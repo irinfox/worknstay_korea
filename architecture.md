@@ -55,24 +55,47 @@ live-API-call requirement at all.
 
 ## 3. UX decisions locked in
 
-**Region info panel (map interaction):** one fixed-slot info card, not a popup, not a
-leader-line arrow.
-- Desktop (≥1024px): 2-column grid — map left, card right. Hover/focus a region → border
-  highlights + card fills with hashtags, cost-of-living snapshot, nomad score, "Learn more →".
-- Mobile (<1024px): single column, card renders in normal flow directly below the map. Tap →
-  highlight + card fill + smooth-scroll into view. Navigation only via the explicit
-  "Learn more →" link.
-- Same DOM and JS (`renderRegionCard(slug)`) in both layouts — placement is CSS-only.
+**Region info panel (map interaction):** a wide-viewport **static infographic layout** with
+always-visible callouts, and a narrow-viewport **single dynamic card** — not a hover-triggered
+floating popup in either case. The distinction that matters is not "desktop vs. mobile" but
+**available width**: the infographic mode is driven by a width breakpoint (not a device or
+orientation check), so it also applies to phones in landscape once they're wide enough, not
+just desktop windows.
+
+- **Wide viewport** (width breakpoint — start from ~700–768px and tune empirically during
+  build against real landscape-phone widths, e.g. ~650–930px on common devices): all 6 region
+  callouts render simultaneously, permanently visible, arranged around the map, each connected
+  to its region by a static, hand-positioned leader line (plain SVG `<line>`/`<path>` — fixed
+  coordinates, not computed at runtime). Each callout shows hashtags, cost-of-living snapshot,
+  nomad score, "Learn more →". **Exact callout arrangement/positions are an implementation
+  detail, left to the build phase**, not specified here.
+  This is what makes it safe despite earlier concerns about floating info panels: those were
+  about *dynamically* positioned, hover-triggered popups needing runtime collision math near
+  map edges. A fixed, authored-once layout with a hard width-based mode switch has neither
+  problem — nothing is recomputed on resize, because narrower viewports don't shrink this
+  layout, they replace it entirely with the single-card mode below.
+- **Narrow viewport** (below the same breakpoint — portrait phones): single column, one card
+  renders in normal document flow directly below the map. Tap a region → card fills +
+  smooth-scrolls into view. Navigation only via the explicit "Learn more →" link.
+- Both modes render from the same region-card partial/template and the same per-region data —
+  wide viewport just loops it 6 times into fixed slots instead of rendering it once dynamically.
+
+**Hover/focus border highlight is a v1 requirement, not a nice-to-have,** in both modes:
+- Wide viewport: hovering or focusing a region **or its callout** bolds/brightens that region's
+  SVG border, its leader line, and its callout together, as one connected unit.
+- Narrow viewport: tapping a region bolds/brightens its border the same way, alongside filling
+  the single card.
 
 **Eligibility-gated regions:** greyed-out (ineligible) regions are **not** clickable through to
 their region page — doing so would misrepresent the eligibility gating that's the site's core
-value proposition. Instead: hover/tap on a greyed region shows a tooltip/badge — "Not available
-at your current income/age input — adjust or clear filters to see all regions" — with a
-clear-filters action reachable from there. Gyeonggi-do additionally has a **third, "partial"**
-visual state distinct from active/grey — see §7 for why (it contains specific
-population-decline-designated counties that qualify at the lower income threshold even when
-the rest of Gyeonggi doesn't). Partial regions remain clickable, since part of them is
-genuinely eligible.
+value proposition. In wide-viewport mode, a greyed region's callout permanently shows "Not
+available at your current income/age input — adjust or clear filters to see all regions"
+inline (no hover needed to discover it, since the callout is always visible anyway). In
+narrow-viewport mode, the same message appears in the single card on tap. Gyeonggi-do
+additionally has a **third, "partial"** visual state distinct from active/grey — see §7 for why
+(it contains specific population-decline-designated counties that qualify at the lower income
+threshold even when the rest of Gyeonggi doesn't). Partial regions remain clickable, since part
+of them is genuinely eligible, and their callout/card explains the split.
 
 **Seoul/Incheon:** absorbed into the Gyeonggi region page (one page, not three), but kept as
 distinct labeled sub-shapes on the SVG map rather than merged into one blob, since they're
@@ -302,8 +325,11 @@ No library, no store. Three tiers:
 
 - Header/nav: one `<ul>` in the DOM at all times; `nav.js` toggles `[aria-expanded]` on the
   burger. Never render two navs. Burger under ~768px.
-- Region card: single component, grid-placement swapped by media query (see §3) — this is the
-  one boundary decision that matters; a floating-popup fallback would force two code paths.
+- Region info: two render modes swapped by a width-only media query (see §3) — 6 static
+  callouts above the breakpoint (covers desktop and wide/landscape phones), 1 dynamic card
+  below it (portrait phones). This is the one boundary decision that matters most for the
+  homepage; the breakpoint value itself needs empirical tuning against real landscape-phone
+  widths during build, not just standard device presets.
 - Region page Main tab: cities list + event calendar are a 2-column grid ≥900px, stacked below
   that, cities first (primary answer to "where would I live").
 - Galleries: CSS `scroll-snap-type: x mandatory` + `overflow-x: auto`, no carousel library.
@@ -312,7 +338,9 @@ No library, no store. Three tiers:
   smallest region (Jeju); add an invisible enlarged hit-circle if not.
 - iOS Safari specifics: use `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent
   focus-zoom, `-webkit-text-size-adjust: 100%`.
-- Test matrix: 360 / 768 / 1280px + a real iPhone Safari pass before calling a feature done.
+- Test matrix: 360 / 768 / 1280px **plus at least one landscape-phone width (~700–850px)** to
+  verify the infographic mode actually reads well there, not just on desktop, + a real iPhone
+  Safari pass (both orientations) before calling a feature done.
 
 ## 10. Designated Task #4 alignment (for the eventual 기능설명서)
 

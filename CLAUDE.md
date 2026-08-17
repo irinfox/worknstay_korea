@@ -53,10 +53,13 @@ guardrail, not just the list.
 
 ## Feedback log (approach decisions made and why)
 
-- Rejected popup/floating-card and leader-line-arrow UX for the region map info panel in favor
-  of one fixed-slot info card (right column desktop / below-map mobile), same DOM repositioned
-  by CSS. Popups were judged the most bug-prone pattern for this (edge clipping, z-index,
-  mobile focus-trap) — avoid reintroducing them.
+- Rejected *dynamic, hover-triggered* floating popups for the region map info panel — bug-prone
+  (edge clipping, z-index, mobile focus-trap). Adopted instead: a **static, always-visible
+  infographic** (6 fixed callouts + hand-positioned leader lines, all authored once, nothing
+  computed at runtime) above a width breakpoint, falling back to a single dynamic card below
+  it. The breakpoint is width-only (not a device/orientation check) specifically so wide
+  landscape phones get the infographic too, not just desktop. Border/leader-line/callout
+  highlight on hover (wide) or tap (narrow) is v1, not deferred polish.
 - Rejected pure build-time-fetch-and-commit for KTO data after reading the contest FAQ — judges
   check live call history, not just that OpenAPI was used once during a scrape. This is a
   contest-compliance decision, not a taste preference — don't revert to full static-bake for
