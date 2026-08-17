@@ -62,15 +62,20 @@ Goal: the editorial `_data/*.json` files exist with real-or-plausible values.
 - [x] `cities.json`, `costOfLiving.json`, `food.json`, `transport.json`, `communities.json` (small mock sets, correct shape)
 - [x] `populationDeclineAreas.json` stub — empty array, note that real sourcing is deferred (§7/§11)
 
-## Phase 1b — Mock data: KTO-shaped content
+## Phase 1b — Mock data: KTO-shaped content ✅
 Goal: local mock JSON standing in for what Phase-N (post-scaffolding) live KTO calls will return,
 so region-page templates have something realistic to render against now.
 
-- [ ] Mock `Attraction[]` and `Event[]` fixtures per region (matching §6 models exactly, including
-      an empty-events region to exercise the empty-state per rule 5)
-- [ ] Mock gallery image list per region (`imageUrl`, `imageLicense`, attribution fields present)
-- [ ] Decide + note where these mocks live (e.g. `src/_data/mock/*.json`) so Phase-N swap-in for
-      live `functions/api/*` is a data-source change only, not a template rewrite
+- [x] Mock `Attraction[]` and `Event[]` fixtures per region (matching §6 models exactly, including
+      an empty-events region to exercise the empty-state per rule 5) — `jeju-do` has zero events,
+      matching the real quirk noted in architecture.md §5
+- [x] Mock gallery image list per region (`imageUrl`, `imageLicense`, attribution fields present)
+- [x] Decided: mocks live in `src/_data/mock/{attractions,events,gallery}.json`. Eleventy exposes
+      these as global data namespaced by directory — `mock.attractions`, `mock.events`,
+      `mock.gallery` in templates (verified: 18/10/24 records). Phase-N's live-KTO swap in
+      `functions/api/**` replaces the data *source* templates read from — the shape (`Attraction`/
+      `Event` models from §6) is already what Phase-N's `normalize.mjs` output will match, so no
+      template rewrite is needed then, only a fetch-vs-import change.
 
 ## Phase 2 — Base layout & header/footer
 Goal: one throwaway page renders with real nav, no JS required to navigate.
