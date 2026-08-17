@@ -15,15 +15,15 @@ Source docs: `CLAUDE.md` (rules), `architecture.md` (detail, §-references below
 
 ---
 
-## Phase 0 — Project skeleton & tooling
+## Phase 0 — Project skeleton & tooling ✅
 Goal: `npx eleventy` runs clean, folder structure from architecture.md §4 exists.
 
-- [ ] `.nvmrc`, `package.json` (`@11ty/eleventy` v3, only direct dependency), `package-lock.json`
-- [ ] `.gitignore` (`_site/`, `node_modules/`, `.env`), `.env.example` (documents `KTO_API_KEY`)
-- [ ] `eleventy.config.js` — input/output dirs, passthrough copy for `assets/`
-- [ ] Full empty folder tree: `src/_data`, `src/_includes/layouts`, `src/_includes/partials`,
+- [x] `.nvmrc`, `package.json` (`@11ty/eleventy` v3, only direct dependency), `package-lock.json`
+- [x] `.gitignore` (`_site/`, `node_modules/`, `.env`), `.env.example` (documents `KTO_API_KEY`)
+- [x] `eleventy.config.js` — input/output dirs, passthrough copy for `assets/`
+- [x] Full empty folder tree: `src/_data`, `src/_includes/layouts`, `src/_includes/partials`,
       `src/assets/{css,js,img,fonts,svg}`, `functions/api/lib`
-- [ ] Confirm `npx eleventy` builds `_site/` with zero errors (no pages yet)
+- [x] Confirm `npx eleventy` builds `_site/` with zero errors (no pages yet)
 
 ## Phase 1a — Mock data: core content
 Goal: the editorial `_data/*.json` files exist with real-or-plausible values.

@@ -1,0 +1,18 @@
+{
+  "name": "worknstay-korea",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Work&Stay Korea — F-1-D digital nomad visa region-matching site (2026 관광데이터 활용 공모전 submission)",
+  "type": "module",
+  "engines": {
+    "node": "24.19.0"
+  },
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "debug": "DEBUG=Eleventy* eleventy"
+  },
+  "dependencies": {
+    "@11ty/eleventy": "3.1.6"
+  }
+}
