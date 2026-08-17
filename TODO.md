@@ -13,6 +13,34 @@ built. See "Explicitly deferred past scaffolding" at the bottom for what that me
 
 Source docs: `CLAUDE.md` (rules), `architecture.md` (detail, §-references below).
 
+## Session continuity notes
+Carry these into the next session — they're decisions/caveats from chat that aren't fully
+captured anywhere else in committed files. Delete each line once it's been resolved or folded
+into a more permanent home (architecture.md, a code comment, etc.).
+
+- Local dev environment now has **nvm installed** (`~/.nvm`) with **Node 24.19.0 set as the
+  default** (`nvm alias default`). This was a one-time machine setup step (Node wasn't present
+  before), not something the repo needs to redo — a fresh shell should already have `node`/`npm`
+  on `PATH` via `.bashrc`. If a new session finds `node: command not found`, source
+  `~/.nvm/nvm.sh` rather than reinstalling.
+- A real `.env` with a working `KTO_API_KEY` already exists locally (not created by an assistant
+  session, correctly gitignored) — don't assume it needs sourcing/asking-for again in Phase 8.
+- Data-authoring convention in use across `src/_data/*.json`: unverified/mock values are marked
+  inline with the literal strings `MOCK` or `PLACEHOLDER` in a `source`/`credit`/`note`/`url`
+  field (e.g. `costOfLiving.json`, `food.json`, `communities.json`, city `workationCenters`).
+  Search for these strings before Phase 9 to find everything that still needs real sourcing —
+  there's no separate tracking list.
+- `regions.json`'s `ktoLDongRegnCds`/`ktoAreaCodes` were filled in from general knowledge of
+  Korea's standard administrative region codes (stable government codes, not KTO-specific), not
+  verified against a live KTO API response. Sanity-check these against real API output during
+  Phase 7/8 (live KTO integration) before trusting them for actual `lDongRegnCd` filtering.
+- `populationDeclineAreas.json` is still an empty-array stub (§7/§11 open gap). `cities.json`
+  deliberately keeps every `isPopulationDeclineArea` at `false`, including Ganghwa (Incheon) even
+  though it's a plausible real candidate — resist the temptation to flip it to `true` from memory;
+  wait for the official MOIS 인구감소지역 list to be sourced, since this flag is designed to
+  eventually feed real eligibility-gating logic (Phase 5) and misrepresenting it undermines the
+  site's core value prop (see CLAUDE.md feedback log).
+
 ---
 
 ## Phase 0 — Project skeleton & tooling ✅
@@ -25,14 +53,14 @@ Goal: `npx eleventy` runs clean, folder structure from architecture.md §4 exist
       `src/assets/{css,js,img,fonts,svg}`, `functions/api/lib`
 - [x] Confirm `npx eleventy` builds `_site/` with zero errors (no pages yet)
 
-## Phase 1a — Mock data: core content
+## Phase 1a — Mock data: core content ✅
 Goal: the editorial `_data/*.json` files exist with real-or-plausible values.
 
-- [ ] `site.json` (name, nav items, footer disclaimer)
-- [ ] `regions.json` (6 regions, full `Region` model per §6 — mock `nomadScore`/copy is fine)
-- [ ] `visaRules.json` (real thresholds from §7 — this one should be accurate, not mock)
-- [ ] `cities.json`, `food.json`, `transport.json`, `communities.json` (small mock sets, correct shape)
-- [ ] `populationDeclineAreas.json` stub — empty array, note that real sourcing is deferred (§7/§11)
+- [x] `site.json` (name, nav items, footer disclaimer)
+- [x] `regions.json` (6 regions, full `Region` model per §6 — mock `nomadScore`/copy is fine)
+- [x] `visaRules.json` (real thresholds from §7, verified against `visa_rules.pdf` — not mock)
+- [x] `cities.json`, `costOfLiving.json`, `food.json`, `transport.json`, `communities.json` (small mock sets, correct shape)
+- [x] `populationDeclineAreas.json` stub — empty array, note that real sourcing is deferred (§7/§11)
 
 ## Phase 1b — Mock data: KTO-shaped content
 Goal: local mock JSON standing in for what Phase-N (post-scaffolding) live KTO calls will return,

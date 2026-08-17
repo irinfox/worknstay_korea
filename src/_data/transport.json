@@ -1,0 +1,65 @@
+[
+  {
+    "regionSlug": "gyeonggi-do",
+    "airports": [
+      { "name": "Incheon International Airport", "iata": "ICN", "note": "Korea's main international gateway" },
+      { "name": "Gimpo International Airport", "iata": "GMP", "note": "Domestic + short-haul international, closer to central Seoul" }
+    ],
+    "railNote": "Dense KTX/SRT and subway network; every other region is reachable from Seoul stations within a few hours.",
+    "intercityBusNote": "Extensive express and intercity bus terminals throughout the region.",
+    "localTransitNote": "Best local transit in the country — subway, bus, and GTX commuter rail all overlap here.",
+    "carRecommended": false
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "airports": [
+      { "name": "Yangyang International Airport", "iata": "YNY", "note": "Limited scheduled routes" }
+    ],
+    "railNote": "KTX-Gyeonggang line connects Seoul to Gangneung directly; coverage thins out further south/inland.",
+    "intercityBusNote": "Primary way to reach smaller towns not on the KTX line.",
+    "localTransitNote": "Workable in city centers (Chuncheon, Gangneung); sparse in rural/mountain areas.",
+    "carRecommended": true
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "airports": [
+      { "name": "Cheongju International Airport", "iata": "CJJ", "note": "Small regional airport, limited routes" }
+    ],
+    "railNote": "KTX stops at Osong and Daejeon put most of the region under 1 hour from Seoul.",
+    "intercityBusNote": "Well-connected intercity bus network across all four sub-provinces/metros.",
+    "localTransitNote": "Good in Daejeon and Sejong; more limited in smaller Chungbuk/Chungnam towns.",
+    "carRecommended": true
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "airports": [
+      { "name": "Gimhae International Airport", "iata": "PUS", "note": "Serves Busan" },
+      { "name": "Daegu International Airport", "iata": "TAE", "note": "Serves Daegu" }
+    ],
+    "railNote": "KTX/SRT connect Busan, Daegu, and Gyeongju to Seoul in under 3 hours.",
+    "intercityBusNote": "Extensive network linking coastal and inland cities.",
+    "localTransitNote": "Strong subway/bus systems in Busan and Daegu; more limited in smaller cities like Andong.",
+    "carRecommended": false
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "airports": [
+      { "name": "Muan International Airport", "iata": "MWX", "note": "Limited international routes" },
+      { "name": "Gwangju Airport", "iata": "KWJ", "note": "Domestic routes" }
+    ],
+    "railNote": "KTX serves Gwangju and Yeosu directly from Seoul.",
+    "intercityBusNote": "Reliable coverage across Jeonbuk and Jeonnam.",
+    "localTransitNote": "Good within Jeonju and Gwangju city centers; a car helps for smaller coastal towns.",
+    "carRecommended": true
+  },
+  {
+    "regionSlug": "jeju-do",
+    "airports": [
+      { "name": "Jeju International Airport", "iata": "CJU", "note": "One of the world's busiest domestic routes (to/from Seoul)" }
+    ],
+    "railNote": "No rail network on the island.",
+    "intercityBusNote": "Island-wide bus routes cover most towns, but schedules can be infrequent outside Jeju City.",
+    "localTransitNote": "Improved in recent years but still car-centric outside the two main cities.",
+    "carRecommended": true
+  }
+]

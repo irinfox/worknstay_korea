@@ -1,0 +1,40 @@
+{
+  "version": "2026-07-07",
+  "effectiveFrom": "2026-06-30",
+  "gniReferenceYear": 2025,
+  "gniPerCapitaKrw": 52410000,
+  "currency": "KRW",
+  "sourceUrl": "",
+  "sourceNote": "Ministry of Justice (법무부) press release, 2026-07-07: '연봉 1억 문턱은 낮추고 체류기간은 최대 3년으로…'. Full text in visa_rules.pdf at repo root; no public URL captured yet.",
+  "disclaimer": "General guidance only, based on the Ministry of Justice's F-1-D (Digital Nomad / Workation) visa announcement. Rules and thresholds are revised periodically — always confirm current requirements with the Ministry of Justice or your nearest Korean embassy or consulate before applying.",
+  "ageBands": [
+    {
+      "minAge": 18,
+      "maxAge": 34,
+      "multiplierCapitalArea": 1.5,
+      "multiplierNonCapitalArea": 1.0
+    },
+    {
+      "minAge": 35,
+      "maxAge": null,
+      "multiplierCapitalArea": 2.0,
+      "multiplierNonCapitalArea": 1.5
+    }
+  ],
+  "familyMultiplier": {
+    "capitalArea": 2.0,
+    "nonCapitalArea": 1.5
+  },
+  "additionalFacts": {
+    "minApplicantAge": 18,
+    "minApplicantAgeExemption": "Accompanying minor children are exempt from the age-18 minimum",
+    "healthInsuranceMinCoverageKrw": 100000000,
+    "initialStayYears": 1,
+    "extensionIncrementYears": 1,
+    "maxStayYears": 3,
+    "workRestriction": "No local paid employment or for-profit activity permitted",
+    "convertibleFromVisas": ["B-1", "B-2", "C-3"],
+    "eligibleApplicantSummary": "Employed by an overseas company in a remote-work-capable role, with at least 1 year in the same job/industry; accompanying spouse and minor children may join",
+    "nonCapitalDefinitionNote": "\"Non-capital area\" for visa purposes includes areas officially designated as population-decrease (인구감소관심지역), even when they sit administratively inside a capital-tier province — see populationDeclineAreas.json (list not yet sourced)."
+  }
+}

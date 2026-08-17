@@ -1,0 +1,80 @@
+[
+  {
+    "regionSlug": "gyeonggi-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 900000,
+    "monthlyBudgetSingle": 1800000,
+    "mealInexpensive": 9000,
+    "transitPass": 65000,
+    "utilities": 150000,
+    "indexVsSeoul": 0.95
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 450000,
+    "monthlyBudgetSingle": 1300000,
+    "mealInexpensive": 7000,
+    "transitPass": 45000,
+    "utilities": 130000,
+    "indexVsSeoul": 0.72
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 500000,
+    "monthlyBudgetSingle": 1350000,
+    "mealInexpensive": 7500,
+    "transitPass": 48000,
+    "utilities": 135000,
+    "indexVsSeoul": 0.75
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 550000,
+    "monthlyBudgetSingle": 1400000,
+    "mealInexpensive": 8000,
+    "transitPass": 55000,
+    "utilities": 140000,
+    "indexVsSeoul": 0.78
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 420000,
+    "monthlyBudgetSingle": 1250000,
+    "mealInexpensive": 7000,
+    "transitPass": 45000,
+    "utilities": 125000,
+    "indexVsSeoul": 0.68
+  },
+  {
+    "regionSlug": "jeju-do",
+    "currency": "KRW",
+    "asOf": "2026-08",
+    "source": "MOCK placeholder — replace with verified figures (e.g. Numbeo, KOSIS) before launch",
+    "sourceUrl": "",
+    "rent1brCityCentre": 600000,
+    "monthlyBudgetSingle": 1500000,
+    "mealInexpensive": 8500,
+    "transitPass": 50000,
+    "utilities": 145000,
+    "indexVsSeoul": 0.82
+  }
+]

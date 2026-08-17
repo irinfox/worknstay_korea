@@ -1,0 +1,158 @@
+[
+  {
+    "slug": "paju",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Paju",
+    "nameKo": "파주시",
+    "lat": 37.76,
+    "lng": 126.78,
+    "blurb": "Quiet border-area city with a growing arts/publishing district (Heyri) and easy access to Seoul.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Paju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "ganghwa",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Ganghwa",
+    "nameKo": "강화군",
+    "lat": 37.75,
+    "lng": 126.49,
+    "blurb": "Incheon county with a distinct rural, historic character — a plausible candidate for a population-decline-designated area inside the capital-tier region, pending official verification.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Ganghwa Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "chuncheon",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Chuncheon",
+    "nameKo": "춘천시",
+    "lat": 37.88,
+    "lng": 127.73,
+    "blurb": "Lakeside provincial capital, about an hour from Seoul by train, with a small coworking scene.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Chuncheon Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "gangneung",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Gangneung",
+    "nameKo": "강릉시",
+    "lat": 37.75,
+    "lng": 128.90,
+    "blurb": "East-coast surf and coffee town, KTX-connected to Seoul in under two hours.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Gangneung Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "cheongju",
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Cheongju",
+    "nameKo": "청주시",
+    "lat": 36.64,
+    "lng": 127.49,
+    "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Cheongju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "boryeong",
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Boryeong",
+    "nameKo": "보령시",
+    "lat": 36.33,
+    "lng": 126.61,
+    "blurb": "Coastal city best known for the Mud Festival, with a slower off-season pace.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Boryeong Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "gyeongju",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Gyeongju",
+    "nameKo": "경주시",
+    "lat": 35.86,
+    "lng": 129.22,
+    "blurb": "Former Silla-dynasty capital — living among UNESCO heritage sites, an hour from Busan.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Gyeongju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "andong",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Andong",
+    "nameKo": "안동시",
+    "lat": 36.57,
+    "lng": 128.73,
+    "blurb": "Traditional Confucian-heritage city, quieter and more rural than the region's coastal metros.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Andong Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "jeonju",
+    "regionSlug": "jeolla-do",
+    "nameEn": "Jeonju",
+    "nameKo": "전주시",
+    "lat": 35.82,
+    "lng": 127.15,
+    "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Jeonju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "yeosu",
+    "regionSlug": "jeolla-do",
+    "nameEn": "Yeosu",
+    "nameKo": "여수시",
+    "lat": 34.76,
+    "lng": 127.66,
+    "blurb": "Harbor city with a night-view reputation and a growing short-stay rental market.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Yeosu Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "jeju-city",
+    "regionSlug": "jeju-do",
+    "nameEn": "Jeju City",
+    "nameKo": "제주시",
+    "lat": 33.50,
+    "lng": 126.53,
+    "blurb": "The island's main airport city, with the highest concentration of coworking spaces on Jeju.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Jeju City Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  },
+  {
+    "slug": "seogwipo",
+    "regionSlug": "jeju-do",
+    "nameEn": "Seogwipo",
+    "nameKo": "서귀포시",
+    "lat": 33.25,
+    "lng": 126.56,
+    "blurb": "South-coast Jeju city, calmer than Jeju City, popular for month-long guesthouse stays.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      { "name": "Seogwipo Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+    ]
+  }
+]
