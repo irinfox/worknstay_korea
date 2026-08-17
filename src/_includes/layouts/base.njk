@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title or site.name }}{% if title %} · {{ site.name }}{% endif %}</title>
+  <meta name="description" content="{{ description or site.tagline }}">
+  <link rel="stylesheet" href="/assets/css/tokens.css">
+  <link rel="stylesheet" href="/assets/css/base.css">
+  <link rel="stylesheet" href="/assets/css/components/header.css">
+  <link rel="stylesheet" href="/assets/css/components/footer.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  {% include "partials/header.njk" %}
+  {{ content | safe }}
+  {% include "partials/footer.njk" %}
+</body>
+</html>

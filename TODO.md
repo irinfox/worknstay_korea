@@ -77,14 +77,19 @@ so region-page templates have something realistic to render against now.
       `Event` models from §6) is already what Phase-N's `normalize.mjs` output will match, so no
       template rewrite is needed then, only a fetch-vs-import change.
 
-## Phase 2 — Base layout & header/footer
+## Phase 2 — Base layout & header/footer ✅
 Goal: one throwaway page renders with real nav, no JS required to navigate.
 
-- [ ] `layouts/base.njk`, `layouts/page.njk`
-- [ ] `partials/header.njk`, `partials/footer.njk` (nav from `site.json`, real `<a href>`s)
-- [ ] `assets/css/tokens.css` (color/spacing/type-scale/breakpoint custom properties)
-- [ ] `assets/css/base.css` (mobile-first resets, base typography)
-- [ ] Verify: one page using the layout renders header/footer correctly at 360/768/1280px
+- [x] `layouts/base.njk`, `layouts/page.njk`
+- [x] `partials/header.njk`, `partials/footer.njk` (nav from `site.json`, real `<a href>`s)
+- [x] `assets/css/tokens.css` (color/spacing/type-scale/breakpoint custom properties)
+- [x] `assets/css/base.css` (mobile-first resets, base typography)
+- [x] Verify: `src/index.njk` (the real home page, doubling as the Phase 2 throwaway) renders
+      header/footer via the layout chain; build succeeds, all CSS assets 200 over `eleventy --serve`.
+      Nav burger (`.nav-toggle`) is `display:none` until Phase 3's `nav.js` adds `.js-nav-ready` to
+      `<body>` — until then `.site-nav__list` is always visible (column <768px, row ≥768px), so nav
+      is fully usable with JS disabled at every width. No browser-automation tool was available in
+      this session to capture actual 360/768/1280px screenshots — visual check deferred to the user.
 
 ## Phase 3 — JS module scaffolding
 Goal: every JS module from architecture.md §4 exists with a stub `init()` and is imported by

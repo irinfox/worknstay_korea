@@ -1,0 +1,62 @@
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.site-header__inner {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.site-header__logo {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/*
+ * The burger toggle only does anything once nav.js runs (Phase 3), so it stays out of the
+ * DOM's visible flow until then — otherwise it renders as a dead button. nav.js adds
+ * `.js-nav-ready` to <body> and takes over collapsing `.site-nav__list` behind it.
+ */
+.nav-toggle {
+  display: none;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.site-nav__item a {
+  display: block;
+  padding: var(--space-2) 0;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.site-nav__item a[aria-current="page"] {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .site-nav__list {
+    flex-direction: row;
+    width: auto;
+    gap: var(--space-5);
+  }
+
+  .site-nav__item a {
+    padding: var(--space-1) 0;
+  }
+}
