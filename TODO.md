@@ -40,6 +40,27 @@ into a more permanent home (architecture.md, a code comment, etc.).
   wait for the official MOIS 인구감소지역 list to be sourced, since this flag is designed to
   eventually feed real eligibility-gating logic (Phase 5) and misrepresenting it undermines the
   site's core value prop (see CLAUDE.md feedback log).
+- **Session recap (stopped after Phase 3, 2026-08-17):** Phases 0–3 are done. Site currently
+  builds one real page (`index.njk`, still placeholder body text) through the full layout chain:
+  `layouts/base.njk` → `layouts/page.njk`, with `partials/header.njk`/`footer.njk` rendering real
+  nav from `site.json`. `assets/css/tokens.css` + `base.css` + `components/{header,footer}.css`
+  exist. All 8 JS modules from architecture.md §4 exist and are wired through `main.js`; only
+  `nav.js` has real logic (burger toggle, gated behind `.js-nav-ready` on `<body>` so JS-disabled
+  nav still works at every width — toggle only shows/does anything below ~768px). **Next up:
+  Phase 4 — Korea map placeholder SVG** (6 region `<g>` groups + Seoul/Incheon sub-shapes,
+  `partials/korea-map.njk`, `components/korea-map.css`).
+- **No browser-automation tool was available/connected this session** (`chromium-cli` not
+  installed, `claude-in-chrome` not connected via `ToolSearch`) — Phase 2/3 responsive and
+  console-error verification was done by CSS/JS logic review + `curl` HTTP-200 checks + `node
+  --check` + watching the `eleventy --serve` rebuild log for errors, **not** actual screenshots or
+  a live console. This is a real gap, not just a formality: flag it again before Phase 5 (the
+  width-breakpoint infographic/single-card switch) and Phase 9 (full responsive pass) — those need
+  an actual visual check per CLAUDE.md rule 7, either via a connected browser tool next session or
+  the user checking manually. Don't claim a visual pass without one.
+- **Workflow note:** the user runs all `git add`/`git commit` themselves — only propose the
+  `git add` file list and commit message after each phase, never execute git commands that stage
+  or commit. Dev server: `npm run serve` (port 8080, `eleventy --serve`); stop with
+  `lsof -ti:8080 -sTCP:LISTEN | xargs -r kill` before relaunching to avoid `EADDRINUSE`.
 
 ---
 
@@ -91,16 +112,22 @@ Goal: one throwaway page renders with real nav, no JS required to navigate.
       is fully usable with JS disabled at every width. No browser-automation tool was available in
       this session to capture actual 360/768/1280px screenshots — visual check deferred to the user.
 
-## Phase 3 — JS module scaffolding
+## Phase 3 — JS module scaffolding ✅
 Goal: every JS module from architecture.md §4 exists with a stub `init()` and is imported by
 `main.js` — establishes the module boundary before any module gets real logic.
 
-- [ ] `assets/js/main.js` (entry point, imports + calls each module's `init()`)
-- [ ] `assets/js/nav.js` — real burger-toggle logic (small enough to fully implement now)
-- [ ] `assets/js/calculator.js`, `eligibility.js`, `korea-map.js`, `tabs.js`, `gallery.js`,
-      `region-card.js` — stub `init()` only (e.g. `console.log` or empty body + comment marking
-      it as a Phase-N target), each exporting the single-`init()` shape rule 4/§4 expects
-- [ ] Verify: page loads with no console errors, burger nav works, no other behavior expected yet
+- [x] `assets/js/main.js` (entry point, imports + calls each module's `init()`)
+- [x] `assets/js/nav.js` — real burger-toggle logic (small enough to fully implement now)
+- [x] `assets/js/calculator.js`, `eligibility.js`, `korea-map.js`, `tabs.js`, `gallery.js`,
+      `region-card.js` — stub `init()` only, each with a one-line Phase-N-target comment, each
+      exporting the single-`init()` shape §4's conventions section expects
+- [x] Verify: `<script type="module" src="/assets/js/main.js">` wired into `layouts/base.njk`;
+      all 8 JS files 200 over `eleventy --serve`, `node --check` clean on all of them, dev-server
+      rebuild log shows zero errors through every edit. Burger nav verified by code path: `nav.js`
+      adds `.js-nav-ready` to `<body>`, which is the only thing that lets `header.css` hide
+      `.site-nav__list` behind the toggle below ~768px — without JS (or ≥768px, any time) the nav
+      list stays visible per Phase 2. No browser-automation tool was available in this session to
+      click the toggle live and check the browser console directly — deferred to the user.
 
 ## Phase 4 — Korea map asset (placeholder-accurate)
 Goal: an SVG map with the correct 6-region group structure exists and inlines cleanly — visual
