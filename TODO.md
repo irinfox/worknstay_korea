@@ -339,19 +339,38 @@ Goal: the two remaining `site.json` nav destinations exist and render real data.
       itself gaining horizontal scroll (`body.scrollWidth` stayed at 360px) — the one real
       overflow risk on these two pages is contained correctly.
 
-## Phase 8 — API stub layer (local mock endpoints, not live yet)
+## Phase 8 — API stub layer (local mock endpoints, not live yet) ✅
 Goal: `functions/api/**` file structure exists and returns the same shape live KTO calls will
 later return, sourced from the Phase-1b mock JSON — this makes the eventual live-call swap
 (a separate, compliance-driven follow-up TODO) a drop-in replacement, without doing any real
 KTO integration now.
 
-- [ ] `functions/api/lib/region-map.mjs` — `lDongRegnCd` ↔ slug mapping (real logic, small/self-contained)
-- [ ] `functions/api/lib/kto-client.mjs`, `normalize.mjs` — stub/pass-through only (real KTO request
-      building, paging, retry, and normalization logic is explicitly out of scope for scaffolding)
-- [ ] `functions/api/region/[slug]/{attractions,events,gallery}.js` — return mock JSON matching
-      the response shape the templates expect, keyed by `slug`
-- [ ] Verify: hitting each function locally (`wrangler pages dev` or equivalent) returns valid
-      mock JSON for every region slug
+- [x] `functions/api/lib/region-map.mjs` — real logic, small/self-contained. Imports
+      `regions.json` directly (`with { type: "json" }`) rather than duplicating the
+      `ktoLDongRegnCds` lists, so the Function layer and the editorial data can never drift.
+      Exports `REGION_SLUGS`, `isValidSlug(slug)`, `slugToLDongRegnCds(slug)`,
+      `lDongRegnCdToSlug(code)`. Verified directly in Node: all 6 slugs resolve, `41 →
+      gyeonggi-do`, unknown code → `null`.
+- [x] `functions/api/lib/kto-client.mjs`, `normalize.mjs` — stub/pass-through only, per scope.
+      `fetchKto()` throws a clear "Phase 8 stub" error (nothing calls it yet); the three
+      `normalize*` functions are identity pass-throughs. Both carry comments pointing at
+      architecture.md §5 for what the real versions need to do (URL building/paging/backoff;
+      title-split/https-rewrite/HTML-strip/license-filter/lDongRegnCd→slug).
+- [x] `functions/api/region/[slug]/{attractions,events,gallery}.js` — each imports its
+      Phase-1b mock JSON directly, filters by `params.slug`, returns the array via
+      `Response.json()`; 404 with a JSON error body for an unknown slug (checked via
+      `region-map.mjs`'s `isValidSlug`). Response shape is a bare `Attraction[]`/`Event[]`/
+      `Gallery[]` array — matching exactly what the region-page templates already consume via
+      the `byRegion` filter — so the eventual live swap only changes what populates the array,
+      not the shape callers see.
+- [x] Verify: ran `npx wrangler pages dev _site --port 8788` (via `npx`, not added to
+      `package.json` — Cloudflare Pages Functions are already the chosen deploy target per
+      architecture.md §2, and this is a one-off local check, not a new project dependency) and
+      hit all three endpoints for real: `attractions` for gyeonggi-do returns real mock records,
+      `events` for jeju-do returns `[]` (the designed empty state, not a bug — matches Phase 6),
+      `gallery` for gangwon-do returns real mock records, and an unknown slug returns
+      `404 {"error":"Unknown region slug: nope"}`. All via actual HTTP requests against the
+      Workers runtime, not just reading the source.
 
 ## Phase 9 — Full local build verification
 - [ ] Full `npx eleventy` build, browse every page locally end to end
