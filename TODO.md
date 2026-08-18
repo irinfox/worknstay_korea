@@ -1,6 +1,9 @@
 # Work&Stay Korea — Scaffolding TODO
 
-Status: draft, awaiting approval. Do not execute until each phase is checked off with sign-off.
+Status: **scaffolding complete (Phases 0–9, ✅)**, awaiting user commit of Phase 9. What's next
+is the separate, not-yet-written follow-up TODO for "Explicitly deferred past scaffolding" below
+(real eligibility logic, live KTO integration, real map data, etc.) — this document's own scope
+is done.
 Rule for execution: complete one phase, pause, wait for explicit approval, mark it `[x]` before
 starting the next.
 
@@ -372,11 +375,62 @@ KTO integration now.
       `404 {"error":"Unknown region slug: nope"}`. All via actual HTTP requests against the
       Workers runtime, not just reading the source.
 
-## Phase 9 — Full local build verification
-- [ ] Full `npx eleventy` build, browse every page locally end to end
-- [ ] Click every nav link, every region link, every tab, with JS disabled — confirm no dead ends
-- [ ] Confirm every KTO-derived block shows its provenance note + at least one empty-state region
-- [ ] List any gaps found during this pass before calling scaffolding done
+## Phase 9 — Full local build verification ✅
+Goal: one final, whole-site pass now that every phase (0–8) exists together, catching anything
+that only shows up at integration time rather than per-phase.
+
+- [x] Full `npx eleventy` build — clean, 9 pages written (`/`, `/visa-info/`, `/communities/`,
+      6× `/regions/<slug>/`).
+- [x] Browsed every page locally end to end via `claude-in-chrome` (dev server on :8080): home,
+      all 6 region pages (including jeju-do, the zero-events region), `/visa-info/`,
+      `/communities/` — **zero console errors on any of the 9 pages**.
+- [x] Click-through / dead-end check, done two ways:
+      1. **Exhaustive static link audit** (script, not manual sampling): parsed every generated
+         `_site/**/*.html` file for every internal `href`/`src`, resolved each against the real
+         build output on disk, and for every `#hash` link confirmed the target `id` actually
+         exists on the right page. Covers **100% of internal links across all 9 pages** — nav,
+         footer, region-map SVG links, region-card "Learn more" links, tab anchors, asset links.
+         **Result: 0 dead links, 0 missing anchor targets.** This is effectively the literal
+         "does it work with JS disabled" check, since it operates on the server-rendered HTML
+         with no JS execution involved at all — stronger than a manual click pass for that
+         specific question.
+      2. **Live browser spot-check** on top of that: navigated a region page and clicked the
+         Attractions/Living Info tab anchors for real (via `computer` click, not just reading
+         the `href`) — confirmed `location.hash` updates and `scrollY` moves to the correct
+         section under the sticky tab nav both times. One tooling note: the `ref`-based click
+         action (using an element reference from `find`/`read_page`) silently failed to trigger
+         navigation twice in a row this session, while a literal pixel-coordinate click on the
+         same element worked immediately — a `claude-in-chrome` tool quirk this session, not a
+         site bug (confirmed by the coordinate click succeeding on the identical element).
+- [x] Confirmed every KTO-derived block shows its provenance note: grepped all 6 region pages,
+      `.data-provenance` appears exactly twice on each (once for Attractions, once for the event
+      calendar) — 12/12 as expected. Confirmed the designed empty state is genuinely exercised:
+      jeju-do's event calendar renders its `.event-calendar__empty-note` (no other region
+      triggers any empty-state variant, since cities/attractions/food mock data covers all 6
+      regions — the event calendar is the only block with real region-to-region variation).
+- [x] Gaps found during this pass (none blocking, noted for later, not re-listing what
+      "Explicitly deferred past scaffolding" below already covers):
+      - **No custom 404 page** (`src/404.njk` → `_site/404.html`) exists yet. Cloudflare Pages
+        serves its own default 404 for unmatched routes without one — not a scaffolding blocker,
+        but worth a small pass before the live submission URL is public, since a nomad hitting a
+        typo'd or old region URL currently gets a generic host-level page instead of a branded
+        one with a way back to the nav.
+      - `.empty-state`'s CSS class is now doing double duty: its original purpose (a dashed-box
+        "nothing here" indicator, still used that way in `communities.njk`/`region.njk`) versus
+        its reuse on `visa-info.njk` as a plain disclaimer-text treatment (Phase 7). Not a bug —
+        the dashed-box look reads fine as a "fine print" treatment too — but if a real
+        empty-state and a disclaimer ever end up on the same page, consider a second class name
+        so they don't visually collide.
+      - True browser-level "JavaScript fully disabled" testing (e.g. via a DevTools setting or
+        `chrome://` flag) was still not performed via automation — same tool gap noted since
+        Phase 2. Confidence here now rests on the exhaustive static link audit above (which is
+        JS-independent by construction) plus the fact that every interactive affordance sitewide
+        traces to a real `<a href>`, verified per-phase (2/3/6/9). If literal no-JS testing is
+        wanted before submission, it needs either a manual user check or a scriptable
+        `chrome://` JS-disable flag, neither available to this tool this session.
+
+**Scaffolding (Phases 0–9) is now complete.** Everything in "Explicitly deferred past
+scaffolding" below is real, tracked follow-up work — not a gap in this TODO's own scope.
 
 ---
 
