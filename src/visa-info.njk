@@ -1,0 +1,85 @@
+---
+layout: layouts/page.njk
+title: "Visa Info"
+description: "F-1-D Digital Nomad Visa income thresholds, family multipliers, and other requirements."
+---
+<div class="content-page">
+<header class="region-header">
+  <h1>F-1-D Digital Nomad Visa — Income Requirements</h1>
+  <p class="region-header__intro">
+    General guidance on the income thresholds and other requirements for Korea's Digital Nomad
+    (Workation) visa. This page is informational only — see the disclaimer at the bottom before
+    relying on it.
+  </p>
+</header>
+
+<section class="region-section">
+  <h2>Minimum annual income by age and region</h2>
+  <p>
+    Thresholds are set as a multiple of Korea's Gross National Income (GNI) per capita
+    ({{ visaRules.gniReferenceYear }} reference year: ₩{{ visaRules.gniPerCapitaKrw | krw }}).
+    Non-capital areas — including population-decrease-designated counties that sit inside
+    capital-tier provinces — get a lower multiplier than the capital area.
+  </p>
+  <div class="table-scroll">
+    <table class="visa-threshold-table">
+      <thead>
+        <tr>
+          <th scope="col">Age</th>
+          <th scope="col">Capital area</th>
+          <th scope="col">Non-capital area</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for band in visaRules.ageBands %}
+        <tr>
+          <td>
+            {% if band.maxAge %}{{ band.minAge }}–{{ band.maxAge }}{% else %}{{ band.minAge }}+{% endif %}
+          </td>
+          <td>₩{{ (visaRules.gniPerCapitaKrw * band.multiplierCapitalArea) | round | krw }}
+            <span class="mock-note">(×{{ band.multiplierCapitalArea }})</span></td>
+          <td>₩{{ (visaRules.gniPerCapitaKrw * band.multiplierNonCapitalArea) | round | krw }}
+            <span class="mock-note">(×{{ band.multiplierNonCapitalArea }})</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="data-provenance">
+    Source: Ministry of Justice (법무부) F-1-D announcement, {{ visaRules.version }}
+    (effective {{ visaRules.effectiveFrom }}).
+  </p>
+</section>
+
+<section class="region-section">
+  <h2>Bringing family</h2>
+  <p>
+    Accompanying spouse and minor children raise the required income to a flat family
+    multiplier, regardless of the applicant's age:
+  </p>
+  <ul>
+    <li>Capital area — GNI × {{ visaRules.familyMultiplier.capitalArea }} =
+      ₩{{ (visaRules.gniPerCapitaKrw * visaRules.familyMultiplier.capitalArea) | round | krw }}</li>
+    <li>Non-capital area — GNI × {{ visaRules.familyMultiplier.nonCapitalArea }} =
+      ₩{{ (visaRules.gniPerCapitaKrw * visaRules.familyMultiplier.nonCapitalArea) | round | krw }}</li>
+  </ul>
+</section>
+
+<section class="region-section">
+  <h2>Other requirements</h2>
+  <dl class="cost-summary">
+    <div><dt>Minimum applicant age</dt><dd>{{ visaRules.additionalFacts.minApplicantAge }}
+      <span class="mock-note">({{ visaRules.additionalFacts.minApplicantAgeExemption }})</span></dd></div>
+    <div><dt>Health insurance</dt><dd>≥ ₩{{ visaRules.additionalFacts.healthInsuranceMinCoverageKrw | krw }} coverage</dd></div>
+    <div><dt>Initial stay</dt><dd>{{ visaRules.additionalFacts.initialStayYears }} year</dd></div>
+    <div><dt>Max stay</dt><dd>{{ visaRules.additionalFacts.maxStayYears }} years (with renewals, +{{ visaRules.additionalFacts.extensionIncrementYears }}/yr)</dd></div>
+    <div><dt>Work restriction</dt><dd>{{ visaRules.additionalFacts.workRestriction }}</dd></div>
+    <div><dt>Convertible from</dt><dd>{{ visaRules.additionalFacts.convertibleFromVisas | join(", ") }}</dd></div>
+  </dl>
+  <p>{{ visaRules.additionalFacts.eligibleApplicantSummary }}</p>
+</section>
+
+<section class="region-section">
+  <p class="empty-state">{{ visaRules.disclaimer }}</p>
+</section>
+</div>

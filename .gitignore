@@ -1,5 +1,6 @@
-# Ignore keys
+node_modules/
+_site/
 .env
-
-# Ignore cashes
-__pycache__/
+.DS_Store
+.wrangler/
+*.swp

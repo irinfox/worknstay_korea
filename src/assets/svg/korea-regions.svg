@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="75 80 380 588" role="group" aria-label="Map of South Korea by region">
+  <title>South Korea — regions</title>
+
+  <!-- Gyeonggi-do (capital area) + Seoul/Incheon labeled sub-shapes -->
+  <a href="/regions/gyeonggi-do/" class="region" data-slug="gyeonggi-do" aria-label="Gyeonggi-do (incl. Seoul, Incheon)">
+    <g id="region-gyeonggi">
+      <rect class="region__shape" x="165" y="110" width="130" height="95" rx="6" />
+      <g class="region__subshape" aria-hidden="true">
+        <rect x="215" y="140" width="28" height="20" rx="3" />
+        <text x="229" y="153">Seoul</text>
+      </g>
+      <g class="region__subshape" aria-hidden="true">
+        <rect x="173" y="156" width="30" height="18" rx="3" />
+        <text x="188" y="168">Incheon</text>
+      </g>
+      <text class="region__label" x="230" y="198">Gyeonggi-do</text>
+    </g>
+  </a>
+
+  <!-- Gangwon-do -->
+  <a href="/regions/gangwon-do/" class="region" data-slug="gangwon-do" aria-label="Gangwon-do">
+    <g id="region-gangwon">
+      <rect class="region__shape" x="305" y="100" width="110" height="110" rx="6" />
+      <text class="region__label" x="360" y="160">Gangwon-do</text>
+    </g>
+  </a>
+
+  <!-- Chungcheong-do (Chungcheongbuk/nam, Daejeon, Sejong) -->
+  <a href="/regions/chungcheong-do/" class="region" data-slug="chungcheong-do" aria-label="Chungcheong-do">
+    <g id="region-chungcheong">
+      <rect class="region__shape" x="165" y="250" width="130" height="85" rx="6" />
+      <text class="region__label" x="230" y="297">Chungcheong-do</text>
+    </g>
+  </a>
+
+  <!-- Gyeongsang-do (Gyeongbuk/nam, Busan, Daegu, Ulsan) -->
+  <a href="/regions/gyeongsang-do/" class="region" data-slug="gyeongsang-do" aria-label="Gyeongsang-do">
+    <g id="region-gyeongsang">
+      <rect class="region__shape" x="280" y="350" width="155" height="165" rx="6" />
+      <text class="region__label" x="357" y="437">Gyeongsang-do</text>
+    </g>
+  </a>
+
+  <!-- Jeolla-do (Jeonbuk/nam, Gwangju) -->
+  <a href="/regions/jeolla-do/" class="region" data-slug="jeolla-do" aria-label="Jeolla-do">
+    <g id="region-jeolla">
+      <rect class="region__shape" x="125" y="390" width="130" height="140" rx="6" />
+      <text class="region__label" x="190" y="465">Jeolla-do</text>
+    </g>
+  </a>
+
+  <!-- Jeju-do -->
+  <a href="/regions/jeju-do/" class="region" data-slug="jeju-do" aria-label="Jeju-do">
+    <g id="region-jeju">
+      <ellipse class="region__shape" cx="150" cy="620" rx="55" ry="28" />
+      <text class="region__label" x="150" y="624">Jeju-do</text>
+    </g>
+  </a>
+</svg>

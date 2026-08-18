@@ -1,0 +1,56 @@
+[
+  {
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Suwon Galbi",
+    "nameKo": "수원갈비",
+    "romanized": "Suwon Galbi",
+    "imagePath": "/assets/img/food/suwon-galbi.jpg",
+    "caption": "Thick-cut grilled beef short ribs, a Suwon specialty for over a century.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "nameEn": "Chuncheon Dakgalbi",
+    "nameKo": "춘천닭갈비",
+    "romanized": "Chuncheon Dakgalbi",
+    "imagePath": "/assets/img/food/chuncheon-dakgalbi.jpg",
+    "caption": "Spicy stir-fried marinated chicken with rice cakes and cabbage, cooked tableside.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Kong-guksu",
+    "nameKo": "콩국수",
+    "romanized": "Kong-guksu",
+    "imagePath": "/assets/img/food/kong-guksu.jpg",
+    "caption": "Chilled noodles in a savory cold soybean broth — a Chungcheong-region summer staple.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Dwaeji Gukbap",
+    "nameKo": "돼지국밥",
+    "romanized": "Dwaeji Gukbap",
+    "imagePath": "/assets/img/food/dwaeji-gukbap.jpg",
+    "caption": "Pork and rice soup, a Busan comfort-food staple with roots in the Korean War era.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "nameEn": "Jeonju Bibimbap",
+    "nameKo": "전주비빔밥",
+    "romanized": "Jeonju Bibimbap",
+    "imagePath": "/assets/img/food/jeonju-bibimbap.jpg",
+    "caption": "Considered the definitive version of Korea's mixed rice dish, from the city widely regarded as its birthplace.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Jeju Heuk Dwaeji (Black Pork)",
+    "nameKo": "제주 흑돼지",
+    "romanized": "Jeju Heuk Dwaeji",
+    "imagePath": "/assets/img/food/jeju-heuk-dwaeji.jpg",
+    "caption": "Grilled black pork from Jeju's native pig breed, typically served with the island's own fermented sauces.",
+    "credit": "PLACEHOLDER — image and credit not yet sourced"
+  }
+]

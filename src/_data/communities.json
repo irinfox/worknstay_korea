@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Digital Nomads Korea (placeholder)",
+    "platform": "Facebook Group",
+    "url": "",
+    "description": "MOCK — placeholder for a general Korea-based digital nomad community group; verify and link a real, active group before launch."
+  },
+  {
+    "name": "Korea Expats (placeholder)",
+    "platform": "Facebook Group",
+    "url": "",
+    "description": "MOCK — placeholder for a general foreign-resident community group; verify and link a real, active group before launch."
+  },
+  {
+    "name": "r/korea (placeholder)",
+    "platform": "Reddit",
+    "url": "",
+    "description": "MOCK — placeholder for a Korea-focused subreddit relevant to expats/nomads; verify link before launch."
+  },
+  {
+    "name": "Regional workation program Discord (placeholder)",
+    "platform": "Discord",
+    "url": "",
+    "description": "MOCK — placeholder for a region-specific workation-program community; source per-region if available."
+  }
+]

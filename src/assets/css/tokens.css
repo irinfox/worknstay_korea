@@ -1,0 +1,67 @@
+:root {
+  /* Color */
+  --color-bg: #ffffff;
+  --color-surface: #f5f4f1;
+  --color-text: #1c1b19;
+  --color-text-muted: #5c5952;
+  --color-border: #ddd9d1;
+  --color-primary: #1f5c4d;
+  --color-primary-dark: #143d33;
+  --color-accent: #c96f34;
+  --color-link: var(--color-primary);
+  --color-link-visited: #3d4f6b;
+  --color-focus-ring: #2f6fed;
+
+  /* Region-eligibility states (map + region cards, wired in a later phase) */
+  --color-region-active: var(--color-primary);
+  --color-region-partial: #b8862f;
+  --color-region-ineligible: #b7b2a7;
+
+  /* Spacing scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+
+  /* Type */
+  --font-family-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Malgun Gothic", "Segoe UI", sans-serif;
+  --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
+  --font-size-base: 1rem;
+  --font-size-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --font-size-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --font-size-2xl: clamp(1.625rem, 1.4rem + 1vw, 2.125rem);
+  --font-size-3xl: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+  --line-height-tight: 1.2;
+  --line-height-base: 1.55;
+
+  /* Radius / shadow / z-index */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shadow-sm: 0 1px 2px rgba(28, 27, 25, 0.08);
+  --shadow-md: 0 4px 16px rgba(28, 27, 25, 0.12);
+  --z-header: 100;
+  --z-nav-overlay: 200;
+
+  /* Layout */
+  --content-max-width: 1200px;
+  /* Narrower reading-width cap for text-heavy content, applied via base.css's .content-page
+     (region pages, /visa-info/, /communities/) — centered via margin auto, distinct from
+     --content-max-width which is the outer site-shell cap used by header/footer. */
+  --content-reading-width: 860px;
+
+  /*
+   * Breakpoints (reference values only — CSS custom properties cannot be read inside
+   * @media conditions, so these document the intent and must be kept in sync by hand with
+   * the literal px values used in each component's media queries).
+   */
+  --bp-tablet: 768px;
+  --bp-desktop: 1280px;
+  /* Region-info infographic/single-card switch (architecture.md §3/§9) — starting point,
+     tune empirically against real landscape-phone widths during Phase 5 build. */
+  --bp-region-info-wide: 768px;
+}

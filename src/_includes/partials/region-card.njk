@@ -1,0 +1,25 @@
+{# Single template for both region-info render modes (architecture.md §3): the wide-viewport
+   infographic loops this 6x into fixed slots, the narrow-viewport single card renders it once.
+   Params: region (Region, required), cost (CostOfLiving | null), modifier ("infographic" | "single") #}
+<div class="region-card region-card--{{ modifier | default("single") }}" data-region-slug="{{ region.slug }}">
+  <div class="region-card__header">
+    <h3 class="region-card__name">{{ region.nameEn }}</h3>
+    <span class="region-card__score" title="Nomad score (editorial, v1)">{{ region.nomadScore }}</span>
+  </div>
+  <ul class="region-card__tags">
+    {% for tag in region.vibeTags %}
+    <li>{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  <p class="region-card__intro">{{ region.shortIntro }}</p>
+  {% if cost %}
+  <p class="region-card__cost">
+    <span class="region-card__cost-label">Rent, 1BR city centre</span>
+    <span class="region-card__cost-value">₩{{ cost.rent1brCityCentre | krw }}/mo</span>
+  </p>
+  {% endif %}
+  {# Eligibility caption (active/partial/ineligible) wired in a later phase — the calculator
+     and eligibility.js don't exist yet. Empty on purpose, kept as the mount point. #}
+  <p class="region-card__eligibility" data-eligibility-caption hidden></p>
+  <a class="region-card__link" href="/regions/{{ region.slug }}/">Learn more →</a>
+</div>

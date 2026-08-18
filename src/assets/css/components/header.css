@@ -1,0 +1,126 @@
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.site-header__inner {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.site-header__logo {
+  font-weight: 700;
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/*
+ * The burger toggle only does anything once nav.js runs, so it stays out of the DOM's visible
+ * flow until then — otherwise it renders as a dead button. nav.js adds `.js-nav-ready` to
+ * <body> and takes over collapsing `.site-nav__list` behind it below the ~768px breakpoint.
+ * Without JS, `.site-nav__list` is always visible at every width (the rules below the
+ * `.js-nav-ready` block) — that's the progressive-enhancement fallback, not a broken state.
+ */
+.nav-toggle {
+  display: none;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.site-nav__item a {
+  display: block;
+  padding: var(--space-2) 0;
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.site-nav__item a[aria-current="page"] {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .site-nav__list {
+    flex-direction: row;
+    width: auto;
+    gap: var(--space-5);
+  }
+
+  .site-nav__item a {
+    padding: var(--space-1) 0;
+  }
+}
+
+.js-nav-ready .nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin-left: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  cursor: pointer;
+}
+
+.js-nav-ready .nav-toggle__bar,
+.js-nav-ready .nav-toggle__bar::before,
+.js-nav-ready .nav-toggle__bar::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-text);
+}
+
+.js-nav-ready .nav-toggle__bar {
+  position: relative;
+}
+
+.js-nav-ready .nav-toggle__bar::before,
+.js-nav-ready .nav-toggle__bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.js-nav-ready .nav-toggle__bar::before {
+  top: -6px;
+}
+
+.js-nav-ready .nav-toggle__bar::after {
+  top: 6px;
+}
+
+.js-nav-ready .site-nav__list {
+  display: none;
+}
+
+.js-nav-ready .site-nav__list.is-open {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .js-nav-ready .nav-toggle {
+    display: none;
+  }
+
+  .js-nav-ready .site-nav__list,
+  .js-nav-ready .site-nav__list.is-open {
+    display: flex;
+    flex-direction: row;
+  }
+}

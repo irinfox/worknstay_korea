@@ -1,0 +1,138 @@
+/* Mobile-first reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul[class],
+ol[class] {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  font-size: 1rem; /* iOS Safari zooms on focus below 16px — never go smaller on form fields */
+}
+
+/* Base typography */
+body {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+.page {
+  flex: 1;
+  padding: var(--space-5) var(--space-4);
+}
+
+/* Centers text-heavy page content (region pages, visa-info, communities) in a reading-width
+   column instead of stretching edge-to-edge inside .page's full width. Distinct from
+   --content-max-width (tokens.css), which is the wider outer site-shell cap used by the
+   header/footer bar. */
+.content-page {
+  max-width: var(--content-reading-width);
+  margin: 0 auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: var(--line-height-tight);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+}
+
+h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3 {
+  font-size: var(--font-size-xl);
+}
+
+h4 {
+  font-size: var(--font-size-lg);
+}
+
+a {
+  color: var(--color-link);
+}
+
+a:visited {
+  color: var(--color-link-visited);
+}
+
+/* Accessible focus state, visible on keyboard nav only */
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-2);
+  z-index: var(--z-nav-overlay);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-primary);
+  color: #fff;
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  top: var(--space-2);
+}
