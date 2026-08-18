@@ -129,19 +129,33 @@ Goal: every JS module from architecture.md §4 exists with a stub `init()` and i
       list stays visible per Phase 2. No browser-automation tool was available in this session to
       click the toggle live and check the browser console directly — deferred to the user.
 
-## Phase 4 — Korea map asset (placeholder-accurate)
+## Phase 4 — Korea map asset (placeholder-accurate) ✅
 Goal: an SVG map with the correct 6-region group structure exists and inlines cleanly — visual
 polish and real boundary accuracy is not the goal here, group/id/slug correctness is.
 
-- [ ] Placeholder `assets/svg/korea-regions.svg` — 6 region `<g>` groups with correct `svgGroupId`s
+- [x] Placeholder `assets/svg/korea-regions.svg` — 6 region `<g>` groups with correct `svgGroupId`s
       from `regions.json` + Seoul/Incheon sub-shapes inside Gyeonggi (simple/rough shapes are fine;
       real boundary-data conversion via mapshaper is a noted follow-up, not blocking scaffolding)
-- [ ] `partials/korea-map.njk` — inlines the SVG, each region `<g>` wrapped in a real
+- [x] `partials/korea-map.njk` — inlines the SVG, each region `<g>` wrapped in a real
       `<a href="/regions/<slug>/">` (rule 6), ineligible-region non-clickable behavior deferred to
       Phase-N (calculator doesn't exist yet)
-- [ ] `assets/css/components/korea-map.css` — base region fill/stroke, `:hover` state, `viewBox`
-      + `max-width: 100%`
-- [ ] Verify: map renders on a test page, all 6 regions link correctly, JS-disabled click works
+- [x] `assets/css/components/korea-map.css` — base region fill/stroke, `:hover`/`:focus-visible`
+      state, `viewBox` + `max-width: 100%`
+- [x] Verify: build clean (`npx eleventy`), `_site/index.html` checked programmatically against
+      `regions.json` — all 6 `href="/regions/<slug>/"` and all 6 `id="<svgGroupId>"` match exactly
+      (script diffed live output against the data file, not eyeballed). CSS/SVG both 200 over
+      `eleventy --serve`. Anchors are real `<a href>` SVG elements (no JS involved), so
+      JS-disabled click works by construction, matching rule 6.
+      **No visual/browser check this session either**: `claude-in-chrome` extension is installed
+      but browser tools weren't enabled for this session (needs `/chrome` or a Claude Code
+      restart) — same gap flagged after Phase 3. Implementation approach used inline SVG via a
+      new `inlineSvg` Eleventy shortcode (`eleventyConfig.addShortcode`, plain `node:fs`, no new
+      dependency) rather than `<img src>`, so hover/focus CSS and future JS state (Phase 5+) can
+      target the `<g>`/`<a>` elements directly. `korea-map.njk` was temporarily mounted into
+      `index.njk` (behind a comment) purely so it renders somewhere pre-Phase-5; Phase 5 replaces
+      `index.njk`'s body entirely and will keep the same include. **Flag again before Phase 5**
+      (infographic/single-card switch) and Phase 9 — those need an actual visual pass per rule 7,
+      either via `/chrome` next session or the user checking `localhost:8080` manually.
 
 ## Phase 5 — Home page shell
 Goal: home page renders both region-info render modes (§3) as static markup from mock data —

@@ -1,0 +1,55 @@
+.korea-map {
+  width: 100%;
+}
+
+.korea-map svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+
+.region {
+  cursor: pointer;
+}
+
+.region__shape {
+  fill: var(--color-region-active);
+  fill-opacity: 0.55;
+  stroke: var(--color-primary-dark);
+  stroke-width: 2;
+  transition: fill-opacity 0.15s ease, stroke-width 0.15s ease;
+}
+
+.region:hover .region__shape,
+.region:focus-visible .region__shape {
+  fill-opacity: 0.85;
+  stroke-width: 3;
+}
+
+.region:focus-visible {
+  outline: 3px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.region__label {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  fill: var(--color-text);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.region__subshape rect {
+  fill: var(--color-surface);
+  stroke: var(--color-primary-dark);
+  stroke-width: 1;
+}
+
+.region__subshape text {
+  font-family: var(--font-family-base);
+  font-size: 8px;
+  fill: var(--color-text);
+  text-anchor: middle;
+  pointer-events: none;
+}
