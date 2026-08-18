@@ -1,0 +1,30 @@
+---
+layout: layouts/page.njk
+title: "Communities"
+description: "Online communities for digital nomads and expats in Korea."
+---
+<header class="region-header">
+  <h1>Communities</h1>
+  <p class="region-header__intro">
+    Online groups where digital nomads and foreign residents in Korea share advice, meet up, and
+    swap regional tips. Verify a group is still active before joining — links here are a starting
+    point, not an endorsement.
+  </p>
+</header>
+
+<section class="region-section">
+  {% if communities.length %}
+  <ul class="community-list">
+    {% for c in communities %}
+    <li class="community-card">
+      <h2>{% if c.url %}<a href="{{ c.url }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}</h2>
+      <p class="community-card__platform">{{ c.platform }}</p>
+      <p>{{ c.description }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  {% set message = "No communities currently listed." %}
+  {% include "partials/empty-state.njk" %}
+  {% endif %}
+</section>

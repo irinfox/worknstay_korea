@@ -17,7 +17,7 @@ layout: layouts/page.njk
   (regions.json `centroid`), ordered top-to-bottom within each column — see leader-line
   coordinates below, computed against that same centroid data.
 #}
-<section class="region-infographic" aria-label="Region overview">
+<section id="map" class="region-infographic" aria-label="Region overview">
   <div class="region-infographic__col region-infographic__col--left">
     {% for slug in ["chungcheong-do", "jeolla-do", "jeju-do"] %}
     {% set region = regions | findBySlug(slug) %}

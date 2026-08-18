@@ -1,0 +1,44 @@
+/* visa-info.njk + communities.njk — shared table/list styling for the two remaining static
+   pages (Phase 7). Reuses .region-header / .region-section / .cost-summary / .mock-note /
+   .data-provenance / .empty-state from region-page.css rather than duplicating them. */
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.visa-threshold-table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 480px;
+}
+
+.visa-threshold-table th,
+.visa-threshold-table td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.visa-threshold-table th {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.community-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.community-card {
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.community-card__platform {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}

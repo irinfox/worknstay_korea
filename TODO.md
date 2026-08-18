@@ -304,11 +304,40 @@ Goal: all 6 region pages generate via pagination, tabs and empty states render f
       class, so the base CSS reset (`ul[class] { list-style: none }`, which requires a class
       attribute) didn't strip bullets — fixed directly in `tabs.css` instead of the reset.
 
-## Phase 7 — Remaining static pages
-- [ ] `visa-info.njk` — thresholds table + family multiplier + insurance/age/stay-length/conversion
-      facts, pulling numbers from `visaRules.json`
-- [ ] `communities.njk` — from `communities.json`
-- [ ] Confirm nav (`site.json`) links to every page that now exists, no dead links
+## Phase 7 — Remaining static pages ✅
+Goal: the two remaining `site.json` nav destinations exist and render real data.
+
+- [x] `visa-info.njk` — thresholds table (computed live from `visaRules.gniPerCapitaKrw` ×
+      each age band's multiplier, not hardcoded numbers) + family multiplier + insurance/age/
+      stay-length/conversion facts from `visaRules.additionalFacts`, plus the `disclaimer` string
+      rendered via `.empty-state`. New `.table-scroll` wrapper (`overflow-x:auto`) around the
+      threshold table so it degrades to horizontal-scroll instead of breaking page width on
+      narrow screens — no separate breakpoint needed.
+- [x] `communities.njk` — from `communities.json`; each card links out only when `url` is
+      non-empty (`{% if c.url %}`), since every current entry is a `MOCK` placeholder with an
+      empty `url` — renders as plain (non-link) text until real links are sourced. Empty-state
+      partial wired in for the zero-communities case even though it doesn't trigger today.
+- [x] New `assets/css/components/static-pages.css` (table + community-card styling only; reuses
+      `.region-header`/`.region-section`/`.cost-summary`/`.mock-note`/`.data-provenance`/
+      `.empty-state` from `region-page.css` rather than duplicating them), wired into
+      `layouts/base.njk`.
+- [x] Confirmed nav (`site.json`) — all 4 links now resolve: `/`, `/visa-info/`, `/communities/`
+      all pre-existed or were just built; `/#map` was a **dead in-page anchor** (no element had
+      `id="map"` anywhere) until this phase — fixed by adding `id="map"` to `index.njk`'s
+      `<section class="region-infographic">`, which stays in the DOM (only its columns/lines are
+      CSS-hidden below the 768px breakpoint) so the anchor resolves at every width.
+- [x] Verify: clean `npx eleventy` build, both new pages 200 over `eleventy --serve`, computed
+      threshold values checked in the built HTML (18–34 capital ₩78,615,000, 35+ capital
+      ₩104,820,000, etc. — GNI × multiplier, matches `visaRules.json`, off by a few thousand KRW
+      from architecture.md §7's own rounded prose figures, which is expected since the JSON is
+      the source of truth here, not the doc prose). Visually checked via `claude-in-chrome` at
+      the wide default viewport — both pages render cleanly, zero console errors. Narrow-width
+      check done via a targeted JS simulation (not a full device-preset pass, since this content
+      is plain block-flow reusing already-verified patterns, not new width-driven layout): forced
+      a 360px container width and confirmed the visa-threshold table's `scrollWidth` (480px)
+      overflows its `.table-scroll` wrapper (328px) via `overflow-x:auto` **without** the page
+      itself gaining horizontal scroll (`body.scrollWidth` stayed at 360px) — the one real
+      overflow risk on these two pages is contained correctly.
 
 ## Phase 8 — API stub layer (local mock endpoints, not live yet)
 Goal: `functions/api/**` file structure exists and returns the same shape live KTO calls will
