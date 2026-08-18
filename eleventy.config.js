@@ -15,6 +15,17 @@ export default function (eleventyConfig) {
     return readFileSync(filePath, "utf8").replace(/<\?xml[^>]*\?>\s*/, "");
   });
 
+  // Thousand-separator formatting for KRW figures (costOfLiving.json values are raw integers).
+  eleventyConfig.addFilter("krw", function (value) {
+    return new Intl.NumberFormat("en-US").format(value);
+  });
+
+  // Looks up a record by `slug` or `regionSlug` — regions.json uses the former,
+  // costOfLiving.json (and other per-region data files) use the latter.
+  eleventyConfig.addFilter("findBySlug", function (arr, slug) {
+    return (arr || []).find((item) => item.slug === slug || item.regionSlug === slug);
+  });
+
   return {
     dir: {
       input: "src",

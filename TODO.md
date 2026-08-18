@@ -214,17 +214,50 @@ polish and real boundary accuracy is not the goal here, group/id/slug correctnes
       (infographic/single-card switch) and Phase 9 — those need an actual visual pass per rule 7,
       either via `/chrome` next session or the user checking `localhost:8080` manually.
 
-## Phase 5 — Home page shell
+## Phase 5 — Home page shell ✅
 Goal: home page renders both region-info render modes (§3) as static markup from mock data —
 width-breakpoint CSS switch works, hover/tap highlight logic is deferred, not the DOM/CSS structure.
 
-- [ ] `partials/region-card.njk` — single template used by both modes, fed from `regions.json`
-- [ ] `index.njk` — loops `region-card` 6× into infographic slots (wide) + map + single dynamic-card
-      container (narrow), per §3
-- [ ] `assets/css/components/region-card.css` — width-only breakpoint switch, hand-positioned
-      leader-line SVG (fixed coordinates, authored once)
-- [ ] Verify at 360/768/1280px: correct mode shows at each width, cards contain real region content,
-      JS-disabled navigation to region pages works
+- [x] `partials/region-card.njk` — single template used by both modes (`region-card--infographic`
+      compact / `region-card--single` full-size), fed from `regions.json` + `costOfLiving.json`
+      via a new `findBySlug` Nunjucks filter (`eleventy.config.js`) and a new `krw` thousands-
+      separator filter for cost figures
+- [x] `index.njk` — left column (Chungcheong-do, Jeolla-do, Jeju-do) + shared `korea-map.njk`
+      include (kept visible at every width — it's a plain grid child, not nested inside a
+      wide-only wrapper) + right column (Gangwon-do, Gyeonggi-do, Gyeongsang-do), all as direct
+      children of `.region-infographic` so the columns can be hidden below the breakpoint without
+      hiding the map too; `.region-single` (defaults to Gyeonggi-do) renders after it for narrow
+      mode. Column L/R assignment and top-to-bottom order follow each region's actual
+      `centroid.y` in `regions.json`, matching the map's placeholder shape positions.
+- [x] `assets/css/components/region-card.css` — width-only 768px breakpoint (hardcoded, matching
+      the existing header.css constraint — custom properties aren't readable in `@media`); fixed
+      720px-wide infographic grid (210px col / 260px map / 210px col) so the SVG leader-line
+      overlay's coordinates never need recomputing; 6 `<line>` elements with fixed coordinates
+      computed from each region's `centroid` mapped into the container's local coordinate space.
+      `.page` given base padding in `base.css` (was 0 — first phase with real content).
+- [x] Verify: clean `npx eleventy` build; all 7 region-card `<a href>`s (6 infographic + 1
+      single) checked via JS and match `regions.json` slugs exactly; zero console errors.
+      **Visually verified across all three rule-7 checkpoints** (`claude-in-chrome`, same
+      DevTools-preset-on-extension-tab workflow established after the Phase 2/3 catch-up):
+      - **Wide** (~1850px, the environment's stuck default): all 6 cards render with real data
+        (name, nomad score, hashtags, cost, "Learn more →"); leader lines initially invisible
+        (traced programmatically first — all 6 `<line>` elements present with correct computed
+        endpoints — turned out to be a contrast bug, not a positioning bug: `stroke:
+        var(--color-border)` (#ddd9d1) against white was nearly invisible; fixed to
+        `var(--color-text-muted)` at `stroke-opacity: 0.6`, re-verified visible on both sides).
+      - **768px exactly** (the tightest fit: 720px fixed content against 736px available):
+        `document.documentElement.scrollWidth === clientWidth === 768`, no horizontal overflow;
+        cost labels wrap to a second line inside the 130px-tall cards but stay within bounds,
+        nothing clipped.
+      - **412px** (Pixel 9 preset, ≈360px checkpoint): map full-width, single Gyeonggi-do card
+        below it with untruncated intro text, correct data, working link; zero console errors.
+      - Narrow-mode DOM/CSS switch (columns + lines hidden, single card shown) also verified
+        programmatically before the visual pass. One tooling note: simulating narrow mode via a
+        forced CSS override at the actual stuck-wide (1850px) viewport blew the map up to
+        ~1800×2790px and made `computer:screenshot` time out repeatedly (JS inspection still
+        worked); not a real bug, just confirms the override technique doesn't substitute for an
+        actual narrow viewport when a component's size is width-driven (unlike the Phase 3 nav
+        toggle, which was a fixed-size element).
 
 ## Phase 6 — Region pages
 Goal: all 6 region pages generate via pagination, tabs and empty states render from mock data.

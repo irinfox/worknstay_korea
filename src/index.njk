@@ -1,9 +1,56 @@
 ---
 layout: layouts/page.njk
 ---
-<p>Home page content lands in Phase 5 (region-info shell). This placeholder exists to verify
-the base layout, header, and footer render correctly.</p>
+<h1 class="sr-only">Work&amp;Stay Korea</h1>
 
-{# Temporary Phase 4 verification mount — Phase 5 replaces this whole file with the real
-   region-info shell (infographic/single-card modes wrapping this same partial). #}
-{% include "partials/korea-map.njk" %}
+{#
+  Region-info shell (architecture.md §3): one shared region-card.njk partial feeds two
+  render modes, switched by a width-only CSS breakpoint (768px) — never both at once, never
+  recomputed on resize.
+    - Wide (region-infographic): all 6 regions permanently visible around the map, in two
+      fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
+    - Narrow (region-single): the map alone, full width, followed by one static card in normal
+      flow. Tap-to-fill-this-card-from-the-map is real behavior deferred to a later phase
+      (korea-map.js/region-card.js are still stub init()s) — this card shows Gyeonggi-do as the
+      default so the DOM/CSS structure and mock data wiring are provable now.
+  Left/right column assignment follows each region's actual centroid position on the map
+  (regions.json `centroid`), ordered top-to-bottom within each column — see leader-line
+  coordinates below, computed against that same centroid data.
+#}
+<section class="region-infographic" aria-label="Region overview">
+  <div class="region-infographic__col region-infographic__col--left">
+    {% for slug in ["chungcheong-do", "jeolla-do", "jeju-do"] %}
+    {% set region = regions | findBySlug(slug) %}
+    {% set cost = costOfLiving | findBySlug(slug) %}
+    {% set modifier = "infographic" %}
+    {% include "partials/region-card.njk" %}
+    {% endfor %}
+  </div>
+
+  {% include "partials/korea-map.njk" %}
+
+  <div class="region-infographic__col region-infographic__col--right">
+    {% for slug in ["gangwon-do", "gyeonggi-do", "gyeongsang-do"] %}
+    {% set region = regions | findBySlug(slug) %}
+    {% set cost = costOfLiving | findBySlug(slug) %}
+    {% set modifier = "infographic" %}
+    {% include "partials/region-card.njk" %}
+    {% endfor %}
+  </div>
+
+  <svg class="region-infographic__lines" viewBox="0 0 720 414" aria-hidden="true" focusable="false">
+    <line x1="210" y1="65" x2="230" y2="150" />
+    <line x1="210" y1="207" x2="230" y2="266" />
+    <line x1="210" y1="349" x2="230" y2="375" />
+    <line x1="510" y1="65" x2="490" y2="54" />
+    <line x1="510" y1="207" x2="490" y2="61" />
+    <line x1="510" y1="349" x2="490" y2="245" />
+  </svg>
+</section>
+
+<section class="region-single" aria-label="Selected region">
+  {% set region = regions | findBySlug("gyeonggi-do") %}
+  {% set cost = costOfLiving | findBySlug("gyeonggi-do") %}
+  {% set modifier = "single" %}
+  {% include "partials/region-card.njk" %}
+</section>

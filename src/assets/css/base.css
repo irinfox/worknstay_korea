@@ -58,6 +58,7 @@ body {
 
 .page {
   flex: 1;
+  padding: var(--space-5) var(--space-4);
 }
 
 h1,
