@@ -1,0 +1,186 @@
+/* Shared placeholder box for images that don't exist yet (no real asset files in any mock
+   data — attractions/events/gallery/food all reference paths that were never generated).
+   Swap to a real <img> once real assets are sourced; keeps things from rendering as broken
+   image icons in the meantime. */
+.media-placeholder {
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.data-provenance {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.empty-state {
+  padding: var(--space-4);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.region-header {
+  max-width: 65ch;
+  margin-bottom: var(--space-6);
+}
+
+.region-header__ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.region-header__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.region-header__intro {
+  margin-top: var(--space-3);
+}
+
+.region-section {
+  margin-bottom: var(--space-8);
+  scroll-margin-top: var(--space-4);
+}
+
+/* Overview tab: cities + event calendar, cities first when stacked (architecture.md §9). */
+.region-overview-grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+@media (min-width: 900px) {
+  .region-overview-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.city-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.city-list__item {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.city-list__ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.city-list__badge {
+  display: inline-block;
+  margin-top: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+}
+
+.city-list__workation {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.city-list__workation .note {
+  font-style: italic;
+}
+
+/* Attractions: horizontal scroll-snap gallery (same pattern as gallery.css's .gallery, per
+   user feedback — attractions ARE the gallery view here, not a separate grid). */
+.attraction-list {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
+}
+
+.attraction-card {
+  flex: 0 0 auto;
+  width: 220px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.attraction-card__media {
+  aspect-ratio: 4 / 3;
+}
+
+.attraction-card__address {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Food: stays a wrapping grid — a handful of dishes per region, not a scrolling set. */
+.dish-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.dish-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dish-card__media {
+  aspect-ratio: 4 / 3;
+}
+
+.dish-card__ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Living Info tab */
+.living-info__block {
+  margin-bottom: var(--space-6);
+}
+
+.mock-note {
+  font-size: var(--font-size-sm);
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.cost-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+}
+
+.cost-summary dt {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.cost-summary dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.transport-summary__airports {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-5);
+}

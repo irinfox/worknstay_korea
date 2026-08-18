@@ -1,0 +1,4 @@
+{# Renders a real month-grid calendar for a region's Event[] — one grid per distinct calendar
+   month any event touches (see eleventy/event-calendar.mjs for the date math and the zero-event
+   fallback). Param: events (Event[]) — mock now, will come from the live KTO proxy later. #}
+{% eventCalendar events %}

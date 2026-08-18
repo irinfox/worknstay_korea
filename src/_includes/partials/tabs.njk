@@ -1,0 +1,13 @@
+{#
+  Real anchor-based tab nav (rule 6: functional without JS — links just jump to the section).
+  tabs.js (still a stub, Phase-N) will later intercept clicks to show one panel at a time instead
+  of a full anchor jump; until then every .region-section stays visible in normal document flow.
+  Param: tabs = [{ id, label }, ...]
+#}
+<nav class="tabs__nav" aria-label="Region page sections">
+  <ul>
+    {% for tab in tabs %}
+    <li><a href="#{{ tab.id }}">{{ tab.label }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>

@@ -1,0 +1,25 @@
+/* Horizontal scroll-snap gallery (architecture.md §9) — CSS only, no carousel library.
+   Desktop-only arrow buttons are a later JS enhancement (gallery.js is still a stub). */
+.gallery {
+  display: flex;
+  gap: var(--space-3);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
+}
+
+.gallery__item {
+  flex: 0 0 auto;
+  width: 220px;
+  scroll-snap-align: start;
+}
+
+.gallery__media {
+  aspect-ratio: 4 / 3;
+}
+
+.gallery__item figcaption {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

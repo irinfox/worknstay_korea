@@ -259,19 +259,50 @@ width-breakpoint CSS switch works, hover/tap highlight logic is deferred, not th
         actual narrow viewport when a component's size is width-driven (unlike the Phase 3 nav
         toggle, which was a fixed-size element).
 
-## Phase 6 — Region pages
+## Phase 6 — Region pages ✅
 Goal: all 6 region pages generate via pagination, tabs and empty states render from mock data.
 
-- [ ] `regions/region.njk` — pagination over `regions.json` → `/regions/<slug>/`
-- [ ] `partials/tabs.njk` — real anchor-based tabs (functional without JS)
-- [ ] `partials/empty-state.njk` — generic reusable empty-state partial
-- [ ] `partials/gallery.njk`, `partials/event-calendar.njk` — render from Phase-1b mock
-      `Attraction`/`Event`/gallery data, including the deliberately-empty region
-- [ ] Data-provenance note element present on each KTO-derived block (rule 5) even though the data
-      is mock — so Phase-N's live swap only changes the data source, not the markup
-- [ ] `assets/css/components/tabs.css`, `gallery.css`, `event-calendar.css`
-- [ ] Verify: all 6 region pages build; cities+events grid is 2-col ≥900px, stacked below (§9,
-      layout only — no JS-driven behavior required yet)
+- [x] `regions/region.njk` — pagination over `regions.json` → `/regions/<slug>/`; header
+      (name/Ko-name/hashtags/longIntro) + 3 tabs (Overview, Attractions, Living Info — see note
+      below on why not 4)
+- [x] `partials/tabs.njk` — real anchor-based tabs (functional without JS; sticky nav, no bullets)
+- [x] `partials/empty-state.njk` — generic reusable empty-state partial (dashed box)
+- [x] `partials/event-calendar.njk` — **not** the simple upcoming-list originally planned. Mid-build
+      feedback: user wanted a real month-grid calendar, not a text hint for the empty case. Rebuilt
+      as `eleventy/event-calendar.mjs`, a JS shortcode (real date math doesn't belong in Nunjucks) —
+      renders one grid per distinct calendar month any event touches (chronological, multi-month
+      events like Cheongju's Sep11–Oct11 correctly split across two grids), event days highlighted,
+      legend underneath with date range/title/address. Zero-event regions (Jeju-do) get one blank
+      grid for the current month + the empty-state note, not just text — verified via exact day-count
+      math (Gyeonggi-do: Aug 7–9 + Oct 2–5 = 7 marked cells, confirmed programmatically) and visually.
+      Calendar was initially oversized (53×53px cells, 419px-tall month block) at every width tested,
+      not just narrow — fixed with `max-width: 280px` on `.event-calendar__month`, re-verified
+      compact at 309px, 412px, and inside the 900px 2-col desktop layout.
+- [x] `partials/gallery.njk` — built (scroll-snap, license/attribution plumbing) but **not currently
+      wired into region.njk**: originally planned as a separate "Gallery" tab for `mock.gallery`
+      (hero images, KTO `detailImage2`), but user feedback after visual review found a dedicated
+      Gallery tab confusing next to Attractions and wanted Attractions itself to be the horizontal-
+      scroll gallery view. Tab count dropped from the planned 4 to 3 (Overview/Attractions/Living
+      Info); `.attraction-list` restyled from a CSS grid to the same scroll-snap pattern as
+      `gallery.css`. `gallery.njk`/`gallery.css`/`mock.gallery` kept in the repo, unused for now —
+      reserved for hero images or a future Natural Activities section (architecture.md §6/§11
+      `NatureActivity`, explicitly last-cut-if-short-on-time), not deleted.
+- [x] Data-provenance note present on every KTO-derived block (rule 5) — Attractions and the event
+      calendar both carry it, even though the data is mock
+- [x] `assets/css/components/tabs.css`, `event-calendar.css`, plus a new (not originally itemized but
+      necessary) `region-page.css` for header/overview-grid/attraction-card/dish-card/cost-summary
+      layout and the shared `.media-placeholder` utility. `gallery.css` built but currently unused
+      (see above).
+- [x] Verify: clean `npx eleventy` build, all 6 pages generate; Jeju-do's zero-event empty state
+      confirmed as the *only* empty-state trigger across all 6 pages (grepped for false positives —
+      none); cities+events grid confirmed exactly 2-col (418px/418px, no overflow) at exactly 900px
+      via `claude-in-chrome` + DevTools-preset-on-tab; tab anchor navigation confirmed functional
+      (click → URL fragment updates → target section scrolls into view below the sticky nav via
+      `scroll-margin-top`); attraction horizontal-scroll confirmed via `scrollWidth` (692px) >
+      `clientWidth` (380px) with `scroll-snap-type: x mandatory`; zero console errors across every
+      page/width checked. One real bug found and fixed along the way: `tabs.njk`'s `<ul>` had no
+      class, so the base CSS reset (`ul[class] { list-style: none }`, which requires a class
+      attribute) didn't strip bullets — fixed directly in `tabs.css` instead of the reset.
 
 ## Phase 7 — Remaining static pages
 - [ ] `visa-info.njk` — thresholds table + family multiplier + insurance/age/stay-length/conversion

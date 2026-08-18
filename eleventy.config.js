@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import { renderEventCalendar } from "./eleventy/event-calendar.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +25,18 @@ export default function (eleventyConfig) {
   // costOfLiving.json (and other per-region data files) use the latter.
   eleventyConfig.addFilter("findBySlug", function (arr, slug) {
     return (arr || []).find((item) => item.slug === slug || item.regionSlug === slug);
+  });
+
+  // Filters a per-region data array (cities, food, mock KTO content) down to one region —
+  // Nunjucks has no built-in selectattr/rejectattr (that's Jinja2-only).
+  eleventyConfig.addFilter("byRegion", function (arr, slug) {
+    return (arr || []).filter((item) => item.regionSlug === slug);
+  });
+
+  // Month-grid calendar for a region's events — real date math, so this is a JS shortcode
+  // rather than Nunjucks markup. See eleventy/event-calendar.mjs.
+  eleventyConfig.addShortcode("eventCalendar", function (events) {
+    return renderEventCalendar(events);
   });
 
   return {

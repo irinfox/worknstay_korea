@@ -1,0 +1,148 @@
+---
+pagination:
+  data: regions
+  size: 1
+  alias: region
+permalink: "/regions/{{ region.slug }}/"
+layout: layouts/page.njk
+eleventyComputed:
+  title: "{{ region.nameEn }}"
+  description: "{{ region.shortIntro }}"
+---
+{% set cost = costOfLiving | findBySlug(region.slug) %}
+{% set transportInfo = transport | findBySlug(region.slug) %}
+{% set regionCities = cities | byRegion(region.slug) %}
+{% set regionAttractions = mock.attractions | byRegion(region.slug) %}
+{% set regionEvents = mock.events | byRegion(region.slug) %}
+{% set regionFood = food | byRegion(region.slug) %}
+{#
+  mock.gallery (hero images, KTO detailImage2 per architecture.md §5) isn't rendered on the
+  region page yet — dropped the dedicated Gallery tab per user feedback after the Phase 6 visual
+  review (confusing next to Attractions, which is itself now a horizontal-scroll gallery view).
+  gallery.njk/gallery.css are kept for whenever hero images or a future Natural Activities
+  section need this exact horizontal-scroll pattern.
+#}
+
+<header class="region-header">
+  <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
+  <ul class="region-header__tags">
+    {% for tag in region.vibeTags %}
+    <li>{{ tag }}</li>
+    {% endfor %}
+  </ul>
+  <p class="region-header__intro">{{ region.longIntro }}</p>
+</header>
+
+{% set tabs = [
+  { id: "overview", label: "Overview" },
+  { id: "attractions", label: "Attractions" },
+  { id: "living-info", label: "Living Info" }
+] %}
+{% include "partials/tabs.njk" %}
+
+<section id="overview" class="region-section">
+  <h2>Overview</h2>
+  <div class="region-overview-grid">
+    <div class="region-overview-grid__cities">
+      <h3>Where you'd live</h3>
+      {% if regionCities.length %}
+      <ul class="city-list">
+        {% for city in regionCities %}
+        <li class="city-list__item">
+          <h4>{{ city.nameEn }} <span class="city-list__ko">{{ city.nameKo }}</span></h4>
+          <p>{{ city.blurb }}</p>
+          {% if city.isPopulationDeclineArea %}
+          <p class="city-list__badge">Population-decline-designated area</p>
+          {% endif %}
+          {% if city.workationCenters.length %}
+          <ul class="city-list__workation">
+            {% for wc in city.workationCenters %}
+            <li>{{ wc.name }}{% if wc.note %} <span class="note">({{ wc.note }})</span>{% endif %}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      {% set message = "No workation-centre cities currently listed for this region." %}
+      {% include "partials/empty-state.njk" %}
+      {% endif %}
+    </div>
+    <div class="region-overview-grid__events">
+      <h3>Upcoming festivals &amp; events</h3>
+      {% set events = regionEvents %}
+      {% include "partials/event-calendar.njk" %}
+    </div>
+  </div>
+</section>
+
+<section id="attractions" class="region-section">
+  <h2>Attractions</h2>
+  {% if regionAttractions.length %}
+  <ul class="attraction-list">
+    {% for a in regionAttractions %}
+    <li class="attraction-card">
+      <div class="media-placeholder attraction-card__media" aria-hidden="true"></div>
+      <h3>{{ a.titleEn }}</h3>
+      <p>{{ a.summary }}</p>
+      <p class="attraction-card__address">{{ a.address }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  {% set message = "No attractions currently listed for this region." %}
+  {% include "partials/empty-state.njk" %}
+  {% endif %}
+  <p class="data-provenance">Data from the Korea Tourism Organization (KTO) OpenAPI — currently mock data, live via the proxy layer in a later phase.</p>
+</section>
+
+<section id="living-info" class="region-section">
+  <h2>Living Info</h2>
+
+  {% if cost %}
+  <div class="living-info__block">
+    <h3>Cost of living <span class="mock-note">mock placeholder figures — not yet verified</span></h3>
+    <dl class="cost-summary">
+      <div><dt>Rent, 1BR city centre</dt><dd>₩{{ cost.rent1brCityCentre | krw }}/mo</dd></div>
+      <div><dt>Monthly budget, single person</dt><dd>₩{{ cost.monthlyBudgetSingle | krw }}/mo</dd></div>
+      <div><dt>Inexpensive meal</dt><dd>₩{{ cost.mealInexpensive | krw }}</dd></div>
+      <div><dt>Transit pass</dt><dd>₩{{ cost.transitPass | krw }}/mo</dd></div>
+      <div><dt>Utilities</dt><dd>₩{{ cost.utilities | krw }}/mo</dd></div>
+    </dl>
+  </div>
+  {% endif %}
+
+  {% if transportInfo %}
+  <div class="living-info__block">
+    <h3>Getting around</h3>
+    <ul class="transport-summary__airports">
+      {% for airport in transportInfo.airports %}
+      <li>{{ airport.name }} ({{ airport.iata }}) — {{ airport.note }}</li>
+      {% endfor %}
+    </ul>
+    <p>{{ transportInfo.railNote }}</p>
+    <p>{{ transportInfo.intercityBusNote }}</p>
+    <p>{{ transportInfo.localTransitNote }}</p>
+    <p>
+      {% if transportInfo.carRecommended %}A car is recommended for getting around comfortably.
+      {% else %}A car isn't necessary — public transit covers most needs.{% endif %}
+    </p>
+  </div>
+  {% endif %}
+
+  {% if regionFood.length %}
+  <div class="living-info__block">
+    <h3>Local food</h3>
+    <ul class="dish-list">
+      {% for dish in regionFood %}
+      <li class="dish-card">
+        <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
+        <h4>{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h4>
+        <p>{{ dish.caption }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</section>
