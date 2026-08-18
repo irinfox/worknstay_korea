@@ -25,19 +25,30 @@ only after a calculator run do ineligible regions grey out (Phase 17).
 | jeolla-do | `["29","45","46"]` | `["12","52"]` — 12 = merged Jeonnam+Gwangju, 52 = Jeonbuk |
 | others | ok | ok |
 
-- [ ] Fix the codes above, comment that they're live-verified (2026-08-18).
-- [ ] Fill `visaRules.sourceUrl` (currently empty).
+- [x] Fix the codes above, comment that they're live-verified (2026-08-18).
+- [x] Fill `visaRules.sourceUrl` (currently empty).
 - Verify: live call per region returns `totalCount > 0`; `visaRules.sourceUrl` non-empty and
   resolves.
 
 ## Phase 12 — Data truth: population-decline areas
 Blocks Phase 15 (`eligibility.js`'s `'partial'` tier).
 
-- [ ] Source real MOIS 인구감소지역 list into `populationDeclineAreas.json` (currently `[]`;
+- [x] Source real MOIS 인구감소지역 list into `populationDeclineAreas.json` (currently `[]`;
       ~89 counties reported, confirm against the actual MOIS notice, don't trust secondhand).
-- [ ] Every `provinceSlug` must match a real `regions.json` slug.
-- [ ] Update `cities.json`'s `isPopulationDeclineArea` flags to match (Ganghwa is a likely `true`).
+      Sourced 2026-08-18 directly from `mois.go.kr`, verified twice independently. Actually 107
+      records nationwide (89 「인구감소지역」+ 18 「관심지역」, a separate watch-list — visa text is
+      ambiguous whether watch counties qualify too, see Phase 29). Split into two files: the
+      working `populationDeclineAreas.json` keeps only the 7 records inside `gyeonggi-do` (the
+      only region where this data affects eligibility); `populationDeclineAreasFull.json` backs
+      up all 107 so the scrape doesn't need repeating if scope changes.
+- [x] Every `provinceSlug` must match a real `regions.json` slug.
+- [x] Update `cities.json`'s `isPopulationDeclineArea` flags to match (Ganghwa is a likely `true`).
+      Ganghwa → `true`. Gangneung/Gyeongju/Boryeong/Andong are MOIS-listed too but outside
+      Gyeonggi-do, so left `false` (no eligibility effect there — see architecture.md §7).
 - Verify: script-check every entry has real fields + valid `provinceSlug`.
+      Working file: 7/7 valid, all `provinceSlug: 'gyeonggi-do'`. Full file: 107/107 valid, 89
+      decline + 18 watch, no duplicate counties across the two lists. `cities.json` flags
+      cross-checked against the working file (script run 2026-08-18).
 
 ## Phase 13 — Real Korea boundary SVG
 No dependency on 11/12. Filename stays `korea-regions.svg` (`korea-map.njk` inlines it by that
@@ -225,6 +236,26 @@ Milestone bucket, not a day/branch phase.
 - [ ] 기능설명서 write-up mapped to Task #4 hashtags.
 - [ ] Final KTO call-history screenshot (Phase 22 already did an early check).
 - [ ] User testing, final link audit, deploy freeze before the deadline.
+
+## Phase 29 — Verification: confirm eligibility-rule ambiguities with MOJ
+Milestone bucket, not a day/branch phase. Not a hard blocker for earlier phases — the site can
+be built and demoed with the current best-guess interpretations — but should close out before
+Phase 28's deploy freeze, since it can change calculator output for real regions/cities.
+
+- [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과, contact in
+      `visa_rules.pdf` p.2, or immigration.go.kr) whether the 18 「관심지역」 watch counties
+      qualify for the lower threshold, or only the 89 official 「인구감소지역」 do — see
+      architecture.md §7. If narrow: drop the 3 `category: 'watch'` rows from
+      `populationDeclineAreas.json` (and from the full backup).
+      Sources: [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
+      [official mirror PDF](https://www.kla.kr/api/boards/6/posts/25311/files/4305/download),
+      [MOJ press release](https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do).
+- [ ] **Non-capital decline flag scope.** Decide if non-capital cities that MOIS also lists
+      (Gangneung, Gyeongju, Boryeong, Andong, +16 more in `populationDeclineAreasFull.json`)
+      deserve their own editorial badge — not needed for the calculator, deliberately deferred.
+- [ ] Log other eligibility-rule ambiguities surfaced in Phase 15/16 here instead of guessing.
+- Verify: each item has either a confirmed answer + a data update, or an explicit "still open,
+  shipping with the default interpretation" note before Phase 28's deploy freeze.
 
 ---
 

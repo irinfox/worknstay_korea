@@ -1,1 +1,9 @@
-[]
+[
+  { "countyNameEn": "Ganghwa-gun", "countyNameKo": "강화군", "provinceSlug": "gyeonggi-do", "metroEn": "Incheon", "category": "decline" },
+  { "countyNameEn": "Ongjin-gun", "countyNameKo": "옹진군", "provinceSlug": "gyeonggi-do", "metroEn": "Incheon", "category": "decline" },
+  { "countyNameEn": "Gapyeong-gun", "countyNameKo": "가평군", "provinceSlug": "gyeonggi-do", "metroEn": "Gyeonggi-do", "category": "decline" },
+  { "countyNameEn": "Yeoncheon-gun", "countyNameKo": "연천군", "provinceSlug": "gyeonggi-do", "metroEn": "Gyeonggi-do", "category": "decline" },
+  { "countyNameEn": "Dong-gu", "countyNameKo": "동구", "provinceSlug": "gyeonggi-do", "metroEn": "Incheon", "category": "watch" },
+  { "countyNameEn": "Dongducheon-si", "countyNameKo": "동두천시", "provinceSlug": "gyeonggi-do", "metroEn": "Gyeonggi-do", "category": "watch" },
+  { "countyNameEn": "Pocheon-si", "countyNameKo": "포천시", "provinceSlug": "gyeonggi-do", "metroEn": "Gyeonggi-do", "category": "watch" }
+]

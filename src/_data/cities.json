@@ -19,8 +19,8 @@
     "nameKo": "강화군",
     "lat": 37.75,
     "lng": 126.49,
-    "blurb": "Incheon county with a distinct rural, historic character — a plausible candidate for a population-decline-designated area inside the capital-tier region, pending official verification.",
-    "isPopulationDeclineArea": false,
+    "blurb": "Incheon county with a distinct rural, historic character — a population-decline-designated area inside the capital-tier region (MOIS-confirmed 2026-08-18).",
+    "isPopulationDeclineArea": true,
     "workationCenters": [
       { "name": "Ganghwa Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
     ]

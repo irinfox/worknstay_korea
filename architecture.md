@@ -258,8 +258,12 @@ VisaRules     version, effectiveFrom, gniReferenceYear, gniPerCapitaKrw, currenc
               ageBands[{ minAge, maxAge, multiplierCapitalArea, multiplierNonCapitalArea }],
               familyMultiplier{ capitalArea, nonCapitalArea }
 
-PopulationDeclineArea   countyNameEn, countyNameKo, provinceSlug   // official MOIS 인구감소지역
-                        list — sourced separately, see §7. Rarely updated; static data.
+PopulationDeclineArea   countyNameEn, countyNameKo, provinceSlug, metroEn,
+                        category: 'decline' | 'watch'
+                        // populationDeclineAreas.json: working file, gyeonggi-do only (the
+                        //   only capital-tier region — elsewhere the flag can't change
+                        //   eligibility). populationDeclineAreasFull.json: full 107-record
+                        //   nationwide backup, not read by the build. See §7.
 
 EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all' | 'partial'
                     captionKey, dimmedRegionSlugs[], partialRegionSlugs[]
@@ -298,13 +302,20 @@ Decrease Region) list, some of which sit administratively inside Gyeonggi-do. Bl
 "Gyeonggi = capital tier" would misrepresent real eligibility for those counties, so this is
 modeled explicitly rather than disclaimed away:
 
-- `src/_data/populationDeclineAreas.json` holds the official MOIS-designated county list (see
-  `PopulationDeclineArea` in §6). **This list still needs to be sourced** — neither
-  `visa_rules.pdf` nor `contest_rules.pdf` enumerates it, only names the category. Source it
-  from the official MOIS 인구감소지역 지정 공고 before building the calculator, and re-verify
-  periodically since the list is occasionally revised.
-- Each `City` in `cities.json` carries `isPopulationDeclineArea`. Any workation-centre city
-  inside Gyeonggi-do that's on the list gets `true`.
+- `src/_data/populationDeclineAreas.json` holds the MOIS-designated county list, sourced live
+  2026-08-18 (`mois.go.kr`, legal basis: 지방자치분권 및 지역균형발전에 관한 특별법 §2/시행령 §3,
+  first designated 2021-10, 5-year re-designation cycle). Two categories: 89 official
+  「인구감소지역」(`category: 'decline'`) + 18 「관심지역」(`category: 'watch'`), confirmed disjoint.
+  Trimmed to the 7 records inside `gyeonggi-do` — the only capital-tier region, so the only
+  place this data can change an eligibility outcome. The full 107-record nationwide set lives in
+  `populationDeclineAreasFull.json` (not read by the build) in case scope broadens later.
+  Whether `'watch'` counties genuinely qualify for the lower threshold, or only the 89 `'decline'`
+  counties do, is unconfirmed — the visa press release's wording ("인구감소(관심)지역") supports
+  both readings. Modeled here as the broader reading (include now, narrow later if wrong).
+- Each `City` in `cities.json` carries `isPopulationDeclineArea`, `true` only for a Gyeonggi-do/
+  Incheon workation city on the list above (currently just `ganghwa`) — it has no eligibility
+  meaning outside Gyeonggi-do, so it's left `false` elsewhere even where MOIS also designates
+  the county (e.g. Gangneung, Andong — see `populationDeclineAreasFull.json`).
 - `eligibility.js` gains a third outcome: a region is `'partial'` (not simply active/grey) when
   it's nominally capital-tier but contains at least one population-decline county that
   independently qualifies at the lower threshold. Today this only applies to `gyeonggi-do`.
