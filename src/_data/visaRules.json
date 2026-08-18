@@ -4,8 +4,8 @@
   "gniReferenceYear": 2025,
   "gniPerCapitaKrw": 52410000,
   "currency": "KRW",
-  "sourceUrl": "",
-  "sourceNote": "Ministry of Justice (법무부) press release, 2026-07-07: '연봉 1억 문턱은 낮추고 체류기간은 최대 3년으로…'. Full text in visa_rules.pdf at repo root; no public URL captured yet.",
+  "sourceUrl": "https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do",
+  "sourceNote": "Ministry of Justice (법무부) press release, 2026-07-07: '연봉 1억 문턱은 낮추고 체류기간은 최대 3년으로…'. URL verified live 2026-08-18. Full text also in visa_rules.pdf at repo root.",
   "disclaimer": "General guidance only, based on the Ministry of Justice's F-1-D (Digital Nomad / Workation) visa announcement. Rules and thresholds are revised periodically — always confirm current requirements with the Ministry of Justice or your nearest Korean embassy or consulate before applying.",
   "ageBands": [
     {

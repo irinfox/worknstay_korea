@@ -25,8 +25,8 @@ only after a calculator run do ineligible regions grey out (Phase 17).
 | jeolla-do | `["29","45","46"]` | `["12","52"]` — 12 = merged Jeonnam+Gwangju, 52 = Jeonbuk |
 | others | ok | ok |
 
-- [ ] Fix the codes above, comment that they're live-verified (2026-08-18).
-- [ ] Fill `visaRules.sourceUrl` (currently empty).
+- [x] Fix the codes above, comment that they're live-verified (2026-08-18).
+- [x] Fill `visaRules.sourceUrl` (currently empty).
 - Verify: live call per region returns `totalCount > 0`; `visaRules.sourceUrl` non-empty and
   resolves.
 
