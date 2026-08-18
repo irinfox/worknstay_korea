@@ -21,6 +21,15 @@ the durable, brief set of project-scope agreements.
 - Hard deadline: **2026-09-21 16:00 KST**. Real target: feature-complete by **~Sept 7** to leave
   2–2.5 weeks for user testing and the submission write-up.
 
+## Workflow constraints (do not violate)
+
+- The user runs all `git add`/`git commit` themselves — only propose the
+  `git add` file list and commit message after each phase, never execute git commands that stage
+  or commit.
+- Dev server: `npm run serve` (port 8080, `eleventy --serve`); stop with
+  `lsof -ti:8080 -sTCP:LISTEN | xargs -r kill` before relaunching to avoid `EADDRINUSE`.
+
+
 ## Tech stack (do not add to this list without strong justification)
 
 Eleventy (11ty) v3 + Nunjucks, hand-written CSS, vanilla ES module JS, inline SVG map,

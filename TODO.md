@@ -57,10 +57,26 @@ into a more permanent home (architecture.md, a code comment, etc.).
   width-breakpoint infographic/single-card switch) and Phase 9 (full responsive pass) — those need
   an actual visual check per CLAUDE.md rule 7, either via a connected browser tool next session or
   the user checking manually. Don't claim a visual pass without one.
-- **Workflow note:** the user runs all `git add`/`git commit` themselves — only propose the
-  `git add` file list and commit message after each phase, never execute git commands that stage
-  or commit. Dev server: `npm run serve` (port 8080, `eleventy --serve`); stop with
-  `lsof -ti:8080 -sTCP:LISTEN | xargs -r kill` before relaunching to avoid `EADDRINUSE`.
+- **Session recap (stopped after Phase 4, 2026-08-18):** Phase 4 (Korea map placeholder SVG) is
+  built and structurally verified (clean `npx eleventy` build; script-diffed `_site/index.html`
+  against `regions.json` — all 6 `href="/regions/<slug>/"` and all 6 `id="<svgGroupId>"` match
+  exactly; CSS/SVG both 200 over `eleventy --serve`). **Not yet visually verified** — this
+  session's `claude-in-chrome` extension was installed but browser tools weren't enabled
+  (needed `/chrome` or a restart), so the map has never actually been looked at in a browser.
+  **First thing next session:** confirm browser tools are on, then do the Phase 4 visual check
+  before starting Phase 5 — load `localhost:8080`, look at `.korea-map`, confirm the 6 shapes
+  render sanely (no huge overlap, labels legible, Seoul/Incheon sub-shapes visible inside
+  Gyeonggi), and click through all 6 region links. If anything looks visually broken, fix it
+  before Phase 5 builds real content around it.
+- `korea-map.njk` is mounted into `index.njk` behind an explicit "Temporary Phase 4 verification
+  mount" comment — Phase 5 replaces `index.njk`'s body with the real infographic/single-card
+  shell (§3) and should keep the same `{% include "partials/korea-map.njk" %}` inside it rather
+  than re-inlining the shortcode call.
+- New Eleventy shortcode `inlineSvg` added in `eleventy.config.js` (plain `node:fs`, no new
+  dependency) — reads a file from `src/assets/svg/` and inlines its raw markup so CSS/JS can
+  target `<g>`/`<a>` elements directly. Reuse this shortcode for any future inlined SVG (e.g. the
+  Phase 5 hand-positioned leader lines, if those end up as a separate SVG asset rather than
+  inline markup in `region-card.njk`).
 
 ---
 
