@@ -49,6 +49,10 @@
 
   /* Layout */
   --content-max-width: 1200px;
+  /* Narrower reading-width cap for text-heavy content, applied via base.css's .content-page
+     (region pages, /visa-info/, /communities/) — centered via margin auto, distinct from
+     --content-max-width which is the outer site-shell cap used by header/footer. */
+  --content-reading-width: 860px;
 
   /*
    * Breakpoints (reference values only — CSS custom properties cannot be read inside

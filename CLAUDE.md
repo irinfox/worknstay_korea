@@ -48,6 +48,10 @@ guardrail, not just the list.
    never rely on it for filtering.
 4. Content and numbers (visa thresholds, cost-of-living figures, region metadata) live in
    `src/_data/*.json`, never hardcoded in templates or JS.
+   - Unverified/placeholder values in `_data/*.json` are marked inline with the literal string
+     `MOCK` or `PLACEHOLDER` in a `source`/`credit`/`note`/`url` field on that record — never
+     silently. Grepping `_data/*.json` for these two strings is the canonical way to find
+     everything that still needs real sourcing before launch; there is no separate tracking list.
 5. Every KTO-derived UI block shows data provenance and has a designed empty state (some
    regions currently have zero upcoming festivals — that's expected, not a bug).
 6. Progressive enhancement: every region link is a real `<a href>`, tabs are real anchors, the

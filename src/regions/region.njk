@@ -15,14 +15,7 @@ eleventyComputed:
 {% set regionAttractions = mock.attractions | byRegion(region.slug) %}
 {% set regionEvents = mock.events | byRegion(region.slug) %}
 {% set regionFood = food | byRegion(region.slug) %}
-{#
-  mock.gallery (hero images, KTO detailImage2 per architecture.md §5) isn't rendered on the
-  region page yet — dropped the dedicated Gallery tab per user feedback after the Phase 6 visual
-  review (confusing next to Attractions, which is itself now a horizontal-scroll gallery view).
-  gallery.njk/gallery.css are kept for whenever hero images or a future Natural Activities
-  section need this exact horizontal-scroll pattern.
-#}
-
+<div class="content-page">
 <header class="region-header">
   <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
   <ul class="region-header__tags">
@@ -35,7 +28,6 @@ eleventyComputed:
 
 {% set tabs = [
   { id: "overview", label: "Overview" },
-  { id: "attractions", label: "Attractions" },
   { id: "living-info", label: "Living Info" }
 ] %}
 {% include "partials/tabs.njk" %}
@@ -75,33 +67,48 @@ eleventyComputed:
       {% include "partials/event-calendar.njk" %}
     </div>
   </div>
-</section>
 
-<section id="attractions" class="region-section">
-  <h2>Attractions</h2>
-  {% if regionAttractions.length %}
-  <ul class="attraction-list">
-    {% for a in regionAttractions %}
-    <li class="attraction-card">
-      <div class="media-placeholder attraction-card__media" aria-hidden="true"></div>
-      <h3>{{ a.titleEn }}</h3>
-      <p>{{ a.summary }}</p>
-      <p class="attraction-card__address">{{ a.address }}</p>
-    </li>
-    {% endfor %}
-  </ul>
-  {% else %}
-  {% set message = "No attractions currently listed for this region." %}
-  {% include "partials/empty-state.njk" %}
+  <div class="region-block">
+    <h3>Attractions</h3>
+    {% if regionAttractions.length %}
+    <ul class="attraction-list">
+      {% for a in regionAttractions %}
+      <li class="attraction-card">
+        <div class="media-placeholder attraction-card__media" aria-hidden="true"></div>
+        <h4>{{ a.titleEn }}</h4>
+        <p>{{ a.summary }}</p>
+        <p class="attraction-card__address">{{ a.address }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    {% set message = "No attractions currently listed for this region." %}
+    {% include "partials/empty-state.njk" %}
+    {% endif %}
+    <p class="data-provenance">Data from the Korea Tourism Organization (KTO) OpenAPI — currently mock data, live via the proxy layer in a later phase.</p>
+  </div>
+
+  {% if regionFood.length %}
+  <div class="region-block">
+    <h3>Local food</h3>
+    <ul class="dish-list">
+      {% for dish in regionFood %}
+      <li class="dish-card">
+        <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
+        <h4>{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h4>
+        <p>{{ dish.caption }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
   {% endif %}
-  <p class="data-provenance">Data from the Korea Tourism Organization (KTO) OpenAPI — currently mock data, live via the proxy layer in a later phase.</p>
 </section>
 
 <section id="living-info" class="region-section">
   <h2>Living Info</h2>
 
   {% if cost %}
-  <div class="living-info__block">
+  <div class="region-block">
     <h3>Cost of living <span class="mock-note">mock placeholder figures — not yet verified</span></h3>
     <dl class="cost-summary">
       <div><dt>Rent, 1BR city centre</dt><dd>₩{{ cost.rent1brCityCentre | krw }}/mo</dd></div>
@@ -114,7 +121,7 @@ eleventyComputed:
   {% endif %}
 
   {% if transportInfo %}
-  <div class="living-info__block">
+  <div class="region-block">
     <h3>Getting around</h3>
     <ul class="transport-summary__airports">
       {% for airport in transportInfo.airports %}
@@ -130,19 +137,5 @@ eleventyComputed:
     </p>
   </div>
   {% endif %}
-
-  {% if regionFood.length %}
-  <div class="living-info__block">
-    <h3>Local food</h3>
-    <ul class="dish-list">
-      {% for dish in regionFood %}
-      <li class="dish-card">
-        <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
-        <h4>{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h4>
-        <p>{{ dish.caption }}</p>
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
-  {% endif %}
 </section>
+</div>

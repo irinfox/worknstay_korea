@@ -1,7 +1,8 @@
 /*
- * Real anchor-based tab nav (rule 6). Phase 6: every .region-section stays visible in normal
- * document flow — these links just jump/scroll to a section. Phase-N's tabs.js will intercept
- * clicks to show one panel at a time instead; the DOM/CSS here doesn't need to change for that.
+ * Real anchor-based tab nav (rule 6): without JS, every .region-section stays visible in normal
+ * document flow and these links just jump/scroll to a section. Phase 10's tabs.js progressively
+ * enhances this into real single-panel ARIA tabs (hides inactive .region-sections, adds
+ * aria-selected) — the [aria-selected] styling below only ever applies once that JS has run.
  */
 .tabs__nav {
   position: sticky;
@@ -28,9 +29,26 @@
   text-decoration: none;
   color: var(--color-text);
   white-space: nowrap;
+  border-bottom: 3px solid transparent;
 }
 
 .tabs__nav a:hover,
 .tabs__nav a:focus-visible {
   color: var(--color-primary);
+}
+
+/* Active/inactive distinction only makes sense once tabs.js has enhanced the nav into real
+   single-panel tabs — without JS every link is an equally-valid jump link (rule 6), so this
+   stays scoped behind .js-tabs-ready rather than applying to the no-JS baseline. */
+.js-tabs-ready .tabs__nav a {
+  color: var(--color-text-muted);
+}
+
+.js-tabs-ready .tabs__nav a[aria-selected="true"] {
+  color: var(--color-primary-dark);
+  border-bottom-color: var(--color-primary);
+}
+
+.region-section[role="tabpanel"]:focus {
+  outline: none;
 }

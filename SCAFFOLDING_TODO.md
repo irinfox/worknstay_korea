@@ -1,9 +1,11 @@
 # Work&Stay Korea — Scaffolding TODO
 
-Status: **scaffolding complete (Phases 0–9, ✅)**, awaiting user commit of Phase 9. What's next
-is the separate, not-yet-written follow-up TODO for "Explicitly deferred past scaffolding" below
-(real eligibility logic, live KTO integration, real map data, etc.) — this document's own scope
-is done.
+Status: **Phases 0–10 complete ✅ — this document's own scope is fully done.** Every page/
+partial/CSS file/JS module exists and is wired to mock data; the full site is browsable end to
+end; region-page tabs are real single-panel tabs; region-page content is centered. Real feature
+work (real calculator, real map, live KTO integration, etc.) lives in `ROADMAP_TODO.md`, not
+here.
+
 Rule for execution: complete one phase, pause, wait for explicit approval, mark it `[x]` before
 starting the next.
 
@@ -11,79 +13,9 @@ starting the next.
 partial, CSS file, and JS module scaffolded and wired — small enough per step to avoid blowing
 output limits. This is *scaffolding*, not feature-complete implementation: business logic (real
 eligibility math, live KTO calls, full responsive/a11y polish, deployment) is deliberately kept
-to stub/placeholder level here and gets its own follow-up TODO once scaffolding is approved and
-built. See "Explicitly deferred past scaffolding" at the bottom for what that means concretely.
+to stub/placeholder level here. See `ROADMAP_TODO.md` for what comes after.
 
 Source docs: `CLAUDE.md` (rules), `architecture.md` (detail, §-references below).
-
-## Session continuity notes
-Carry these into the next session — they're decisions/caveats from chat that aren't fully
-captured anywhere else in committed files. Delete each line once it's been resolved or folded
-into a more permanent home (architecture.md, a code comment, etc.).
-
-- Local dev environment now has **nvm installed** (`~/.nvm`) with **Node 24.19.0 set as the
-  default** (`nvm alias default`). This was a one-time machine setup step (Node wasn't present
-  before), not something the repo needs to redo — a fresh shell should already have `node`/`npm`
-  on `PATH` via `.bashrc`. If a new session finds `node: command not found`, source
-  `~/.nvm/nvm.sh` rather than reinstalling.
-- A real `.env` with a working `KTO_API_KEY` already exists locally (not created by an assistant
-  session, correctly gitignored) — don't assume it needs sourcing/asking-for again in Phase 8.
-- Data-authoring convention in use across `src/_data/*.json`: unverified/mock values are marked
-  inline with the literal strings `MOCK` or `PLACEHOLDER` in a `source`/`credit`/`note`/`url`
-  field (e.g. `costOfLiving.json`, `food.json`, `communities.json`, city `workationCenters`).
-  Search for these strings before Phase 9 to find everything that still needs real sourcing —
-  there's no separate tracking list.
-- `regions.json`'s `ktoLDongRegnCds`/`ktoAreaCodes` were filled in from general knowledge of
-  Korea's standard administrative region codes (stable government codes, not KTO-specific), not
-  verified against a live KTO API response. Sanity-check these against real API output during
-  Phase 7/8 (live KTO integration) before trusting them for actual `lDongRegnCd` filtering.
-- `populationDeclineAreas.json` is still an empty-array stub (§7/§11 open gap). `cities.json`
-  deliberately keeps every `isPopulationDeclineArea` at `false`, including Ganghwa (Incheon) even
-  though it's a plausible real candidate — resist the temptation to flip it to `true` from memory;
-  wait for the official MOIS 인구감소지역 list to be sourced, since this flag is designed to
-  eventually feed real eligibility-gating logic (Phase 5) and misrepresenting it undermines the
-  site's core value prop (see CLAUDE.md feedback log).
-- **Session recap (stopped after Phase 3, 2026-08-17):** Phases 0–3 are done. Site currently
-  builds one real page (`index.njk`, still placeholder body text) through the full layout chain:
-  `layouts/base.njk` → `layouts/page.njk`, with `partials/header.njk`/`footer.njk` rendering real
-  nav from `site.json`. `assets/css/tokens.css` + `base.css` + `components/{header,footer}.css`
-  exist. All 8 JS modules from architecture.md §4 exist and are wired through `main.js`; only
-  `nav.js` has real logic (burger toggle, gated behind `.js-nav-ready` on `<body>` so JS-disabled
-  nav still works at every width — toggle only shows/does anything below ~768px). **Next up:
-  Phase 4 — Korea map placeholder SVG** (6 region `<g>` groups + Seoul/Incheon sub-shapes,
-  `partials/korea-map.njk`, `components/korea-map.css`).
-- **No browser-automation tool was available/connected this session** (`chromium-cli` not
-  installed, `claude-in-chrome` not connected via `ToolSearch`) — Phase 2/3 responsive and
-  console-error verification was done by CSS/JS logic review + `curl` HTTP-200 checks + `node
-  --check` + watching the `eleventy --serve` rebuild log for errors, **not** actual screenshots or
-  a live console. This is a real gap, not just a formality: flag it again before Phase 5 (the
-  width-breakpoint infographic/single-card switch) and Phase 9 (full responsive pass) — those need
-  an actual visual check per CLAUDE.md rule 7, either via a connected browser tool next session or
-  the user checking manually. Don't claim a visual pass without one.
-- **Session recap (Phase 4 visually verified, 2026-08-18):** Phase 4 (Korea map placeholder SVG)
-  is built, structurally verified (clean `npx eleventy` build; script-diffed `_site/index.html`
-  against `regions.json` — all 6 `href="/regions/<slug>/"` and all 6 `id="<svgGroupId>"` match
-  exactly; CSS/SVG both 200 over `eleventy --serve`), **and now visually verified** via
-  `claude-in-chrome` (extension connected this session after a Chrome restart/login check): all
-  6 region shapes render with no overlap, labels legible, Seoul/Incheon sub-shapes visible inside
-  Gyeonggi-do; `:hover` darkens fill correctly (checked on Gangwon-do); all 6 region links
-  confirmed via accessibility-tree read (`read_page`) to have correct `href`s matching
-  `regions.json` slugs, and clicking one (Jeju-do) navigated to `/regions/jeju-do/` — a 404 there
-  is expected since region pages don't exist until Phase 6; zero console errors on load. **Not
-  covered this pass:** narrow-viewport (360px) rendering and the burger-nav toggle —
-  `resize_window` did not actually shrink the captured viewport in this session (stayed
-  1850x966/1512px-wide screenshots regardless of requested size), so that check still needs a
-  working resize tool or the user's manual check before Phase 5's width-breakpoint switch and
-  Phase 9's full responsive pass.
-- `korea-map.njk` is mounted into `index.njk` behind an explicit "Temporary Phase 4 verification
-  mount" comment — Phase 5 replaces `index.njk`'s body with the real infographic/single-card
-  shell (§3) and should keep the same `{% include "partials/korea-map.njk" %}` inside it rather
-  than re-inlining the shortcode call.
-- New Eleventy shortcode `inlineSvg` added in `eleventy.config.js` (plain `node:fs`, no new
-  dependency) — reads a file from `src/assets/svg/` and inlines its raw markup so CSS/JS can
-  target `<g>`/`<a>` elements directly. Reuse this shortcode for any future inlined SVG (e.g. the
-  Phase 5 hand-positioned leader lines, if those end up as a separate SVG asset rather than
-  inline markup in `region-card.njk`).
 
 ---
 
@@ -107,8 +39,8 @@ Goal: the editorial `_data/*.json` files exist with real-or-plausible values.
 - [x] `populationDeclineAreas.json` stub — empty array, note that real sourcing is deferred (§7/§11)
 
 ## Phase 1b — Mock data: KTO-shaped content ✅
-Goal: local mock JSON standing in for what Phase-N (post-scaffolding) live KTO calls will return,
-so region-page templates have something realistic to render against now.
+Goal: local mock JSON standing in for what `ROADMAP_TODO.md` Phases 20–23's live KTO calls will
+return, so region-page templates have something realistic to render against now.
 
 - [x] Mock `Attraction[]` and `Event[]` fixtures per region (matching §6 models exactly, including
       an empty-events region to exercise the empty-state per rule 5) — `jeju-do` has zero events,
@@ -116,10 +48,11 @@ so region-page templates have something realistic to render against now.
 - [x] Mock gallery image list per region (`imageUrl`, `imageLicense`, attribution fields present)
 - [x] Decided: mocks live in `src/_data/mock/{attractions,events,gallery}.json`. Eleventy exposes
       these as global data namespaced by directory — `mock.attractions`, `mock.events`,
-      `mock.gallery` in templates (verified: 18/10/24 records). Phase-N's live-KTO swap in
-      `functions/api/**` replaces the data *source* templates read from — the shape (`Attraction`/
-      `Event` models from §6) is already what Phase-N's `normalize.mjs` output will match, so no
-      template rewrite is needed then, only a fetch-vs-import change.
+      `mock.gallery` in templates (verified: 18/10/24 records). `ROADMAP_TODO.md` Phase 22's
+      live-KTO swap in `functions/api/**` replaces the data *source* templates read from — the
+      shape (`Attraction`/`Event` models from §6) is already what Phase 21's `normalize.mjs`
+      output will match, so no template rewrite is needed then, only a fetch-vs-import change
+      (and Phase 23 for actually wiring region pages to fetch it).
 
 ## Phase 2 — Base layout & header/footer ✅
 Goal: one throwaway page renders with real nav, no JS required to navigate.
@@ -161,8 +94,7 @@ Goal: one throwaway page renders with real nav, no JS required to navigate.
       container caps and centers); no distinct behavior exists between them.
       **Phase 2/3 visual-check debt is now fully closed**, covering all three CLAUDE.md rule-7
       checkpoints (≈360 via 412px Pixel 9 preset, 768, 1280-equivalent) plus the fix verified at
-      each. Phase 5 has not been started yet (`region-card.njk` doesn't exist, `index.njk` still
-      carries the Phase 4 placeholder mount) — no visual check applicable there until it's built.
+      each.
 
 ## Phase 3 — JS module scaffolding ✅
 Goal: every JS module from architecture.md §4 exists with a stub `init()` and is imported by
@@ -198,7 +130,7 @@ polish and real boundary accuracy is not the goal here, group/id/slug correctnes
       real boundary-data conversion via mapshaper is a noted follow-up, not blocking scaffolding)
 - [x] `partials/korea-map.njk` — inlines the SVG, each region `<g>` wrapped in a real
       `<a href="/regions/<slug>/">` (rule 6), ineligible-region non-clickable behavior deferred to
-      Phase-N (calculator doesn't exist yet)
+      `ROADMAP_TODO.md` Phase 17 (calculator doesn't exist yet)
 - [x] `assets/css/components/korea-map.css` — base region fill/stroke, `:hover`/`:focus-visible`
       state, `viewBox` + `max-width: 100%`
 - [x] Verify: build clean (`npx eleventy`), `_site/index.html` checked programmatically against
@@ -213,9 +145,8 @@ polish and real boundary accuracy is not the goal here, group/id/slug correctnes
       dependency) rather than `<img src>`, so hover/focus CSS and future JS state (Phase 5+) can
       target the `<g>`/`<a>` elements directly. `korea-map.njk` was temporarily mounted into
       `index.njk` (behind a comment) purely so it renders somewhere pre-Phase-5; Phase 5 replaces
-      `index.njk`'s body entirely and will keep the same include. **Flag again before Phase 5**
-      (infographic/single-card switch) and Phase 9 — those need an actual visual pass per rule 7,
-      either via `/chrome` next session or the user checking `localhost:8080` manually.
+      `index.njk`'s body entirely and will keep the same include. (Closed — see Phase 5 and
+      Phase 9's own verify notes below for the real visual passes that resolved this.)
 
 ## Phase 5 — Home page shell ✅
 Goal: home page renders both region-info render modes (§3) as static markup from mock data —
@@ -267,7 +198,8 @@ Goal: all 6 region pages generate via pagination, tabs and empty states render f
 
 - [x] `regions/region.njk` — pagination over `regions.json` → `/regions/<slug>/`; header
       (name/Ko-name/hashtags/longIntro) + 3 tabs (Overview, Attractions, Living Info — see note
-      below on why not 4)
+      below on why not 4). **→ superseded by Phase 10: now 2 tabs** (Overview absorbed
+      Attractions + Local food; Living Info kept to cost + transport only).
 - [x] `partials/tabs.njk` — real anchor-based tabs (functional without JS; sticky nav, no bullets)
 - [x] `partials/empty-state.njk` — generic reusable empty-state partial (dashed box)
 - [x] `partials/event-calendar.njk` — **not** the simple upcoming-list originally planned. Mid-build
@@ -289,13 +221,16 @@ Goal: all 6 region pages generate via pagination, tabs and empty states render f
       Info); `.attraction-list` restyled from a CSS grid to the same scroll-snap pattern as
       `gallery.css`. `gallery.njk`/`gallery.css`/`mock.gallery` kept in the repo, unused for now —
       reserved for hero images or a future Natural Activities section (architecture.md §6/§11
-      `NatureActivity`, explicitly last-cut-if-short-on-time), not deleted.
+      `NatureActivity`, explicitly last-cut-if-short-on-time), not deleted. **→ superseded by
+      Phase 10: `gallery.njk`/`gallery.css` deleted** (zero remaining consumers — Nature
+      Activities was decided fully cut, not last-cut, in `ROADMAP_TODO.md`). `mock.gallery` data
+      and the `functions/api/region/[slug]/gallery.js` endpoint were kept, unaffected.
 - [x] Data-provenance note present on every KTO-derived block (rule 5) — Attractions and the event
       calendar both carry it, even though the data is mock
 - [x] `assets/css/components/tabs.css`, `event-calendar.css`, plus a new (not originally itemized but
       necessary) `region-page.css` for header/overview-grid/attraction-card/dish-card/cost-summary
       layout and the shared `.media-placeholder` utility. `gallery.css` built but currently unused
-      (see above).
+      at the time (see above; deleted in Phase 10).
 - [x] Verify: clean `npx eleventy` build, all 6 pages generate; Jeju-do's zero-event empty state
       confirmed as the *only* empty-state trigger across all 6 pages (grepped for false positives —
       none); cities+events grid confirmed exactly 2-col (418px/418px, no overflow) at exactly 900px
@@ -408,40 +343,83 @@ that only shows up at integration time rather than per-phase.
       jeju-do's event calendar renders its `.event-calendar__empty-note` (no other region
       triggers any empty-state variant, since cities/attractions/food mock data covers all 6
       regions — the event calendar is the only block with real region-to-region variation).
-- [x] Gaps found during this pass (none blocking, noted for later, not re-listing what
-      "Explicitly deferred past scaffolding" below already covers):
-      - **No custom 404 page** (`src/404.njk` → `_site/404.html`) exists yet. Cloudflare Pages
-        serves its own default 404 for unmatched routes without one — not a scaffolding blocker,
-        but worth a small pass before the live submission URL is public, since a nomad hitting a
-        typo'd or old region URL currently gets a generic host-level page instead of a branded
-        one with a way back to the nav.
+- [x] Gaps found during this pass (none blocking, all with a concrete home in `ROADMAP_TODO.md`):
+      - **No custom 404 page** (`src/404.njk` → `_site/404.html`) exists yet. → Phase 19.
       - `.empty-state`'s CSS class is now doing double duty: its original purpose (a dashed-box
         "nothing here" indicator, still used that way in `communities.njk`/`region.njk`) versus
         its reuse on `visa-info.njk` as a plain disclaimer-text treatment (Phase 7). Not a bug —
         the dashed-box look reads fine as a "fine print" treatment too — but if a real
         empty-state and a disclaimer ever end up on the same page, consider a second class name
-        so they don't visually collide.
+        so they don't visually collide. → Phase 26.
       - True browser-level "JavaScript fully disabled" testing (e.g. via a DevTools setting or
         `chrome://` flag) was still not performed via automation — same tool gap noted since
-        Phase 2. Confidence here now rests on the exhaustive static link audit above (which is
+        Phase 2. Confidence here rests on the exhaustive static link audit above (which is
         JS-independent by construction) plus the fact that every interactive affordance sitewide
-        traces to a real `<a href>`, verified per-phase (2/3/6/9). If literal no-JS testing is
-        wanted before submission, it needs either a manual user check or a scriptable
-        `chrome://` JS-disable flag, neither available to this tool this session.
-
-**Scaffolding (Phases 0–9) is now complete.** Everything in "Explicitly deferred past
-scaffolding" below is real, tracked follow-up work — not a gap in this TODO's own scope.
+        traces to a real `<a href>`, verified per-phase (2/3/6/9). → Phase 26 (scoped there to
+        the calculator and region-page KTO content specifically, since this sitewide nav/tabs/map
+        baseline is already closed by the link audit above).
 
 ---
 
-## Explicitly deferred past scaffolding (separate future TODO)
-Not part of this document's execution — noted so nothing is lost:
-- Real `eligibility.js` logic + `calculator.js`/`korea-map.js` state wiring, hover/focus highlight,
-  `sessionStorage` persistence, ineligible-region click gating (§5/§8 from architecture.md)
-- Real KTO OpenAPI integration in `kto-client.mjs`/`normalize.mjs` (live calls, edge caching, rate
-  limits, the quirks list in §5) — compliance-critical, but a distinct build phase from scaffolding
-- Real Korea boundary-data SVG conversion (mapshaper pass) replacing the Phase 4 placeholder
-- Population-decline county list sourcing (§7/§11 open gap) and the `'partial'` map tier
-- Full responsive/a11y pass (landscape-phone tuning, iOS Safari pass, 44px hit-target audit)
-- Deployment to Cloudflare Pages, env vars, analytics, live-URL + KTO call-history verification
-- Workation-centre city list expansion, nature activities/Go Camping API (last-cut candidate)
+## Phase 10 — Minor style/UX fixes ✅
+Goal: fix the three things that already read as wrong even at scaffolding fidelity, without
+waiting on the bigger feature work in `ROADMAP_TODO.md`. CSS/JS-only, no data models touched.
+
+- [x] **Region-page tabs: real tab-switching, not anchor-scroll.** `tabs.js` now progressively
+      enhances `tabs.njk`'s real anchor links into a proper single-panel ARIA tablist: on load
+      (if JS runs), `role="tablist"`/`"tab"`/`"tabpanel"` + `aria-selected`/`aria-controls` are
+      added, all but the active `.region-section` get `hidden`, clicking a tab calls
+      `preventDefault()` and swaps the visible panel via `history.replaceState` (no page jump,
+      URL hash still stays in sync for deep-linking), and Left/Right arrow keys move focus
+      between tabs (roving `tabindex`). Direct-loading a URL with `#attractions` etc. activates
+      that tab and focuses the panel on load. **Without JS, nothing changed** — `tabs.js` bails
+      out before touching the DOM if the expected structure isn't found, so the Phase 6 baseline
+      (all sections visible, anchors just scroll) is the literal no-JS fallback, not a
+      simulation of it. Active/inactive tab styling (`tabs.css`) is scoped behind a new
+      `.js-tabs-ready` class on `<body>` (same pattern as `nav.js`'s `.js-nav-ready`) so the
+      no-JS baseline still renders all tabs identically bold/equal, not permanently "muted."
+- [x] **Region-page content: center it — later generalized to a shared `.content-page`
+      utility.** New `--content-reading-width` token (`860px`, tokens.css) distinct from the
+      existing `--content-max-width` (`1200px`, the outer header/footer shell). Initially applied
+      as `.region-page` scoped to `region.njk` only; when the user asked for `visa-info.njk` and
+      `communities.njk` to match, the rule was moved to base.css as a generic `.content-page`
+      class (`max-width: var(--content-reading-width); margin: 0 auto;`) and all three templates
+      now share it. `.region-header`'s existing narrower `65ch` cap still nests inside it for
+      intro text specifically.
+- [x] **"Regions" nav item — removed, final decision reversed from the original draft.** A
+      `/regions/` index page was considered (and briefly planned as a roadmap phase) but
+      rejected: regions should be navigable from the map only, everywhere. `site.json`'s nav is
+      now 3 items (Home, Visa Info, Communities) — no dead/placeholder-destination link.
+- [x] **Region-page tabs restructured from 3 to 2** (post-Phase-10 user feedback, folded in here
+      since it's the same "minor style/UX fix" category): Overview now contains cities+calendar
+      (unchanged) followed by Attractions and Local food as stacked blocks within the same tab;
+      Living Info keeps only Cost-of-living + Getting-around. `.living-info__block` renamed to
+      the now-more-accurate `.region-block` since it's used in both tabs. Provenance note on
+      Attractions preserved in its new location.
+- [x] **Dead Gallery UI code deleted** (`gallery.njk`, `gallery.css`, `gallery.js`, plus their
+      wiring in `main.js`/`base.njk`) — zero templates referenced them since the Phase 6 decision
+      to fold Attractions into the gallery-view pattern instead of a separate Gallery tab, and
+      Nature Activities (the other originally-imagined consumer) is cut in `ROADMAP_TODO.md`.
+      `mock.gallery` data and the `functions/api/region/[slug]/gallery.js` endpoint are **kept**
+      — still a live roadmap item (Phase 21/22), a decision for Phase 14's hero-image-source
+      call, not dead code. `architecture.md`'s folder listing and §8 state-management note
+      updated to match; its `functions/api` and KTO-caching references to gallery are untouched
+      since those are still accurate.
+- [x] Verify: clean `npx eleventy` build, zero console errors on a region page load. Real-browser
+      click-through confirmed via `claude-in-chrome`: clicking Attractions/Living Info sets
+      `location.hash`, correctly hides/shows exactly one `.region-section` at a time
+      (`hidden` boolean checked directly per-panel, not inferred from a screenshot),
+      `aria-selected` toggles correctly, and — the actual point of this fix — `scrollY` stays at
+      `0` on click instead of jumping down the page. Direct-URL-with-hash load into a **fresh
+      tab** also verified correct (a same-tab hash-only navigation doesn't trigger a real reload
+      in any browser, so that specific check needed a new tab to be meaningful — noted here so a
+      future session doesn't mistake that non-reload behavior for a `tabs.js` bug).
+      Centering verified via a forced-narrow-width JS simulation (390px): `.region-page` shrinks
+      to fit inside the padded viewport with zero page-level horizontal overflow
+      (`body.scrollWidth` stayed at 390), and the existing 900px overview-grid 2-column
+      breakpoint still triggers correctly (it's viewport-width-driven, not container-width-driven,
+      so narrowing the reading column doesn't disable it — the grid just renders narrower).
+      A full manual DevTools-preset visual pass at the three exact rule-7 breakpoints was not run
+      this phase (JS-state verification + one narrow-width simulation only) — that check now
+      belongs to `ROADMAP_TODO.md` Phase 27, which explicitly carries it forward. Scaffolding's
+      own scope for this phase is closed.

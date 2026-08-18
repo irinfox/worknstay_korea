@@ -1,3 +1,3 @@
-// Phase-N target: apply EligibilityResult to the SVG map (active/partial/ineligible region
-// states), hover/focus border-highlight linking a region to its callout. Scaffolding stub only.
+// ROADMAP_TODO.md Phase 17 target: applyResult(result) — toggle active/partial/ineligible region
+// classes, click-gating (+ restore path) on ineligible regions. Scaffolding stub only.
 export function init() {}

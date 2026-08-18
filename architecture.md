@@ -1,9 +1,9 @@
 # Work&Stay Korea — Architecture
 
-Status: approved, ready for first implementation pass with mock data. This document is meant
-to be concrete enough that a fresh session can scaffold the site from it without re-deriving
-decisions already made. See `CLAUDE.md` for the condensed rules; this file has the reasoning
-and the detail.
+Status: approved. This document describes the site's technical architecture and decisions —
+what to build and why — independent of project scheduling; see `SCAFFOLDING_TODO.md` and
+`ROADMAP_TODO.md` for what's built and what's next. See `CLAUDE.md` for the condensed rules;
+this file has the reasoning and detail.
 
 ## 0. What this site is
 
@@ -36,7 +36,7 @@ OpenAPI. Built for the 2026 관광데이터 활용 공모전, ②-2 웹·앱 구
 | Site generator | **Eleventy (11ty) v3** | Static HTML output, one dependency, no Vite/Babel/PostCSS chain. Templates are HTML+`{{ }}`, stack traces point at your file. Slow, deliberate major-version cadence. |
 | Templating | **Nunjucks** (built into 11ty) | Layouts/partials kill header-footer duplication; `pagination` generates all 6 region pages from one `regions.json`. |
 | Styling | **Hand-written CSS**, custom properties, Grid/Flexbox, `clamp()` | Zero build step, zero churn. Tailwind explicitly rejected — its v3→v4 break is exactly the failure mode the stability constraint forbids. |
-| Client JS | **Vanilla ES modules, no libraries** (~300 lines total) | Nav toggle, calculator, map states, tabs, galleries. Debuggable by reading it; no framework runtime to go stale. |
+| Client JS | **Vanilla ES modules, no libraries** (~300 lines total) | Nav toggle, calculator, map states, tabs. Debuggable by reading it; no framework runtime to go stale. |
 | Map | **Inline SVG**, 6 region `<g>` groups (Seoul/Incheon as labeled sub-shapes inside Gyeonggi) | No Leaflet/Mapbox, no second API key/vendor. States are CSS classes, hover is `:hover`, hit targets are real `<a>`. |
 | **KTO-sourced data** | **Cloudflare Pages Functions** (`functions/api/*`) proxying live KTO calls, edge-cached per content-volatility (see §5) | Satisfies the "real, checkable API use" constraint; keeps the API key server-side; keeps response times fast via caching. This is the one deliberate exception to "no backend." |
 | **Static/editorial data** | Build-time JSON in `src/_data/*.json`, hand-authored, committed | Visa rules, cost-of-living snapshot, food, communities, transport — none of this is KTO-sourced, so none of it needs live calls. |
@@ -124,8 +124,12 @@ worknstay_korea/
 ├── .nvmrc
 ├── package.json / package-lock.json
 ├── eleventy.config.js
+├── eleventy/
+│   └── event-calendar.mjs      # build-time month-grid date math (Eleventy shortcode)
 ├── CLAUDE.md
 ├── architecture.md
+├── SCAFFOLDING_TODO.md
+├── ROADMAP_TODO.md
 ├── functions/
 │   └── api/
 │       ├── region/[slug]/attractions.js   # live KTO call, edge-cached (short TTL)
@@ -144,20 +148,24 @@ worknstay_korea/
 │   │   ├── costOfLiving.json   # hand-curated snapshot w/ asOf + source URL
 │   │   ├── food.json           # regional dishes (static)
 │   │   ├── transport.json      # Living Info tab
-│   │   └── communities.json    # communities page links
+│   │   ├── communities.json    # communities page links
+│   │   ├── populationDeclineAreas.json  # MOIS 인구감소지역 list (§7/§11)
+│   │   └── mock/{attractions,events,gallery}.json  # KTO-shaped fixtures; the dev-only fallback
+│   │                            # once functions/api/** makes real live calls
 │   ├── _includes/
 │   │   ├── layouts/{base,page}.njk
-│   │   └── partials/{header,footer,region-card,korea-map,tabs,gallery,event-calendar,empty-state}.njk
+│   │   └── partials/{header,footer,region-card,korea-map,tabs,event-calendar,empty-state}.njk
 │   ├── assets/
-│   │   ├── css/  tokens.css, base.css, layout.css, components/*.css
+│   │   ├── css/  tokens.css, base.css, components/*.css
 │   │   ├── js/   main.js, nav.js, calculator.js, eligibility.js,
-│   │   │         korea-map.js, region-card.js, tabs.js, gallery.js
-│   │   ├── img/  hero/, food/, og/
-│   │   ├── fonts/
+│   │   │         korea-map.js, region-card.js, tabs.js
+│   │   ├── img/  hero/, food/, og/  # planned subfolders; empty until real assets are sourced
+│   │   ├── fonts/               # empty until a real webfont is added
 │   │   └── svg/  korea-regions.svg
 │   ├── index.njk               # home
 │   ├── visa-info.njk
 │   ├── communities.njk
+│   ├── 404.njk
 │   └── regions/region.njk      # pagination over regions.json → /regions/<slug>/
 └── _site/                      # build output (gitignored)
 ```
@@ -242,7 +250,8 @@ CostOfLiving  regionSlug, currency, asOf, source, sourceUrl,
 Transport     regionSlug, airports[{name, iata, note}], railNote,
               intercityBusNote, localTransitNote, carRecommended:bool
 
-NatureActivity  regionSlug, name, type, difficulty, season, url   // stretch, last-cut if short on time
+NatureActivity  regionSlug, name, type, difficulty, season, url   // stretch, likely last-cut
+                                                                    // if time is short (§11)
 
 VisaRules     version, effectiveFrom, gniReferenceYear, gniPerCapitaKrw, currency: 'KRW',
               sourceUrl, disclaimer,
@@ -311,12 +320,12 @@ modeled explicitly rather than disclaimed away:
 
 No library, no store. Three tiers:
 
-1. **Local/DOM state** — burger open/closed, active tab, gallery index. Lives in the owning
-   module, expressed as a CSS class on one element.
+1. **Local/DOM state** — burger open/closed, active tab. Lives in the owning module, expressed
+   as a CSS class on one element.
 2. **Shared state — exactly one piece:** `EligibilityResult`. Flow: `calculator.js` reads
-   inputs → calls pure `eligibility.js` → hands the result to `main.js`, which calls
-   `caption.render(result)` and `koreaMap.applyResult(result)`. One-directional, ~10 lines of
-   glue, no event bus.
+   inputs → calls pure `eligibility.js` → `calculator.js` renders the result caption itself, and
+   `main.js` glue calls `koreaMap.applyResult(result)` separately for the map state only.
+   One-directional, ~10 lines of glue, no event bus, no separate `caption.js` module.
 3. **Persistence** — write the result to `sessionStorage` so a user returning from a region
    page doesn't lose their calculator result; region pages can read it to show a small
    "available to you" badge.
@@ -330,10 +339,16 @@ No library, no store. Three tiers:
   below it (portrait phones). This is the one boundary decision that matters most for the
   homepage; the breakpoint value itself needs empirical tuning against real landscape-phone
   widths during build, not just standard device presets.
-- Region page Main tab: cities list + event calendar are a 2-column grid ≥900px, stacked below
-  that, cities first (primary answer to "where would I live").
-- Galleries: CSS `scroll-snap-type: x mandatory` + `overflow-x: auto`, no carousel library.
-  Desktop-only arrow buttons added by JS.
+- Region page Overview tab: cities list + event calendar are a 2-column grid ≥900px, stacked
+  below that, cities first (primary answer to "where would I live"); Attractions and Local food
+  render as further stacked blocks below the grid, inside the same tab (Living Info is the only
+  other tab, holding just cost-of-living + transport).
+- Horizontal scroll-snap lists (e.g. `.attraction-list`): CSS `scroll-snap-type: x mandatory` +
+  `overflow-x: auto`, no carousel library, no JS required. (A standalone Gallery UI — a separate
+  `gallery.njk`/`gallery.css`/a `gallery.js` module for desktop-only arrow buttons — was removed:
+  no template ever wired it in after Attractions absorbed this horizontal-scroll pattern instead.
+  `mock.gallery` data and the `functions/api/region/[slug]/gallery.js` endpoint are unaffected;
+  arrow-button controls are not planned anywhere and should be treated as cut, not deferred.)
 - Map: SVG with `viewBox` + `max-width: 100%`. Verify hit targets ≥44px at 360px width for the
   smallest region (Jeju); add an invisible enlarged hit-circle if not.
 - iOS Safari specifics: use `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent
@@ -355,13 +370,14 @@ back to one of these:
 ## 11. Open, non-blocking gaps (known, deliberately deferred)
 
 - **Population-decline-designated county list not yet sourced** (see §7) — needed before the
-  calculator/map can be built accurately. Source from the official MOIS 인구감소지역 지정 공고
-  next session; this blocks accurate Gyeonggi map behavior but not the rest of the site.
+  calculator/map can be built accurately.
 - Workation-centre city list has no canonical source yet — ship v1 with a small hand-curated
   set per region, expand later (pure data change, no architecture impact).
 - Nomad score is a static editorial number for v1 (real scoring pipeline is a separate future
   sub-project/repo) — just a plain field on `Region`, swappable later without a schema change.
-- Nature activities / Go Camping API integration is explicitly last-cut if time is short before
-  the ~Sept 7 internal feature-complete target.
+  This one is a settled decision, not just a deferral.
+- Nature activities / Go Camping API integration — leaning toward cutting this if time is
+  short, not yet a final decision.
 - Custom domain not yet secured — the `*.pages.dev` Cloudflare Pages URL satisfies the
-  contest's live-URL requirement in the meantime.
+  contest's live-URL requirement either way; whether to get a custom domain at all is still
+  open, independent of the contest deadline.

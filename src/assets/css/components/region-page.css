@@ -1,3 +1,7 @@
+/* .content-page (base.css) provides the centered reading-width column this page uses;
+   .region-header keeps its own narrower 65ch cap for the intro text specifically, nested inside
+   the wider .content-page container for grids/galleries. */
+
 /* Shared placeholder box for images that don't exist yet (no real asset files in any mock
    data — attractions/events/gallery/food all reference paths that were never generated).
    Swap to a real <img> once real assets are sourced; keeps things from rendering as broken
@@ -152,8 +156,9 @@
   font-size: var(--font-size-sm);
 }
 
-/* Living Info tab */
-.living-info__block {
+/* Generic spaced block within a tab panel — used by Overview's Attractions/Local food blocks
+   and Living Info's Cost/Getting-around blocks alike. */
+.region-block {
   margin-bottom: var(--space-6);
 }
 

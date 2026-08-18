@@ -3,7 +3,6 @@
   "tagline": "Find your region. Stay a while.",
   "nav": [
     { "label": "Home", "href": "/" },
-    { "label": "Regions", "href": "/#map" },
     { "label": "Visa Info", "href": "/visa-info/" },
     { "label": "Communities", "href": "/communities/" }
   ],

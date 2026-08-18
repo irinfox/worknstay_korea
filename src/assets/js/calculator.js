@@ -1,3 +1,3 @@
-// Phase-N target: read salary/age form inputs, call eligibility.js, hand the result to
-// main.js per architecture.md §8. Scaffolding stub only.
+// ROADMAP_TODO.md Phase 16 target: real <form> (salary/age/family), call eligibility.js, render
+// the result caption itself, write sessionStorage. Scaffolding stub only.
 export function init() {}
