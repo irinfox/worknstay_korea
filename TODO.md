@@ -57,17 +57,21 @@ into a more permanent home (architecture.md, a code comment, etc.).
   width-breakpoint infographic/single-card switch) and Phase 9 (full responsive pass) — those need
   an actual visual check per CLAUDE.md rule 7, either via a connected browser tool next session or
   the user checking manually. Don't claim a visual pass without one.
-- **Session recap (stopped after Phase 4, 2026-08-18):** Phase 4 (Korea map placeholder SVG) is
-  built and structurally verified (clean `npx eleventy` build; script-diffed `_site/index.html`
+- **Session recap (Phase 4 visually verified, 2026-08-18):** Phase 4 (Korea map placeholder SVG)
+  is built, structurally verified (clean `npx eleventy` build; script-diffed `_site/index.html`
   against `regions.json` — all 6 `href="/regions/<slug>/"` and all 6 `id="<svgGroupId>"` match
-  exactly; CSS/SVG both 200 over `eleventy --serve`). **Not yet visually verified** — this
-  session's `claude-in-chrome` extension was installed but browser tools weren't enabled
-  (needed `/chrome` or a restart), so the map has never actually been looked at in a browser.
-  **First thing next session:** confirm browser tools are on, then do the Phase 4 visual check
-  before starting Phase 5 — load `localhost:8080`, look at `.korea-map`, confirm the 6 shapes
-  render sanely (no huge overlap, labels legible, Seoul/Incheon sub-shapes visible inside
-  Gyeonggi), and click through all 6 region links. If anything looks visually broken, fix it
-  before Phase 5 builds real content around it.
+  exactly; CSS/SVG both 200 over `eleventy --serve`), **and now visually verified** via
+  `claude-in-chrome` (extension connected this session after a Chrome restart/login check): all
+  6 region shapes render with no overlap, labels legible, Seoul/Incheon sub-shapes visible inside
+  Gyeonggi-do; `:hover` darkens fill correctly (checked on Gangwon-do); all 6 region links
+  confirmed via accessibility-tree read (`read_page`) to have correct `href`s matching
+  `regions.json` slugs, and clicking one (Jeju-do) navigated to `/regions/jeju-do/` — a 404 there
+  is expected since region pages don't exist until Phase 6; zero console errors on load. **Not
+  covered this pass:** narrow-viewport (360px) rendering and the burger-nav toggle —
+  `resize_window` did not actually shrink the captured viewport in this session (stayed
+  1850x966/1512px-wide screenshots regardless of requested size), so that check still needs a
+  working resize tool or the user's manual check before Phase 5's width-breakpoint switch and
+  Phase 9's full responsive pass.
 - `korea-map.njk` is mounted into `index.njk` behind an explicit "Temporary Phase 4 verification
   mount" comment — Phase 5 replaces `index.njk`'s body with the real infographic/single-card
   shell (§3) and should keep the same `{% include "partials/korea-map.njk" %}` inside it rather
@@ -125,8 +129,37 @@ Goal: one throwaway page renders with real nav, no JS required to navigate.
       header/footer via the layout chain; build succeeds, all CSS assets 200 over `eleventy --serve`.
       Nav burger (`.nav-toggle`) is `display:none` until Phase 3's `nav.js` adds `.js-nav-ready` to
       `<body>` — until then `.site-nav__list` is always visible (column <768px, row ≥768px), so nav
-      is fully usable with JS disabled at every width. No browser-automation tool was available in
-      this session to capture actual 360/768/1280px screenshots — visual check deferred to the user.
+      is fully usable with JS disabled at every width. **Now visually verified at a real narrow
+      width (2026-08-18):** `resize_window` never worked in this session (stuck reporting
+      1850x966 regardless of requested size), but the user manually opened Chrome DevTools →
+      device toolbar → Pixel 9 preset (412x924) on the specific tab `claude-in-chrome` had
+      navigated to `localhost:8080` — the extension's screenshot/JS tools *do* correctly reflect
+      a manually-set DevTools viewport even though the automated resize call doesn't. **This is
+      the reusable workaround for Phase 5/9 responsive checks**: navigate the extension's tab to
+      the page, ask the user to set the DevTools device preset on that exact tab, then screenshot/
+      inspect normally.
+      **Found and fixed a real bug this way:** at 412px, `.nav-toggle` sat ~111px away from the
+      right edge with dead space on both sides, instead of flush-right — root cause was
+      `.site-header__inner`'s `display:flex; justify-content:space-between` treating the
+      `<nav class="site-nav">` wrapper as a 3rd flex item even after `.js-nav-ready` collapsed
+      its inner `<ul class="site-nav__list">` to `display:none`; the now-empty `<nav>` still
+      reserved flex-item + gap space, so `space-between` centered the toggle in the leftover gap
+      instead of pinning it to the edge. Fixed in `assets/css/components/header.css` by adding
+      `margin-left: auto` to `.js-nav-ready .nav-toggle` (1-line change, no HTML/JS touched) —
+      toggle now sits flush-right with one consistent `--space-4` gap. Re-verified after the fix:
+      toggle position correct, open/close click still sets `aria-expanded`/`.is-open` correctly,
+      zero console errors.
+      **768px breakpoint boundary also checked directly** (the actual transition point, not just
+      well-above/well-below it): `window.matchMedia('(min-width:768px)').matches` is `true` at
+      exactly 768px, toggle correctly hidden, nav list correctly `flex`-row, all 4 nav links
+      render in one clean row with no wrapping/overlap, active-page bolding intact, zero console
+      errors. **1280px explicitly not re-tested as a separate width** — `--content-max-width`
+      (tokens.css) is `1200px`, so 1280px and the earlier ~1850px check render identically (the
+      container caps and centers); no distinct behavior exists between them.
+      **Phase 2/3 visual-check debt is now fully closed**, covering all three CLAUDE.md rule-7
+      checkpoints (≈360 via 412px Pixel 9 preset, 768, 1280-equivalent) plus the fix verified at
+      each. Phase 5 has not been started yet (`region-card.njk` doesn't exist, `index.njk` still
+      carries the Phase 4 placeholder mount) — no visual check applicable there until it's built.
 
 ## Phase 3 — JS module scaffolding ✅
 Goal: every JS module from architecture.md §4 exists with a stub `init()` and is imported by
@@ -142,8 +175,16 @@ Goal: every JS module from architecture.md §4 exists with a stub `init()` and i
       rebuild log shows zero errors through every edit. Burger nav verified by code path: `nav.js`
       adds `.js-nav-ready` to `<body>`, which is the only thing that lets `header.css` hide
       `.site-nav__list` behind the toggle below ~768px — without JS (or ≥768px, any time) the nav
-      list stays visible per Phase 2. No browser-automation tool was available in this session to
-      click the toggle live and check the browser console directly — deferred to the user.
+      list stays visible per Phase 2. **Now visually/behaviorally verified** (2026-08-18, via
+      `claude-in-chrome`): since the real viewport couldn't be narrowed (see Phase 2 note), the
+      toggle's CSS-hidden state at the stuck wide viewport was overridden with a temporary
+      injected `<style>` (test-only, not a file change) to force `.nav-toggle` visible and expose
+      real narrow-width layout, then the actual button was clicked live twice. Confirmed: first
+      click sets `aria-expanded="true"` and adds `.is-open` to `.site-nav__list` (nav row becomes
+      visible); second click resets `aria-expanded="false"` and removes the class; zero console
+      messages/errors on either click. This verifies `nav.js`'s real logic, though the visual
+      layout itself was only seen at the stuck 1850px-wide viewport with CSS forced, not a true
+      360px device rendering — same residual gap as Phase 2.
 
 ## Phase 4 — Korea map asset (placeholder-accurate) ✅
 Goal: an SVG map with the correct 6-region group structure exists and inlines cleanly — visual
