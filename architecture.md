@@ -111,10 +111,9 @@ jeolla-do      → Jeollabuk-do, Jeollanam-do, Gwangju
 jeju-do        → Jeju-do
 ```
 
-**Korea provinces SVG:** none owned yet — needs to be sourced from a public-domain/permissive
-admin-boundary GeoJSON (e.g. Natural Earth or Korea's own public boundary data) and converted
-once, offline (e.g. via mapshaper), into the 6 region groups above with Seoul/Incheon as
-sub-shapes. Treat this as a one-time asset-prep task, not a runtime dependency.
+**Korea provinces SVG:** sourced — a public-domain per-province boundary SVG (17 first-tier
+division shapes, `src/assets/svg/source/korea-provinces-blank.svg`, see its header comment for
+provenance).
 
 ## 4. Folder structure
 
@@ -162,6 +161,7 @@ worknstay_korea/
 │   │   ├── img/  hero/, food/, og/  # planned subfolders; empty until real assets are sourced
 │   │   ├── fonts/               # empty until a real webfont is added
 │   │   └── svg/  korea-regions.svg
+│   │              source/korea-provinces-blank.svg  # raw Wikimedia source (public domain)
 │   ├── index.njk               # home
 │   ├── visa-info.njk
 │   ├── communities.njk
