@@ -79,3 +79,6 @@ guardrail, not just the list.
   KTO content even if it'd simplify hosting.
 - Ineligible (greyed) regions are intentionally not clickable through — showing them as
   navigable would misrepresent the visa-eligibility gating that's the site's core value prop.
+- Region map uses real province boundaries (Wikimedia source, simplified), not placeholder
+  shapes — user wants genuine geography. Jeju keeps its true geographic distance (sea-tinted
+  background, not an inset) — deliberate, don't "fix" the gap.
