@@ -1,5 +1,9 @@
 .korea-map {
   width: 100%;
+  /* Sea color lives here (not as an opaque <rect> inside the SVG) so the leader-lines layer
+     behind the map (see region-card.css's z-index) shows through, dimmed, under the
+     semi-transparent region shapes — fully hidden only under opaque label text. */
+  background-color: var(--color-map-sea);
 }
 
 .korea-map svg {
@@ -21,10 +25,26 @@
   transition: fill-opacity 0.15s ease, stroke-width 0.15s ease;
 }
 
+/* Metro/special cities carved out of a province (Seoul, Incheon, Daejeon, Sejong, Busan,
+   Daegu, Ulsan, Gwangju) — a deliberate darker shade, distinct from the plain province fill. */
+.region__city {
+  fill: var(--color-primary-dark);
+  fill-opacity: 0.7;
+  stroke: var(--color-primary-dark);
+  stroke-width: 1.5;
+  transition: fill-opacity 0.15s ease, stroke-width 0.15s ease;
+}
+
 .region:hover .region__shape,
 .region:focus-visible .region__shape {
   fill-opacity: 0.85;
   stroke-width: 3;
+}
+
+.region:hover .region__city,
+.region:focus-visible .region__city {
+  fill-opacity: 0.95;
+  stroke-width: 2.5;
 }
 
 .region:focus-visible {
@@ -34,22 +54,104 @@
 
 .region__label {
   font-family: var(--font-family-base);
-  font-size: 11px;
-  fill: var(--color-text);
-  text-anchor: middle;
-  pointer-events: none;
-}
-
-.region__subshape rect {
-  fill: var(--color-surface);
+  fill: #fff;
+  paint-order: stroke;
   stroke: var(--color-primary-dark);
-  stroke-width: 1;
-}
-
-.region__subshape text {
-  font-family: var(--font-family-base);
-  font-size: 8px;
-  fill: var(--color-text);
+  stroke-linejoin: round;
   text-anchor: middle;
   pointer-events: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.15s ease;
+}
+
+/* Always-visible labels: the 6 main region names + Seoul (Phase 13 request — the capital
+   should be identifiable at every width, not just above the wide breakpoint). */
+.region__label--core {
+  font-size: 24px;
+  font-weight: 700;
+  stroke-width: 3px;
+}
+
+/* Narrow/mobile: one summary label per merged region (Chungcheong-do/Gyeongsang-do/Jeolla-do —
+   Gyeonggi-do/Gangwon-do/Jeju-do reuse their `--core` province label, no duplicate needed). */
+.region__label--group {
+  font-size: 15px;
+  font-weight: 700;
+  stroke-width: 3px;
+}
+
+/* Wide (matches the 768px region-info breakpoint, tokens.css --bp-region-info-wide): all 17
+   admin-division names instead of the 6-region summary. */
+.region__label--detail {
+  display: none;
+  font-size: 17px;
+  font-weight: 600;
+  stroke-width: 2.5px;
+}
+
+/* Hovering/focusing a region (directly, or via its card — Phase 18 cross-hover) enlarges its
+   own labels in place, since there's no other way to read the smaller division names up close
+   short of the browser's own zoom. */
+.region:hover .region__label,
+.region:focus-visible .region__label {
+  transform: scale(1.2);
+}
+
+@media (min-width: 768px) {
+  .region__label--group {
+    display: none;
+  }
+
+  .region__label--detail {
+    display: block;
+  }
+
+  /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region[data-slug="chungcheong-do"] .region__shape,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region[data-slug="gyeongsang-do"] .region__shape,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region[data-slug="jeolla-do"] .region__shape,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region[data-slug="jeju-do"] .region__shape,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region[data-slug="gyeonggi-do"] .region__shape,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region[data-slug="gangwon-do"] .region__shape,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region[data-slug="chungcheong-do"] .region__shape,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region[data-slug="gyeongsang-do"] .region__shape,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region[data-slug="jeolla-do"] .region__shape,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__shape {
+    fill-opacity: 0.85;
+    stroke-width: 3;
+  }
+
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__city,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__city,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region[data-slug="chungcheong-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region[data-slug="gyeongsang-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region[data-slug="jeolla-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region[data-slug="jeju-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region[data-slug="gyeonggi-do"] .region__city,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region[data-slug="gangwon-do"] .region__city,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region[data-slug="chungcheong-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region[data-slug="gyeongsang-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region[data-slug="jeolla-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__city {
+    fill-opacity: 0.95;
+    stroke-width: 2.5;
+  }
+
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region[data-slug="gyeonggi-do"] .region__label,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__label,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region[data-slug="gangwon-do"] .region__label,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region[data-slug="chungcheong-do"] .region__label,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region[data-slug="chungcheong-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region[data-slug="gyeongsang-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region[data-slug="gyeongsang-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region[data-slug="jeolla-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region[data-slug="jeolla-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region[data-slug="jeju-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__label {
+    transform: scale(1.2);
+  }
 }

@@ -68,11 +68,11 @@ Phase 17's `applyResult()` keys off — losing it here breaks Phase 17 silently.
 *not* targeted by any CSS/JS today (only classes are); the real reason to preserve them exactly
 is staying in sync with `regions.json`.
 
-- [ ] Mapshaper-convert a real boundary GeoJSON into the existing 6-group structure.
-- [ ] Re-derive `regions.json` centroids + the 6 hardcoded leader-line coords in `index.njk`.
-- [ ] Re-position the 6 labels + Seoul/Incheon sub-shapes.
-- [ ] **Budget: inlined SVG ≤60KB** (current placeholder is 2.6KB; raw mapshaper output can be
-      MBs — this is the likeliest way the timebox blows up).
+- [x] Simplify + group `source/korea-provinces-blank.svg`'s 17 shapes into the 6-group structure
+      (source was already SVG, no GeoJSON/mapshaper needed).
+- [x] Re-derive `regions.json` centroids + the 6 leader-line coords in `index.njk`.
+- [x] Re-position the 6 labels + Seoul/Incheon sub-shapes.
+- [x] **Budget: inlined SVG ≤60KB** — 48.7KB.
 - [ ] Timebox: 1 day hard. Bad output → hand-drawn fallback, don't fight the tool.
 - Verify: rule-7 pass (360/768/1280 + real iOS Safari), all 6 `href`s/`data-slug`s still match
   slugs, all 6 `id`s still match `regions.json`'s `svgGroupId`, file size under budget.
@@ -131,7 +131,8 @@ Depends on 13 (real shapes) + 16 (`EligibilityResult`).
 ## Phase 18 — Region-card interactivity
 Depends on 17. Architecture §3's v1-scope hover/tap layer.
 
-- [ ] Wide: hover/focus highlights region + leader line + callout together.
+- [x] Wide: hover/focus highlights region + leader line + callout together (pulled forward,
+      pure CSS `:has()`, no JS needed).
 - [ ] Narrow: tap-to-fill single card, scroll-into-view — **honor `prefers-reduced-motion`**.
 - [ ] Region pages read `sessionStorage` → "available to you" badge.
 - Verify: highlight trio at wide width, tap-to-fill at 360/412px w/ reduced-motion respected,
