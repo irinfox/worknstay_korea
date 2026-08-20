@@ -111,10 +111,9 @@ jeolla-do      → Jeollabuk-do, Jeollanam-do, Gwangju
 jeju-do        → Jeju-do
 ```
 
-**Korea provinces SVG:** none owned yet — needs to be sourced from a public-domain/permissive
-admin-boundary GeoJSON (e.g. Natural Earth or Korea's own public boundary data) and converted
-once, offline (e.g. via mapshaper), into the 6 region groups above with Seoul/Incheon as
-sub-shapes. Treat this as a one-time asset-prep task, not a runtime dependency.
+**Korea provinces SVG:** sourced — a public-domain per-province boundary SVG (17 first-tier
+division shapes, `src/assets/svg/source/korea-provinces-blank.svg`, see its header comment for
+provenance).
 
 ## 4. Folder structure
 
@@ -162,6 +161,7 @@ worknstay_korea/
 │   │   ├── img/  hero/, food/, og/  # planned subfolders; empty until real assets are sourced
 │   │   ├── fonts/               # empty until a real webfont is added
 │   │   └── svg/  korea-regions.svg
+│   │              source/korea-provinces-blank.svg  # raw Wikimedia source (public domain)
 │   ├── index.njk               # home
 │   ├── visa-info.njk
 │   ├── communities.njk
@@ -360,8 +360,10 @@ No library, no store. Three tiers:
   no template ever wired it in after Attractions absorbed this horizontal-scroll pattern instead.
   `mock.gallery` data and the `functions/api/region/[slug]/gallery.js` endpoint are unaffected;
   arrow-button controls are not planned anywhere and should be treated as cut, not deferred.)
-- Map: SVG with `viewBox` + `max-width: 100%`. Verify hit targets ≥44px at 360px width for the
-  smallest region (Jeju); add an invisible enlarged hit-circle if not.
+- Map: SVG with `viewBox` + `max-width: 100%`. Jeju has an invisible `.region__hit-target`
+  ellipse padding its tap area to ≥44px at 360px width (its own shape alone is ~39px tall).
+- Map labels: all 17 admin-division/city names render at every width — no narrow-viewport
+  summary fallback.
 - iOS Safari specifics: use `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent
   focus-zoom, `-webkit-text-size-adjust: 100%`.
 - Test matrix: 360 / 768 / 1280px **plus at least one landscape-phone width (~700–850px)** to

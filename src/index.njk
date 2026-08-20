@@ -9,17 +9,22 @@ layout: layouts/page.njk
   recomputed on resize.
     - Wide (region-infographic): all 6 regions permanently visible around the map, in two
       fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
+      Cross-hover (card <-> map region <-> leader line, Phase 18) is pure CSS (:has()), no JS —
+      each card/line carries a matching data-slug/data-region-slug for the selectors to key off.
     - Narrow (region-single): the map alone, full width, followed by one static card in normal
       flow. Tap-to-fill-this-card-from-the-map is real behavior deferred to a later phase
       (korea-map.js/region-card.js are still stub init()s) — this card shows Gyeonggi-do as the
       default so the DOM/CSS structure and mock data wiring are provable now.
-  Left/right column assignment follows each region's actual centroid position on the map
-  (regions.json `centroid`), ordered top-to-bottom within each column — see leader-line
-  coordinates below, computed against that same centroid data.
+  Left/right column assignment follows each region's actual west/east position on the map
+  (verified against live centroid measurement, not eyeballed — Korea's landmass genuinely
+  splits 4-west/2-east, not 3/3: Gyeonggi/Chungcheong/Jeolla/Jeju all sit west of the map's own
+  center line, only Gangwon/Gyeongsang sit east), ordered top-to-bottom (N to S) within each
+  column — see leader-line coordinates below, which target each region's actual centroid on the
+  map (not the map's outer edge) so the lines visually connect to the region itself.
 #}
 <section id="map" class="region-infographic" aria-label="Region overview">
   <div class="region-infographic__col region-infographic__col--left">
-    {% for slug in ["chungcheong-do", "jeolla-do", "jeju-do"] %}
+    {% for slug in ["gyeonggi-do", "chungcheong-do", "jeolla-do", "jeju-do"] %}
     {% set region = regions | findBySlug(slug) %}
     {% set cost = costOfLiving | findBySlug(slug) %}
     {% set modifier = "infographic" %}
@@ -30,7 +35,7 @@ layout: layouts/page.njk
   {% include "partials/korea-map.njk" %}
 
   <div class="region-infographic__col region-infographic__col--right">
-    {% for slug in ["gangwon-do", "gyeonggi-do", "gyeongsang-do"] %}
+    {% for slug in ["gangwon-do", "gyeongsang-do"] %}
     {% set region = regions | findBySlug(slug) %}
     {% set cost = costOfLiving | findBySlug(slug) %}
     {% set modifier = "infographic" %}
@@ -38,13 +43,13 @@ layout: layouts/page.njk
     {% endfor %}
   </div>
 
-  <svg class="region-infographic__lines" viewBox="0 0 720 414" aria-hidden="true" focusable="false">
-    <line x1="210" y1="65" x2="230" y2="150" />
-    <line x1="210" y1="207" x2="230" y2="266" />
-    <line x1="210" y1="349" x2="230" y2="375" />
-    <line x1="510" y1="65" x2="490" y2="54" />
-    <line x1="510" y1="207" x2="490" y2="61" />
-    <line x1="510" y1="349" x2="490" y2="245" />
+  <svg class="region-infographic__lines" viewBox="0 0 880 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <line data-slug="gyeonggi-do" x1="210" y1="221.2" x2="358.8" y2="193.5" />
+    <line data-slug="chungcheong-do" x1="210" y1="390.4" x2="377.9" y2="352.6" />
+    <line data-slug="jeolla-do" x1="210" y1="559.6" x2="344.5" y2="587.3" />
+    <line data-slug="jeju-do" x1="210" y1="728.8" x2="285.9" y2="911.3" />
+    <line data-slug="gangwon-do" x1="670" y1="390.4" x2="489.6" y2="160.2" />
+    <line data-slug="gyeongsang-do" x1="670" y1="559.6" x2="529.9" y2="462.3" />
   </svg>
 </section>
 

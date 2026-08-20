@@ -16,6 +16,7 @@
   --color-region-active: var(--color-primary);
   --color-region-partial: #b8862f;
   --color-region-ineligible: #b7b2a7;
+  --color-map-sea: #dbe6ea;
 
   /* Spacing scale */
   --space-1: 0.25rem;

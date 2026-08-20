@@ -126,10 +126,10 @@
 @media (min-width: 768px) {
   .region-infographic {
     display: grid;
-    grid-template-columns: 210px 260px 210px;
+    grid-template-columns: 210px 420px 210px;
     column-gap: 20px;
     align-items: center;
-    width: 720px;
+    width: 880px;
     margin-inline: auto;
   }
 
@@ -146,12 +146,75 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Map must stack above the lines layer (it's a plain grid item otherwise, painted below any
+     positioned sibling regardless of DOM order) — lines should read as going *under* the land,
+     not crossing over labels. */
+  .korea-map {
+    position: relative;
+    z-index: 1;
   }
 
   .region-infographic__lines line {
     stroke: var(--color-text-muted);
     stroke-width: 1.5;
     stroke-opacity: 0.6;
+    transition: stroke 0.15s ease, stroke-width 0.15s ease, stroke-opacity 0.15s ease;
+  }
+
+  .region-card {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  /* Cross-hover: hovering/focusing a map region highlights its card too (Phase 18). */
+  .region-card:hover,
+  .region-card:focus-within,
+  .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) [data-region-slug="gyeonggi-do"],
+  .region-infographic:has(.region[data-slug="gangwon-do"]:hover) [data-region-slug="gangwon-do"],
+  .region-infographic:has(.region[data-slug="chungcheong-do"]:hover) [data-region-slug="chungcheong-do"],
+  .region-infographic:has(.region[data-slug="gyeongsang-do"]:hover) [data-region-slug="gyeongsang-do"],
+  .region-infographic:has(.region[data-slug="jeolla-do"]:hover) [data-region-slug="jeolla-do"],
+  .region-infographic:has(.region[data-slug="jeju-do"]:hover) [data-region-slug="jeju-do"],
+  .region-infographic:has(.region[data-slug="gyeonggi-do"]:focus-visible) [data-region-slug="gyeonggi-do"],
+  .region-infographic:has(.region[data-slug="gangwon-do"]:focus-visible) [data-region-slug="gangwon-do"],
+  .region-infographic:has(.region[data-slug="chungcheong-do"]:focus-visible) [data-region-slug="chungcheong-do"],
+  .region-infographic:has(.region[data-slug="gyeongsang-do"]:focus-visible) [data-region-slug="gyeongsang-do"],
+  .region-infographic:has(.region[data-slug="jeolla-do"]:focus-visible) [data-region-slug="jeolla-do"],
+  .region-infographic:has(.region[data-slug="jeju-do"]:focus-visible) [data-region-slug="jeju-do"] {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Leader-line highlight, triggered from either end (Phase 18). */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region-infographic__lines line[data-slug="gyeonggi-do"],
+  .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],
+  .region-infographic:has(.region[data-slug="gyeonggi-do"]:focus-visible) .region-infographic__lines line[data-slug="gyeonggi-do"],
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region-infographic__lines line[data-slug="gangwon-do"],
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region-infographic__lines line[data-slug="gangwon-do"],
+  .region-infographic:has(.region[data-slug="gangwon-do"]:hover) .region-infographic__lines line[data-slug="gangwon-do"],
+  .region-infographic:has(.region[data-slug="gangwon-do"]:focus-visible) .region-infographic__lines line[data-slug="gangwon-do"],
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region-infographic__lines line[data-slug="chungcheong-do"],
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region-infographic__lines line[data-slug="chungcheong-do"],
+  .region-infographic:has(.region[data-slug="chungcheong-do"]:hover) .region-infographic__lines line[data-slug="chungcheong-do"],
+  .region-infographic:has(.region[data-slug="chungcheong-do"]:focus-visible) .region-infographic__lines line[data-slug="chungcheong-do"],
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region-infographic__lines line[data-slug="gyeongsang-do"],
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region-infographic__lines line[data-slug="gyeongsang-do"],
+  .region-infographic:has(.region[data-slug="gyeongsang-do"]:hover) .region-infographic__lines line[data-slug="gyeongsang-do"],
+  .region-infographic:has(.region[data-slug="gyeongsang-do"]:focus-visible) .region-infographic__lines line[data-slug="gyeongsang-do"],
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region-infographic__lines line[data-slug="jeolla-do"],
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region-infographic__lines line[data-slug="jeolla-do"],
+  .region-infographic:has(.region[data-slug="jeolla-do"]:hover) .region-infographic__lines line[data-slug="jeolla-do"],
+  .region-infographic:has(.region[data-slug="jeolla-do"]:focus-visible) .region-infographic__lines line[data-slug="jeolla-do"],
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region-infographic__lines line[data-slug="jeju-do"],
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region-infographic__lines line[data-slug="jeju-do"],
+  .region-infographic:has(.region[data-slug="jeju-do"]:hover) .region-infographic__lines line[data-slug="jeju-do"],
+  .region-infographic:has(.region[data-slug="jeju-do"]:focus-visible) .region-infographic__lines line[data-slug="jeju-do"] {
+    stroke: var(--color-primary-dark);
+    stroke-width: 2.5;
+    stroke-opacity: 1;
   }
 
   .region-single {
