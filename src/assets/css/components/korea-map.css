@@ -17,6 +17,13 @@
   cursor: pointer;
 }
 
+/* Jeju's shape alone falls under the 44px hit-target minimum at 360px width (~39px tall) —
+   this invisible ellipse pads its tap area without changing the visible shape. */
+.region__hit-target {
+  fill: transparent;
+  pointer-events: all;
+}
+
 .region__shape {
   fill: var(--color-region-active);
   fill-opacity: 0.55;
@@ -73,18 +80,12 @@
   stroke-width: 3px;
 }
 
-/* Narrow/mobile: one summary label per merged region (Chungcheong-do/Gyeongsang-do/Jeolla-do —
-   Gyeonggi-do/Gangwon-do/Jeju-do reuse their `--core` province label, no duplicate needed). */
-.region__label--group {
-  font-size: 15px;
-  font-weight: 700;
-  stroke-width: 3px;
-}
-
-/* Wide (matches the 768px region-info breakpoint, tokens.css --bp-region-info-wide): all 17
-   admin-division names instead of the 6-region summary. */
+/* All 17 admin-division names + city carve-outs, at every width — confirmed on a real Pixel 9
+   (2026-08-21) that full detail naming reads fine at phone width, so the earlier
+   merged-region-summary fallback (Chungcheong-do/Gyeongsang-do/Jeolla-do as one label each)
+   was retired; see architecture.md §9. */
 .region__label--detail {
-  display: none;
+  display: block;
   font-size: 17px;
   font-weight: 600;
   stroke-width: 2.5px;
@@ -99,14 +100,6 @@
 }
 
 @media (min-width: 768px) {
-  .region__label--group {
-    display: none;
-  }
-
-  .region__label--detail {
-    display: block;
-  }
-
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,

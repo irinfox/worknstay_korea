@@ -360,8 +360,10 @@ No library, no store. Three tiers:
   no template ever wired it in after Attractions absorbed this horizontal-scroll pattern instead.
   `mock.gallery` data and the `functions/api/region/[slug]/gallery.js` endpoint are unaffected;
   arrow-button controls are not planned anywhere and should be treated as cut, not deferred.)
-- Map: SVG with `viewBox` + `max-width: 100%`. Verify hit targets ≥44px at 360px width for the
-  smallest region (Jeju); add an invisible enlarged hit-circle if not.
+- Map: SVG with `viewBox` + `max-width: 100%`. Jeju has an invisible `.region__hit-target`
+  ellipse padding its tap area to ≥44px at 360px width (its own shape alone is ~39px tall).
+- Map labels: all 17 admin-division/city names render at every width — no narrow-viewport
+  summary fallback.
 - iOS Safari specifics: use `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent
   focus-zoom, `-webkit-text-size-adjust: 100%`.
 - Test matrix: 360 / 768 / 1280px **plus at least one landscape-phone width (~700–850px)** to

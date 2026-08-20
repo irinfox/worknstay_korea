@@ -68,14 +68,15 @@ Phase 17's `applyResult()` keys off — losing it here breaks Phase 17 silently.
 *not* targeted by any CSS/JS today (only classes are); the real reason to preserve them exactly
 is staying in sync with `regions.json`.
 
-- [x] Simplify + group `source/korea-provinces-blank.svg`'s 17 shapes into the 6-group structure
-      (source was already SVG, no GeoJSON/mapshaper needed).
+- [x] Simplify + group `source/korea-provinces-blank.svg`'s 17 shapes into the 6-group structure.
 - [x] Re-derive `regions.json` centroids + the 6 leader-line coords in `index.njk`.
-- [x] Re-position the 6 labels + Seoul/Incheon sub-shapes.
-- [x] **Budget: inlined SVG ≤60KB** — 48.7KB.
-- [ ] Timebox: 1 day hard. Bad output → hand-drawn fallback, don't fight the tool.
-- Verify: rule-7 pass (360/768/1280 + real iOS Safari), all 6 `href`s/`data-slug`s still match
-  slugs, all 6 `id`s still match `regions.json`'s `svgGroupId`, file size under budget.
+- [x] Position + fine-tune all labels (hover-scale-checked); full detail naming confirmed legible
+      on a real Pixel 9 instead of a narrow-viewport summary fallback — see architecture.md §9.
+- [x] Jeju's hit target padded to ≥44px at 360px via an invisible `.region__hit-target` ellipse.
+- [x] **Budget: inlined SVG ≤60KB** — ~49.0KB.
+- [x] Timebox: 1 day hard — used ~1.5 days (2026-08-19–21); no hand-drawn fallback needed.
+- [x] Verify: `href`/`data-slug`/`id` match `regions.json` (script-checked); hit targets ≥44px at
+  360px (script-checked); labels legible on a real Pixel 9.
 
 ## Phase 14 — Home page: hero + layout restructure
 Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched once.
