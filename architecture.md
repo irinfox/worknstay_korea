@@ -265,17 +265,25 @@ PopulationDeclineArea   countyNameEn, countyNameKo, provinceSlug, metroEn,
                         //   eligibility). populationDeclineAreasFull.json: full 107-record
                         //   nationwide backup, not read by the build. See §7.
 
-EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all' | 'partial'
-                    captionKey, dimmedRegionSlugs[], partialRegionSlugs[]
-                    // 'partial': a region is nominally capital-tier but contains
-                    // population-decline-designated counties that independently qualify —
-                    // see §7. Currently only relevant to gyeonggi-do.
+EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all'
+                    dimmedRegionSlugs[], partialRegionSlugs[]
+                    thresholdCapitalKrw, thresholdNonCapitalKrw
+                    gapToNonCapitalKrw, gapToCapitalKrw
+                    // tier stays 3-way — partiality is per-region, not a 4th tier. A region is
+                    // in partialRegionSlugs (not dimmedRegionSlugs) when it's nominally
+                    // capital-tier but contains population-decline-designated counties that
+                    // independently qualify — see §7. Currently only relevant to gyeonggi-do.
+                    // Two separate gap fields, not one: in the nonCapitalOnly tier the useful
+                    // caption is "how much more to unlock the capital area," which a single
+                    // gap-to-whatever-you-haven't-cleared field can't express on its own.
 ```
 
 `VisaRules` is **JSON data, not JavaScript** — `eligibility.js` is a pure function
-`(salary, age, rules) → EligibilityResult` with no DOM access, trivially testable. Thresholds
-update by editing this one file when the government reissues the annual GNI figure — no code
-change needed.
+`(userInput, referenceData) → EligibilityResult`, where `userInput` is
+`{ salaryKrw, age, hasFamily }` and `referenceData` is `{ rules, regions,
+populationDeclineAreas }`. No DOM access, trivially testable
+(`scripts/verify-eligibility.mjs`). Thresholds update by editing `visaRules.json` when the
+government reissues the annual GNI figure — no code change needed.
 
 `Region.nameKo` exists from day one even though v1 ships English-only, both so users can
 cross-reference Naver Map by Korean place name, and to make a future `ja`/`zh` locale additive

@@ -81,27 +81,36 @@ is staying in sync with `regions.json`.
 ## Phase 14 — Home page: hero + layout restructure
 Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched once.
 
-- [ ] Hero section with an image-slot (data-fed, placeholder gradient until a real photo exists).
-- [ ] Brief intro copy, calculator mount point, result-caption mount point, existing map section
+- [x] Hero section with an image-slot (data-fed, placeholder gradient until a real photo exists).
+      `partials/hero.njk` + `components/hero.css`.
+- [x] Brief intro copy, calculator mount point (`#calculator`, `<noscript>` fallback to
+      `/visa-info/`), result-caption mount point (`#eligibility-result`), existing map section
       below (unchanged).
-- [ ] Decide: hero photo — own vs. KTO-sourced (licensing implications either way).
-- [ ] Decide: KTO `Type3` images (no-derivative-works, most sampled records) — `cover` (crops) vs
-      `contain` (letterbox). Affects hero CSS now if hero ends up KTO-sourced.
-- Verify: rule-7 pass, map/leader-lines unaffected by the restructure.
+- [ ] Decide: hero photo — own vs. KTO-sourced. Blocked on user's pick from `temp_photos/`.
+- [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Defaults to `cover` for now.
+- [ ] Real 360px/768px narrow-viewport check — only ≥768px confirmed live so far (browser
+      tool's `resize_window` isn't shrinking the actual viewport in this environment).
+- Verify: build clean; map/leader-lines untouched by the restructure (diff-checked).
 
 ## Phase 15 — `eligibility.js`
 Pure function, no DOM. Depends on Phase 12.
 
-- [ ] `(salary, age, hasFamily, rules) → EligibilityResult` (`tier`, `captionKey`,
-      `dimmedRegionSlugs[]`, `partialRegionSlugs[]`) — update architecture.md §6's signature to
-      match (currently missing `hasFamily`).
-- [ ] `'partial'` tier reads `populationDeclineAreas.json`. **Decide here (recommendation, not
-      settled):** partiality is inherently per-region (only gyeonggi-do today), so keep the
-      global `tier` to `ineligible | nonCapitalOnly | all` and carry partiality only via
-      `partialRegionSlugs[]` — Phase 16 then renders 3 tier captions plus a separate partial-
-      region note, not a 4th global tier.
-- [ ] Decide: family input — boolean (recommended) vs. headcount.
-- Verify: standalone `node` script, one hand-computed case per tier (keep the script in-repo).
+- [x] `(userInput, referenceData) → EligibilityResult` — `assets/js/eligibility.js`.
+      `userInput = { salaryKrw, age, hasFamily }`, `referenceData = { rules, regions,
+      populationDeclineAreas }`. Two-object shape, not flat args: `userInput` is also exactly
+      what Phase 16 will serialize (form → sessionStorage → query-param permalink), so it
+      doubles as that DTO. architecture.md §6 updated to match.
+- [x] `'partial'` tier via `partialRegionSlugs[]`; global `tier` stays 3-way
+      (`ineligible | nonCapitalOnly | all`), not a 4th tier.
+- [x] Family input: boolean `hasFamily`.
+- [x] Dropped `eligibility.js`'s scaffolding no-op `init()` and its `main.js` wiring — nothing
+      calls it yet (Phase 16's `calculator.js` will call `calculateEligibility()` directly).
+- [x] website-architect review (2026-08-21): signature OK as-is; dropped `captionKey`, split
+      `gapKrw` into `gapToNonCapitalKrw`/`gapToCapitalKrw`.
+- [ ] Data bug found in that review: `visaRules.json`'s rounded GNI doesn't reproduce the
+      published MOJ thresholds (also live on `/visa-info/` today, pre-dates Phase 14/15). Fix:
+      store real `thresholdKrw` per band in `visaRules.json`. Separate follow-up commit.
+- Verify: `node scripts/verify-eligibility.mjs` — 5/5 pass (2026-08-21).
 
 ## Phase 16 — `calculator.js` + caption + persistence
 Depends on 14 (mount points) + 15 (pure function). **Owns all caption rendering** — Phase 17
