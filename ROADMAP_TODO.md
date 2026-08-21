@@ -105,12 +105,13 @@ Pure function, no DOM. Depends on Phase 12.
 - [x] Family input: boolean `hasFamily`.
 - [x] Dropped `eligibility.js`'s scaffolding no-op `init()` and its `main.js` wiring — nothing
       calls it yet (Phase 16's `calculator.js` will call `calculateEligibility()` directly).
-- [x] website-architect review (2026-08-21): signature OK as-is; dropped `captionKey`, split
-      `gapKrw` into `gapToNonCapitalKrw`/`gapToCapitalKrw`.
-- [ ] Data bug found in that review: `visaRules.json`'s rounded GNI doesn't reproduce the
-      published MOJ thresholds (also live on `/visa-info/` today, pre-dates Phase 14/15). Fix:
-      store real `thresholdKrw` per band in `visaRules.json`. Separate follow-up commit.
-- Verify: `node scripts/verify-eligibility.mjs` — 5/5 pass (2026-08-21).
+- [x] website-architect review: signature OK as-is; dropped `captionKey`, split `gapKrw` into
+      `gapToNonCapitalKrw`/`gapToCapitalKrw`.
+- [x] Data bug found in review: `visaRules.json` multiplied a rounded GNI instead of storing MOJ's published figures.
+      Fixed via `thresholdsByMultiplier` — the 3 real figures, stored once, keyed by multiplier;
+      `eligibility.js`/`visa-info.njk` look it up. Also renamed `familyMultiplier`'s fields to
+      match `ageBands`' shape, removing the asymmetry that caused this.
+- Verify: `node scripts/verify-eligibility.mjs` — 5/5 pass, now asserts real threshold values.
 
 ## Phase 16 — `calculator.js` + caption + persistence
 Depends on 14 (mount points) + 15 (pure function). **Owns all caption rendering** — Phase 17

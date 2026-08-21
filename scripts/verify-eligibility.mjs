@@ -22,27 +22,27 @@ function check(label, actual, expected) {
   }
 }
 
-// Sanity check on the source figures themselves (architecture.md §7's table), so a silent
-// visaRules.json edit that changes the underlying multipliers/GNI is caught here too.
+// Sanity check on the source figures themselves (architecture.md §7 / visa_rules.pdf p.3's
+// table), so a silent visaRules.json edit is caught here too. Asserts the actual threshold
+// values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not just the
+// multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't be
+// multiplied against gniPerCapitaKrw to reproduce these (MOJ derived them from the unrounded
+// GNI); a prior version of this check only asserted the multipliers, which is why it didn't
+// catch that bug.
+const t = (multiplier) => rules.thresholdsByMultiplier[multiplier];
 check(
-  "visaRules.json matches architecture.md §7's published thresholds",
+  "visaRules.json matches visa_rules.pdf p.3's published thresholds",
   {
     gniPerCapitaKrw: rules.gniPerCapitaKrw,
-    age18to34: [
-      rules.ageBands[0].multiplierNonCapitalArea,
-      rules.ageBands[0].multiplierCapitalArea,
-    ],
-    age35plus: [
-      rules.ageBands[1].multiplierNonCapitalArea,
-      rules.ageBands[1].multiplierCapitalArea,
-    ],
-    family: [rules.familyMultiplier.nonCapitalArea, rules.familyMultiplier.capitalArea],
+    age18to34: [t(rules.ageBands[0].multiplierNonCapitalArea), t(rules.ageBands[0].multiplierCapitalArea)],
+    age35plus: [t(rules.ageBands[1].multiplierNonCapitalArea), t(rules.ageBands[1].multiplierCapitalArea)],
+    family: [t(rules.familyMultiplier.multiplierNonCapitalArea), t(rules.familyMultiplier.multiplierCapitalArea)],
   },
   {
     gniPerCapitaKrw: 52_410_000,
-    age18to34: [1.0, 1.5],
-    age35plus: [1.5, 2.0],
-    family: [1.5, 2.0],
+    age18to34: [52_410_000, 78_620_000],
+    age35plus: [78_620_000, 104_830_000],
+    family: [78_620_000, 104_830_000],
   }
 );
 
@@ -87,7 +87,7 @@ check(
     const r = calculateEligibility({ salaryKrw: 80_000_000, age: 22, hasFamily: true }, referenceData);
     return { tier: r.tier, thresholdNonCapitalKrw: r.thresholdNonCapitalKrw, thresholdCapitalKrw: r.thresholdCapitalKrw };
   })(),
-  { tier: "nonCapitalOnly", thresholdNonCapitalKrw: 78_615_000, thresholdCapitalKrw: 104_820_000 }
+  { tier: "nonCapitalOnly", thresholdNonCapitalKrw: 78_620_000, thresholdCapitalKrw: 104_830_000 }
 );
 
 console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);

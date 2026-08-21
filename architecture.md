@@ -255,8 +255,12 @@ NatureActivity  regionSlug, name, type, difficulty, season, url   // stretch, li
 
 VisaRules     version, effectiveFrom, gniReferenceYear, gniPerCapitaKrw, currency: 'KRW',
               sourceUrl, disclaimer,
+              thresholdsByMultiplier{ [multiplier]: thresholdKrw }  // 3 published figures,
+                                      // stored once each — not derived (see §7)
               ageBands[{ minAge, maxAge, multiplierCapitalArea, multiplierNonCapitalArea }],
-              familyMultiplier{ capitalArea, nonCapitalArea }
+              familyMultiplier{ multiplierCapitalArea, multiplierNonCapitalArea }
+                                      // same shape as ageBands; both look up
+                                      // thresholdsByMultiplier
 
 PopulationDeclineArea   countyNameEn, countyNameKo, provinceSlug, metroEn,
                         category: 'decline' | 'watch'
@@ -303,6 +307,11 @@ non-capital/decline area → ×1.5. Currency is KRW only. Other visa facts to su
 static visa-info page (not part of the calculator): ≥100M KRW health insurance required, age
 18+ (dependents exempt), max stay 3 years (1yr + renewals), no local paid work, convertible
 from B-1/B-2/C-3.
+
+The "GNI × multiplier" column is MOJ's framing, not an exact formula: multiplying the *rounded*
+`gniPerCapitaKrw` gives 78,615,000/104,820,000, off by up to ₩15000-10,000 from the published
+78,620,000/104,830,000 (MOJ used the unrounded GNI). `visaRules.json` stores the published
+figures directly (`thresholdsByMultiplier`) instead of deriving them.
 
 **County-level accuracy for population-decline areas (not simplified away):** the real rule's
 non-capital bucket also includes specific counties on Korea's official 인구감소지역 (Population

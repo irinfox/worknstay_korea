@@ -27,6 +27,16 @@ function ageBandFor(age, rules) {
   return band;
 }
 
+// visaRules.thresholdsByMultiplier stores each of the 3 distinct published KRW figures exactly
+// once, keyed by multiplier — ageBands/familyMultiplier just name which one applies.
+function thresholdFor(multiplier, rules) {
+  const thresholdKrw = rules.thresholdsByMultiplier[multiplier];
+  if (thresholdKrw === undefined) {
+    throw new Error(`No threshold in visaRules.thresholdsByMultiplier for multiplier ${multiplier}`);
+  }
+  return thresholdKrw;
+}
+
 /**
  * @param {object} userInput
  * @param {number} userInput.salaryKrw - annual salary in KRW
@@ -54,15 +64,13 @@ export function calculateEligibility(userInput, referenceData) {
   const { salaryKrw, age, hasFamily } = userInput;
   const { rules, regions, populationDeclineAreas } = referenceData;
 
+  // familyMultiplier and each ageBand share the exact same shape
+  // ({ multiplierCapitalArea, multiplierNonCapitalArea }), so no per-branch remapping needed.
   const { multiplierCapitalArea, multiplierNonCapitalArea } = hasFamily
-    ? {
-        multiplierCapitalArea: rules.familyMultiplier.capitalArea,
-        multiplierNonCapitalArea: rules.familyMultiplier.nonCapitalArea,
-      }
+    ? rules.familyMultiplier
     : ageBandFor(age, rules);
-
-  const thresholdCapitalKrw = rules.gniPerCapitaKrw * multiplierCapitalArea;
-  const thresholdNonCapitalKrw = rules.gniPerCapitaKrw * multiplierNonCapitalArea;
+  const thresholdCapitalKrw = thresholdFor(multiplierCapitalArea, rules);
+  const thresholdNonCapitalKrw = thresholdFor(multiplierNonCapitalArea, rules);
 
   const meetsNonCapital = salaryKrw >= thresholdNonCapitalKrw;
   const meetsCapital = salaryKrw >= thresholdCapitalKrw;

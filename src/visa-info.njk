@@ -36,9 +36,9 @@ description: "F-1-D Digital Nomad Visa income thresholds, family multipliers, an
           <td>
             {% if band.maxAge %}{{ band.minAge }}–{{ band.maxAge }}{% else %}{{ band.minAge }}+{% endif %}
           </td>
-          <td>₩{{ (visaRules.gniPerCapitaKrw * band.multiplierCapitalArea) | round | krw }}
+          <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}
             <span class="mock-note">(×{{ band.multiplierCapitalArea }})</span></td>
-          <td>₩{{ (visaRules.gniPerCapitaKrw * band.multiplierNonCapitalArea) | round | krw }}
+          <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}
             <span class="mock-note">(×{{ band.multiplierNonCapitalArea }})</span></td>
         </tr>
         {% endfor %}
@@ -58,10 +58,10 @@ description: "F-1-D Digital Nomad Visa income thresholds, family multipliers, an
     multiplier, regardless of the applicant's age:
   </p>
   <ul>
-    <li>Capital area — GNI × {{ visaRules.familyMultiplier.capitalArea }} =
-      ₩{{ (visaRules.gniPerCapitaKrw * visaRules.familyMultiplier.capitalArea) | round | krw }}</li>
-    <li>Non-capital area — GNI × {{ visaRules.familyMultiplier.nonCapitalArea }} =
-      ₩{{ (visaRules.gniPerCapitaKrw * visaRules.familyMultiplier.nonCapitalArea) | round | krw }}</li>
+    <li>Capital area — GNI × {{ visaRules.familyMultiplier.multiplierCapitalArea }} =
+      ₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}</li>
+    <li>Non-capital area — GNI × {{ visaRules.familyMultiplier.multiplierNonCapitalArea }} =
+      ₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}</li>
   </ul>
 </section>
 
