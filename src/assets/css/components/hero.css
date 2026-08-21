@@ -1,0 +1,113 @@
+/*
+ * Home-page hero (ROADMAP_TODO.md Phase 14): full-bleed cover photo, transparent header
+ * floating over its top portion (.has-hero in header.css), heading/tagline/intro/calculator
+ * anchored toward the bottom of the frame. Mobile-first — the layout doesn't change shape
+ * across breakpoints, only spacing/min-height scale up.
+ * .hero__media--placeholder is a gradient stand-in — swapped for a real photo (own or
+ * KTO-sourced) once that decision is made; cover-vs-contain for Type3 KTO images is still open
+ * (see ROADMAP), so .hero__media img defaults to object-fit: cover, the generic safe choice.
+ */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  min-height: 70svh;
+  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-8);
+  color: #fff;
+}
+
+.hero__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__media--placeholder {
+  background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+}
+
+.hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Darker toward the bottom (where the text sits) and at the very top (where the floating
+   header sits), lighter through the middle so the photo still reads as a photo. Generic on
+   purpose — it has to work over whichever photo eventually lands here. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.55) 0%,
+    rgba(10, 10, 10, 0.1) 30%,
+    rgba(10, 10, 10, 0.15) 55%,
+    rgba(10, 10, 10, 0.8) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 860px;
+  margin-inline: auto;
+  padding: var(--space-6) var(--space-4) var(--space-8);
+  text-align: center;
+}
+
+.hero__heading {
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-3xl);
+  color: #fff;
+}
+
+.hero__tagline {
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero__intro {
+  margin-top: calc(var(--space-8) + 10px);
+  max-width: 82ch;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.calculator-mount {
+  width: 100%;
+  margin-top: var(--space-5);
+}
+
+.calculator-mount__noscript {
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+.eligibility-result {
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    min-height: 85svh;
+    margin-bottom: var(--space-10);
+  }
+
+  .hero__content {
+    padding: var(--space-8) var(--space-4) var(--space-10);
+  }
+}
