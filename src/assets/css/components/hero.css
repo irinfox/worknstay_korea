@@ -36,20 +36,49 @@
   object-fit: cover;
 }
 
-/* Darker toward the bottom (where the text sits) and at the very top (where the floating
-   header sits), lighter through the middle so the photo still reads as a photo. Generic on
-   purpose — it has to work over whichever photo eventually lands here. */
+/* .hero__content sits at flex-end, so its height isn't fixed — once the eligibility result
+   appears below the form, everything above (heading included) gets pushed further up the
+   photo, into whatever's there. A gradient with a light dip in the middle (the old version)
+   looks fine with the form alone but leaves the heading/intro exposed over open sky once the
+   result box adds height. Keeping the floor no lower than 0.58 anywhere in the 0–75% band fixes
+   that — dark enough wherever content ends up, without going flat/opaque top-to-bottom. */
 .hero__scrim {
   position: absolute;
   inset: 0;
   z-index: 1;
   background: linear-gradient(
     to bottom,
-    rgba(10, 10, 10, 0.55) 0%,
-    rgba(10, 10, 10, 0.1) 30%,
-    rgba(10, 10, 10, 0.15) 55%,
-    rgba(10, 10, 10, 0.8) 100%
+    rgba(10, 10, 10, 0.7) 0%,
+    rgba(10, 10, 10, 0.58) 25%,
+    rgba(10, 10, 10, 0.65) 55%,
+    rgba(10, 10, 10, 0.88) 100%
   );
+}
+
+/* Per-photo override (see heroCredits.json's needsDarkerScrim) for bright/high-key shots where
+   the default gradient still doesn't leave enough contrast for the heading/tagline. */
+.hero__scrim--dark {
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 10, 10, 0.78) 0%,
+    rgba(10, 10, 10, 0.68) 25%,
+    rgba(10, 10, 10, 0.75) 55%,
+    rgba(10, 10, 10, 0.92) 100%
+  );
+}
+
+/* KOGL Type1 attribution (see hero.njk) — small, out of the way, but legible over any photo. */
+.hero__credit {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  margin: 0;
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.hero__credit a {
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .hero__content {
@@ -62,6 +91,20 @@
   margin-inline: auto;
   padding: var(--space-6) var(--space-4) var(--space-8);
   text-align: center;
+}
+
+/* 3-layer shadow — near-opaque + tight (a crisp edge, does most of the work against busy
+   detail like leaves/branches), a mid layer to reinforce it, and a soft wide halo for the rest
+   — belt-and-suspenders with .hero__scrim for legibility over whichever photo is live. The
+   previous single soft shadow read as "a bit tiring" over textured backgrounds; this reads
+   closer to a hard outline without looking stroked. */
+.hero__heading,
+.hero__tagline,
+.hero__intro {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 2px 5px rgba(0, 0, 0, 0.85),
+    0 4px 18px rgba(0, 0, 0, 0.7);
 }
 
 .hero__heading {

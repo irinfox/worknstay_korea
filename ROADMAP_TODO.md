@@ -86,8 +86,11 @@ Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched onc
 - [x] Brief intro copy, calculator mount point (`#calculator`, `<noscript>` fallback to
       `/visa-info/`), result-caption mount point (`#eligibility-result`), existing map section
       below (unchanged).
-- [ ] Decide: hero photo — own vs. KTO-sourced. Blocked on user's pick from `temp_photos/`.
-- [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Defaults to `cover` for now.
+- [x] Decide: hero photo — own vs. KTO-sourced. Chosen KTO-sourced ("Mungyeongsaejae Open Set",
+      Type1/unrestricted); lives in `src/assets/img/hero/` with credit line + scrim/shadow tuned
+      for legibility.
+- [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Moot for the 3 photos currently in
+      `hero/` (all Type1); revisit if a Type3 photo is ever swapped in instead.
 - [ ] Real 360px/768px narrow-viewport check — only ≥768px confirmed live so far (browser
       tool's `resize_window` isn't shrinking the actual viewport in this environment).
 - Verify: build clean; map/leader-lines untouched by the restructure (diff-checked).
