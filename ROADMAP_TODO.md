@@ -117,14 +117,17 @@ Pure function, no DOM. Depends on Phase 12.
 Depends on 14 (mount points) + 15 (pure function). **Owns all caption rendering** — Phase 17
 doesn't render captions, only applies map state.
 
-- [ ] Real `<form>`, salary/age/family, `inputmode="numeric"`, 16px+ inputs, inline validation.
-- [ ] Render the 3 tier captions + the partial-region note (per Phase 15's decision) into
-      Phase 14's mount point.
-- [ ] `sessionStorage` write (read later by region pages).
-- [ ] Query-param permalink (prefill + caption only — map application comes free once Phase 17
-      exists, don't build it twice).
-- [ ] Gap message ("₩12.4M below threshold"), not just pass/fail.
-- Verify: one correct result per tier, `sessionStorage` inspected, permalink round-trip.
+- [x] Real `<form>` in `hero.njk` (hidden until JS reveals it), salary/age/family,
+      `inputmode="numeric"`, 44px+ inputs, inline validation (salary ≥ 0, age ≥ 18).
+- [x] `calculator.js` renders the 3 tier captions + partial-region note into `#eligibility-result`.
+- [x] `sessionStorage` write (`eligibilityResult`, read later by region pages).
+- [x] Query-param permalink: `?salaryKrw=&age=&hasFamily=` prefills + auto-computes on load,
+      `history.replaceState` on submit.
+- [x] Gap message via `gapToNonCapitalKrw`/`gapToCapitalKrw`, not just pass/fail.
+- [x] Reference data (`visaRules`/trimmed `regions`/`populationDeclineAreas`) embedded as a
+      build-time JSON island (`_data/eligibilityReferenceData.js`) — no client fetch, no server.
+- Verify: browser-tested all 3 tiers + under-18 validation live; `sessionStorage` inspected;
+  permalink round-trip confirmed; no console errors.
 
 **Calculator works end to end here — map doesn't react yet.**
 

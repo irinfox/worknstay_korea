@@ -1,0 +1,80 @@
+/*
+ * Eligibility calculator form (ROADMAP_TODO.md Phase 16). Sits inside the hero's
+ * `.hero__content` (hero.css), on top of the cover photo/scrim, so inputs need their own solid
+ * background rather than inheriting the hero's transparent/white text styling.
+ */
+.calculator-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  text-align: left;
+}
+
+.calculator-form__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-3);
+}
+
+.calculator-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1 1 160px;
+}
+
+.calculator-form__field label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.calculator-form__field input[type="number"] {
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+}
+
+.calculator-form__field--checkbox {
+  flex-direction: row;
+  align-items: center;
+  flex: 1 1 100%;
+}
+
+.calculator-form__field--checkbox input {
+  width: 20px;
+  height: 20px;
+}
+
+.calculator-form__submit {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.calculator-form__submit:hover {
+  background: var(--color-primary-dark);
+}
+
+.calculator-form__note {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .calculator-form__row {
+    flex-wrap: nowrap;
+  }
+}

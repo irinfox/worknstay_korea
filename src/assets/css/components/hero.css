@@ -22,6 +22,8 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  background-size: cover;
+  background-position: center;
 }
 
 .hero__media--placeholder {
@@ -99,6 +101,15 @@
   background: var(--color-surface);
   color: var(--color-text);
   font-weight: 700;
+}
+
+.eligibility-result a {
+  color: var(--color-link);
+  font-weight: 400;
+}
+
+.eligibility-result--error {
+  color: var(--color-error, #b91c1c);
 }
 
 @media (min-width: 768px) {

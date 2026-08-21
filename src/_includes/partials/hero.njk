@@ -2,11 +2,20 @@
    site header (see .has-hero in header.css/base.njk) and the heading/tagline/intro, styled
    after a reference "cover-photo hero" layout the user shared — full-width image, header
    floating over its top portion, heading/subscribe-style content lower in the frame.
-   .hero__media--placeholder is a gradient stand-in until a real photo is chosen — see
-   ROADMAP_TODO.md Phase 14's open "own vs. KTO-sourced" + cover/contain decisions. Swap to a
-   real <img> (or background-image) inside .hero__media without touching anything else here. #}
+
+   TO TRY A CANDIDATE PHOTO: change heroPhoto below to a filename from
+   src/assets/images/hero-candidates/ (dev server hot-reloads). Leave it "" to see the gradient
+   placeholder. Once a photo is picked for real, move it out of hero-candidates/ into
+   src/assets/images/ and update the path — hero-candidates/ is a scratch folder for comparison,
+   not the final home. #}
+{% set heroPhoto = "" %}
 <section class="hero" aria-labelledby="hero-heading">
-  <div class="hero__media hero__media--placeholder" data-hero-media aria-hidden="true"></div>
+  <div
+    class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
+    data-hero-media
+    aria-hidden="true"
+    {% if heroPhoto %}style="background-image: url('/assets/images/hero-candidates/{{ heroPhoto }}')"{% endif %}
+  ></div>
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__content">
     <h1 id="hero-heading" class="hero__heading">{{ site.name }}</h1>
@@ -14,14 +23,14 @@
     <p class="hero__intro">
       Korea's F-1-D Digital Nomad Visa lets you live and work remotely from Korea for up to
       three years — but the income bar is lower, and life is better, outside the Seoul capital
-      area. Find out which regions you qualify for, then see what a month-long stay actually
-      looks like there.
+      area.<br>
+      Find out which regions you qualify for, then see what a month-long stay actually looks
+      like there.
     </p>
 
-    {# Calculator mount point (ROADMAP Phase 16 target: real <form>, salary/age/family inputs,
-       calls eligibility.js, renders the caption below into #eligibility-result, writes
-       sessionStorage). Empty on purpose — this is the mount point, not the implementation, so
-       nothing renders here yet. #}
+    {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
+       caption itself into #eligibility-result below. JS-only per CLAUDE.md rule 6 — the
+       <noscript> fallback sends no-JS visitors to the static thresholds table instead. #}
     <div id="calculator" class="calculator-mount" data-calculator-mount>
       <noscript>
         <p class="calculator-mount__noscript">
@@ -29,7 +38,38 @@
           <a href="/visa-info/">visa income thresholds</a> directly instead.
         </p>
       </noscript>
+      <form class="calculator-form" data-calculator-form novalidate hidden>
+        <div class="calculator-form__row">
+          <div class="calculator-form__field">
+            <label for="calc-salary">Annual salary (KRW) *</label>
+            <input
+              type="number"
+              id="calc-salary"
+              name="salaryKrw"
+              inputmode="numeric"
+              min="0"
+              step="1000000"
+              required
+            >
+          </div>
+          <div class="calculator-form__field">
+            <label for="calc-age">Age</label>
+            <input type="number" id="calc-age" name="age" inputmode="numeric" min="18" max="120" required>
+          </div>
+          <div class="calculator-form__field calculator-form__field--checkbox">
+            <input type="checkbox" id="calc-has-family" name="hasFamily">
+            <label for="calc-has-family">Bringing spouse / minor children</label>
+          </div>
+          <button type="submit" class="calculator-form__submit">Check eligibility</button>
+        </div>
+        <p class="calculator-form__note">{{ visaRules.salaryGrossNote }}</p>
+      </form>
     </div>
+
+    {# Reference data for calculator.js — assembled at build time (see
+       _data/eligibilityReferenceData.js), embedded here so the calculator needs no network
+       request and no server. Exactly the referenceData shape eligibility.js expects. #}
+    <script type="application/json" id="eligibility-reference-data">{{ eligibilityReferenceData | dump | safe }}</script>
 
     {# Result-caption mount point — calculator.js (Phase 16) owns all caption rendering here;
        korea-map.js (Phase 17) only applies map state, it doesn't touch this element. #}

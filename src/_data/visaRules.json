@@ -7,6 +7,7 @@
   "sourceUrl": "https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do",
   "sourceNote": "Ministry of Justice (법무부) press release, 2026-07-07: '연봉 1억 문턱은 낮추고 체류기간은 최대 3년으로…'. URL verified live 2026-08-18. Full text also in visa_rules.pdf at repo root.",
   "disclaimer": "General guidance only, based on the Ministry of Justice's F-1-D (Digital Nomad / Workation) visa announcement. Rules and thresholds are revised periodically — always confirm current requirements with the Ministry of Justice or your nearest Korean embassy or consulate before applying.",
+  "salaryGrossNote": "* Gross salary, before tax.",
   "thresholdsByMultiplierNote": "The 3 distinct threshold figures (copied verbatim from visa_rules.pdf p.3: 5,241만원/7,862만원/10,483만원), keyed by multiplier so each is stored exactly once — every ageBand/familyMultiplier below just names which multiplier applies. Not derived by multiplying gniPerCapitaKrw: that doesn't reproduce MOJ's published figures, since they were computed from the unrounded GNI.",
   "thresholdsByMultiplier": {
     "1": 52410000,
