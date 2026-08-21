@@ -87,9 +87,21 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* width:100% is load-bearing, not decorative: .hero__content is a flex item of a
+     column-direction .hero, and an auto cross-axis margin (needed below for desktop centering)
+     disables flexbox's default stretch-to-container sizing — without an explicit width, this
+     box was sizing to its content's preferred width instead and overflowing narrow viewports
+     (confirmed on a real Pixel 9: ~337px box in a 294px viewport). */
+  width: 100%;
   max-width: 860px;
   margin-inline: auto;
-  padding: var(--space-6) var(--space-4) var(--space-8);
+  /* Top padding needs to clear .site-header, which is position:absolute over the photo (see
+     .has-hero in header.css) — not just look-nice spacing. .hero uses justify-content:flex-end,
+     so when content (form + result) grows taller than .hero's min-height, the flex-end gap that
+     would otherwise sit above the heading shrinks to zero and the heading crowds the header.
+     72px comfortably clears the header's real height on a narrow phone (measured 68px on a
+     Pixel 9) regardless of how tall the rest of the content gets. */
+  padding: 72px var(--space-4) var(--space-8);
   text-align: center;
 }
 

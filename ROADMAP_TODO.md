@@ -91,8 +91,9 @@ Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched onc
       for legibility.
 - [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Moot for the 3 photos currently in
       `hero/` (all Type1); revisit if a Type3 photo is ever swapped in instead.
-- [ ] Real 360px/768px narrow-viewport check — only ≥768px confirmed live so far (browser
-      tool's `resize_window` isn't shrinking the actual viewport in this environment).
+- [x] Narrow/wide viewport pass (real Pixel 9 + desktop devtools, plus DOM-simulated checks at
+      412/900px) found and fixed several real bugs: `.hero__content` overflow, header/heading
+      overlap, calculator field sizing and alignment at both mobile and ≥768px.
 - Verify: build clean; map/leader-lines untouched by the restructure (diff-checked).
 
 ## Phase 15 — `eligibility.js`

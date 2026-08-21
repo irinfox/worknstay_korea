@@ -111,6 +111,10 @@
   height: 44px;
   padding: 0;
   margin-left: auto;
+  /* Pulls it in from .site-header__inner's space-4 (16px) edge padding toward the actual
+     screen edge — this button only ever shows below 768px (hidden at 768px+ further down),
+     so no breakpoint-scoping needed here. */
+  margin-right: calc(var(--space-3) * -1);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-bg);
