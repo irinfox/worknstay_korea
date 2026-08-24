@@ -151,12 +151,6 @@
 
 .region-single {
   margin-top: var(--space-5);
-  /* Matches the gap above the map (hero.css's .hero margin-bottom) minus .page's own
-     padding-bottom (base.css) — that padding already adds space before the footer, so this
-     only needs to add the difference. Without it, the map→footer gap was just .page's flat
-     padding-bottom (space-5), noticeably tighter than the hero→map gap (space-8). This is the
-     narrow-viewport case: .region-single is the last visible element below 768px. */
-  margin-bottom: calc(var(--space-8) - var(--space-5));
 }
 
 @media (min-width: 768px) {
@@ -167,10 +161,6 @@
     align-items: center;
     width: 940px;
     margin-inline: auto;
-    /* Same idea as .region-single's margin-bottom above, but for the ≥768px case, where
-       .region-single is hidden and .region-infographic (map + cards + legend) is the last
-       visible element instead — matched against .hero's ≥768px margin-bottom (space-10). */
-    margin-bottom: calc(var(--space-10) - var(--space-5));
   }
 
   .region-infographic__col {

@@ -14,7 +14,10 @@
   justify-content: flex-end;
   overflow: hidden;
   min-height: 70svh;
-  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-8);
+  /* Bottom margin matches .page's own padding-bottom (base.css) exactly — that's also the gap
+     the map section leaves before the footer, so hero→map and map→footer read as the same,
+     smaller gap instead of the hero carrying extra breathing room the rest of the page doesn't. */
+  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-5);
   color: #fff;
 }
 
@@ -193,7 +196,6 @@
 @media (min-width: 768px) {
   .hero {
     min-height: 85svh;
-    margin-bottom: var(--space-10);
   }
 
   .hero__content {

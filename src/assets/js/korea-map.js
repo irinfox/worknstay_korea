@@ -57,8 +57,19 @@ function markPartial(link, countyNamesEn) {
   link.classList.remove("region--active");
   link.classList.add("region--partial");
   if (countyNamesEn.length > 0) {
-    link.setAttribute("title", `Eligible counties: ${countyNamesEn.join(", ")}.`);
+    link.setAttribute("title", `Eligible counties: ${countyNamesEn.join(", ")} — click to see them.`);
   }
+}
+
+// Same dataset.originalHref swap-and-restore mechanism as dimLink/restoreLink, so restoreLink
+// (called unconditionally at the top of every applyResult() pass) also undoes this on the next
+// call without a third code path. A partial region's own page is a summary that doesn't mention
+// which counties actually qualify — clicking through should land somewhere that does.
+function pointLinkTo(link, href) {
+  if (!link.dataset.originalHref) {
+    link.dataset.originalHref = link.getAttribute("href");
+  }
+  link.setAttribute("href", href);
 }
 
 // Static 3-item color key (index.njk) lives beneath the map at every width; this is just its one
@@ -93,6 +104,8 @@ export function applyResult(result, referenceData) {
         .filter((area) => area.provinceSlug === slug)
         .map((area) => area.countyNameEn);
       markPartial(mapLink, counties);
+      pointLinkTo(mapLink, POPULATION_DECLINE_COUNTIES_PAGE);
+      cardLinks.forEach((link) => pointLinkTo(link, POPULATION_DECLINE_COUNTIES_PAGE));
       setLegendDetail(
         (counties.length > 0
           ? `Hatched area — eligible counties: ${counties.join(", ")}.`

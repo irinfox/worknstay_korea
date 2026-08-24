@@ -5,3 +5,5 @@ _site/
 .wrangler/
 *.swp
 temp_photos/
+temp-food-photo/
+temp-region-photos/
