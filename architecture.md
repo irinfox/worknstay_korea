@@ -411,6 +411,7 @@ back to one of these:
   This one is a settled decision, not just a deferral.
 - Nature activities / Go Camping API integration — leaning toward cutting this if time is
   short, not yet a final decision.
-- Custom domain not yet secured — the `*.pages.dev` Cloudflare Pages URL satisfies the
-  contest's live-URL requirement either way; whether to get a custom domain at all is still
-  open, independent of the contest deadline.
+- Custom domain: decided to get one before submission. Until then, the site runs on the
+  default `*.pages.dev` Cloudflare Pages URL (which alone still satisfies the contest's
+  live-URL requirement) with `robots.txt` disallow-all + a `noindex` meta tag, since the site
+  isn't ready for search indexing yet — both come off once the real domain is live.

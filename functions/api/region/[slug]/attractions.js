@@ -2,7 +2,7 @@
 // Response shape (Attraction[], architecture.md §6) is the exact drop-in target for the
 // eventual live version, so swapping the body to a real kto-client.mjs/normalize.mjs call later
 // needs no change on the calling side.
-import mockAttractions from "../../../../src/_data/mock/attractions.json" with { type: "json" };
+import mockAttractions from "../../../../src/_data/mock/attractions.json";
 import { isValidSlug } from "../../lib/region-map.mjs";
 
 export async function onRequestGet({ params }) {

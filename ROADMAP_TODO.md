@@ -174,12 +174,14 @@ Depends on 17. Architecture §3's v1-scope hover/tap layer.
 After 11–18 on purpose (no public URL until it's good). Kept short/isolated so "submission
 valid" doesn't get conflated with "KTO is live" (Phase 20+).
 
-- [ ] Cloudflare Pages project, `KTO_API_KEY` env var, Web Analytics snippet.
-- [ ] Custom `src/404.njk`.
-- [ ] Verify once: the cross-directory JSON imports (`region-map.mjs` + the 3 mock-JSON imports
-      in `attractions.js`/`events.js`/`gallery.js`) resolve in the real Cloudflare build, not
-      just local `wrangler pages dev`.
-- [ ] Secret check: `KTO_API_KEY`'s value doesn't leak into any deployed HTML/JS/response.
+- [ ] Cloudflare Pages project, `KTO_API_KEY` env var, Web Analytics snippet. Analytics
+      include point wired (`site.cfAnalyticsToken`); rest needs dashboard access.
+- [x] Custom `src/404.njk`.
+- [ ] Verify cross-directory JSON imports resolve in the real Cloudflare build. Found + fixed a
+      real incompatibility: Cloudflare's Functions bundler rejects `with { type: "json" }`
+      import attributes — dropped the clause. Pending final confirmation post-merge.
+- [x] Secret check: `KTO_API_KEY` doesn't leak into `_site/` output.
+- [x] Added `robots.txt` (disallow-all) + `site.json`'s `noindex` — remove both before Phase 28.
 - Verify: all 9 pages 200 live, Analytics fires, 404 works, API endpoints respond.
 
 ## Phase 20 — `kto-client.mjs`
@@ -267,6 +269,9 @@ Milestone bucket, not a day/branch phase.
 - [ ] 기능설명서 write-up mapped to Task #4 hashtags.
 - [ ] Final KTO call-history screenshot (Phase 22 already did an early check).
 - [ ] User testing, final link audit, deploy freeze before the deadline.
+- [decision] Get a separate/custom domain for the site before the deploy freeze.
+- [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
+      right before submission.
 
 ## Phase 29 — Verification: confirm eligibility-rule ambiguities with MOJ
 Milestone bucket, not a day/branch phase. Not a hard blocker for earlier phases — the site can
@@ -307,7 +312,6 @@ Nomad score stays a static editorial int (pre-existing project decision, archite
 **Proposed cuts, not yet confirmed:**
 nature activities/Go Camping API integration (leaning cut, not decided); 
 tax info page content&tax guidance -- currently sketched as one disclaimer line instead of real
-a custom domain
 
 ## If time runs short — protect in this order
 1. **Phases 20–23 (KTO live)** — 20/100 judged points, can't be faked or done late.

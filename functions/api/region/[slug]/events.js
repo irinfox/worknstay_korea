@@ -2,7 +2,7 @@
 // Response shape (Event[], architecture.md §6) is the exact drop-in target for the eventual
 // live version. Some regions (e.g. jeju-do) legitimately return an empty array — that's the
 // designed empty state (CLAUDE.md rule 5), not a bug.
-import mockEvents from "../../../../src/_data/mock/events.json" with { type: "json" };
+import mockEvents from "../../../../src/_data/mock/events.json";
 import { isValidSlug } from "../../lib/region-map.mjs";
 
 export async function onRequestGet({ params }) {
