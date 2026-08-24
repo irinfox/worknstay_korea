@@ -1,6 +1,7 @@
 {
   "name": "Work&Stay Korea",
   "tagline": "Find your region. Stay a while.",
+  "noindex": true,
   "nav": [
     { "label": "Home", "href": "/" },
     { "label": "Visa Info", "href": "/visa-info/" },

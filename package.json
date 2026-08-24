@@ -10,9 +10,14 @@
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",
-    "debug": "DEBUG=Eleventy* eleventy"
+    "debug": "DEBUG=Eleventy* eleventy",
+    "pages:dev": "npm run build && wrangler pages dev _site",
+    "pages:deploy": "npm run build && wrangler pages deploy _site"
   },
   "dependencies": {
     "@11ty/eleventy": "3.1.6"
+  },
+  "devDependencies": {
+    "wrangler": "4.125.0"
   }
 }

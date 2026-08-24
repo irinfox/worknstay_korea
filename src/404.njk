@@ -1,0 +1,25 @@
+---
+layout: layouts/page.njk
+title: "Page not found"
+description: "The page you're looking for doesn't exist."
+permalink: "404.html"
+---
+{% set heroPhoto = "mungyeong-saejae-open-set.jpg" %}
+{% set heroCredit = heroCredits.photos[heroPhoto] %}
+
+<section class="not-found" aria-labelledby="not-found-heading">
+  <div class="not-found__media" style="background-image: url('/assets/img/hero/{{ heroPhoto }}')" aria-hidden="true"></div>
+  <div class="not-found__scrim" aria-hidden="true"></div>
+  {% if heroCredit %}
+  <p class="not-found__credit">
+    <a href="{{ heroCredit.sourceImageUrl }}">Photo: Korea Tourism Organization (KTO) OpenAPI</a>
+  </p>
+  {% endif %}
+  <div class="not-found__content">
+    <h1 id="not-found-heading" class="not-found__code">404</h1>
+    <p class="not-found__message">
+      Page not found. Try the <a href="/">home page</a>,
+      <a href="/visa-info/">Visa Info</a>, or <a href="/communities/">Communities</a>.
+    </p>
+  </div>
+</section>

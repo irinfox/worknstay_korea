@@ -7,6 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
+  eleventyConfig.addPassthroughCopy("src/robots.txt");
 
   // Reads an SVG from src/assets/svg and inlines its markup directly into the page
   // (rather than <img src>), so CSS can target region <g>/<a> elements and hover/focus

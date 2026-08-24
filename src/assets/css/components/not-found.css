@@ -1,0 +1,83 @@
+/* 404 page: same cover-photo/credit pattern as the home hero (hero.css), but centered on both
+   axes — no bottom-anchored content like the calculator, so nothing pins it to the bottom.
+   .page:has(.not-found) turns .page into a column flex container just for this page, so
+   .not-found (flex: 1 below) fills exactly whatever's left after the footer — the whole page
+   fits in one viewport with the footer visible, without hardcoding a height that subtracts the
+   footer's own (variable, wraps differently per viewport) height. */
+.page:has(.not-found) {
+  display: flex;
+  flex-direction: column;
+}
+
+.not-found {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1);
+  color: #fff;
+  text-align: center;
+}
+
+.not-found__media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+}
+
+.not-found__scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: rgba(10, 10, 10, 0.6);
+}
+
+.not-found__credit {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  margin: 0;
+  font-size: var(--font-size-xs, 0.75rem);
+}
+
+.not-found__credit a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.not-found__content {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-4);
+}
+
+.not-found__code,
+.not-found__message {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.95),
+    0 2px 5px rgba(0, 0, 0, 0.85),
+    0 4px 18px rgba(0, 0, 0, 0.7);
+}
+
+.not-found__code {
+  margin: 0;
+  font-size: clamp(4.5rem, 22vw, 11rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.not-found__message {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-lg);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.not-found__message a {
+  color: #fff;
+  text-decoration: underline;
+}
