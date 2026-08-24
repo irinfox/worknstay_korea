@@ -177,9 +177,9 @@ valid" doesn't get conflated with "KTO is live" (Phase 20+).
 - [ ] Cloudflare Pages project, `KTO_API_KEY` env var, Web Analytics snippet. Analytics
       include point wired (`site.cfAnalyticsToken`); rest needs dashboard access.
 - [x] Custom `src/404.njk`.
-- [ ] Verify cross-directory JSON imports resolve in the real Cloudflare build. Found + fixed a
+- [x] Verify cross-directory JSON imports resolve in the real Cloudflare build. Found + fixed a
       real incompatibility: Cloudflare's Functions bundler rejects `with { type: "json" }`
-      import attributes — dropped the clause. Pending final confirmation post-merge.
+      import attributes — dropped the clause. Confirmed on a live preview deployment.
 - [x] Secret check: `KTO_API_KEY` doesn't leak into `_site/` output.
 - [x] Added `robots.txt` (disallow-all) + `site.json`'s `noindex` — remove both before Phase 28.
 - Verify: all 9 pages 200 live, Analytics fires, 404 works, API endpoints respond.
