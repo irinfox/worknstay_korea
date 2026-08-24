@@ -39,7 +39,27 @@ function readUserInput(form) {
   };
 }
 
-function validate(userInput) {
+// Takes `form` (not just userInput) specifically to tell "field left empty" apart from "field
+// filled with a real 0" — Number("") is 0, same as Number("0"), so userInput alone can't
+// distinguish them. An empty salary field was silently computing as salaryKrw:0, a technically
+// valid input that produced a real (if trivial) "not eligible" result instead of flagging that
+// nothing was entered.
+function validate(userInput, form) {
+  const salaryMissing = form.elements.salaryKrw.value.trim() === "";
+  const ageMissing = form.elements.age.value.trim() === "";
+
+  if (salaryMissing || ageMissing) {
+    const missingLabel =
+      salaryMissing && ageMissing
+        ? "your annual salary and age"
+        : salaryMissing
+          ? "your annual salary"
+          : "your age";
+    return (
+      "Eligibility is based on your age, salary, and whether family is accompanying you — " +
+      `please fill in ${missingLabel}.`
+    );
+  }
   if (!Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0) {
     return "Enter a salary of 0 or more.";
   }
@@ -47,6 +67,41 @@ function validate(userInput) {
     return `F-1-D requires applicants to be ${MIN_APPLICANT_AGE}+.`;
   }
   return null;
+}
+
+// A failed validation means we never got a real EligibilityResult — but korea-map.js's
+// applyResult() only runs on success, so without this, a stale result from a *previous* valid
+// submission stays applied to the map (e.g. drop age from 30 to 15: the caption correctly turns
+// into an error, but every region the age-30 run unlocked stays lit up as eligible). Shaping a
+// fully-dimmed result and routing it through the same applyResult() call is simpler than adding
+// a second "clear" code path to korea-map.js for one edge case.
+function buildInvalidInputResult(referenceData) {
+  return {
+    tier: "ineligible",
+    dimmedRegionSlugs: referenceData.regions.map((r) => r.slug),
+    partialRegionSlugs: [],
+    thresholdCapitalKrw: 0,
+    thresholdNonCapitalKrw: 0,
+    gapToNonCapitalKrw: 0,
+    gapToCapitalKrw: 0,
+  };
+}
+
+// "Show all regions" reset (ROADMAP feedback): a visitor who doesn't know their salary/age yet,
+// or just wants to browse, had no way to see an un-gated map short of typing throwaway numbers
+// that happen to clear every threshold. Shares eligibility.js's own "all" tier shape — that tier
+// already means nothing dimmed/partial — so this is what a real "all" result looks like, not a
+// separate map-clearing code path.
+function buildShowAllResult() {
+  return {
+    tier: "all",
+    dimmedRegionSlugs: [],
+    partialRegionSlugs: [],
+    thresholdCapitalKrw: 0,
+    thresholdNonCapitalKrw: 0,
+    gapToNonCapitalKrw: 0,
+    gapToCapitalKrw: 0,
+  };
 }
 
 // Both render into the same #eligibility-result box (error state via a modifier class) rather
@@ -68,9 +123,9 @@ function renderError(resultEl, message) {
   resultEl.hidden = false;
 }
 
-// Permalink covers prefill + caption only, not map state — applyResult() (Phase 17) reads the
-// same sessionStorage write this produces, so there's nothing left for the permalink to do that
-// isn't already covered once that phase lands (architecture.md §8).
+// Permalink covers prefill + caption + map state (via onResult) — nothing is persisted beyond
+// the URL itself (no sessionStorage — region pages deliberately don't remember a calculator run
+// from the home page; see ROADMAP feedback on that ambiguity).
 function userInputFromParams(params) {
   if (!params.has("salaryKrw") || !params.has("age")) return null;
   return {
@@ -88,9 +143,13 @@ function paramsFromUserInput(userInput) {
   return params;
 }
 
-export function init() {
+// architecture.md §8: calculator.js owns caption rendering; main.js's glue passes onResult so
+// korea-map.js's applyResult() can react to the same result for map state only — one-directional,
+// no event bus, no separate module.
+export function init(onResult = () => {}) {
   const form = document.querySelector("[data-calculator-form]");
   const resultEl = document.querySelector("[data-eligibility-result]");
+  const resetButton = document.querySelector("[data-calculator-reset]");
   if (!form || !resultEl) return;
 
   const referenceData = readReferenceData();
@@ -98,18 +157,16 @@ export function init() {
   function computeAndRender(userInput) {
     resultEl.hidden = true;
 
-    const validationMessage = validate(userInput);
+    const validationMessage = validate(userInput, form);
     if (validationMessage) {
       renderError(resultEl, validationMessage);
+      onResult(buildInvalidInputResult(referenceData), referenceData);
       return false;
     }
 
     const result = calculateEligibility(userInput, referenceData);
     renderCaption(resultEl, result);
-
-    // architecture.md §8: written so a region page a visitor navigates to next can read it back
-    // and show an "available to you" badge (Phase 18).
-    sessionStorage.setItem("eligibilityResult", JSON.stringify({ userInput, result }));
+    onResult(result, referenceData);
     return true;
   }
 
@@ -132,4 +189,17 @@ export function init() {
       history.replaceState(null, "", `?${paramsFromUserInput(userInput)}`);
     }
   });
+
+  if (resetButton) {
+    resetButton.addEventListener("click", () => {
+      // Clearing the map without clearing the form was worse than doing nothing — the age/salary
+      // fields stayed filled with e.g. "17", so every region reading as open now looked like the
+      // site was claiming a 17-year-old is eligible everywhere, rather than "no check is active."
+      form.reset();
+      resultEl.hidden = true;
+      resultEl.classList.remove("eligibility-result--error");
+      history.replaceState(null, "", window.location.pathname);
+      onResult(buildShowAllResult(), referenceData);
+    });
+  }
 }

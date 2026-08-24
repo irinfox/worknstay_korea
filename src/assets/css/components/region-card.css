@@ -25,6 +25,17 @@
   font-size: var(--font-size-base);
 }
 
+/* Second row under the English name/score header (not inline with it — inline was getting
+   ellipsis-truncated away for any region whose English name alone already filled the header
+   line, e.g. Chungcheong-do/Gyeongsang-do; only the two shortest names, Jeju-do/Jeolla-do, ever
+   had room left over for it). Own line always renders in full, regardless of name length. */
+.region-card__name-ko {
+  margin: 0;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
 .region-card__score {
   font-size: var(--font-size-sm);
   font-weight: 700;
@@ -67,10 +78,6 @@
   white-space: nowrap;
 }
 
-.region-card__eligibility[hidden] {
-  display: none;
-}
-
 .region-card__link {
   margin-top: auto;
   padding-top: var(--space-1);
@@ -79,16 +86,39 @@
   text-decoration: none;
 }
 
+/* Phase 17: gated the same way as the map shape (korea-map.js) — href removed, so this is
+   already inert; the muted color + no-pointer-events just stop it from looking clickable. */
+.region-card__link[aria-disabled="true"] {
+  color: var(--color-text-muted);
+  pointer-events: none;
+  cursor: default;
+}
+
 /* Infographic (wide-viewport) variant — fixed height so the hand-positioned leader lines
    in index.njk line up with each card's vertical slot; content is clamped to fit. */
 .region-card--infographic {
-  height: 130px;
+  height: 152px;
   overflow: hidden;
 }
 
 .region-card--infographic .region-card__tags {
   flex-wrap: nowrap;
   overflow: hidden;
+}
+
+/* A long name ("Chungcheong-do") plus the score badge was wrapping the header onto 2 lines
+   inside the fixed 130px height, pushing "Learn more →" past the overflow:hidden boundary so
+   it clipped. Keeping the name to one line (ellipsis as a last resort) is cheaper than growing
+   the card, which would also require re-tuning every hand-positioned leader line in index.njk. */
+.region-card--infographic .region-card__header {
+  flex-wrap: nowrap;
+}
+
+.region-card--infographic .region-card__name {
+  overflow: hidden;
+  min-width: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .region-card--infographic .region-card__intro {
@@ -121,16 +151,26 @@
 
 .region-single {
   margin-top: var(--space-5);
+  /* Matches the gap above the map (hero.css's .hero margin-bottom) minus .page's own
+     padding-bottom (base.css) — that padding already adds space before the footer, so this
+     only needs to add the difference. Without it, the map→footer gap was just .page's flat
+     padding-bottom (space-5), noticeably tighter than the hero→map gap (space-8). This is the
+     narrow-viewport case: .region-single is the last visible element below 768px. */
+  margin-bottom: calc(var(--space-8) - var(--space-5));
 }
 
 @media (min-width: 768px) {
   .region-infographic {
     display: grid;
-    grid-template-columns: 210px 420px 210px;
+    grid-template-columns: 240px 420px 240px;
     column-gap: 20px;
     align-items: center;
-    width: 880px;
+    width: 940px;
     margin-inline: auto;
+    /* Same idea as .region-single's margin-bottom above, but for the ≥768px case, where
+       .region-single is hidden and .region-infographic (map + cards + legend) is the last
+       visible element instead — matched against .hero's ≥768px margin-bottom (space-10). */
+    margin-bottom: calc(var(--space-10) - var(--space-5));
   }
 
   .region-infographic__col {
@@ -139,9 +179,22 @@
     gap: 12px;
   }
 
+  /* Explicitly placed into row 1 (map's own height) spanning all 3 columns — without this, an
+     absolutely-positioned grid item with no explicit placement sizes to the *whole* grid
+     container by default, including row 2 once the legend (index.njk) added one. inset:0 was
+     then stretching this 950-unit-tall coordinate system over a taller box than it was drawn
+     for, dragging every line (worst on jeju-do's, anchored near the bottom of the 950 range)
+     down into the legend instead of stopping at the map. */
   .region-infographic__lines {
     display: block;
     position: absolute;
+    /* Explicit start AND end on both axes — "grid-row: 1" alone (shorthand for
+       grid-row-start:1; grid-row-end:auto) reads as non-definite placement for an
+       out-of-flow grid item, so its containing block still fell back to the whole grid
+       container (both rows) instead of just row 1. That's what let this stretch into the
+       legend row again after it was first "fixed" without an explicit end line. */
+    grid-column: 1 / -1;
+    grid-row: 1 / 2;
     inset: 0;
     width: 100%;
     height: 100%;

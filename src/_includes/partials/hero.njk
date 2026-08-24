@@ -72,6 +72,11 @@
           <button type="submit" class="calculator-form__submit">Check eligibility</button>
         </div>
         <p class="calculator-form__note">{{ visaRules.salaryGrossNote }}</p>
+        {# For a visitor who doesn't know their numbers yet (or wants to browse before
+           committing to a check) — restores every region to open/active without needing a
+           second, throwaway salary/age guess just to unlock the map. calculator.js wires this
+           to the same applyResult() path a real "all eligible" tier would take. #}
+        <button type="button" class="calculator-form__reset" data-calculator-reset>Reset and show all regions on the map</button>
       </form>
     </div>
 
@@ -89,5 +94,10 @@
       aria-live="polite"
       hidden
     ></p>
+
+    {# Static nudge toward the map below — a real anchor link (CLAUDE.md rule 6: works with JS
+       off, no scroll-triggered JS needed) rather than tied to a calculator result, so it's
+       useful to a visitor who skips the calculator entirely too. #}
+    <a class="hero__scroll-cue" href="#map">Scroll down to explore the regions ↓</a>
   </div>
 </section>

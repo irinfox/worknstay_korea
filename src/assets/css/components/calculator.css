@@ -110,6 +110,22 @@
   color: var(--color-text-muted);
 }
 
+.calculator-form__reset {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-link);
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.calculator-form__reset:hover,
+.calculator-form__reset:focus-visible {
+  color: var(--color-primary-dark);
+}
+
 @media (min-width: 768px) {
   .calculator-form__row {
     flex-wrap: nowrap;

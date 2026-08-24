@@ -167,6 +167,29 @@
   color: var(--color-error, #b91c1c);
 }
 
+/* A translucent dark pill still washed out against the darker parts of the photo (which is
+   exactly where this sits, low in the scrim gradient) — a light, opaque background guarantees
+   contrast against any part of the image, but then needs genuinely dark text, not the white the
+   rest of the hero uses; white-on-beige would just recreate the same problem inverted. */
+.hero__scroll-cue {
+  display: inline-block;
+  margin-top: var(--space-5);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero__scroll-cue:hover,
+.hero__scroll-cue:focus-visible {
+  background: #fff;
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
 @media (min-width: 768px) {
   .hero {
     min-height: 85svh;

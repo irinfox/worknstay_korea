@@ -34,6 +34,24 @@ layout: layouts/page.njk
 
   {% include "partials/korea-map.njk" %}
 
+  {#
+    Static color key, always visible beneath the map (not just once a partial region exists) —
+    same "authored once, nothing computed at runtime" approach as the infographic itself. Its one
+    dynamic piece is the county list for whichever region the calculator just marked partial
+    (korea-map.js's setLegendDetail()); that used to be crammed into the region-card itself,
+    where it clipped mid-word inside the card's fixed 130px height. Explicitly grid-placed (see
+    korea-map.css) to span every column / row 2, so it renders full-width under the map and both
+    card columns rather than as a 4th auto-placed column squeezed into the map's own 420px slot.
+  #}
+  <div class="map-legend" aria-label="Map color key">
+    <div class="map-legend__list">
+      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--active" aria-hidden="true"></span>Fully eligible to stay</p>
+      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--partial" aria-hidden="true"></span>Partially eligible to stay — decline-designated counties only</p>
+      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--ineligible" aria-hidden="true"></span>Not eligible to stay</p>
+    </div>
+    <p class="map-legend__detail" data-map-legend-detail hidden></p>
+  </div>
+
   <div class="region-infographic__col region-infographic__col--right">
     {% for slug in ["gangwon-do", "gyeongsang-do"] %}
     {% set region = regions | findBySlug(slug) %}
@@ -43,13 +61,22 @@ layout: layouts/page.njk
     {% endfor %}
   </div>
 
-  <svg class="region-infographic__lines" viewBox="0 0 880 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <line data-slug="gyeonggi-do" x1="210" y1="221.2" x2="358.8" y2="193.5" />
-    <line data-slug="chungcheong-do" x1="210" y1="390.4" x2="377.9" y2="352.6" />
-    <line data-slug="jeolla-do" x1="210" y1="559.6" x2="344.5" y2="587.3" />
-    <line data-slug="jeju-do" x1="210" y1="728.8" x2="285.9" y2="911.3" />
-    <line data-slug="gangwon-do" x1="670" y1="390.4" x2="489.6" y2="160.2" />
-    <line data-slug="gyeongsang-do" x1="670" y1="559.6" x2="529.9" y2="462.3" />
+  {#
+    Card columns grew from 210px to 240px (region-card.css — room for the English name on one
+    line, ROADMAP feedback). Total grid width grew from 880 to 940 (+30 each side) to match.
+    Every coordinate below shifted by that same +30: the two column-edge x1 anchors (210→240,
+    670→700) and every map-side x2 — the map's own 420px column didn't change size, but its left
+    edge moved from x=230 to x=260, so every x2 (a point *inside* the map) shifts by the same
+    +30 the map itself moved. y-values are untouched — card height changed (item elsewhere), not
+    the column layout's vertical position.
+  #}
+  <svg class="region-infographic__lines" viewBox="0 0 940 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    <line data-slug="gyeonggi-do" x1="240" y1="221.2" x2="388.8" y2="193.5" />
+    <line data-slug="chungcheong-do" x1="240" y1="390.4" x2="407.9" y2="352.6" />
+    <line data-slug="jeolla-do" x1="240" y1="559.6" x2="374.5" y2="587.3" />
+    <line data-slug="jeju-do" x1="240" y1="728.8" x2="315.9" y2="911.3" />
+    <line data-slug="gangwon-do" x1="700" y1="390.4" x2="519.6" y2="160.2" />
+    <line data-slug="gyeongsang-do" x1="700" y1="559.6" x2="559.9" y2="462.3" />
   </svg>
 </section>
 

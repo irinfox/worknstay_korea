@@ -88,14 +88,16 @@ just desktop windows.
 
 **Eligibility-gated regions:** greyed-out (ineligible) regions are **not** clickable through to
 their region page — doing so would misrepresent the eligibility gating that's the site's core
-value proposition. In wide-viewport mode, a greyed region's callout permanently shows "Not
-available at your current income/age input — adjust or clear filters to see all regions"
-inline (no hover needed to discover it, since the callout is always visible anyway). In
-narrow-viewport mode, the same message appears in the single card on tap. Gyeonggi-do
-additionally has a **third, "partial"** visual state distinct from active/grey — see §7 for why
-(it contains specific population-decline-designated counties that qualify at the lower income
-threshold even when the rest of Gyeonggi doesn't). Partial regions remain clickable, since part
-of them is genuinely eligible, and their callout/card explains the split.
+value proposition. Gating is link-only, not text-only: the map shape and the region-card's
+"Learn more →" both lose their `href`; the card's own content (name, tags, intro, cost) doesn't
+change. The *why* lives outside the card — the calculator's own result caption, and, for the
+partial state, a static color-key legend beneath the map. Gyeonggi-do additionally has a
+**third, "partial"** visual state distinct from active/grey — see §7 for why (it contains specific
+population-decline-designated counties that qualify at the lower income threshold even when the
+rest of Gyeonggi doesn't). Partial regions remain clickable, since part of them is genuinely
+eligible; the qualifying counties are listed on their own page
+(`/regions/gyeonggi-do/population-decline-counties/`), linked from the map legend and the map's
+hover tooltip.
 
 **Seoul/Incheon:** absorbed into the Gyeonggi region page (one page, not three), but kept as
 distinct labeled sub-shapes on the SVG map rather than merged into one blob, since they're
@@ -354,9 +356,10 @@ No library, no store. Three tiers:
    inputs → calls pure `eligibility.js` → `calculator.js` renders the result caption itself, and
    `main.js` glue calls `koreaMap.applyResult(result)` separately for the map state only.
    One-directional, ~10 lines of glue, no event bus, no separate `caption.js` module.
-3. **Persistence** — write the result to `sessionStorage` so a user returning from a region
-   page doesn't lose their calculator result; region pages can read it to show a small
-   "available to you" badge.
+3. **Persistence** — the result is reflected in the URL only (`?salaryKrw=&age=&hasFamily=`,
+   calculator.js), not stored client-side: reloading or sharing the link reproduces the same
+   result, but navigating to a region page does not carry it — region pages don't read or
+   remember a calculator run.
 
 ## 9. Responsive strategy
 

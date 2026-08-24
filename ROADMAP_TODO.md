@@ -122,39 +122,51 @@ Depends on 14 (mount points) + 15 (pure function). **Owns all caption rendering*
 doesn't render captions, only applies map state.
 
 - [x] Real `<form>` in `hero.njk` (hidden until JS reveals it), salary/age/family,
-      `inputmode="numeric"`, 44px+ inputs, inline validation (salary ≥ 0, age ≥ 18).
+      `inputmode="numeric"`, 44px+ inputs, inline validation (salary ≥ 0, age ≥ 18, both
+      required — an empty field must not silently read as salary/age 0).
 - [x] `calculator.js` renders the 3 tier captions + partial-region note into `#eligibility-result`.
-- [x] `sessionStorage` write (`eligibilityResult`, read later by region pages).
+- [x] ~~`sessionStorage` write, read by a region-page badge~~ — removed, see Phase 18.
 - [x] Query-param permalink: `?salaryKrw=&age=&hasFamily=` prefills + auto-computes on load,
-      `history.replaceState` on submit.
+      `history.replaceState` on submit. Reset control clears the form and the map together.
 - [x] Gap message via `gapToNonCapitalKrw`/`gapToCapitalKrw`, not just pass/fail.
 - [x] Reference data (`visaRules`/trimmed `regions`/`populationDeclineAreas`) embedded as a
       build-time JSON island (`_data/eligibilityReferenceData.js`) — no client fetch, no server.
-- Verify: browser-tested all 3 tiers + under-18 validation live; `sessionStorage` inspected;
-  permalink round-trip confirmed; no console errors.
+- Verify: browser-tested all 3 tiers + under-18 + empty-field validation live; permalink
+  round-trip confirmed; no console errors.
 
 **Calculator works end to end here — map doesn't react yet.**
 
 ## Phase 17 — Map eligibility wiring (click-gating)
 Depends on 13 (real shapes) + 16 (`EligibilityResult`).
 
-- [ ] `korea-map.js applyResult()` → `.region--active/--partial/--ineligible` classes.
-- [ ] Click-gating: strip `href`/add `aria-disabled` on ineligible regions (already-locked
-      decision — see CLAUDE.md feedback log). Build the **restore path** in the same commit.
-- [ ] `main.js` glue: calculator → eligibility → map (map state only, not captions).
-- [ ] Reset path back to all-active.
-- Verify: correct region set per tier (script-check against real data, not eyeballed), gated
-  click does nothing, keyboard path works, reset restores every `href`.
+- [x] `korea-map.js applyResult()` → `.region--active/--partial/--ineligible` classes; partial
+      gets a hatched fill (new SVG `<pattern>`, ~0.9KB, still ~49.9KB of the 60KB cap) + tooltip.
+- [x] Click-gating (href/`aria-disabled`) + restore path, same commit. Also gates each
+      region-card's "Learn more →" link, not just the map shape — otherwise the callout
+      bypasses the map's gating. No in-card eligibility text (~~tried, dropped~~) — the map
+      legend and the calculator's own caption cover it instead.
+- [x] `main.js` glue via an `onResult` callback param on `calculator.js`'s `init()` (no event bus).
+- [x] Reset path: `applyResult()` restores every region to baseline before reapplying, every call.
+- Verify: browser-tested all 3 tiers (DOM inspection + `.focus()` check) — dimmed regions
+  unfocusable/no href, partial hatched with correct county list, "all" restores everything.
+  No console errors.
 
 ## Phase 18 — Region-card interactivity
 Depends on 17. Architecture §3's v1-scope hover/tap layer.
 
 - [x] Wide: hover/focus highlights region + leader line + callout together (pulled forward,
       pure CSS `:has()`, no JS needed).
-- [ ] Narrow: tap-to-fill single card, scroll-into-view — **honor `prefers-reduced-motion`**.
-- [ ] Region pages read `sessionStorage` → "available to you" badge.
-- Verify: highlight trio at wide width, tap-to-fill at 360/412px w/ reduced-motion respected,
-  badge present/absent correctly.
+- [x] Narrow: tap-to-fill single card (clones the matching infographic card, no second copy of
+      region data in JS), scroll-into-view honoring `prefers-reduced-motion`. Persistent
+      `.region--selected` map class bolds the tapped region's border.
+- [x] ~~Region pages read `sessionStorage` → "available to you" badge~~ — dropped, only worked
+      for one navigation path (home → calculator → region page).
+- [x] Replacement: standalone `/regions/gyeonggi-do/population-decline-counties/` page (same
+      shell as `regions/region.njk`), listing all `populationDeclineAreas.json` counties. Linked
+      from the map legend and the map's hover tooltip.
+- Verify: tap-to-fill logic-tested via `matchMedia` override (real window resize didn't take
+  effect in this environment) — card content/link/selected-class and reduced-motion scroll
+  behavior all correct. No console errors.
 
 **Core product works end to end here — this is "good enough to show someone."**
 
