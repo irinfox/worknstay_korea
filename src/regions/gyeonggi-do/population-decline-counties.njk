@@ -1,0 +1,42 @@
+---
+layout: layouts/page.njk
+title: "Gyeonggi-do Population-Decline Counties"
+description: "The Gyeonggi-do counties designated as population-decline or watch-list areas, which qualify for the F-1-D visa's lower, non-capital income threshold."
+permalink: "/regions/gyeonggi-do/population-decline-counties/"
+---
+{# Not paginated like regions/region.njk — there's only one region this data can ever affect
+   (architecture.md §7: Gyeonggi-do is the only capital-tier region, so it's the only place a
+   population-decline county can change the eligibility outcome). Built the same way as a region
+   page otherwise: same .content-page/.region-header shell, same .city-list pattern already used
+   for cities.json entries (region.njk) reused here for county entries — same shape (English/
+   Korean name + a category badge), just a different data source. #}
+<div class="content-page">
+<header class="region-header">
+  <h1>Gyeonggi-do population-decline counties</h1>
+  <p class="region-header__intro">
+    Gyeonggi-do is a capital-tier region for F-1-D visa purposes, so its income threshold is the
+    country's highest — except in the counties below, which the government separately designates
+    as population-decline or watch-list areas. Those counties qualify at the lower, non-capital
+    threshold even though they sit administratively inside Gyeonggi-do. This is the hatched area
+    on the <a href="/#map">home page map</a>.
+  </p>
+</header>
+
+<section class="region-section">
+  <h2>Qualifying counties</h2>
+  <ul class="city-list">
+    {% for county in populationDeclineAreas %}
+    <li class="city-list__item">
+      <h3>{{ county.countyNameEn }} <span class="city-list__ko">{{ county.countyNameKo }}</span></h3>
+      <p>{{ county.metroEn }}</p>
+      <p class="city-list__badge">{% if county.category == "decline" %}Population-decline-designated area{% else %}Population watch-list area{% endif %}</p>
+    </li>
+    {% endfor %}
+  </ul>
+  <p class="data-provenance">
+    Source: Ministry of the Interior and Safety (행정안전부) 인구감소지역 designation, sourced
+    2026-08-18. See <a href="/visa-info/">visa income thresholds</a> for the full rules, and the
+    <a href="/regions/gyeonggi-do/">Gyeonggi-do region page</a> for general living info.
+  </p>
+</section>
+</div>

@@ -1,0 +1,103 @@
+{# Home-page hero (architecture.md Phase 14): full-bleed cover photo behind the transparent
+   site header (see .has-hero in header.css/base.njk) and the heading/tagline/intro, styled
+   after a reference "cover-photo hero" layout the user shared — full-width image, header
+   floating over its top portion, heading/subscribe-style content lower in the frame.
+
+   src/assets/img/hero/ holds the chosen photo plus a couple of standby favorites (see
+   _data/heroCredits.json for source/license per file — all Type1 KOGL, attribution required).
+   TO SWAP: change heroPhoto below to another filename from that folder (dev server hot-reloads).
+   Leave it "" to see the gradient placeholder. #}
+{% set heroPhoto = "mungyeong-saejae-open-set.jpg" %}
+{% set heroCredit = heroCredits.photos[heroPhoto] %}
+
+<section class="hero" aria-labelledby="hero-heading">
+  <div
+    class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
+    data-hero-media
+    aria-hidden="true"
+    {% if heroPhoto %}style="background-image: url('/assets/img/hero/{{ heroPhoto }}')"{% endif %}
+  ></div>
+  <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
+  {% if heroCredit %}
+    {# footer.njk's site.dataAttribution is a site-wide blanket credit; CLAUDE.md rule 5 still
+       wants each KTO-derived block (region.njk, visa-info.njk) to carry its own provenance too —
+       same pattern here, phrased the same way as those. #}
+    <p class="hero__credit">
+      <a href="{{ heroCredit.sourceImageUrl }}">Photo: Korea Tourism Organization (KTO) OpenAPI</a>
+    </p>
+  {% endif %}
+  <div class="hero__content">
+    <h1 id="hero-heading" class="hero__heading">{{ site.name }}</h1>
+    <p class="hero__tagline">{{ site.tagline }}</p>
+    <p class="hero__intro">
+      Korea's F-1-D Digital Nomad Visa lets you live and work remotely from Korea for up to
+      three years — but the income bar is lower, and life is better, outside the Seoul capital
+      area.<br>
+      Find out which regions you qualify for, then see what a month-long stay actually looks
+      like there.
+    </p>
+
+    {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
+       caption itself into #eligibility-result below. JS-only per CLAUDE.md rule 6 — the
+       <noscript> fallback sends no-JS visitors to the static thresholds table instead. #}
+    <div id="calculator" class="calculator-mount" data-calculator-mount>
+      <noscript>
+        <p class="calculator-mount__noscript">
+          The eligibility calculator needs JavaScript. See the
+          <a href="/visa-info/">visa income thresholds</a> directly instead.
+        </p>
+      </noscript>
+      <form class="calculator-form" data-calculator-form novalidate hidden>
+        <div class="calculator-form__row">
+          <div class="calculator-form__field">
+            <label for="calc-salary">Annual salary (KRW) *</label>
+            <input
+              type="number"
+              id="calc-salary"
+              name="salaryKrw"
+              inputmode="numeric"
+              min="0"
+              step="1000000"
+              required
+            >
+          </div>
+          <div class="calculator-form__field calculator-form__field--age">
+            <label for="calc-age">Age</label>
+            <input type="number" id="calc-age" name="age" inputmode="numeric" min="18" max="120" required>
+          </div>
+          <div class="calculator-form__field calculator-form__field--checkbox">
+            <input type="checkbox" id="calc-has-family" name="hasFamily">
+            <label for="calc-has-family">Bringing spouse / minor children</label>
+          </div>
+          <button type="submit" class="calculator-form__submit">Check eligibility</button>
+        </div>
+        <p class="calculator-form__note">{{ visaRules.salaryGrossNote }}</p>
+        {# For a visitor who doesn't know their numbers yet (or wants to browse before
+           committing to a check) — restores every region to open/active without needing a
+           second, throwaway salary/age guess just to unlock the map. calculator.js wires this
+           to the same applyResult() path a real "all eligible" tier would take. #}
+        <button type="button" class="calculator-form__reset" data-calculator-reset>Reset and show all regions on the map</button>
+      </form>
+    </div>
+
+    {# Reference data for calculator.js — assembled at build time (see
+       _data/eligibilityReferenceData.js), embedded here so the calculator needs no network
+       request and no server. Exactly the referenceData shape eligibility.js expects. #}
+    <script type="application/json" id="eligibility-reference-data">{{ eligibilityReferenceData | dump | safe }}</script>
+
+    {# Result-caption mount point — calculator.js (Phase 16) owns all caption rendering here;
+       korea-map.js (Phase 17) only applies map state, it doesn't touch this element. #}
+    <p
+      id="eligibility-result"
+      class="eligibility-result"
+      data-eligibility-result
+      aria-live="polite"
+      hidden
+    ></p>
+
+    {# Static nudge toward the map below — a real anchor link (CLAUDE.md rule 6: works with JS
+       off, no scroll-triggered JS needed) rather than tied to a calculator result, so it's
+       useful to a visitor who skips the calculator entirely too. #}
+    <a class="hero__scroll-cue" href="#map">Scroll down to explore the regions ↓</a>
+  </div>
+</section>

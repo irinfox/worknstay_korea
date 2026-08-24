@@ -4,3 +4,6 @@ _site/
 .DS_Store
 .wrangler/
 *.swp
+temp_photos/
+temp-food-photo/
+temp-region-photos/

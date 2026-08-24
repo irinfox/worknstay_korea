@@ -81,63 +81,92 @@ is staying in sync with `regions.json`.
 ## Phase 14 — Home page: hero + layout restructure
 Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched once.
 
-- [ ] Hero section with an image-slot (data-fed, placeholder gradient until a real photo exists).
-- [ ] Brief intro copy, calculator mount point, result-caption mount point, existing map section
+- [x] Hero section with an image-slot (data-fed, placeholder gradient until a real photo exists).
+      `partials/hero.njk` + `components/hero.css`.
+- [x] Brief intro copy, calculator mount point (`#calculator`, `<noscript>` fallback to
+      `/visa-info/`), result-caption mount point (`#eligibility-result`), existing map section
       below (unchanged).
-- [ ] Decide: hero photo — own vs. KTO-sourced (licensing implications either way).
-- [ ] Decide: KTO `Type3` images (no-derivative-works, most sampled records) — `cover` (crops) vs
-      `contain` (letterbox). Affects hero CSS now if hero ends up KTO-sourced.
-- Verify: rule-7 pass, map/leader-lines unaffected by the restructure.
+- [x] Decide: hero photo — own vs. KTO-sourced. Chosen KTO-sourced ("Mungyeongsaejae Open Set",
+      Type1/unrestricted); lives in `src/assets/img/hero/` with credit line + scrim/shadow tuned
+      for legibility.
+- [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Moot for the 3 photos currently in
+      `hero/` (all Type1); revisit if a Type3 photo is ever swapped in instead.
+- [x] Narrow/wide viewport pass (real Pixel 9 + desktop devtools, plus DOM-simulated checks at
+      412/900px) found and fixed several real bugs: `.hero__content` overflow, header/heading
+      overlap, calculator field sizing and alignment at both mobile and ≥768px.
+- Verify: build clean; map/leader-lines untouched by the restructure (diff-checked).
 
 ## Phase 15 — `eligibility.js`
 Pure function, no DOM. Depends on Phase 12.
 
-- [ ] `(salary, age, hasFamily, rules) → EligibilityResult` (`tier`, `captionKey`,
-      `dimmedRegionSlugs[]`, `partialRegionSlugs[]`) — update architecture.md §6's signature to
-      match (currently missing `hasFamily`).
-- [ ] `'partial'` tier reads `populationDeclineAreas.json`. **Decide here (recommendation, not
-      settled):** partiality is inherently per-region (only gyeonggi-do today), so keep the
-      global `tier` to `ineligible | nonCapitalOnly | all` and carry partiality only via
-      `partialRegionSlugs[]` — Phase 16 then renders 3 tier captions plus a separate partial-
-      region note, not a 4th global tier.
-- [ ] Decide: family input — boolean (recommended) vs. headcount.
-- Verify: standalone `node` script, one hand-computed case per tier (keep the script in-repo).
+- [x] `(userInput, referenceData) → EligibilityResult` — `assets/js/eligibility.js`.
+      `userInput = { salaryKrw, age, hasFamily }`, `referenceData = { rules, regions,
+      populationDeclineAreas }`. Two-object shape, not flat args: `userInput` is also exactly
+      what Phase 16 will serialize (form → sessionStorage → query-param permalink), so it
+      doubles as that DTO. architecture.md §6 updated to match.
+- [x] `'partial'` tier via `partialRegionSlugs[]`; global `tier` stays 3-way
+      (`ineligible | nonCapitalOnly | all`), not a 4th tier.
+- [x] Family input: boolean `hasFamily`.
+- [x] Dropped `eligibility.js`'s scaffolding no-op `init()` and its `main.js` wiring — nothing
+      calls it yet (Phase 16's `calculator.js` will call `calculateEligibility()` directly).
+- [x] website-architect review: signature OK as-is; dropped `captionKey`, split `gapKrw` into
+      `gapToNonCapitalKrw`/`gapToCapitalKrw`.
+- [x] Data bug found in review: `visaRules.json` multiplied a rounded GNI instead of storing MOJ's published figures.
+      Fixed via `thresholdsByMultiplier` — the 3 real figures, stored once, keyed by multiplier;
+      `eligibility.js`/`visa-info.njk` look it up. Also renamed `familyMultiplier`'s fields to
+      match `ageBands`' shape, removing the asymmetry that caused this.
+- Verify: `node scripts/verify-eligibility.mjs` — 5/5 pass, now asserts real threshold values.
 
 ## Phase 16 — `calculator.js` + caption + persistence
 Depends on 14 (mount points) + 15 (pure function). **Owns all caption rendering** — Phase 17
 doesn't render captions, only applies map state.
 
-- [ ] Real `<form>`, salary/age/family, `inputmode="numeric"`, 16px+ inputs, inline validation.
-- [ ] Render the 3 tier captions + the partial-region note (per Phase 15's decision) into
-      Phase 14's mount point.
-- [ ] `sessionStorage` write (read later by region pages).
-- [ ] Query-param permalink (prefill + caption only — map application comes free once Phase 17
-      exists, don't build it twice).
-- [ ] Gap message ("₩12.4M below threshold"), not just pass/fail.
-- Verify: one correct result per tier, `sessionStorage` inspected, permalink round-trip.
+- [x] Real `<form>` in `hero.njk` (hidden until JS reveals it), salary/age/family,
+      `inputmode="numeric"`, 44px+ inputs, inline validation (salary ≥ 0, age ≥ 18, both
+      required — an empty field must not silently read as salary/age 0).
+- [x] `calculator.js` renders the 3 tier captions + partial-region note into `#eligibility-result`.
+- [x] ~~`sessionStorage` write, read by a region-page badge~~ — removed, see Phase 18.
+- [x] Query-param permalink: `?salaryKrw=&age=&hasFamily=` prefills + auto-computes on load,
+      `history.replaceState` on submit. Reset control clears the form and the map together.
+- [x] Gap message via `gapToNonCapitalKrw`/`gapToCapitalKrw`, not just pass/fail.
+- [x] Reference data (`visaRules`/trimmed `regions`/`populationDeclineAreas`) embedded as a
+      build-time JSON island (`_data/eligibilityReferenceData.js`) — no client fetch, no server.
+- Verify: `node scripts/verify-calculator.mjs` — 7/7 pass (validation messages, incl. empty vs.
+  `0`). Browser-tested all 3 tiers + permalink round-trip live; no console errors.
 
 **Calculator works end to end here — map doesn't react yet.**
 
 ## Phase 17 — Map eligibility wiring (click-gating)
 Depends on 13 (real shapes) + 16 (`EligibilityResult`).
 
-- [ ] `korea-map.js applyResult()` → `.region--active/--partial/--ineligible` classes.
-- [ ] Click-gating: strip `href`/add `aria-disabled` on ineligible regions (already-locked
-      decision — see CLAUDE.md feedback log). Build the **restore path** in the same commit.
-- [ ] `main.js` glue: calculator → eligibility → map (map state only, not captions).
-- [ ] Reset path back to all-active.
-- Verify: correct region set per tier (script-check against real data, not eyeballed), gated
-  click does nothing, keyboard path works, reset restores every `href`.
+- [x] `korea-map.js applyResult()` → `.region--active/--partial/--ineligible` classes; partial
+      gets a hatched fill (new SVG `<pattern>`, ~0.9KB, still ~49.9KB of the 60KB cap) + tooltip.
+- [x] Click-gating (href/`aria-disabled`) + restore path, same commit. Also gates each
+      region-card's "Learn more →" link, not just the map shape — otherwise the callout
+      bypasses the map's gating. No in-card eligibility text (~~tried, dropped~~) — the map
+      legend and the calculator's own caption cover it instead.
+- [x] `main.js` glue via an `onResult` callback param on `calculator.js`'s `init()` (no event bus).
+- [x] Reset path: `applyResult()` restores every region to baseline before reapplying, every call.
+- Verify: browser-tested all 3 tiers (DOM inspection + `.focus()` check) — dimmed regions
+  unfocusable/no href, partial hatched with correct county list, "all" restores everything.
+  No console errors.
 
 ## Phase 18 — Region-card interactivity
 Depends on 17. Architecture §3's v1-scope hover/tap layer.
 
 - [x] Wide: hover/focus highlights region + leader line + callout together (pulled forward,
       pure CSS `:has()`, no JS needed).
-- [ ] Narrow: tap-to-fill single card, scroll-into-view — **honor `prefers-reduced-motion`**.
-- [ ] Region pages read `sessionStorage` → "available to you" badge.
-- Verify: highlight trio at wide width, tap-to-fill at 360/412px w/ reduced-motion respected,
-  badge present/absent correctly.
+- [x] Narrow: tap-to-fill single card (clones the matching infographic card, no second copy of
+      region data in JS), scroll-into-view honoring `prefers-reduced-motion`. Persistent
+      `.region--selected` map class bolds the tapped region's border.
+- [x] ~~Region pages read `sessionStorage` → "available to you" badge~~ — dropped, only worked
+      for one navigation path (home → calculator → region page).
+- [x] Replacement: standalone `/regions/gyeonggi-do/population-decline-counties/` page (same
+      shell as `regions/region.njk`), listing all `populationDeclineAreas.json` counties. Linked
+      from the map legend and the map's hover tooltip.
+- Verify: tap-to-fill logic-tested via `matchMedia` override (real window resize didn't take
+  effect in this environment) — card content/link/selected-class and reduced-motion scroll
+  behavior all correct. No console errors.
 
 **Core product works end to end here — this is "good enough to show someone."**
 

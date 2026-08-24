@@ -1,0 +1,29 @@
+{
+  "licenseNote": "All entries are 공공누리 (KOGL) Type 1 — attribution required, modification/derivative works permitted (unlike Type 3, which forbids editing). Source: KTO TourAPI (EngService2), cpyrhtDivCd confirmed per-photo at fetch time.",
+  "photos": {
+    "mungyeong-saejae-open-set.jpg": {
+      "title": "Mungyeongsaejae Open Set",
+      "addr1": "932 Saejae-ro, Mungyeong-si, Gyeongsangbuk-do",
+      "contentid": "2996555",
+      "cpyrhtDivCd": "Type1",
+      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/10/2947510_image2_1.jpg"
+    },
+    "woljeongsa-temple-needle-fir-forest.jpg": {
+      "title": "Woljeongsa Temple & Needle Fir Forest",
+      "addr1": "374-8 Odaesan-ro, Jinbu-myeon, Pyeongchang-gun, Gangwon-do",
+      "contentid": "264189",
+      "cpyrhtDivCd": "Type1",
+      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/52/3034152_image2_1.jpg",
+      "note": "PLACEHOLDER — not currently live; kept as a candidate for a cherry-blossom/spring rotation if a matching photo turns up."
+    },
+    "pyeongchang-yukbaekmajigi.jpg": {
+      "title": "Pyeongchang Yukbaekmajigi",
+      "addr1": "583-76 Cheongoksan-gil, Pyeongchang-gun, Gangwon-do",
+      "contentid": "2818731",
+      "cpyrhtDivCd": "Type1",
+      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/30/3331630_image2_1.jpg",
+      "needsDarkerScrim": true,
+      "note": "PLACEHOLDER — not currently live; user really likes this one. needsDarkerScrim: bright sky/field made hero text hard to read in testing, applies .hero__scrim--dark when this photo is selected."
+    }
+  }
+}

@@ -59,6 +59,60 @@
   outline-offset: 2px;
 }
 
+/* Phase 17: eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for
+   .region--active — the base .region__shape/.region__city rules above already render that
+   state, since it's also what the map shows before any calculator run (architecture.md §8:
+   "un-gated by default"). */
+.region--partial .region__shape,
+.region--partial .region__city {
+  fill: url(#region-partial-hatch);
+}
+
+.region--ineligible {
+  /* Not a real link once dimmed (korea-map.js strips href) — the pointer cursor would be
+     misleading. */
+  cursor: default;
+}
+
+.region--ineligible .region__shape,
+.region--ineligible .region__city {
+  fill: var(--color-region-ineligible);
+  fill-opacity: 0.5;
+}
+
+.region--ineligible .region__label {
+  opacity: 0.55;
+}
+
+/* Dimmed regions don't react to hover/focus like live ones do — there's nothing to activate.
+   Higher specificity than the plain :hover/:focus-visible rules above wins regardless of
+   source order. */
+.region--ineligible:hover .region__shape,
+.region--ineligible:focus-visible .region__shape,
+.region--ineligible:hover .region__city,
+.region--ineligible:focus-visible .region__city {
+  fill-opacity: 0.5;
+  stroke-width: 2;
+}
+
+.region--ineligible:hover .region__label,
+.region--ineligible:focus-visible .region__label {
+  transform: none;
+}
+
+/* Phase 18: narrow-viewport tap selection (region-card.js) — a JS-toggled class, not a :hover
+   substitute, because the highlight has to survive after the finger lifts, unlike the
+   wide-viewport :has() cross-hover above which is inherently transient. */
+.region--selected .region__shape,
+.region--selected .region__city {
+  fill-opacity: 0.85;
+  stroke-width: 3;
+}
+
+.region--selected .region__label {
+  transform: scale(1.2);
+}
+
 .region__label {
   font-family: var(--font-family-base);
   fill: #fff;
@@ -99,7 +153,99 @@
   transform: scale(1.2);
 }
 
+/* Static color key beneath the map (index.njk) — see korea-map.js's setLegendDetail() for the
+   one dynamic line. Colors are literal hex, matching korea-regions.svg's own pattern defs
+   (CSS custom properties aren't visible inside an SVG <pattern>, so that file already keeps its
+   own hand-synced copies — same constraint applies here for the hatch swatch). */
+.map-legend {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  font-size: var(--font-size-sm);
+}
+
+.map-legend__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-1) 0;
+  text-align: left;
+}
+
+.map-legend__swatch {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-primary-dark);
+  border-radius: var(--radius-sm);
+}
+
+.map-legend__swatch--active {
+  background-color: var(--color-region-active);
+  opacity: 0.55;
+}
+
+.map-legend__swatch--partial {
+  background-color: #b8862f;
+  background-image: repeating-linear-gradient(
+    45deg,
+    #143d33 0,
+    #143d33 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  opacity: 0.7;
+}
+
+.map-legend__swatch--ineligible {
+  background-color: var(--color-region-ineligible);
+  opacity: 0.5;
+}
+
+.map-legend__detail {
+  margin: var(--space-2) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  text-align: left;
+}
+
+.map-legend__detail a {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.map-legend__detail[hidden] {
+  display: none;
+}
+
 @media (min-width: 768px) {
+  /* Full grid width (spans the map + both card columns), not just the map's own middle column —
+     plenty of room to lay the 3 key items out in one row instead of stacking them. */
+  .map-legend {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    margin-top: var(--space-4);
+  }
+
+  .map-legend__list {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-6);
+  }
+
+  .map-legend__item {
+    padding: 0;
+  }
+
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,

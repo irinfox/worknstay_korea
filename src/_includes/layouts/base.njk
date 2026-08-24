@@ -9,6 +9,8 @@
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/components/header.css">
   <link rel="stylesheet" href="/assets/css/components/footer.css">
+  <link rel="stylesheet" href="/assets/css/components/hero.css">
+  <link rel="stylesheet" href="/assets/css/components/calculator.css">
   <link rel="stylesheet" href="/assets/css/components/korea-map.css">
   <link rel="stylesheet" href="/assets/css/components/region-card.css">
   <link rel="stylesheet" href="/assets/css/components/region-page.css">
@@ -17,7 +19,7 @@
   <link rel="stylesheet" href="/assets/css/components/static-pages.css">
   <script type="module" src="/assets/js/main.js"></script>
 </head>
-<body>
+<body{% if page.url == "/" %} class="has-hero"{% endif %}>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   {% include "partials/header.njk" %}
   {{ content | safe }}
