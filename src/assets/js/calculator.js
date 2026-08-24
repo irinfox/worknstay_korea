@@ -39,14 +39,15 @@ function readUserInput(form) {
   };
 }
 
-// Takes `form` (not just userInput) specifically to tell "field left empty" apart from "field
-// filled with a real 0" — Number("") is 0, same as Number("0"), so userInput alone can't
+// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs. Takes the raw input
+// strings alongside the parsed userInput specifically to tell "field left empty" apart from
+// "field filled with a real 0": Number("") is 0, same as Number("0"), so userInput alone can't
 // distinguish them. An empty salary field was silently computing as salaryKrw:0, a technically
 // valid input that produced a real (if trivial) "not eligible" result instead of flagging that
 // nothing was entered.
-function validate(userInput, form) {
-  const salaryMissing = form.elements.salaryKrw.value.trim() === "";
-  const ageMissing = form.elements.age.value.trim() === "";
+export function validate(userInput, rawInput) {
+  const salaryMissing = rawInput.salaryRaw.trim() === "";
+  const ageMissing = rawInput.ageRaw.trim() === "";
 
   if (salaryMissing || ageMissing) {
     const missingLabel =
@@ -157,7 +158,8 @@ export function init(onResult = () => {}) {
   function computeAndRender(userInput) {
     resultEl.hidden = true;
 
-    const validationMessage = validate(userInput, form);
+    const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
+    const validationMessage = validate(userInput, rawInput);
     if (validationMessage) {
       renderError(resultEl, validationMessage);
       onResult(buildInvalidInputResult(referenceData), referenceData);

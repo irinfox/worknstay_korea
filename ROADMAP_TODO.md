@@ -131,8 +131,8 @@ doesn't render captions, only applies map state.
 - [x] Gap message via `gapToNonCapitalKrw`/`gapToCapitalKrw`, not just pass/fail.
 - [x] Reference data (`visaRules`/trimmed `regions`/`populationDeclineAreas`) embedded as a
       build-time JSON island (`_data/eligibilityReferenceData.js`) — no client fetch, no server.
-- Verify: browser-tested all 3 tiers + under-18 + empty-field validation live; permalink
-  round-trip confirmed; no console errors.
+- Verify: `node scripts/verify-calculator.mjs` — 7/7 pass (validation messages, incl. empty vs.
+  `0`). Browser-tested all 3 tiers + permalink round-trip live; no console errors.
 
 **Calculator works end to end here — map doesn't react yet.**
 
