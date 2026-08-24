@@ -174,8 +174,8 @@ Depends on 17. Architecture §3's v1-scope hover/tap layer.
 After 11–18 on purpose (no public URL until it's good). Kept short/isolated so "submission
 valid" doesn't get conflated with "KTO is live" (Phase 20+).
 
-- [ ] Cloudflare Pages project, `KTO_API_KEY` env var, Web Analytics snippet. Analytics
-      include point wired (`site.cfAnalyticsToken`); rest needs dashboard access.
+- [x] Cloudflare Pages project, `KTO_API_KEY`/`KTO_GALLERY_API_KEY` secrets, Web Analytics —
+      Analytics enabled natively from the dashboard (no code needed, reverted the manual hook).
 - [x] Custom `src/404.njk`.
 - [x] Verify cross-directory JSON imports resolve in the real Cloudflare build. Found + fixed a
       real incompatibility: Cloudflare's Functions bundler rejects `with { type: "json" }`

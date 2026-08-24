@@ -20,9 +20,6 @@
   <link rel="stylesheet" href="/assets/css/components/static-pages.css">
   <link rel="stylesheet" href="/assets/css/components/not-found.css">
   <script type="module" src="/assets/js/main.js"></script>
-  {% if site.cfAnalyticsToken %}
-  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ site.cfAnalyticsToken }}"}'></script>
-  {% endif %}
 </head>
 <body{% if page.url == "/" or page.url == "/404.html" %} class="has-hero"{% endif %}>
   <a class="skip-link" href="#main-content">Skip to main content</a>
