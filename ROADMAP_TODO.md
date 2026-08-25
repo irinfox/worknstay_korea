@@ -89,8 +89,6 @@ Template/CSS only, no JS. Loosely after Phase 13 so `index.njk` gets touched onc
 - [x] Decide: hero photo — own vs. KTO-sourced. Chosen KTO-sourced ("Mungyeongsaejae Open Set",
       Type1/unrestricted); lives in `src/assets/img/hero/` with credit line + scrim/shadow tuned
       for legibility.
-- [ ] Decide: KTO `Type3` images — `cover` vs `contain`. Moot for the 3 photos currently in
-      `hero/` (all Type1); revisit if a Type3 photo is ever swapped in instead.
 - [x] Narrow/wide viewport pass (real Pixel 9 + desktop devtools, plus DOM-simulated checks at
       412/900px) found and fixed several real bugs: `.hero__content` overflow, header/heading
       overlap, calculator field sizing and alignment at both mobile and ≥768px.
@@ -245,6 +243,7 @@ Depends on 12.
       `asOf`/`source`/`sourceUrl`, real community links, food descriptions).
 - [ ] Confirm `#workation #month-long-stay #2030s-youth #local-tourism` show up as real on-page
       copy tied to actual features, not just floating text.
+- [ ] region cards on the homepage: add vibe-tags, update money info to real one
 - Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
 
 ## Phase 26 — Accessibility + robustness (scriptable)
@@ -272,6 +271,10 @@ Milestone bucket, not a day/branch phase.
 - [decision] Get a separate/custom domain for the site before the deploy freeze.
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
       right before submission.
+- [ ] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
+- [ ] refactor code: make sure it doesn't have excessive info, that can be deleted
+- [UX check] is it understandable that the map is reacting to calc on all surfaces?
+- [UX check] perform UX test with several respondents
 
 ## Phase 29 — Verification: confirm eligibility-rule ambiguities with MOJ
 Milestone bucket, not a day/branch phase. Not a hard blocker for earlier phases — the site can
@@ -290,6 +293,8 @@ Phase 28's deploy freeze, since it can change calculator output for real regions
       (Gangneung, Gyeongju, Boryeong, Andong, +16 more in `populationDeclineAreasFull.json`)
       deserve their own editorial badge — not needed for the calculator, deliberately deferred.
 - [ ] Log other eligibility-rule ambiguities surfaced in Phase 15/16 here instead of guessing.
+- [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot for the 3 photos currently in
+      `hero/` (all Type1); revisit if a Type3 photo is ever swapped in instead.
 - Verify: each item has either a confirmed answer + a data update, or an explicit "still open,
   shipping with the default interpretation" note before Phase 28's deploy freeze.
 
