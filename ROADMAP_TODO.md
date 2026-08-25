@@ -185,23 +185,31 @@ valid" doesn't get conflated with "KTO is live" (Phase 20+).
 ## Phase 20 — `kto-client.mjs`
 Depends on 11 (real codes). Infra only, nothing consumes it yet.
 
-- [ ] URL building for `areaBasedList2`/`searchFestival2`/`detailImage2`, paging, timeout, bounded
-      429/5xx backoff-retry.
-- [ ] Hard-failure mode: `{ items: [], degraded: true }`, never throw.
-- Verify: real calls via `wrangler pages dev`; forced-failure returns the degraded shape.
+- [x] URL building for `areaBasedList2`/`searchFestival2`/`detailImage2`, paging
+      (`fetchKtoAllPages`), timeout, bounded 429/5xx backoff-retry.
+- [x] Hard-failure mode: `{ items: [], degraded: true }`, never throw.
+- Verify: `node --env-file=.env scripts/verify-kto-client.mjs` — 5/5 pass against real live
+      calls (contentTypeId 76 confirmed correct) + forced-failure (bad/missing key) cases.
 
 ## Phase 21 — `normalize.mjs`
-Depends on 20. Three confirmed live-data quirks (verified 2026-08-18) **not yet in
-architecture.md §5** — fold them into §5 as part of this phase, or it permanently lags:
+Depends on 20.
 
-- [ ] Zero results → `"items": ""` (empty **string**, not `{}`/`[]`) — guard this first, it's the
-      most likely production crash.
-- [ ] `eventStartDate` only catches festivals *starting* on/after it — query earlier, filter
-      `eventenddate` yourself, or ongoing festivals vanish from the calendar.
-- [ ] `imgname` (detailImage2) is Korean-only — fallback to the attraction's English title.
-- [ ] Apply Phase 14's Type3 crop-policy decision here.
-- [ ] Title En/Ko split, HTML-entity strip, http→https (already in §5, restated for completeness).
-- Verify: run against a captured zero-result payload + a real multi-month festival record.
+- [x] Zero results → `"items": ""` guard — handled in `kto-client.mjs` (envelope-shape concern,
+      not per-field normalization); confirmed against a real zero/near-zero-result call.
+- [x] `isUpcomingOrOngoing` filters on `eventenddate` client-side — guards the `eventStartDate`
+      quirk (start-only filtering would otherwise drop already-running festivals).
+- [x] `imgname` (detailImage2) Korean-only → falls back to the attraction's English title.
+- [x] Gallery images with an unknown/missing `cpyrhtDivCd` are dropped (never rendered
+      unlicensed); known-licensed images pass through untouched, honoring Type3 no-crop.
+- [x] Title En/Ko split, HTML-entity strip, http→https.
+- [x] architecture.md §5 quirks list updated with real field names + behavior, confirmed against
+      live-captured samples.
+- [ ] `Attraction.summary`/`Event.homepageUrl` have no source field on the 3 endpoints in scope
+      (would need `detailCommon2`/`detailIntro2`, one call per `contentId` — no batch form).
+      Call-volume cost needs weighing against Phase 22's fan-out — revisit after Phase 22-23 once
+      real per-page call counts are known.
+- Verify: `node scripts/verify-normalize.mjs` — 14/14 pass against real live-captured raw samples
+      + constructed edge cases (ongoing/ended festival, non-Korean imgname, unlicensed image).
 
 ## Phase 22 — Endpoint wiring + fan-out + caching
 Depends on 20 + 21.

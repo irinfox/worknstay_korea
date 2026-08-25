@@ -209,14 +209,17 @@ both the quota and the page speed safe even under real traffic. Applying for KTO
 "operating account" for one representative API is not required for compliance (call history
 from the regular dev key counts) — consider it only if traffic volume later demands headroom.
 
-**Known KTO data quirks to bake into `normalize.mjs`:**
+**Known KTO data quirks baked into `kto-client.mjs`/`normalize.mjs`:**
 - v4 renumbered content types — attraction is `76`, not the old `12`.
 - `areacode` is empty on festival records — always filter by `lDongRegnCd`.
+- Raw `items` is `""` on zero results, a bare object on one result, an array only at 2+ —
+  `kto-client.mjs` always normalizes to an array.
 - Images serve over `http://` — rewrite to `https://` to avoid mixed-content blocking.
 - Titles are bilingual/messy (`"5.16 Tree Tunnel (Road 5.16 Forest Tunnel) (5.16도로숲터널)"`) —
   split into `titleEn`/`titleKo` at the normalize step.
-- `overview` fields contain raw HTML entities/tags — decode and strip at the normalize step,
-  never `innerHTML` raw KTO text.
+- `searchFestival2`'s `eventStartDate` filters by start date only, so an already-running festival
+  needs an earlier query window filtered by `eventenddate` client-side (`isUpcomingOrOngoing`).
+- `detailImage2`'s `imgname` is Korean-only — falls back to the attraction's English title.
 - Image licensing is per-record via `cpyrhtDivCd` (`Type1`, `Type3`, empty). Only render images
   with a known code, always attribute ("Data from the Korea Tourism Organization"), never crop
   or filter `Type3` (no-derivative-works) assets.
