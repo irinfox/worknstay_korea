@@ -8,7 +8,6 @@
     { "label": "Communities", "href": "/communities/" }
   ],
   "footer": {
-    "disclaimer": "Work&Stay Korea is an independent, unofficial resource built for the 2026 관광데이터 활용 공모전. It is not affiliated with the Korean government. Visa and eligibility information is for general guidance only — always confirm current requirements with the Ministry of Justice or your nearest Korean embassy or consulate before applying.",
-    "dataAttribution": "Tourism content provided by the Korea Tourism Organization (KTO) OpenAPI."
+    "disclaimer": "© 2026 Work&Stay Korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
   }
 }

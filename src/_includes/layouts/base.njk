@@ -22,6 +22,13 @@
   <script type="module" src="/assets/js/main.js"></script>
 </head>
 <body{% if page.url == "/" or page.url == "/404.html" %} class="has-hero"{% endif %}>
+  {# Synchronous and inline (not the deferred main.js module) so it runs before first paint —
+     header.css keys the collapsed-behind-burger nav on this class. Without it, that CSS only
+     takes effect once main.js finishes parsing/executing (after the whole document), so every
+     load — hard refreshes especially — flashes the full inline nav list open before it collapses.
+     Runs if and only if JS is enabled, same as main.js, so the JS-disabled fallback (rule 6:
+     nav always visible, real anchors) is untouched when it's off. #}
+  <script>document.body.classList.add("js-nav-ready")</script>
   <a class="skip-link" href="#main-content">Skip to main content</a>
   {% include "partials/header.njk" %}
   {{ content | safe }}
