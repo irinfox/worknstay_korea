@@ -227,6 +227,8 @@
   display: none;
 }
 
+/* 768px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
+   activation — this grid only exists once that grid does. */
 @media (min-width: 768px) {
   /* Full grid width (spans the map + both card columns), not just the map's own middle column —
      plenty of room to lay the 3 key items out in one row instead of stacking them. */

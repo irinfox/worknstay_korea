@@ -8,7 +8,10 @@
 .site-footer__inner {
   max-width: var(--content-max-width);
   margin-inline: auto;
-  padding: var(--space-5) var(--space-4);
+  /* Block padding only, 20% shorter than the site's standard var(--space-5) — this is what
+     actually shrinks the visible grey bar's height; the text itself still gets the full
+     content width above so the one-line disclaimer never wraps on desktop. */
+  padding: calc(var(--space-5) * 0.8) var(--space-4);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);

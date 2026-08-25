@@ -24,23 +24,28 @@
   color: var(--color-accent);
 }
 
-.has-hero .js-nav-ready .nav-toggle {
-  border-color: rgba(255, 255, 255, 0.6);
+.has-hero.js-nav-ready .nav-toggle {
   background: rgba(28, 27, 25, 0.35);
 }
 
-.has-hero .js-nav-ready .nav-toggle__bar,
-.has-hero .js-nav-ready .nav-toggle__bar::before,
-.has-hero .js-nav-ready .nav-toggle__bar::after {
+.has-hero.js-nav-ready .nav-toggle__bar,
+.has-hero.js-nav-ready .nav-toggle__bar::before,
+.has-hero.js-nav-ready .nav-toggle__bar::after {
   background: #fff;
 }
 
-/* The burger's dropdown needs a solid backing once it's open — floating white-on-photo text
-   is unreadable otherwise. */
-.has-hero .js-nav-ready .site-nav__list.is-open {
-  background: var(--color-primary-dark);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-sm);
+/* Below 768px the open list becomes a slide-out drawer (see the .js-nav-ready block further
+   down) — an opaque panel, never floating translucently over the hero photo — so its links
+   stay normal dark text there, overriding the white-on-photo color above which is only correct
+   for the closed header row (and for the desktop inline nav, which stays over the photo). */
+@media (max-width: 767.98px) {
+  .has-hero.js-nav-ready .site-nav__list .site-nav__item a {
+    color: var(--color-text);
+  }
+
+  .has-hero.js-nav-ready .site-nav__list .site-nav__item a[aria-current="page"] {
+    color: var(--color-primary);
+  }
 }
 
 .site-header__inner {
@@ -103,6 +108,8 @@
   }
 }
 
+/* No border, no background, no border-radius — deliberately not styled as a button. It's meant
+   to read as a bare icon (hamburger closed, X open), not a chip/button around one. */
 .js-nav-ready .nav-toggle {
   display: inline-flex;
   align-items: center;
@@ -115,10 +122,13 @@
      screen edge — this button only ever shows below 768px (hidden at 768px+ further down),
      so no breakpoint-scoping needed here. */
   margin-right: calc(var(--space-3) * -1);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg);
+  border: none;
+  background: transparent;
   cursor: pointer;
+  /* Stays above both the backdrop and the drawer (see further down) so it's always visible
+     and clickable in the same corner — closed as a burger, open as its X morph below. */
+  position: relative;
+  z-index: calc(var(--z-header) + 2);
 }
 
 .js-nav-ready .nav-toggle__bar,
@@ -128,6 +138,7 @@
   width: 20px;
   height: 2px;
   background: var(--color-text);
+  transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
 }
 
 .js-nav-ready .nav-toggle__bar {
@@ -149,12 +160,114 @@
   top: 6px;
 }
 
+/* Burger → X morph: the middle bar fades out, the other two rotate into place on top of it.
+   Keyed off aria-expanded (nav.js sets it), not .is-open, so it stays in sync with the button
+   itself rather than the drawer's own class. */
+.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar {
+  background: transparent;
+}
+
+.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.has-hero.js-nav-ready .nav-toggle[aria-expanded="true"] {
+  /* Once the panel covers the photo, the translucent hero scrim on the closed button
+     (background rgba() above) is no longer needed — bare, like the base X. */
+  background: transparent;
+}
+
+.has-hero.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::before,
+.has-hero.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
+  background: var(--color-text);
+}
+
+/* Below 768px the open list is a fixed, full-width sheet that drops down from the top edge of
+   the viewport — not a flex sibling of the logo/toggle — so the toggle button never shares a
+   line with it or gets pushed around by its content width (it stays fixed in the corner,
+   morphing to an X above, while the sheet slides down from off-screen independently). Sized to
+   its own content (just 3 links) rather than the full viewport height — a full-height drawer
+   reads as excessive for this few items — with a max-height/overflow-y safety net in case the
+   nav ever grows. Edge-to-edge (left/right/top flush with the viewport), so no border-radius —
+   only the bottom edge floats, marked by the box-shadow instead of a border.
+   It's always in the DOM at `display: flex` so the slide transition on `transform` can run;
+   closed state uses `visibility: hidden` (not `display: none`) so it's out of the a11y tree
+   and untabbable without losing the animation.
+   No `transition` here by default — see .nav-animate below for why. */
 .js-nav-ready .site-nav__list {
-  display: none;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  max-height: 100dvh;
+  margin: 0;
+  gap: 0;
+  /* Top padding matches .site-header__inner's own (var(--space-3)) so "Home" lands on the same
+     line as the toggle/X sitting in the corner above it, instead of a whole button-height gap
+     pushing the list down below it. */
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  background: var(--color-surface);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: calc(var(--z-header) + 1);
+  overflow-y: auto;
+  transform: translateY(-100%);
+  visibility: hidden;
 }
 
 .js-nav-ready .site-nav__list.is-open {
-  display: flex;
+  transform: translateY(0);
+  visibility: visible;
+}
+
+/* The slide transition is opt-in, not a standing property of .site-nav__list — nav.js adds this
+   class for ~350ms around every real open/close click, and only then. Any *other* style
+   recalculation that changes the list's transform (crossing the 768px breakpoint by resizing a
+   window, or a browser/devtools mobile-emulation toggle recomputing the viewport) would, if the
+   transition were declared unconditionally, still animate it per the CSS Transitions spec —
+   the browser doesn't distinguish "user clicked" from "viewport changed" when deciding whether
+   to animate a property change, it just animates whatever `transition` says to. A resize
+   listener that suppressed transitions after the fact (an earlier version of this) still let a
+   flash through on some viewport changes, since it reacts to an event that can lag behind the
+   style recalc/paint it's trying to prevent. Scoping the transition to only exist while this
+   class is present sidesteps that race entirely: it's just never armed except right when we
+   want it.
+   Opening and closing need *different* transition lists, not just different end states: closing
+   delays the `visibility: hidden` flip until the slide-out finishes (`visibility 0s linear
+   0.3s`), so the panel stays visible/interactive throughout instead of vanishing mid-slide.
+   Applying that same delay to opening (a bug from an earlier version of this rule — one shared
+   transition list for both directions) delayed `visibility: visible` by 0.3s too, so the panel
+   sat invisible for the entire slide while its transform animated underneath, then snapped
+   visible already in its final position — reading as two disconnected beats (backdrop, then a
+   pause, then the panel just appearing) instead of one smooth slide. */
+.js-nav-ready .site-nav__list.nav-animate {
+  transition: transform 0.3s ease;
+}
+
+.js-nav-ready .site-nav__list.nav-animate:not(.is-open) {
+  transition: transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+/* Dims the page behind the drawer and gives a click target to close it; nav.js toggles
+   [hidden] alongside .is-open. Not part of the no-JS fallback — it's created hidden and only
+   ever un-hidden by nav.js, so it's simply inert (and invisible) without JS. */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: var(--z-header);
+}
+
+.nav-backdrop[hidden] {
+  display: none;
 }
 
 @media (min-width: 768px) {
@@ -166,5 +279,21 @@
   .js-nav-ready .site-nav__list.is-open {
     display: flex;
     flex-direction: row;
+    position: static;
+    width: auto;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+    padding: 0;
+    gap: var(--space-5);
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    visibility: visible;
+    transition: none;
+  }
+
+  .nav-backdrop {
+    display: none;
   }
 }

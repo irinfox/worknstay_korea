@@ -5,8 +5,10 @@ layout: layouts/page.njk
 
 {#
   Region-info shell (architecture.md §3): one shared region-card.njk partial feeds two
-  render modes, switched by a width-only CSS breakpoint (768px) — never both at once, never
-  recomputed on resize.
+  render modes, switched by a width-only CSS breakpoint (768px, see --bp-region-info-wide in
+  tokens.css) — never both at once, never recomputed on resize. The infographic grid's natural
+  width is 940px but its columns are fr-sized with a max-width cap (region-card.css), so it
+  scales down fluidly below that instead of overflowing.
     - Wide (region-infographic): all 6 regions permanently visible around the map, in two
       fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
       Cross-hover (card <-> map region <-> leader line, Phase 18) is pure CSS (:has()), no JS —

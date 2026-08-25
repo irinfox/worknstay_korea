@@ -139,6 +139,14 @@
  * columns and their leader lines are wide-viewport-only. Breakpoint is width-only (768px,
  * matching --bp-region-info-wide in tokens.css — hardcoded here because custom properties
  * aren't readable inside @media conditions, same constraint noted there).
+ * The grid's own natural size is 940px (240+420+240 plus two 20px gaps) — narrower than that
+ * (anywhere between 768px and ~972px, once .page's padding is subtracted) it now scales down
+ * fluidly instead of overflowing: `fr` column tracks keep the 240:420:240 ratio while shrinking
+ * to fit, and the map/leader-lines SVGs (viewBox-scaled, width:100%) shrink in step with their
+ * grid cells, so the hand-positioned lines stay aligned to the map at any size. `min-width: 0`
+ * on the flanking columns (below) is load-bearing — without it, a grid track won't shrink past
+ * its content's intrinsic min-content width (nowrap region names, etc.), which would silently
+ * reintroduce the same overflow this is fixing.
  */
 .region-infographic {
   position: relative;
@@ -156,10 +164,11 @@
 @media (min-width: 768px) {
   .region-infographic {
     display: grid;
-    grid-template-columns: 240px 420px 240px;
+    grid-template-columns: 240fr 420fr 240fr;
     column-gap: 20px;
     align-items: center;
-    width: 940px;
+    width: 100%;
+    max-width: 940px;
     margin-inline: auto;
   }
 
@@ -167,6 +176,10 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    /* Lets the fr-sized grid track actually shrink below the column's content's intrinsic
+       min-content width — grid tracks default to never shrinking past that otherwise, which
+       would silently overflow again exactly like the fixed-940px version did. */
+    min-width: 0;
   }
 
   /* Explicitly placed into row 1 (map's own height) spanning all 3 columns — without this, an
@@ -198,6 +211,7 @@
   .korea-map {
     position: relative;
     z-index: 1;
+    min-width: 0;
   }
 
   .region-infographic__lines line {

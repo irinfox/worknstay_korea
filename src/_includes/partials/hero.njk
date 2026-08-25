@@ -19,9 +19,8 @@
   ></div>
   <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
   {% if heroCredit %}
-    {# footer.njk's site.dataAttribution is a site-wide blanket credit; CLAUDE.md rule 5 still
-       wants each KTO-derived block (region.njk, visa-info.njk) to carry its own provenance too —
-       same pattern here, phrased the same way as those. #}
+    {# CLAUDE.md rule 5: each KTO-derived block (region.njk, visa-info.njk) carries its own
+       provenance — same pattern here, phrased the same way as those. #}
     <p class="hero__credit">
       <a href="{{ heroCredit.sourceImageUrl }}">Photo: Korea Tourism Organization (KTO) OpenAPI</a>
     </p>
