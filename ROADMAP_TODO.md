@@ -224,10 +224,8 @@ Depends on 20 + 21.
       API's default sort is alphabetical, not image-first) and calls `detailImage2` per seed.
 - [x] Cache via `cf: { cacheTtl, cacheEverything }` — festivals 4h, attractions 24h, gallery 14d.
       `fetchKto`/`fetchKtoAllPages` take an optional `cacheTtl` (kto-client.mjs).
-- [ ] After deploying this branch: check the data.go.kr call-history log shows real activity
-      (do this now, not just at the end in Phase 28 — catches a broken key/logging setup early)
-      and spot-check the `cf-cache-status` response header (`cf: { cacheTtl }` only takes effect
-      on Cloudflare's real edge, not local `wrangler pages dev`, so neither is checkable yet).
+- [ ] Spot-check the data.go.kr call-history log for this key shows real traffic — catches a
+      broken key/logging setup early instead of at Phase 28. Dashboard check, not scriptable.
 - Verify: `wrangler pages dev` against real live data — multi-code fan-out dedupes correctly
       (gyeonggi-do/jeolla-do), jeju-do events returns a real non-mock array, gallery returns real
       licensed images, unknown slug still 404s, partial fan-out failure still returns the rest.
@@ -237,9 +235,9 @@ Depends on 22. **This is real, separate work — Phases 20–22 build a working 
 yet.**
 
 - [ ] Region pages fetch live data client-side, replacing the build-time `mock.attractions` loop.
-- [ ] **Event-calendar migration — the big one.** `eleventy/event-calendar.mjs` is a *build-time*
-      shortcode; it can't run against client-fetched data as-is. Pick one: port the date-grid
-      logic to client JS, or have the Function pre-render calendar HTML server-side.
+- [ ] Event-calendar migration. Drop `eleventy/event-calendar.mjs`'s build-time month-grid. Replace
+      with a chronological timeline list — events sorted by date, grouped under month headers so it's
+      always clear which month/date range is showing. Trivial no-JS story (plain list, no date-grid math).
 - [ ] Real `<img>` (replacing `.media-placeholder`) with the crop policy + attribution.
 - [ ] Keep `.data-provenance` + empty states working through the swap (Jeju's empty calendar
       must render in-page, not just an empty array).
@@ -288,6 +286,8 @@ Milestone bucket, not a day/branch phase.
       right before submission.
 - [ ] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
 - [ ] refactor code: make sure it doesn't have excessive info, that can be deleted
+- [decide] Real interactive event calendar (month-to-month navigation, hover detail on event
+      days) on top of Phase 23's timeline list — worth building given remaining time?
 - [UX check] is it understandable that the map is reacting to calc on all surfaces?
 - [UX check] perform UX test with several respondents
 
@@ -315,14 +315,11 @@ Phase 28's deploy freeze, since it can change calculator output for real regions
 
 ---
 
-## Future ideas — not yet scoped, discuss before Phase 14/23
+## Future ideas — not yet scoped
 Raised by the owner, deliberately not phased/estimated yet — don't lose these:
 - **Region-page hero image**: not a gallery, a single cover photo under the region name/tags
   (like Phase 14's home-page hero, but per-region). Likely KTO `detailImage2`-sourced, so ties
   into Phase 23's live-gallery-data work and Phase 14's Type3 crop-policy decision.
-- **Real interactive calendar**: replace the current static month-grid with one that's navigable
-  (month-to-month) and has hover detail on event days — a bigger rebuild than Phase 23's
-  render-migration decision, on top of it, not instead of it.
 
 ## Cut / descoped
 
