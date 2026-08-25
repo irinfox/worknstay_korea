@@ -46,11 +46,16 @@ function buildUrl(endpoint, params, serviceKey) {
   return url.toString();
 }
 
-async function fetchWithTimeout(url) {
+// `cacheTtl` is a Cloudflare `fetch()` `cf` directive (edge Cache API, not a browser header) —
+// harmless to pass under plain Node (undici ignores unknown RequestInit keys), so callers don't
+// need an environment check.
+async function fetchWithTimeout(url, cacheTtl) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    return await fetch(url, { signal: controller.signal });
+    const init = { signal: controller.signal };
+    if (cacheTtl) init.cf = { cacheTtl, cacheEverything: true };
+    return await fetch(url, init);
   } finally {
     clearTimeout(timer);
   }
@@ -72,9 +77,11 @@ function extractItems(body) {
  *   (contentTypeId/areaCode/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for
  *   searchFestival2, contentId for detailImage2), plus numOfRows/pageNo for paging.
  * @param {{ KTO_API_KEY?: string }} env - Cloudflare Functions env binding
+ * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
+ *   to bypass the edge cache (used for verify scripts and other one-off calls).
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number }>}
  */
-export async function fetchKto(endpoint, params, env) {
+export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   const serviceKey = env?.KTO_API_KEY;
   if (!serviceKey) return DEGRADED;
 
@@ -83,7 +90,7 @@ export async function fetchKto(endpoint, params, env) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let response;
     try {
-      response = await fetchWithTimeout(url);
+      response = await fetchWithTimeout(url, cacheTtl);
     } catch {
       // network error or timeout (AbortError)
       if (attempt < MAX_RETRIES) {
@@ -130,13 +137,18 @@ export async function fetchKto(endpoint, params, env) {
  * resilience across *codes* should call fetchKto per code itself (see region-map.mjs), not rely
  * on this helper's own retry to paper over it.
  */
-export async function fetchKtoAllPages(endpoint, params, env, { numOfRows = 20, maxPages = 5 } = {}) {
+export async function fetchKtoAllPages(
+  endpoint,
+  params,
+  env,
+  { numOfRows = 20, maxPages = 5, cacheTtl } = {}
+) {
   const items = [];
   let pageNo = 1;
   let totalCount = Infinity;
 
   while (pageNo <= maxPages && items.length < totalCount) {
-    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env);
+    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env, { cacheTtl });
     if (page.degraded) return { items: [], degraded: true, totalCount: 0 };
 
     items.push(...page.items);

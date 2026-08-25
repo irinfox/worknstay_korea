@@ -214,16 +214,23 @@ Depends on 20.
 ## Phase 22 — Endpoint wiring + fan-out + caching
 Depends on 20 + 21.
 
-- [ ] Switch all 3 endpoints to live calls; mock JSON becomes dev-only fallback (gate on
+- [x] Switch all 3 endpoints to live calls; mock JSON becomes dev-only fallback (gate on
       `KTO_API_KEY` absent from `env`).
-- [ ] Fan-out for every region with >1 code, post-Phase-11 (gyeonggi: 3, chungcheong: 4,
-      gyeongsang: 5, jeolla: 2) via `Promise.allSettled`, dedupe by `contentid`. One code failing
-      degrades that region, not the whole thing. No ranking/scoring on the merge.
-- [ ] Cache via `cf: { cacheTtl, cacheEverything }` — festivals ~3–6h during judging (keeps call
-      log visibly active), attractions ~24h, gallery ~7–30d.
-- [ ] Check data.go.kr call-history log once, early — not just at the end in Phase 28.
-- Verify: all 6 regions non-empty attractions, 5/6 events (Jeju is legitimately 0), cache hit
-  confirmed, one fan-out code forced to fail still returns the rest.
+- [x] Fan-out for every region with >1 code via `Promise.allSettled`, dedupe by `contentid`. One
+      code failing/rejecting only drops that code's items, not the whole region. No
+      ranking/scoring on the merge. `gallery.js` fans out differently: `detailImage2` takes a
+      single `contentId`, not a region code, so it first seeds attraction contentIds via
+      `areaBasedList2` (over-fetched per code, filtered to licensed-image attractions — the
+      API's default sort is alphabetical, not image-first) and calls `detailImage2` per seed.
+- [x] Cache via `cf: { cacheTtl, cacheEverything }` — festivals 4h, attractions 24h, gallery 14d.
+      `fetchKto`/`fetchKtoAllPages` take an optional `cacheTtl` (kto-client.mjs).
+- [ ] After deploying this branch: check the data.go.kr call-history log shows real activity
+      (do this now, not just at the end in Phase 28 — catches a broken key/logging setup early)
+      and spot-check the `cf-cache-status` response header (`cf: { cacheTtl }` only takes effect
+      on Cloudflare's real edge, not local `wrangler pages dev`, so neither is checkable yet).
+- Verify: `wrangler pages dev` against real live data — multi-code fan-out dedupes correctly
+      (gyeonggi-do/jeolla-do), jeju-do events returns a real non-mock array, gallery returns real
+      licensed images, unknown slug still 404s, partial fan-out failure still returns the rest.
 
 ## Phase 23 — Front-end actually renders the live data
 Depends on 22. **This is real, separate work — Phases 20–22 build a working API nothing uses
