@@ -274,6 +274,107 @@
   font-style: italic;
 }
 
+/* --- Gyeonggi-do population-decline counties (population-decline-counties.njk) -------------
+   Two labelled rows (designated / watch-list), each a responsive card grid. County name sits
+   above the photo; the photo's attraction label overlays the image bottom-left, same treatment
+   as the region hero-gallery captions (.region-hero__caption). */
+
+/* One notch down from the shared region h1 so this longer title clears the reading column on a
+   single line at desktop width (still wraps on narrow, which is fine there). */
+.county-header h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+}
+
+/* Trim the trailing whitespace before the footer — this page ends on a one-line photo credit,
+   not a full content block. */
+.content-page--tight-end .region-section:last-child {
+  margin-bottom: var(--space-2);
+}
+
+.county-group {
+  margin-top: var(--space-5);
+}
+
+.county-group__title {
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-lg);
+}
+
+/* Horizontal scroll-snap strip (same pattern as .attraction-list) rather than a wrapping grid,
+   so each group stays one row and the watch-list group below stays in view. */
+.county-grid {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2);
+}
+
+.county-card {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.county-card__name {
+  margin: 0;
+  font-size: var(--font-size-base);
+}
+
+.county-card__ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.county-card__metro {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.county-card__figure {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.county-card__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.county-card__caption {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: calc(100% - var(--space-4));
+  padding: 2px var(--space-2);
+  color: #fff;
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs, 0.75rem);
+  line-height: 1.3;
+}
+
+.county-card__caption-ko {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.6875rem;
+}
+
 /* Attractions: horizontal scroll-snap strip, no carousel library, no JS required. */
 .attraction-list {
   display: flex;

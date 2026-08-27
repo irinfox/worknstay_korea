@@ -10,45 +10,65 @@ permalink: "/regions/gyeonggi-do/population-decline-counties/"
    page otherwise: same .content-page/.region-header shell, same .city-list pattern already used
    for cities.json entries (region.njk) reused here for county entries — same shape (English/
    Korean name + a category badge), just a different data source. #}
-<div class="content-page">
-<header class="region-header">
+<div class="content-page content-page--tight-end">
+<header class="region-header county-header">
   <h1>Gyeonggi-do population-decline counties</h1>
   <p class="region-header__intro">
-    Gyeonggi-do is a capital-tier region for F-1-D visa purposes, so its income threshold is the
-    country's highest — except in the counties below, which the government separately designates
-    as population-decline or watch-list areas. Those counties qualify at the lower, non-capital
-    threshold even though they sit administratively inside Gyeonggi-do. This is the hatched area
-    on the <a href="/#map">home page map</a>.
+    Gyeonggi-do is a capital-tier F-1-D region with the country's highest income threshold. Some
+    counties — though administratively part of Gyeonggi-do — still qualify at the lower,
+    non-capital threshold, because the government lists them as population-decline or watch-list
+    areas.
+  </p>
+  <p class="region-header__intro">
+    See the <a href="/visa-info/">visa info</a> for the rules and the
+    <a href="/regions/gyeonggi-do/">Gyeonggi-do region page</a> for living info.
   </p>
 </header>
 
+{% macro countyCard(county) %}
+{% set countyPhoto = countyHeroPhotos[county.countyNameEn] %}
+{% set countyCredit = countyHeroCredits.photos[countyPhoto] %}
+<li class="county-card">
+  <div class="county-card__head">
+    <h4 class="county-card__name">{{ county.countyNameEn }} <span class="county-card__ko">{{ county.countyNameKo }}</span></h4>
+    <p class="county-card__metro">{{ county.metroEn }}</p>
+  </div>
+  {% if countyPhoto %}
+  <figure class="county-card__figure">
+    <img class="county-card__photo" src="/assets/img/hero/gyeonggi-do-population-decline/{{ countyPhoto }}" alt="{{ countyCredit.titleEn }}" loading="lazy">
+    {% if countyCredit.titleEn %}
+    <figcaption class="county-card__caption">
+      <span class="county-card__caption-en">{{ countyCredit.titleEn }}</span>
+      {% if countyCredit.titleKo %}<span class="county-card__caption-ko">{{ countyCredit.titleKo }}</span>{% endif %}
+    </figcaption>
+    {% endif %}
+  </figure>
+  {% endif %}
+</li>
+{% endmacro %}
+
 <section class="region-section">
   <h2>Qualifying counties</h2>
-  <ul class="city-list">
-    {% for county in populationDeclineAreas %}
-    {% set countyPhoto = countyHeroPhotos[county.countyNameEn] %}
-    {% set countyCredit = countyHeroCredits.photos[countyPhoto] %}
-    <li class="city-list__item">
-      {% if countyPhoto %}
-      <img class="city-list__photo" src="/assets/img/hero/gyeonggi-do-population-decline/{{ countyPhoto }}" alt="{{ countyCredit.titleEn }}" loading="lazy">
-      {% if countyCredit.titleEn %}
-      <p class="city-list__photo-caption">
-        <span class="city-list__photo-caption-en">{{ countyCredit.titleEn }}</span>
-        {% if countyCredit.titleKo %}<span class="city-list__photo-caption-ko">{{ countyCredit.titleKo }}</span>{% endif %}
-      </p>
-      {% endif %}
-      {% endif %}
-      <h3>{{ county.countyNameEn }} <span class="city-list__ko">{{ county.countyNameKo }}</span></h3>
-      <p>{{ county.metroEn }}</p>
-      <p class="city-list__badge">{% if county.category == "decline" %}Population-decline-designated area{% else %}Population watch-list area{% endif %}</p>
-    </li>
-    {% endfor %}
-  </ul>
-  <p class="data-provenance">Photo source: © Korea Tourism Organization (한국관광공사).</p>
   <p class="data-provenance">
-    Source: Ministry of the Interior and Safety (행정안전부) 인구감소지역 designation, sourced
-    2026-08-18. See <a href="/visa-info/">visa income thresholds</a> for the full rules, and the
-    <a href="/regions/gyeonggi-do/">Gyeonggi-do region page</a> for general living info.
+    Source:
+    <a href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do">Ministry of the Interior and Safety (행정안전부) 인구감소지역 designation</a>,
+    sourced 2026-08-18.
   </p>
+
+  <div class="county-group">
+    <h3 class="county-group__title">Population-decline-designated</h3>
+    <ul class="county-grid">
+      {% for county in populationDeclineAreas %}{% if county.category == "decline" %}{{ countyCard(county) }}{% endif %}{% endfor %}
+    </ul>
+  </div>
+
+  <div class="county-group">
+    <h3 class="county-group__title">Population watch-list</h3>
+    <ul class="county-grid">
+      {% for county in populationDeclineAreas %}{% if county.category == "watch" %}{{ countyCard(county) }}{% endif %}{% endfor %}
+    </ul>
+  </div>
+
+  <p class="data-provenance">Photo source: © Korea Tourism Organization (한국관광공사).</p>
 </section>
 </div>
