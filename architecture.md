@@ -155,8 +155,9 @@ worknstay_korea/
 │   │   ├── populationDeclineAreas.json  # MOIS 인구감소지역 list (§7/§11)
 │   │   ├── mock/{attractions,events,gallery}.json  # KTO-shaped fixtures; the dev-only fallback
 │   │   │                        # once functions/api/** makes real live calls
-│   │   └── regionHeroPhotos.json, regionHeroCredits.json  # hand-picked cover photo per region
-│   │                            # (slug → filename in assets/img/hero/) + its KOGL credit
+│   │   ├── regionHeroPhotos.json, regionHeroCredits.json  # region cover-photo galleries
+│   │   │                        # (slug → [filename in assets/img/hero/<slug>/]) + KOGL credits
+│   │   └── countyHeroPhotos.json, countyHeroCredits.json  # same, for the Gyeonggi decline counties
 │   ├── _includes/
 │   │   ├── layouts/{base,page}.njk
 │   │   └── partials/{header,footer,region-card,korea-map,tabs,empty-state}.njk
@@ -165,8 +166,8 @@ worknstay_korea/
 │   │   ├── js/   main.js, nav.js, calculator.js, eligibility.js,
 │   │   │         korea-map.js, region-card.js, tabs.js, region-data.js,
 │   │   │         region-hero-gallery.js
-│   │   ├── img/  hero/  # home + region-page cover photos (KOGL Type1, credited in
-│   │   │         #       _data/heroCredits.json / regionHeroCredits.json)
+│   │   ├── img/  hero/{home,<region-slug>,gyeonggi-do-population-decline}/  # cover photos,
+│   │   │         #       KOGL Type1, credited in _data/{hero,regionHero,countyHero}Credits.json
 │   │   │         food/, og/  # planned subfolders; empty until real assets are sourced
 │   │   ├── fonts/               # empty until a real webfont is added
 │   │   └── svg/  korea-regions.svg

@@ -252,15 +252,14 @@ yet.**
       JavaScript" message + an outbound link to KTO's English site), inert the instant JS runs
       since `region-data.js` overwrites the mount unconditionally. Verified via curl (raw HTML,
       no browser) that the fallback renders server-side.
-- [x] Region hero photos: `regionHeroPhotos.json` maps each slug to an ordered filename list;
-      `regionHeroCredits.json` / `countyHeroCredits.json` hold per-file KTO Type1 credit +
-      caption (attraction + short city, EN/KO; full address in `addressEn`/`addressKo`).
-      `.region-hero-gallery__track` is CSS scroll-snap; `region-hero-gallery.js` adds
-      prev/next + dots + autoplay (no-JS still swipes). `.region-hero` aspect-ratio `16 / 9`.
-      All 6 regions + Gyeonggi-do decline counties finalized. Yeosu entry's Type1 rests on a
-      manual classification, not a reproducible `detailImage2` call — noted inline.
-  - [ ] Shorten gangwon-do / jeolla-do / jeju-do captions to the short `cityEn` + full
-        `addressEn`/`addressKo` form the other regions now use.
+- [x] Region hero photos: `regionHeroPhotos.json` maps each slug to an ordered filename list
+      (files in `assets/img/hero/<slug>/`); `regionHeroCredits.json` / `countyHeroCredits.json`
+      hold per-file KTO Type1 credit + caption (attraction + short city EN/KO; full address in
+      `addressEn`/`addressKo`). `.region-hero-gallery__track` is CSS scroll-snap;
+      `region-hero-gallery.js` adds prev/next + dots + autoplay (no-JS still swipes).
+      `.region-hero` aspect-ratio `16 / 9`. All 6 regions + Gyeonggi-do decline counties done.
+      Yeosu entry's Type1 rests on a manual classification, not a reproducible `detailImage2`
+      call — noted inline.
 - Verify: `npm run pages:dev` — live data in-page on gyeonggi-do/jeju-do, hero photos resolve
       200, licensed image renders next to placeholders, no-JS fallback present in raw HTML.
 

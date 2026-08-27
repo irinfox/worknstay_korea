@@ -36,7 +36,7 @@ eleventyComputed:
     {% for filename in heroPhotos %}
     {% set credit = regionHeroCredits.photos[filename] %}
     <figure class="region-hero-gallery__slide">
-      <img class="region-hero__img" src="/assets/img/hero/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+      <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
       {% if credit.titleEn %}
       <figcaption class="region-hero__caption">
         <span class="region-hero__caption-en">{{ credit.titleEn }}{% if credit.cityEn %}, {{ credit.cityEn }}{% endif %}</span>

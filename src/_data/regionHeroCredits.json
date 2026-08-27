@@ -1,12 +1,14 @@
 {
   "licenseNote": "All entries are 공공누리 (KOGL) Type 1 — attribution required, modification/derivative works permitted. Two source APIs feed this file: KTO TourAPI EngService2 (detailImage2, cpyrhtDivCd checked per-photo) and KTO PhotoGalleryService1 (gallerySearchList1, whole catalog is uniformly Type1 by product definition — no cpyrhtDivCd field exists on those records). `source` on each entry says which. `titleKo`/`cityKo` are plain translations/transliterations for display and are not KTO-supplied English-service fields (EngService2 has no Korean-name field; PhotoGalleryService1 is Korean-only and has no English one) — kept so a user can search the Korean name directly (CLAUDE.md rule 9).",
-  "captionNote": "The rendered hero caption is `titleEn, cityEn` (+ a `titleKo, cityKo` line) — `cityEn`/`cityKo` are the short display form (bare city/metro name, no gu/do). `addressEn`/`addressKo` hold the full administrative address, not shown, kept in case the caption format is revisited. Older entries (gangwon-do, jeolla-do, jeju-do) still carry the long string in `cityEn` and no `addressEn` — pending the same shortening pass.",
+  "captionNote": "Rendered hero caption is `titleEn, cityEn` plus a `titleKo, cityKo` line. `cityEn`/`cityKo` are the short display form — bare city/metro name, no gu/si/do — and are omitted entirely for province- or island-wide subjects. `addressEn`/`addressKo` hold the full administrative address and are not displayed, kept in case the caption format is revisited. Image files live in `src/assets/img/hero/<region-slug>/`.",
   "photos": {
     "taejo-ro-jeonju.jpg": {
       "titleEn": "Taejo-ro",
       "titleKo": "태조로",
-      "cityEn": "Jeonju-si, Jeollabuk-do",
-      "cityKo": "전주시, 전라북도",
+      "cityEn": "Jeonju",
+      "cityKo": "전주",
+      "addressEn": "Jeonju-si, Jeollabuk-do",
+      "addressKo": "전주시, 전라북도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "1022787"
@@ -14,8 +16,10 @@
     "gunsan-dongguksa-temple.jpg": {
       "titleEn": "Dongguksa Temple",
       "titleKo": "군산 동국사",
-      "cityEn": "Gunsan-si, Jeollabuk-do",
-      "cityKo": "군산시, 전라북도",
+      "cityEn": "Gunsan",
+      "cityKo": "군산",
+      "addressEn": "Gunsan-si, Jeollabuk-do",
+      "addressKo": "군산시, 전라북도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2811818"
@@ -23,8 +27,10 @@
     "jucheon-ecological-park.jpg": {
       "titleEn": "Jucheon Ecological Park",
       "titleKo": "주천생태공원",
-      "cityEn": "Jinan-gun, Jeollabuk-do",
-      "cityKo": "진안군, 전라북도",
+      "cityEn": "Jinan",
+      "cityKo": "진안",
+      "addressEn": "Jinan-gun, Jeollabuk-do",
+      "addressKo": "진안군, 전라북도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "4069955"
@@ -32,12 +38,14 @@
     "yeosu-romantic-pocha-street.png": {
       "titleEn": "Romantic Pocha Street",
       "titleKo": "낭만포차거리",
-      "cityEn": "Yeosu-si, Jeollanam-do",
-      "cityKo": "여수시, 전라남도",
+      "cityEn": "Yeosu",
+      "cityKo": "여수",
+      "addressEn": "Yeosu-si, Jeollanam-do",
+      "addressKo": "여수시, 전라남도",
       "source": "EngService2",
       "contentid": "2657472",
       "cpyrhtDivCd": "Type1",
-      "note": "Type1 confirmed by manual classification during the original 2026-08-24 sourcing session (temp-region-photos/jeolla-do/type1/) — the file doesn't match any image currently returned by detailImage2 for this contentId (same dimensions, different pixels; KTO's image set for a contentId can change over time), so it can't be re-derived from a fresh API call."
+      "note": "Type1 confirmed by manual classification during the 2026-08-24 sourcing session. The file no longer matches any image detailImage2 returns for this contentId (KTO's image set for a contentId can change over time), so it can't be re-verified from a fresh API call."
     },
     "ikseon-dong-hanok-street.jpg": {
       "titleEn": "Ikseon-dong Hanok Street",
@@ -109,8 +117,8 @@
     "hwadam-botanic-garden-gwangju.jpg": {
       "titleEn": "Hwadam Botanic Garden",
       "titleKo": "화담숲",
-      "cityEn": "Gwangju, Gyeonggi-do",
-      "cityKo": "경기 광주",
+      "cityEn": "Gwangju",
+      "cityKo": "광주",
       "addressEn": "278-1 Docheogwit-ro, Gwangju-si, Gyeonggi-do",
       "addressKo": "광주시, 경기도",
       "source": "EngService2",
@@ -285,13 +293,15 @@
       "contentid": "1349247",
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/08/3309808_image2_1.jpg",
-      "note": "Standby only — was chungcheong-do's single pick before the 7-photo gallery; file kept in assets/img/hero/ but not in regionHeroPhotos.json."
+      "note": "Standby only — was chungcheong-do's single pick before the 7-photo gallery; file kept in assets/img/hero/chungcheong-do/ but not listed in regionHeroPhotos.json."
     },
     "uhwajeong-pavilion.jpg": {
       "titleEn": "Uhwajeong Pavilion (Naejangsan)",
       "titleKo": "우화정 (내장산)",
-      "cityEn": "Naejangsan National Park, Jeongeup-si, Jeollabuk-do",
-      "cityKo": "내장산국립공원, 정읍시, 전라북도",
+      "cityEn": "Jeongeup",
+      "cityKo": "정읍",
+      "addressEn": "Naejangsan National Park, Jeongeup-si, Jeollabuk-do",
+      "addressKo": "내장산국립공원, 정읍시, 전라북도",
       "source": "EngService2",
       "contentid": "658438",
       "cpyrhtDivCd": "Type1",
@@ -300,7 +310,8 @@
     "seoraksan-national-park.jpg": {
       "titleEn": "Seoraksan National Park",
       "titleKo": "설악산국립공원",
-      "cityEn": "Gangwon-do",
+      "addressEn": "Gangwon-do",
+      "addressKo": "강원도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "1785340"
@@ -308,8 +319,10 @@
     "sokcho-ferris-wheel-view.jpg": {
       "titleEn": "Sokcho Ferris Wheel & Beach View",
       "titleKo": "속초 대관람차",
-      "cityEn": "Jo-yang-dong, Sokcho-si, Gangwon-do",
-      "cityKo": "조양동, 속초시, 강원도",
+      "cityEn": "Sokcho",
+      "cityKo": "속초",
+      "addressEn": "Jo-yang-dong, Sokcho-si, Gangwon-do",
+      "addressKo": "조양동, 속초시, 강원도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "3566454"
@@ -317,7 +330,10 @@
     "chuncheon-daegyo-bridge.jpg": {
       "titleEn": "Chuncheondaegyo Bridge",
       "titleKo": "춘천대교",
-      "cityEn": "Geunhwa-dong, Chuncheon-si, Gangwon-do",
+      "cityEn": "Chuncheon",
+      "cityKo": "춘천",
+      "addressEn": "Geunhwa-dong, Chuncheon-si, Gangwon-do",
+      "addressKo": "근화동, 춘천시, 강원도",
       "source": "EngService2",
       "contentid": "3111201",
       "cpyrhtDivCd": "Type1",
@@ -326,8 +342,10 @@
     "yeongjin-beach-gangneung.jpg": {
       "titleEn": "Yeongjin Beach",
       "titleKo": "영진해변",
-      "cityEn": "Yeongok-myeon, Gangneung-si, Gangwon-do",
-      "cityKo": "연곡면, 강릉시, 강원도",
+      "cityEn": "Gangneung",
+      "cityKo": "강릉",
+      "addressEn": "Yeongok-myeon, Gangneung-si, Gangwon-do",
+      "addressKo": "연곡면, 강릉시, 강원도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2828601"
@@ -335,8 +353,10 @@
     "alpensia-resort-pyeongchang.jpg": {
       "titleEn": "Alpensia Resort",
       "titleKo": "알펜시아",
-      "cityEn": "Daegwallyeong-myeon, Pyeongchang-gun, Gangwon-do",
-      "cityKo": "대관령면, 평창군, 강원도",
+      "cityEn": "Pyeongchang",
+      "cityKo": "평창",
+      "addressEn": "Daegwallyeong-myeon, Pyeongchang-gun, Gangwon-do",
+      "addressKo": "대관령면, 평창군, 강원도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2711583"
@@ -344,8 +364,10 @@
     "sogeumsan-grand-valley.jpg": {
       "titleEn": "Sogeumsan Grand Valley",
       "titleKo": "소금산 그랜드밸리",
-      "cityEn": "Jijeong-myeon, Wonju-si, Gangwon-do",
-      "cityKo": "지정면, 원주시, 강원도",
+      "cityEn": "Wonju",
+      "cityKo": "원주",
+      "addressEn": "Jijeong-myeon, Wonju-si, Gangwon-do",
+      "addressKo": "지정면, 원주시, 강원도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2765603"
@@ -353,8 +375,10 @@
     "jeju-batdam-theme-park.jpg": {
       "titleEn": "Jeju Batdam Theme Park",
       "titleKo": "제주밭담테마공원",
-      "cityEn": "Gujwa-eup, Jeju-si, Jeju-do",
-      "cityKo": "구좌읍, 제주시, 제주도",
+      "cityEn": "Jeju City",
+      "cityKo": "제주시",
+      "addressEn": "Gujwa-eup, Jeju-si, Jeju-do",
+      "addressKo": "구좌읍, 제주시, 제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "3590966"
@@ -362,8 +386,10 @@
     "sinchang-windmill-coastal-road.jpg": {
       "titleEn": "Sinchang Windmill Coastal Road",
       "titleKo": "신창풍차해안도로",
-      "cityEn": "Hangyeong-myeon, Jeju-si, Jeju-do",
-      "cityKo": "한경면, 제주시, 제주도",
+      "cityEn": "Jeju City",
+      "cityKo": "제주시",
+      "addressEn": "Hangyeong-myeon, Jeju-si, Jeju-do",
+      "addressKo": "한경면, 제주시, 제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2860409"
@@ -371,7 +397,8 @@
     "jeju-mandarins.jpg": {
       "titleEn": "Jeju Mandarins",
       "titleKo": "제주 감귤",
-      "cityEn": "Jeju-do",
+      "addressEn": "Jeju-do",
+      "addressKo": "제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2704212"
@@ -379,7 +406,10 @@
     "dumaengi-gil-mural-alley.jpg": {
       "titleEn": "Dumaengi-gil Mural Alley",
       "titleKo": "두맹이골목",
-      "cityEn": "Jeju-si, Jeju-do",
+      "cityEn": "Jeju City",
+      "cityKo": "제주시",
+      "addressEn": "Jeju-si, Jeju-do",
+      "addressKo": "제주시, 제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "1938109"
@@ -387,8 +417,10 @@
     "olle-trail-course-2.jpg": {
       "titleEn": "Jeju Olle Trail — Course 2",
       "titleKo": "제주올레길 2코스",
-      "cityEn": "Seongsan-eup, Seogwipo-si, Jeju-do",
-      "cityKo": "성산읍, 서귀포시, 제주도",
+      "cityEn": "Seogwipo",
+      "cityKo": "서귀포",
+      "addressEn": "Seongsan-eup, Seogwipo-si, Jeju-do",
+      "addressKo": "성산읍, 서귀포시, 제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "1012145"
@@ -396,8 +428,10 @@
     "seogwipo-hallasan-view.jpg": {
       "titleEn": "Seogwipo City with Hallasan View (Soesokkak)",
       "titleKo": "서귀포 한라산 전망 (쇠소깍)",
-      "cityEn": "Hyo-dong, Seogwipo-si, Jeju-do",
-      "cityKo": "하효동, 서귀포시, 제주도",
+      "cityEn": "Seogwipo",
+      "cityKo": "서귀포",
+      "addressEn": "Hyo-dong, Seogwipo-si, Jeju-do",
+      "addressKo": "하효동, 서귀포시, 제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "2860156",
@@ -406,7 +440,8 @@
     "haenyeo-divers.jpg": {
       "titleEn": "Haenyeo (Jeju Women Divers)",
       "titleKo": "해녀",
-      "cityEn": "Jeju-do",
+      "addressEn": "Jeju-do",
+      "addressKo": "제주도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
       "galContentId": "1260716"
