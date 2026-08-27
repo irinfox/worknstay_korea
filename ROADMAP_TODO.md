@@ -43,7 +43,7 @@ until Phase 19.
       `/regions/gyeonggi-do/population-decline-counties/` page.
 - [x] **19 — Deploy.** Cloudflare Pages project, `KTO_API_KEY`/`KTO_GALLERY_API_KEY` secrets,
       native Web Analytics, custom `src/404.njk`, `robots.txt` disallow-all + `noindex` (both
-      come off in Phase 28). Secret-leak check clean. `functions/**` JSON-import constraint →
+      come off in Phase 29). Secret-leak check clean. `functions/**` JSON-import constraint →
       architecture.md §4.
 
 ## Phases 20–22 — done (KTO client → normalize → live endpoints)
@@ -56,14 +56,14 @@ until Phase 19.
       http→https. KTO quirks list is architecture.md §5. Verify: `scripts/verify-normalize.mjs`.
   - [ ] `Attraction.summary` / `Event.homepageUrl` have no source field on the 2 in-scope
         endpoints (would need `detailCommon2`/`detailIntro2`, one call per `contentId`) — weigh
-        call-volume cost before Phase 28.
+        call-volume cost before Phase 29.
 - [x] **22 — Endpoint wiring + fan-out + caching.** Both endpoints live; mock JSON is the
       `KTO_API_KEY`-absent dev fallback. Multi-code regions fan out via `Promise.allSettled`,
       dedupe by `contentid`, one code failing drops only its items. Cache via `cf.cacheTtl` —
       attractions 24h, festivals 4h.
   - [ ] data.go.kr's individual-account mypage shows only approval status, no call-count
         dashboard found. Live calls confirmed working regardless; recheck for a real log view
-        before Phase 28.
+        before Phase 29.
 
 ## Phase 23 — done (front end renders live data)
 
@@ -85,21 +85,33 @@ until Phase 19.
         on any region page (region-data.js — live data has neither right now; jeju-do at 1 event
         exercises the no-tabs single-month path).
 
-## Phase 24 — Workation-city expansion
+## Phase 24 — Region editorial + attraction curation
+Iterative editorial/research work, mostly hand-curation — do one region at a time.
+
+- [x] Attraction feed: `areaBasedList2` with `arrange=Q` (view-count order, representative image
+      required) — drops the medical-tourism venues KTO files under 관광지.
+- [ ] Attraction curation: eyeball each region's list for junk, add a name blocklist if needed,
+      decide per-region count + whether to dedupe same-name branches.
+- [ ] Region description rewrite (all 6).
+- [ ] Home region cards: vibe-tags.
+- [ ] Home region cards: real money figures (replace MOCK).
+- [ ] Home region cards: transportation info.
+
+## Phase 25 — Workation-city expansion
 Depends on 12.
 
 - [ ] ~4–6 cities/region, ≥1 verified workation center each.
 - Verify: per-region count scripted, every center URL resolves.
 
-## Phase 25 — Remaining de-MOCK + Task #4 copy pass
+## Phase 26 — Remaining de-MOCK + Task #4 copy pass
 - [ ] Grep `MOCK`/`PLACEHOLDER` in `_data/*.json`, replace with real values (cost-of-living w/
       `asOf`/`source`/`sourceUrl`, real community links, food descriptions).
+- [ ] `communities.json` links + `/visa-info/` copy verified against current official sources.
 - [ ] Confirm `#workation #month-long-stay #2030s-youth #local-tourism` show up as real on-page
       copy tied to actual features, not just floating text.
-- [ ] region cards on the homepage: add vibe-tags, update money info to real one
 - Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
 
-## Phase 26 — Accessibility + robustness (scriptable)
+## Phase 27 — Accessibility + robustness (scriptable)
 - [ ] `aria-live` on the result caption, keyboard path through the map, 44px hit targets.
 - [ ] No-JS pass covering **both** gated surfaces now: the calculator (Phase 16) + map
       click-gating (Phase 17), and region-page KTO content (Phase 23's decision). The sitewide
@@ -108,14 +120,14 @@ Depends on 12.
 - [ ] Resolve `.empty-state` class double-duty (real empty state vs. visa-info's disclaimer use).
 - Verify: each item explicitly checked, not eyeballed.
 
-## Phase 27 — Responsive + real-device pass
+## Phase 28 — Responsive + real-device pass
 - [ ] 360/768/1280 + landscape-phone on hero/calculator/caption/map.
 - [ ] Real iOS Safari, both orientations.
 - [ ] Region-page tabs (single-panel switching) and the shared `.content-page` centered layout
       (region pages, `/visa-info/`, `/communities/`) still need a real DevTools-preset pass.
 - Verify: each checkpoint recorded.
 
-## Phase 28 — Contest deliverables (Sept 8–21)
+## Phase 29 — Contest deliverables (Sept 8–21)
 Milestone bucket, not a day/branch phase.
 
 - [ ] 기능설명서 write-up mapped to Task #4 hashtags.
@@ -132,10 +144,10 @@ Milestone bucket, not a day/branch phase.
 - [UX check] is it understandable that the map is reacting to calc on all surfaces?
 - [UX check] perform UX test with several respondents
 
-## Phase 29 — Verification: confirm eligibility-rule ambiguities with MOJ
+## Phase 30 — Verification: confirm eligibility-rule ambiguities with MOJ
 Milestone bucket, not a day/branch phase. Not a hard blocker for earlier phases — the site can
 be built and demoed with the current best-guess interpretations — but should close out before
-Phase 28's deploy freeze, since it can change calculator output for real regions/cities.
+Phase 29's deploy freeze, since it can change calculator output for real regions/cities.
 
 - [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과, contact in
       `visa_rules.pdf` p.2, or immigration.go.kr) whether the 18 「관심지역」 watch counties
@@ -152,7 +164,7 @@ Phase 28's deploy freeze, since it can change calculator output for real regions
 - [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
       Type1; revisit if a Type3 photo is ever swapped in.
 - Verify: each item has either a confirmed answer + a data update, or an explicit "still open,
-  shipping with the default interpretation" note before Phase 28's deploy freeze.
+  shipping with the default interpretation" note before Phase 29's deploy freeze.
 
 ---
 
@@ -165,9 +177,9 @@ Nomad score stays a static editorial int (architecture.md §6).
 cut); tax-info page content — currently one disclaimer line instead of real guidance.
 
 ## If time runs short — protect in this order
-1. **Phase 28 deliverables** (기능설명서, KTO call-history evidence, deploy freeze) — non-negotiable.
-2. **Phases 24–25** (real content) — the hashtags need real data behind them.
-3. **Phase 27** (real-device pass), then **Phase 26** (a11y).
+1. **Phase 29 deliverables** (기능설명서, KTO call-history evidence, deploy freeze) — non-negotiable.
+2. **Phases 24–26** (real content) — the hashtags need real data behind them.
+3. **Phase 28** (real-device pass), then **Phase 27** (a11y).
 
-Cut first if behind: interactive event calendar (Phase 28 `[decide]`) → nature activities →
+Cut first if behind: interactive event calendar (Phase 29 `[decide]`) → nature activities →
 landscape-phone tuning.

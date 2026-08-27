@@ -9,6 +9,10 @@ import { normalizeAttraction } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
 const CONTENT_TYPE_ID_ATTRACTION = 76; // v4 renumbered content types (architecture.md §5)
+// arrange=Q: view-count order, representative image required. KTO files medical-tourism venues
+// (Gangnam clinics, dental hospitals, 한의원) under contentTypeId 76; alphabetical order floats
+// those to the top of our per-code sample, Q sinks them and guarantees a usable card image.
+const ARRANGE = "Q";
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
 // A region page shows a representative sample, not an exhaustive attraction database (a 3-code
 // region fully paginated returns 100s of items — too many for the horizontal scroll-snap card
@@ -31,7 +35,7 @@ export async function onRequestGet({ params, env }) {
     codes.map((lDongRegnCd) =>
       fetchKtoAllPages(
         "areaBasedList2",
-        { contentTypeId: CONTENT_TYPE_ID_ATTRACTION, lDongRegnCd },
+        { contentTypeId: CONTENT_TYPE_ID_ATTRACTION, lDongRegnCd, arrange: ARRANGE },
         env,
         { numOfRows: ROWS_PER_CODE, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
       )

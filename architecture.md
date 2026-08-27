@@ -197,6 +197,9 @@ account" isn't needed for compliance (regular dev-key history counts).
 
 **Known KTO data quirks baked into `kto-client.mjs`/`normalize.mjs`:**
 - v4 renumbered content types — attraction is `76`, not the old `12`.
+- KTO files medical-tourism venues (Gangnam plastic-surgery clinics, dental hospitals, 한의원)
+  under `contentTypeId` 76. `areaBasedList2` is called with `arrange=Q` (view-count order,
+  representative image required) so those sink below real attractions and every card has an image.
 - `areacode` is empty on festival records — always filter by `lDongRegnCd`.
 - Raw `items` is `""` on zero results, a bare object on one result, an array only at 2+ —
   `kto-client.mjs` always normalizes to an array.
