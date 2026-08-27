@@ -4,7 +4,6 @@
 import {
   normalizeAttraction,
   normalizeEvent,
-  normalizeGalleryImage,
   isUpcomingOrOngoing,
 } from "../functions/api/lib/normalize.mjs";
 
@@ -87,32 +86,6 @@ check(
 check(
   "isUpcomingOrOngoing keeps records with no end date (unknown, don't drop)",
   isUpcomingOrOngoing({}, new Date("2026-08-25")) === true
-);
-
-// Real sample: detailImage2, Korean-only imgname.
-const rawGalleryImage = {
-  contentid: "3544517",
-  originimgurl: "http://tong.visitkorea.or.kr/cms/resource/83/3523283_image2_1.jpg",
-  imgname: "용산구_아티스푼(ARTEASPOON) (2)",
-  smallimageurl: "http://tong.visitkorea.or.kr/cms/resource/83/3523283_image3_1.jpg",
-  cpyrhtDivCd: "Type3",
-};
-{
-  const g = normalizeGalleryImage(rawGalleryImage, "ARTEASPOON");
-  check("Korean-dominant imgname falls back to attraction's English title", g.caption === "ARTEASPOON", g.caption);
-  check("gallery image https rewrite applied", g.imageUrl.startsWith("https://"));
-}
-
-// Constructed edge case: imgname that's plain English (rare, but shouldn't be discarded).
-{
-  const g = normalizeGalleryImage({ ...rawGalleryImage, imgname: "Front entrance" }, "ARTEASPOON");
-  check("non-Korean imgname is kept as-is, not overridden by fallback", g.caption === "Front entrance", g.caption);
-}
-
-// Unlicensed gallery image is dropped entirely, not rendered without attribution context.
-check(
-  "gallery image with empty cpyrhtDivCd returns null (dropped)",
-  normalizeGalleryImage({ ...rawGalleryImage, cpyrhtDivCd: "" }, "ARTEASPOON") === null
 );
 
 console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);

@@ -1,16 +1,15 @@
-// Raw KTO EngService2 item -> our Attraction/Event/Gallery models (architecture.md §6). Encodes
-// the "known quirks" list in architecture.md §5, confirmed against live-captured samples:
-// bilingual title split, HTML-entity strip, http->https, license gating (never render an image
-// with a missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset — Phase 14's decision),
-// imgname's Korean-only fallback, and the eventStartDate/eventenddate "still running" filter.
+// Raw KTO EngService2 item -> our Attraction/Event models (architecture.md §6). Encodes the
+// "known quirks" list in architecture.md §5, confirmed against live-captured samples: bilingual
+// title split, HTML-entity strip, http->https, license gating (never render an image with a
+// missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset), and the
+// eventStartDate/eventenddate "still running" filter.
 //
 // `regionSlug` is deliberately NOT set here — these functions normalize one raw item in
 // isolation, but which region it belongs to is a fan-out concern (which lDongRegnCd code the
 // caller queried), owned by the endpoint wiring, not this module.
 //
-// Not sourced from areaBasedList2/searchFestival2/detailImage2 at all (would need
-// detailCommon2/detailIntro2 — out of Phase 20's scoped endpoint list): Attraction.summary,
-// Event.homepageUrl, Gallery.sourceModifiedAt. Left as "" / null below, not fabricated.
+// No source field on areaBasedList2/searchFestival2 for Attraction.summary / Event.homepageUrl
+// (would need detailCommon2/detailIntro2). Left as "" below, not fabricated.
 
 const KNOWN_LICENSES = new Set(["Type1", "Type3"]);
 
@@ -28,10 +27,6 @@ function decodeEntities(text) {
     .replace(/&quot;/g, '"')
     .replace(/&#39;/g, "'")
     .trim();
-}
-
-function containsKorean(text) {
-  return /[가-힣]/.test(text || "");
 }
 
 // Titles arrive like "ARTEASPOON (아티스푼)" or "1stbutton Rhinoplasty clinic (첫단추의원)" —
@@ -109,21 +104,4 @@ export function isUpcomingOrOngoing(raw, referenceDate = new Date()) {
   if (!end || end.length !== 8) return true;
   const endOfDay = new Date(`${end.slice(0, 4)}-${end.slice(4, 6)}-${end.slice(6, 8)}T23:59:59+09:00`);
   return endOfDay >= referenceDate;
-}
-
-// Unlicensed images are dropped entirely (return null) rather than rendered without
-// attribution context — callers filter these out.
-export function normalizeGalleryImage(raw, fallbackTitleEn) {
-  const imageLicense = licenseOf(raw.cpyrhtDivCd);
-  if (!imageLicense) return null;
-  const decodedName = decodeEntities(raw.imgname);
-  return {
-    contentId: raw.contentid,
-    imageUrl: toHttps(raw.originimgurl),
-    imageThumbUrl: toHttps(raw.smallimageurl),
-    imageLicense,
-    caption: containsKorean(decodedName) ? fallbackTitleEn || "" : decodedName || fallbackTitleEn || "",
-    attribution: "Source: © Korea Tourism Organization (한국관광공사)",
-    sourceModifiedAt: null,
-  };
 }

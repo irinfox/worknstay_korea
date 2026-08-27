@@ -1,5 +1,5 @@
 // Live KTO OpenAPI transport (architecture.md §5) — EngService2 only (areaBasedList2,
-// searchFestival2, detailImage2). Owns URL building, paging, timeout, and bounded 429/5xx
+// searchFestival2). Owns URL building, paging, timeout, and bounded 429/5xx
 // backoff-retry. Never throws: any failure (missing key, network error, timeout, non-2xx,
 // bad JSON, non-zero resultCode) degrades to { items: [], degraded: true } so callers can
 // always render an empty state instead of a 500.
@@ -72,10 +72,10 @@ function extractItems(body) {
 
 /**
  * Fetch one page from a live EngService2 endpoint.
- * @param {"areaBasedList2"|"searchFestival2"|"detailImage2"} endpoint
+ * @param {"areaBasedList2"|"searchFestival2"} endpoint
  * @param {Record<string, string|number>} params - endpoint-specific query params
  *   (contentTypeId/areaCode/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for
- *   searchFestival2, contentId for detailImage2), plus numOfRows/pageNo for paging.
+ *   searchFestival2), plus numOfRows/pageNo for paging.
  * @param {{ KTO_API_KEY?: string }} env - Cloudflare Functions env binding
  * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
  *   to bypass the edge cache (used for verify scripts and other one-off calls).
