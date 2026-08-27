@@ -1,0 +1,439 @@
+// ROADMAP_TODO.md Phase 23 — region pages fetch live KTO data at request time from
+// functions/api/region/[slug]/{attractions,events}.js, replacing the old build-time mock loop
+// (architecture.md §5: KTO-sourced content can't be a git-committed/build-time snapshot).
+// No-JS story: each mount's <noscript> fallback (region.njk) is the real degraded path — an
+// honest "needs JavaScript" message with an outbound link, not fake/stale data. That's inert the
+// moment JS runs, since init() below replaces the mount's innerHTML unconditionally.
+
+function escapeHtml(str) {
+  return String(str).replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
+  );
+}
+
+async function fetchJson(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
+
+function renderAttractions(container, attractions) {
+  if (!attractions.length) {
+    container.innerHTML = `<li class="empty-state">No attractions currently listed for this region.</li>`;
+    return;
+  }
+  container.innerHTML = attractions
+    .map((a) => {
+      // imageLicense is null for an unlicensed/missing image (normalize.mjs) — never render
+      // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover is the project's
+      // existing default for both Type1/Type3 (hero.css) — Type3's cover-vs-contain question
+      // stays open (ROADMAP Phase 29), unaffected by this.
+      const media = a.imageLicense
+        ? `<img class="attraction-card__media" src="${a.imageThumbUrl || a.imageUrl}" alt="${escapeHtml(a.titleEn)}" loading="lazy">`
+        : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
+      return `
+        <li class="attraction-card">
+          ${media}
+          <h4>${escapeHtml(a.titleEn)}</h4>
+          <p class="attraction-card__address">${escapeHtml(a.address)}</p>
+        </li>`;
+    })
+    .join("");
+}
+
+// ---------------------------------------------------------------------------
+// Events timeline
+// ---------------------------------------------------------------------------
+
+const EVENTS_PAGE_SIZE = 5;
+
+// Small inline glyphs (project rule: inline SVG, zero icon libraries).
+const CAL_ICON = `<svg class="event-cal__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5 1a1 1 0 0 1 1 1v1h4V2a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1V2a1 1 0 0 1 1-1Zm8 5H3v7h10V6Z"/></svg>`;
+const PIN_ICON = `<svg class="event-place__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
+// Tear-off desk calendar with a blank page — the empty state ("no dates listed").
+const CAL_EMPTY_ICON = `<svg class="event-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8.5" cy="4" r="1.3"/><circle cx="15.5" cy="4" r="1.3"/><path d="M8.5 5.3v1.7M15.5 5.3v1.7"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M4 11h16" stroke-dasharray="2 2"/></svg>`;
+
+function todayIso() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function monthKeyOf(isoDate) {
+  return isoDate.slice(0, 7);
+}
+
+// Short, international month label for a "YYYY-MM" key; appends the year only when it isn't the
+// current one so a same-year list stays compact ("Oct (3)") but a cross-year one stays
+// unambiguous ("Jan 2027 (1)").
+function monthLabel(key) {
+  const [y, m] = key.split("-").map(Number);
+  const mon = new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "short" });
+  return y === new Date().getFullYear() ? mon : `${mon} ${y}`;
+}
+
+// Full, screen-reader-facing date range (the visible calendar chip is aria-hidden).
+function readableRange(start, end) {
+  const opts = { month: "long", day: "numeric", year: "numeric" };
+  const s = new Date(`${start}T00:00:00`).toLocaleDateString("en-US", opts);
+  if (start === end) return s;
+  const e = new Date(`${end}T00:00:00`).toLocaleDateString("en-US", opts);
+  return `${s} to ${e}`;
+}
+
+// The visible date block, styled like a calendar tear-off. Fixed size for every form so the
+// chips line up in a list: a single day / same-month span puts the number(s) on row 1 and the
+// month on row 2; a cross-month range puts "<day> <MON>" on each of two rows. Two text rows
+// either way, one font size (event-timeline.css). The old under-title date line is gone.
+function calChip(ev) {
+  const s = new Date(`${ev.startDate}T00:00:00`);
+  const e = new Date(`${ev.endDate}T00:00:00`);
+  const MON = (d) => d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+  let face;
+  if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth()) {
+    const days = ev.startDate === ev.endDate ? s.getDate() : `${s.getDate()}–${e.getDate()}`;
+    face =
+      `<span class="event-cal__row event-cal__row--num">${days}</span>` +
+      `<span class="event-cal__row event-cal__row--mon">${MON(s)}</span>`;
+  } else {
+    face =
+      `<span class="event-cal__row"><b>${s.getDate()}</b>&nbsp;${MON(s)}</span>` +
+      `<span class="event-cal__row event-cal__row--end"><b>${e.getDate()}</b>&nbsp;${MON(e)}</span>`;
+  }
+  return `<span class="event-cal">
+    <span class="sr-only">${readableRange(ev.startDate, ev.endDate)}</span>
+    <span class="event-cal__face" aria-hidden="true">${CAL_ICON}${face}</span>
+  </span>`;
+}
+
+// Ongoing-panel badge shown inline after the event name: multi-month festivals are "Long-term",
+// everything else is "This month".
+function ongoingBadge(ev) {
+  return monthKeyOf(ev.startDate) !== monthKeyOf(ev.endDate)
+    ? ` <span class="event-card__badge event-card__badge--long">long-term</span>`
+    : ` <span class="event-card__badge event-card__badge--month">this month</span>`;
+}
+
+const METROS = ["Seoul", "Busan", "Incheon", "Daegu", "Daejeon", "Gwangju", "Ulsan", "Sejong"];
+const KO_METRO = {
+  서울: "Seoul", 부산: "Busan", 인천: "Incheon", 대구: "Daegu",
+  대전: "Daejeon", 광주: "Gwangju", 울산: "Ulsan", 세종: "Sejong",
+};
+
+// KTO addresses run fine-to-coarse and come romanized ("320 Jeongjo-ro, Paldal-gu, Suwon-si,
+// Gyeonggi-do") or — on many searchFestival2 records, despite it being the English service —
+// Korean ("경기도 안성시 보개면 …", "서울특별시 종로구 …"). Collapse either to the city name: a
+// "-si"/"시" city or "-gun"/"군" county, a metro (romanized where we can), else a "-gu"/"구"
+// district, else the first token. Korean city names stay in Hangul (no romanizer in the stack);
+// the full address is always on the copy control. Tokenized on commas *and* spaces.
+function cityFromAddress(addr) {
+  if (!addr) return "";
+  const tokens = addr.split(/[,\s]+/).map((t) => t.trim()).filter(Boolean);
+  const enSi = tokens.find((t) => /-si$/i.test(t));
+  if (enSi) return enSi.replace(/-si$/i, "");
+  const enGun = tokens.find((t) => /-gun$/i.test(t));
+  if (enGun) return enGun.replace(/-gun$/i, "");
+  const koMetro = tokens.find((t) => /(특별시|광역시|특별자치시)$/.test(t));
+  if (koMetro) {
+    const stem = koMetro.replace(/(특별자치시|특별시|광역시)$/, "");
+    return KO_METRO[stem] || stem;
+  }
+  const koCity = tokens.find((t) => /[가-힣]{2,}(시|군)$/.test(t));
+  if (koCity) return koCity.replace(/(시|군)$/, "");
+  const metro = tokens.find((t) => METROS.includes(t));
+  if (metro) return metro;
+  const enGu = tokens.find((t) => /-gu$/i.test(t));
+  if (enGu) return enGu.replace(/-gu$/i, "");
+  const koGu = tokens.find((t) => /[가-힣]{2,}구$/.test(t));
+  if (koGu) return koGu.replace(/구$/, "");
+  return tokens[0] || addr;
+}
+
+function renderEventCard(ev, { badge = false } = {}) {
+  const addr = escapeHtml(ev.address || "");
+  const place = ev.address
+    ? `<span class="event-place" title="${addr}">
+         ${PIN_ICON}<span class="event-place__city">${escapeHtml(cityFromAddress(ev.address))}</span>
+         <button type="button" class="event-place__copy" data-address="${addr}"
+           aria-label="Copy full address" title="Copy full address">${COPY_ICON}</button>
+         <span class="event-place__status" role="status" aria-live="polite"></span>
+       </span>`
+    : "";
+  return `
+    <li class="event-card">
+      ${calChip(ev)}
+      <div class="event-card__body">
+        <p class="event-card__title">${escapeHtml(ev.titleEn)}${badge ? ongoingBadge(ev) : ""}</p>
+        ${place}
+      </div>
+    </li>`;
+}
+
+// A card list, plus a pager when it runs past one page. Every item is in the DOM; the pager just
+// toggles `hidden` on the out-of-page ones (setupPagers), so it degrades to a full list if the
+// pager JS never runs.
+function renderCardList(events, opts) {
+  const ul = `<ul class="event-list">${events.map((e) => renderEventCard(e, opts)).join("")}</ul>`;
+  if (events.length <= EVENTS_PAGE_SIZE) return `<div class="event-list-wrap">${ul}</div>`;
+  const pages = Math.ceil(events.length / EVENTS_PAGE_SIZE);
+  return `
+    <div class="event-list-wrap" data-paged>
+      ${ul}
+      <div class="event-pager">
+        <button type="button" class="event-pager__btn" data-dir="-1" aria-label="Previous events">‹</button>
+        <span class="event-pager__status">1 / ${pages}</span>
+        <button type="button" class="event-pager__btn" data-dir="1" aria-label="More events">›</button>
+      </div>
+    </div>`;
+}
+
+function buildUpcomingPanel(later) {
+  const byMonth = new Map();
+  for (const ev of later) {
+    const key = monthKeyOf(ev.startDate);
+    if (!byMonth.has(key)) byMonth.set(key, []);
+    byMonth.get(key).push(ev);
+  }
+  const keys = [...byMonth.keys()].sort();
+
+  // One month → skip the month-tab strip, it'd just be a single chip.
+  if (keys.length === 1) {
+    return `<div class="event-monthpanel">${renderCardList(byMonth.get(keys[0]))}</div>`;
+  }
+
+  const tabs = keys
+    .map(
+      (key, i) =>
+        `<button type="button" role="tab" class="event-months__tab" aria-selected="${i === 0}"
+           tabindex="${i === 0 ? 0 : -1}" data-month="${key}">${monthLabel(key)} (${byMonth.get(key).length})</button>`
+    )
+    .join("");
+  const panels = keys
+    .map(
+      (key, i) =>
+        `<div class="event-monthpanel" role="tabpanel" data-month="${key}"${i === 0 ? "" : " hidden"}>
+           ${renderCardList(byMonth.get(key))}
+         </div>`
+    )
+    .join("");
+  return `<div class="event-months" role="tablist" aria-label="Upcoming events by month">${tabs}</div>${panels}`;
+}
+
+// Ongoing tab = "what's on around now": festivals currently running (often multi-month) plus
+// ones that start later this calendar month, as one list — each card carries a "Long-term" /
+// "This month" badge. Upcoming tab = strictly later months, grouped into month sub-tabs. The tab
+// strip and the "no events" message only appear when they're actually warranted (see cases).
+// Dev/QA preview hook: `?preview=empty` forces the zero-events state, `?preview=thismonth`
+// forces a mix with same-month events (the live data currently has neither). No effect without
+// the query param.
+function applyPreview(events) {
+  const mode = new URLSearchParams(location.search).get("preview");
+  if (mode === "empty") return [];
+  if (mode === "thismonth") {
+    return [
+      { startDate: "2026-08-20", endDate: "2026-08-24", titleEn: "Hanriver Summer Night Market", address: "160 Yeouidong-ro, Yeongdeungpo-gu, Seoul" },
+      { startDate: "2026-08-29", endDate: "2026-08-31", titleEn: "Seochon Alley Jazz Weekend", address: "12 Jahamun-ro, Jongno-gu, Seoul" },
+      { startDate: "2026-05-01", endDate: "2026-11-30", titleEn: "City Wall Lantern Walk", address: "Naksan-ro, Jongno-gu, Seoul" },
+      { startDate: "2026-10-02", endDate: "2026-10-05", titleEn: "Autumn Hanok Craft Fair", address: "99 Bukchon-ro, Jongno-gu, Seoul" },
+    ];
+  }
+  return events;
+}
+
+function renderEventsTimeline(container, events) {
+  events = applyPreview(events);
+  const today = todayIso();
+  const currentMonth = monthKeyOf(today);
+
+  const dated = events.filter((e) => e.startDate).sort((a, b) => a.startDate.localeCompare(b.startDate));
+  // isUpcomingOrOngoing (normalize.mjs) already dropped anything fully ended, so endDate >= today
+  // for everything here — the split is purely on whether it has started yet.
+  const ongoing = dated.filter((e) => e.startDate <= today || monthKeyOf(e.startDate) === currentMonth);
+  const later = dated.filter((e) => e.startDate > today && monthKeyOf(e.startDate) !== currentMonth);
+
+  const hasOngoing = ongoing.length > 0;
+  const hasLater = later.length > 0;
+
+  if (!hasOngoing && !hasLater) {
+    // Same card shape as a real event, with a struck-through calendar chip instead of a date.
+    container.innerHTML = `
+      <div class="event-empty">
+        <span class="event-empty__chip" aria-hidden="true">${CAL_EMPTY_ICON}</span>
+        <p class="event-empty__text">No local events scheduled right now — check back later.</p>
+      </div>`;
+    return;
+  }
+
+  const ongoingInner = renderCardList(ongoing, { badge: true });
+
+  if (hasOngoing && hasLater) {
+    container.innerHTML = `
+      <div class="event-tabs" data-active="ongoing" role="tablist" aria-label="Festivals &amp; events">
+        <button type="button" role="tab" class="event-tabs__tab" aria-selected="true" tabindex="0" data-panel="ongoing">Ongoing</button>
+        <button type="button" role="tab" class="event-tabs__tab" aria-selected="false" tabindex="-1" data-panel="upcoming">Upcoming</button>
+      </div>
+      <div class="event-panel" role="tabpanel" data-panel="ongoing">${ongoingInner}</div>
+      <div class="event-panel" role="tabpanel" data-panel="upcoming" hidden>${buildUpcomingPanel(later)}</div>`;
+    setupEventTabs(container);
+  } else if (hasOngoing) {
+    container.innerHTML = `<div class="event-panel">${ongoingInner}</div>`;
+  } else {
+    container.innerHTML = `<div class="event-panel">${buildUpcomingPanel(later)}</div>`;
+  }
+
+  setupMonthTabs(container);
+  setupPagers(container);
+  setupAddressCopy(container);
+}
+
+function setupEventTabs(container) {
+  const strip = container.querySelector(".event-tabs");
+  const tabs = Array.from(container.querySelectorAll(".event-tabs__tab"));
+  const panels = Array.from(container.querySelectorAll(".event-panel[data-panel]"));
+  if (tabs.length < 2) return;
+
+  const select = (tab) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute("aria-selected", String(on));
+      t.tabIndex = on ? 0 : -1;
+    });
+    panels.forEach((p) => {
+      p.hidden = p.dataset.panel !== tab.dataset.panel;
+    });
+    strip.dataset.active = tab.dataset.panel; // drives the sliding fill (event-timeline.css)
+  };
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener("click", () => select(tab));
+    tab.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const next = tabs[(i + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      select(next);
+    });
+  });
+}
+
+function setupMonthTabs(container) {
+  const tabs = Array.from(container.querySelectorAll(".event-months__tab"));
+  const panels = Array.from(container.querySelectorAll(".event-monthpanel[data-month]"));
+  tabs.forEach((tab, i) => {
+    const select = () => {
+      tabs.forEach((t) => {
+        const on = t === tab;
+        t.setAttribute("aria-selected", String(on));
+        t.tabIndex = on ? 0 : -1;
+      });
+      panels.forEach((p) => {
+        p.hidden = p.dataset.month !== tab.dataset.month;
+      });
+    };
+    tab.addEventListener("click", select);
+    tab.addEventListener("keydown", (event) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      event.preventDefault();
+      const next = tabs[(i + (event.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
+      next.focus();
+      next.click();
+    });
+  });
+}
+
+function setupPagers(container) {
+  container.querySelectorAll(".event-list-wrap[data-paged]").forEach((wrap) => {
+    const items = Array.from(wrap.querySelectorAll(".event-list > .event-card"));
+    const status = wrap.querySelector(".event-pager__status");
+    const prev = wrap.querySelector('.event-pager__btn[data-dir="-1"]');
+    const next = wrap.querySelector('.event-pager__btn[data-dir="1"]');
+    const pages = Math.ceil(items.length / EVENTS_PAGE_SIZE);
+    let page = 1;
+
+    const render = () => {
+      items.forEach((li, i) => {
+        li.hidden = Math.floor(i / EVENTS_PAGE_SIZE) !== page - 1;
+      });
+      status.textContent = `${page} / ${pages}`;
+      prev.disabled = page === 1;
+      next.disabled = page === pages;
+    };
+
+    prev.addEventListener("click", () => {
+      if (page > 1) {
+        page -= 1;
+        render();
+      }
+    });
+    next.addEventListener("click", () => {
+      if (page < pages) {
+        page += 1;
+        render();
+      }
+    });
+    render();
+  });
+}
+
+function setupAddressCopy(container) {
+  container.querySelectorAll(".event-place__copy").forEach((btn) => {
+    const place = btn.closest(".event-place");
+    const status = place.querySelector(".event-place__status");
+    btn.addEventListener("click", async () => {
+      const address = btn.dataset.address || "";
+      let ok = false;
+      try {
+        await navigator.clipboard.writeText(address);
+        ok = true;
+      } catch {
+        ok = legacyCopy(address);
+      }
+      status.textContent = ok ? "Full address copied" : "Press ⌘/Ctrl+C to copy";
+      place.classList.toggle("is-copied", ok);
+      clearTimeout(btn._copyTimer);
+      btn._copyTimer = setTimeout(() => {
+        status.textContent = "";
+        place.classList.remove("is-copied");
+      }, 2000);
+    });
+  });
+}
+
+function legacyCopy(text) {
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    const ok = document.execCommand("copy");
+    document.body.removeChild(ta);
+    return ok;
+  } catch {
+    return false;
+  }
+}
+
+export function init() {
+  const attractionsMount = document.querySelector("[data-region-attractions]");
+  const eventsMount = document.querySelector("[data-region-events]");
+  if (!attractionsMount && !eventsMount) return;
+
+  const slug = (attractionsMount || eventsMount).dataset.regionSlug;
+
+  if (attractionsMount) {
+    attractionsMount.innerHTML = `<li class="region-loading">Loading live attraction data…</li>`;
+    fetchJson(`/api/region/${slug}/attractions`).then((items) => renderAttractions(attractionsMount, items));
+  }
+  if (eventsMount) {
+    eventsMount.innerHTML = `<p class="region-loading">Loading live festival/event data…</p>`;
+    fetchJson(`/api/region/${slug}/events`).then((items) => renderEventsTimeline(eventsMount, items));
+  }
+}

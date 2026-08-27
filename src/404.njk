@@ -8,11 +8,11 @@ permalink: "404.html"
 {% set heroCredit = heroCredits.photos[heroPhoto] %}
 
 <section class="not-found" aria-labelledby="not-found-heading">
-  <div class="not-found__media" style="background-image: url('/assets/img/hero/{{ heroPhoto }}')" aria-hidden="true"></div>
+  <div class="not-found__media" style="background-image: url('/assets/img/hero/home/{{ heroPhoto }}')" aria-hidden="true"></div>
   <div class="not-found__scrim" aria-hidden="true"></div>
   {% if heroCredit %}
   <p class="not-found__credit">
-    <a href="{{ heroCredit.sourceImageUrl }}">Photo: Korea Tourism Organization (KTO) OpenAPI</a>
+    Photo source: © Korea Tourism Organization (한국관광공사)
   </p>
   {% endif %}
   <div class="not-found__content">

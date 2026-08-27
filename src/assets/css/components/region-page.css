@@ -2,10 +2,8 @@
    .region-header keeps its own narrower 65ch cap for the intro text specifically, nested inside
    the wider .content-page container for grids/galleries. */
 
-/* Shared placeholder box for images that don't exist yet (no real asset files in any mock
-   data — attractions/events/gallery/food all reference paths that were never generated).
-   Swap to a real <img> once real assets are sourced; keeps things from rendering as broken
-   image icons in the meantime. */
+/* Shared placeholder box for attraction cards whose KTO record has no licensed image
+   (`imageLicense` null) — never render an unlicensed image; show this instead. */
 .media-placeholder {
   background: var(--color-surface);
   border: 1px dashed var(--color-border);
@@ -27,8 +25,15 @@
 }
 
 .region-header {
-  max-width: 65ch;
   margin-bottom: var(--space-6);
+}
+
+.region-header h1 {
+  max-width: 65ch;
+}
+
+.region-header__tags {
+  max-width: 65ch;
 }
 
 .region-header__ko {
@@ -48,6 +53,148 @@
 
 .region-header__intro {
   margin-top: var(--space-3);
+}
+
+/* Region cover photo (ROADMAP_TODO.md Phase 23) — shorter/contained version of the home-page
+   hero's media+credit pattern (hero.css), not full-bleed: region pages have a lot of content
+   below and aren't the landing page, so it sits inside .content-page's normal width instead of
+   breaking out edge-to-edge. */
+.region-hero {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+.region-hero--placeholder {
+  background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+}
+
+.region-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gallery track: plain CSS scroll-snap strip, one full-width slide per "page" — swipeable/
+   scrollable with zero JS (same pattern as .attraction-list). region-hero-gallery.js only adds
+   the optional prev/next buttons + dot indicators on top. */
+.region-hero-gallery__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.region-hero-gallery__track::-webkit-scrollbar {
+  display: none;
+}
+
+.region-hero-gallery__slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.region-hero-gallery__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.45);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.region-hero-gallery__nav:hover,
+.region-hero-gallery__nav:focus-visible {
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.region-hero-gallery__nav--prev {
+  left: var(--space-3);
+}
+
+.region-hero-gallery__nav--next {
+  right: var(--space-3);
+}
+
+.region-hero-gallery__dots {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  gap: var(--space-2);
+  transform: translateX(-50%);
+}
+
+.region-hero-gallery__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.region-hero-gallery__dot[aria-current="true"] {
+  background: #fff;
+}
+
+.region-hero__credit {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  margin: 0;
+  padding: 2px var(--space-2);
+  color: #fff;
+  font-size: var(--font-size-xs, 0.75rem);
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: 999px;
+}
+
+.region-hero__credit a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Per-slide attraction/city caption (EN + KO, ROADMAP_TODO.md Phase 23 finalization) — left side,
+   opposite .region-hero__credit, so the two never overlap. Korean line is a plain search aid
+   (CLAUDE.md rule 9), not a translation UI, so it's set smaller/muted rather than paired 1:1. */
+.region-hero__caption {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  max-width: calc(100% - var(--space-6) * 3);
+  color: #fff;
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.region-hero__caption-ko {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: var(--font-size-xs, 0.75rem);
 }
 
 .region-section {
@@ -79,6 +226,28 @@
   border-radius: var(--radius-md);
 }
 
+.city-list__photo {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.city-list__photo-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: -6px 0 var(--space-2);
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-muted);
+}
+
+.city-list__photo-caption-ko {
+  color: var(--color-text-muted);
+}
+
 .city-list__ko {
   font-weight: 400;
   color: var(--color-text-muted);
@@ -105,8 +274,108 @@
   font-style: italic;
 }
 
-/* Attractions: horizontal scroll-snap gallery (same pattern as gallery.css's .gallery, per
-   user feedback — attractions ARE the gallery view here, not a separate grid). */
+/* --- Gyeonggi-do population-decline counties (population-decline-counties.njk) -------------
+   Two labelled rows (designated / watch-list), each a responsive card grid. County name sits
+   above the photo; the photo's attraction label overlays the image bottom-left, same treatment
+   as the region hero-gallery captions (.region-hero__caption). */
+
+/* One notch down from the shared region h1 so this longer title clears the reading column on a
+   single line at desktop width (still wraps on narrow, which is fine there). */
+.county-header h1 {
+  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+}
+
+/* Trim the trailing whitespace before the footer — this page ends on a one-line photo credit,
+   not a full content block. */
+.content-page--tight-end .region-section:last-child {
+  margin-bottom: var(--space-2);
+}
+
+.county-group {
+  margin-top: var(--space-5);
+}
+
+.county-group__title {
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-lg);
+}
+
+/* Horizontal scroll-snap strip (same pattern as .attraction-list) rather than a wrapping grid,
+   so each group stays one row and the watch-list group below stays in view. */
+.county-grid {
+  display: flex;
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2);
+}
+
+.county-card {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.county-card__name {
+  margin: 0;
+  font-size: var(--font-size-base);
+}
+
+.county-card__ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+.county-card__metro {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.county-card__figure {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.county-card__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.county-card__caption {
+  position: absolute;
+  left: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: calc(100% - var(--space-4));
+  padding: 2px var(--space-2);
+  color: #fff;
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs, 0.75rem);
+  line-height: 1.3;
+}
+
+.county-card__caption-ko {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.6875rem;
+}
+
+/* Attractions: horizontal scroll-snap strip, no carousel library, no JS required. */
 .attraction-list {
   display: flex;
   gap: var(--space-4);
@@ -126,6 +395,9 @@
 
 .attraction-card__media {
   aspect-ratio: 4 / 3;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
 }
 
 .attraction-card__address {

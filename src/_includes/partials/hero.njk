@@ -3,7 +3,7 @@
    after a reference "cover-photo hero" layout the user shared — full-width image, header
    floating over its top portion, heading/subscribe-style content lower in the frame.
 
-   src/assets/img/hero/ holds the chosen photo plus a couple of standby favorites (see
+   src/assets/img/hero/home/ holds the chosen photo plus a couple of standby favorites (see
    _data/heroCredits.json for source/license per file — all Type1 KOGL, attribution required).
    TO SWAP: change heroPhoto below to another filename from that folder (dev server hot-reloads).
    Leave it "" to see the gradient placeholder. #}
@@ -15,14 +15,14 @@
     class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
     data-hero-media
     aria-hidden="true"
-    {% if heroPhoto %}style="background-image: url('/assets/img/hero/{{ heroPhoto }}')"{% endif %}
+    {% if heroPhoto %}style="background-image: url('/assets/img/hero/home/{{ heroPhoto }}')"{% endif %}
   ></div>
   <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
   {% if heroCredit %}
     {# CLAUDE.md rule 5: each KTO-derived block (region.njk, visa-info.njk) carries its own
        provenance — same pattern here, phrased the same way as those. #}
     <p class="hero__credit">
-      <a href="{{ heroCredit.sourceImageUrl }}">Photo: Korea Tourism Organization (KTO) OpenAPI</a>
+      Photo source: © Korea Tourism Organization (한국관광공사)
     </p>
   {% endif %}
   <div class="hero__content">
