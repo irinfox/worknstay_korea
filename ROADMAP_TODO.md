@@ -69,8 +69,11 @@ until Phase 19.
 
 - [x] Region pages fetch live KTO client-side (`assets/js/region-data.js`); build-time mock loop
       and `eleventy/event-calendar.mjs` removed.
-- [x] Event timeline: Ongoing + Upcoming as collapsed `<details>`; Upcoming grouped by start
-      month (this month inline capped at 5, later months as "Month (count)" tabs).
+- [x] Event timeline: Ongoing/Upcoming segmented-slider tabs, primary-tinted cards throughout.
+      Ongoing is one list with an inline "Long-term" / "This month" sticky-note badge per card;
+      Upcoming = later months as short-name "Mon (n)" sub-tabs. Fixed-size two-row calendar chip
+      holds the full date range at one font size, semibold titles, address as city +
+      copy-full-address icon, per-month pager past 5.
 - [x] Attraction `<img>` gated on `imageLicense` (null → `.media-placeholder`).
 - [x] `.data-provenance` per section; `<noscript>` fallback in every mount, verified in raw HTML.
 - [x] Region + county hero galleries: `regionHeroPhotos.json` / `countyHeroPhotos.json` →
@@ -78,8 +81,9 @@ until Phase 19.
       Type1 credit + caption (attraction + short city EN/KO, full address in `addressEn`/Ko).
       Scroll-snap track + `region-hero-gallery.js` (prev/next/dots/autoplay), `.region-hero`
       `16/9`. Yeosu entry's Type1 rests on a manual classification, noted inline.
-  - [ ] Live-screenshot the zero-events empty state (no region currently has zero events to
-        force it).
+  - [x] Zero-events / same-month states previewable via `?preview=empty` / `?preview=thismonth`
+        on any region page (region-data.js — live data has neither right now; jeju-do at 1 event
+        exercises the no-tabs single-month path).
 
 ## Phase 24 — Workation-city expansion
 Depends on 12.

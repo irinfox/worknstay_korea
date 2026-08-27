@@ -201,8 +201,12 @@ account" isn't needed for compliance (regular dev-key history counts).
 - Raw `items` is `""` on zero results, a bare object on one result, an array only at 2+ —
   `kto-client.mjs` always normalizes to an array.
 - Images serve over `http://` — rewrite to `https://` to avoid mixed-content blocking.
-- Titles are bilingual/messy (`"5.16 Tree Tunnel (Road 5.16 Forest Tunnel) (5.16도로숲터널)"`) —
-  split into `titleEn`/`titleKo` at the normalize step.
+- Titles are bilingual/messy, sometimes with nested parens
+  (`"APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))"`) — split into `titleEn`/`titleKo`
+  at the normalize step.
+- `searchFestival2` frequently returns Korean `addr1`/`addr2` even though it's the English
+  service. The UI shows a best-effort city extraction from it; the full address is on the copy
+  control. No romanizer in the stack, so non-metro Korean city names stay in Hangul.
 - `searchFestival2`'s `eventStartDate` filters by start date only, so an already-running festival
   needs an earlier query window filtered by `eventenddate` client-side (`isUpcomingOrOngoing`).
 - Image licensing is per-record via `cpyrhtDivCd` (`Type1`, `Type3`, empty). Only render images

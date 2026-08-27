@@ -1,41 +1,84 @@
-/* ROADMAP_TODO.md Phase 23 — replaces the old build-time month-grid (event-calendar.css):
-   a flat chronological list grouped under month headers, rendered client-side by
-   region-data.js. Deliberately not a grid — real per-region event counts are sparse enough
-   (1-20, scattered across a year) that most month cells would sit empty; a list always reads as
-   populated instead. */
+/* ROADMAP_TODO.md Phase 23 — client-side event timeline (region-data.js), restyled Phase 23.
+   Segmented-slider tabs: "Ongoing" (festivals running now + ones starting later this month, one
+   list, each card badged "Long-term" / "This month") and "Upcoming" (later months, as month
+   sub-tab chips with counts). Each event is a primary-tinted card with a calendar-style date
+   chip; the address shows as city + pin with a copy-full-address icon button. */
 
-.event-timeline__section + .event-timeline__section {
-  margin-top: var(--space-5);
+/* Breathing room under the "Festivals & events" heading before the tabs / month chips. */
+.event-timeline {
+  margin-top: var(--space-2);
 }
 
-.event-timeline__heading {
-  margin: 0 0 var(--space-2);
-  font-size: var(--font-size-base);
-  font-weight: 700;
-  cursor: pointer;
+/* --- Tab strip (Ongoing / Upcoming) — a segmented slider ---------------- */
+
+.event-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: max-content;
+  margin-bottom: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-/* Ongoing/Upcoming are <details> now (collapsed by default, click the summary to expand) —
-   keep the native disclosure triangle, just tighten the spacing around it. */
-.event-timeline__section[open] > .event-timeline__heading {
-  margin-bottom: var(--space-3);
+/* The sliding fill: half-width, parked under the active segment, moved by [data-active]
+   (set in setupEventTabs). */
+.event-tabs::before {
+  content: "";
+  position: absolute;
+  inset: 0 50% 0 0;
+  background: var(--color-primary);
+  transition: transform 0.18s ease;
 }
 
-.event-timeline__subheading {
-  margin: var(--space-3) 0 var(--space-2);
+.event-tabs[data-active="upcoming"]::before {
+  transform: translateX(100%);
+}
+
+.event-tabs__tab {
+  position: relative;
+  padding: var(--space-2) var(--space-5);
+  font: inherit;
   font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: center;
   color: var(--color-text-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: color 0.18s ease;
 }
 
-.event-month-tabs {
+.event-tabs__tab:hover {
+  color: var(--color-text);
+}
+
+.event-tabs__tab[aria-selected="true"] {
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-tabs::before,
+  .event-tabs__tab,
+  .event-place__copy {
+    transition: none;
+  }
+}
+
+/* --- Month sub-tabs inside the Upcoming panel ------------------------- */
+
+.event-months {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
-.event-month-tabs__tab {
+.event-months__tab {
   padding: var(--space-1) var(--space-3);
+  font: inherit;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   background: var(--color-surface);
@@ -44,57 +87,270 @@
   cursor: pointer;
 }
 
-.event-month-tabs__tab[aria-selected="true"] {
+.event-months__tab:hover {
+  color: var(--color-text);
+}
+
+.event-months__tab[aria-selected="true"] {
   color: #fff;
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
 
-.event-timeline__list {
+/* --- Event cards ----------------------------------------------------- */
+
+.event-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
 }
 
-.event-timeline__item {
+.event-card {
   display: grid;
-  grid-template-columns: 6.5rem 1fr;
-  gap: var(--space-1) var(--space-3);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: var(--radius-md);
 }
 
-.event-timeline__date {
-  font-weight: 700;
-  font-size: var(--font-size-sm);
-  color: var(--color-primary);
+/* Pager hides out-of-page items with the `hidden` attribute; `.event-card`'s own `display`
+   would otherwise override the UA `[hidden] { display: none }`. */
+.event-card[hidden] {
+  display: none;
 }
 
-.event-timeline__title {
-  grid-column: 2;
+/* Region-wide empty state — same card shape as an event, struck-through calendar chip. */
+.event-empty {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: var(--radius-md);
 }
 
-.event-timeline__address {
-  grid-column: 2;
+.event-empty__chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 3.75rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+.event-empty__icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-accent); /* same as the calendar chip icon on real event cards */
+}
+
+.event-empty__text {
+  margin: 0;
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
 
-/* Narrow the date column collapses to a plain first line above the title instead of a fixed
-   side-column — a fixed 6.5rem column on a ~320px viewport leaves too little room for the
-   title/address to read comfortably. */
-@media (max-width: 480px) {
-  .event-timeline__item {
-    grid-template-columns: 1fr;
-  }
+/* Calendar tear-off chip — one fixed size for every form (single day, same-month span, or
+   cross-month range), always two text rows so the chips line up down a list. */
+.event-cal__face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 3.75rem;
+  padding: 3px 7px;
+  overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  line-height: 1.2;
+  text-align: center;
+}
 
-  .event-timeline__title,
-  .event-timeline__address {
-    grid-column: 1;
-  }
+.event-cal__icon {
+  width: 11px;
+  height: 11px;
+  margin-bottom: 2px;
+  color: var(--color-accent);
+}
+
+/* One font size for every chip form so they read as a set. */
+.event-cal__row {
+  font-size: 0.8rem;
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.event-cal__row b,
+.event-cal__row--num {
+  font-weight: 700;
+}
+
+/* Row 1 and row 2 of the chip read as one unit — same text colour, hairline separator only.
+   (Previous state, if reverting: --row--mon color var(--color-text-muted) + letter-spacing;
+    --row--end color var(--color-text-muted) + 1px solid var(--color-border) top border.) */
+.event-cal__row--mon {
+  letter-spacing: 0.03em;
+}
+
+.event-cal__row--end {
+  margin-top: 1px;
+  padding-top: 2px;
+}
+
+.event-card__body {
+  min-width: 0;
+}
+
+.event-card__title {
+  margin: 0;
+  font-weight: 600;
+  line-height: var(--line-height-tight);
+}
+
+/* --- Ongoing-panel badge — inline after the event name, sticky-note style ------ */
+
+.event-card__badge {
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+  padding: 3px 7px 3px 6px;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  vertical-align: middle;
+  border-radius: 1px;
+  box-shadow: 1px 1px 0 rgba(28, 27, 25, 0.14);
+}
+
+/* Turned-up corner — the "sticky note" edge. */
+.event-card__badge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 5px 5px 0;
+  border-style: solid;
+  border-color: transparent rgba(28, 27, 25, 0.18) transparent transparent;
+}
+
+.event-card__badge--month {
+  color: var(--color-badge-thismonth-text);
+  background: var(--color-badge-thismonth-bg);
+}
+
+.event-card__badge--long {
+  color: var(--color-badge-longterm-text);
+  background: var(--color-badge-longterm-bg);
+}
+
+/* --- Address: [pin] city [copy] — pin leads, faint copy affordance trails ------ */
+
+.event-place {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: var(--space-2);
+  max-width: 100%;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.event-place__icon {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+
+.event-place__city {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Faint copy affordance — trails the city at the right edge of the address line. */
+.event-place__copy {
+  margin-left: 4px;
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 1px;
+  color: var(--color-text-muted);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-sm);
+  opacity: 0.4;
+  cursor: pointer;
+  transition: opacity 0.12s ease;
+}
+
+.event-place__copy:hover,
+.event-place__copy:focus-visible {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+.event-place__copy svg {
+  width: 12px;
+  height: 12px;
+}
+
+.event-place__status {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.event-place__status:empty {
+  display: none;
+}
+
+/* --- Pager (month > 5 events) -------------------------------------- */
+
+.event-pager {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.event-pager__btn {
+  min-width: 2rem;
+  padding: var(--space-1) var(--space-2);
+  font: inherit;
+  line-height: 1;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.event-pager__btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.event-pager__btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.event-pager__status {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 
 .region-loading {

@@ -7,6 +7,14 @@
   --color-border: #ddd9d1;
   --color-primary: #1f5c4d;
   --color-primary-dark: #143d33;
+  /* Pale primary wash — background for the region-page event cards (event-timeline.css). */
+  --color-primary-tint: #e4ede9;
+  --color-primary-tint-border: #cadfd8;
+  /* Event-card sticky-note badges: "long-term" (taupe) vs "this month" (cream). */
+  --color-badge-longterm-bg: #d4c4b7;
+  --color-badge-longterm-text: #3e2723;
+  --color-badge-thismonth-bg: #fef3c7;
+  --color-badge-thismonth-text: #92400e;
   --color-accent: #c96f34;
   --color-link: var(--color-primary);
   --color-link-visited: #3d4f6b;

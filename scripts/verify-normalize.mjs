@@ -73,6 +73,30 @@ const rawFestival = {
   check("title with no space before paren still splits correctly", e.titleEn === "Bongsan Mask Dance", JSON.stringify(e.titleEn));
 }
 
+// Real sample: searchFestival2, Gyeonggi-do — a title whose Korean group has *nested* parens.
+{
+  const e = normalizeEvent({
+    title: "APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))",
+    addr1: "경기도 안성시 보개면 남사당로 198-2 Anseong Namsadang Performance Site",
+    eventstartdate: "20260310",
+    eventenddate: "20261130",
+    cpyrhtDivCd: "",
+    lDongRegnCd: "41",
+  });
+  check(
+    "nested-paren Korean title still yields a clean titleEn",
+    e.titleEn === "APAP Artwork Tour" && e.titleKo === "APAP 작품투어 (안양공공예술프로젝트)",
+    JSON.stringify(e.titleEn) + " / " + e.titleKo
+  );
+}
+
+// "(English) (Korean)" — the parenthetical English must stay in titleEn.
+check(
+  "two-group title keeps the English parenthetical in titleEn",
+  normalizeEvent({ title: "5.16 Tree Tunnel (Road 5.16 Forest Tunnel) (5.16도로숲터널)" }).titleEn ===
+    "5.16 Tree Tunnel (Road 5.16 Forest Tunnel)"
+);
+
 // Edge case: event that started before "today" but hasn't ended — the eventStartDate query
 // quirk this function exists to guard against.
 check(
