@@ -10,6 +10,10 @@ import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
 const CONTENT_TYPE_ID_ATTRACTION = 76; // v4 renumbered content types (architecture.md §5)
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
+// A region page shows a representative sample, not an exhaustive attraction database (a 3-code
+// region fully paginated returns 100s of items — too many for the horizontal scroll-snap card
+// list, and needless KTO call volume). One page per code, deduped, is enough variety.
+const ROWS_PER_CODE = 12;
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
@@ -29,7 +33,7 @@ export async function onRequestGet({ params, env }) {
         "areaBasedList2",
         { contentTypeId: CONTENT_TYPE_ID_ATTRACTION, lDongRegnCd },
         env,
-        { numOfRows: 20, maxPages: 5, cacheTtl: CACHE_TTL_SECONDS }
+        { numOfRows: ROWS_PER_CODE, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
       )
     )
   );

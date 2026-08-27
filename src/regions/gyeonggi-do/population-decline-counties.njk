@@ -26,13 +26,25 @@ permalink: "/regions/gyeonggi-do/population-decline-counties/"
   <h2>Qualifying counties</h2>
   <ul class="city-list">
     {% for county in populationDeclineAreas %}
+    {% set countyPhoto = countyHeroPhotos[county.countyNameEn] %}
+    {% set countyCredit = countyHeroCredits.photos[countyPhoto] %}
     <li class="city-list__item">
+      {% if countyPhoto %}
+      <img class="city-list__photo" src="/assets/img/hero/{{ countyPhoto }}" alt="{{ countyCredit.titleEn }}" loading="lazy">
+      {% if countyCredit.titleEn %}
+      <p class="city-list__photo-caption">
+        <span class="city-list__photo-caption-en">{{ countyCredit.titleEn }}</span>
+        {% if countyCredit.titleKo %}<span class="city-list__photo-caption-ko">{{ countyCredit.titleKo }}</span>{% endif %}
+      </p>
+      {% endif %}
+      {% endif %}
       <h3>{{ county.countyNameEn }} <span class="city-list__ko">{{ county.countyNameKo }}</span></h3>
       <p>{{ county.metroEn }}</p>
       <p class="city-list__badge">{% if county.category == "decline" %}Population-decline-designated area{% else %}Population watch-list area{% endif %}</p>
     </li>
     {% endfor %}
   </ul>
+  <p class="data-provenance">Photo source: © Korea Tourism Organization (한국관광공사).</p>
   <p class="data-provenance">
     Source: Ministry of the Interior and Safety (행정안전부) 인구감소지역 designation, sourced
     2026-08-18. See <a href="/visa-info/">visa income thresholds</a> for the full rules, and the

@@ -1,0 +1,10 @@
+{
+  "note": "Gyeonggi-do population-decline county cover photo — one per county box on population-decline-counties.njk. Finalized 2026-08-26: all 7 sourced from KTO PhotoGalleryService1 (gallerySearchList1, uniformly KOGL Type1), filenames live in src/assets/img/hero/, credits/captions in countyHeroCredits.json.",
+  "Ganghwa-gun": "seokmodo-glasswort-colony.jpg",
+  "Ongjin-gun": "dumujin-brothers-rock.jpg",
+  "Gapyeong-gun": "cheongpyeong-lakeside.jpg",
+  "Yeoncheon-gun": "yeoncheon-autumn.jpg",
+  "Dong-gu": "baedari-bookstore-alley.jpg",
+  "Dongducheon-si": "jajaam-hermitage-soyosan.jpg",
+  "Pocheon-si": "pocheon-healing-forest.jpg"
+}

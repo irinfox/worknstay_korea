@@ -224,8 +224,10 @@ Depends on 20 + 21.
       API's default sort is alphabetical, not image-first) and calls `detailImage2` per seed.
 - [x] Cache via `cf: { cacheTtl, cacheEverything }` — festivals 4h, attractions 24h, gallery 14d.
       `fetchKto`/`fetchKtoAllPages` take an optional `cacheTtl` (kto-client.mjs).
-- [ ] Spot-check the data.go.kr call-history log for this key shows real traffic — catches a
-      broken key/logging setup early instead of at Phase 28. Dashboard check, not scriptable.
+- [ ] Open question, not resolved: data.go.kr's individual-account mypage has no self-service
+      call-count/traffic dashboard found so far — only application approval status (both keys
+      승인, checked 2026-08-25). Live calls are confirmed working via `wrangler pages dev` +
+      deployed-branch tests either way; revisit whether a real log view exists before Phase 28.
 - Verify: `wrangler pages dev` against real live data — multi-code fan-out dedupes correctly
       (gyeonggi-do/jeolla-do), jeju-do events returns a real non-mock array, gallery returns real
       licensed images, unknown slug still 404s, partial fan-out failure still returns the rest.
@@ -234,16 +236,33 @@ Depends on 20 + 21.
 Depends on 22. **This is real, separate work — Phases 20–22 build a working API nothing uses
 yet.**
 
-- [ ] Region pages fetch live data client-side, replacing the build-time `mock.attractions` loop.
-- [ ] Event-calendar migration. Drop `eleventy/event-calendar.mjs`'s build-time month-grid. Replace
-      with a chronological timeline list — events sorted by date, grouped under month headers so it's
-      always clear which month/date range is showing. Trivial no-JS story (plain list, no date-grid math).
-- [ ] Real `<img>` (replacing `.media-placeholder`) with the crop policy + attribution.
-- [ ] Keep `.data-provenance` + empty states working through the swap (Jeju's empty calendar
-      must render in-page, not just an empty array).
-- [ ] Decide the no-JS story for this content — a bare skeleton isn't an acceptable fallback.
-- Verify: live data visible in-page on all 6 regions, Jeju's empty state renders, key never
-  reaches the browser, no-JS decision actually implemented and tested.
+- [x] Region pages fetch live data client-side (`assets/js/region-data.js`), replacing the
+      build-time `mock.attractions`/`mock.events` loop. `eleventy/event-calendar.mjs` and its
+      shortcode/partial are deleted — can't run at build time against client-fetched data.
+- [x] Event timeline: **Ongoing** + **Upcoming** as collapsed `<details>`; Upcoming groups by
+      start month (this month inline, capped at 5; later months as "Month (count)" tabs).
+      Replaces the flat month list — long festivals made every month header look stale.
+- [x] Real `<img>` for attractions (`attraction-card__media`), gated on `imageLicense` (null →
+      `.media-placeholder`, same as before — never render an unlicensed image). Gallery endpoint
+      still has no consuming UI (pre-existing gap, not this phase's scope).
+- [x] `.data-provenance` kept per section. Empty-state path is code-reviewed (mirrors the old
+      event-calendar's verified zero-length branch) but not live-screenshotted this pass — every
+      region currently has ≥1 real event, so a true zero case couldn't be forced today.
+- [x] No-JS story: each mount's `<noscript>` carries the real fallback (an honest "needs
+      JavaScript" message + an outbound link to KTO's English site), inert the instant JS runs
+      since `region-data.js` overwrites the mount unconditionally. Verified via curl (raw HTML,
+      no browser) that the fallback renders server-side.
+- [x] Region hero photos: `regionHeroPhotos.json` maps each slug to an ordered filename list;
+      `regionHeroCredits.json` / `countyHeroCredits.json` hold per-file KTO Type1 credit +
+      caption (attraction + short city, EN/KO; full address in `addressEn`/`addressKo`).
+      `.region-hero-gallery__track` is CSS scroll-snap; `region-hero-gallery.js` adds
+      prev/next + dots + autoplay (no-JS still swipes). `.region-hero` aspect-ratio `16 / 9`.
+      All 6 regions + Gyeonggi-do decline counties finalized. Yeosu entry's Type1 rests on a
+      manual classification, not a reproducible `detailImage2` call — noted inline.
+  - [ ] Shorten gangwon-do / jeolla-do / jeju-do captions to the short `cityEn` + full
+        `addressEn`/`addressKo` form the other regions now use.
+- Verify: `npm run pages:dev` — live data in-page on gyeonggi-do/jeju-do, hero photos resolve
+      200, licensed image renders next to placeholders, no-JS fallback present in raw HTML.
 
 ## Phase 24 — Workation-city expansion
 Depends on 12.
@@ -314,12 +333,6 @@ Phase 28's deploy freeze, since it can change calculator output for real regions
   shipping with the default interpretation" note before Phase 28's deploy freeze.
 
 ---
-
-## Future ideas — not yet scoped
-Raised by the owner, deliberately not phased/estimated yet — don't lose these:
-- **Region-page hero image**: not a gallery, a single cover photo under the region name/tags
-  (like Phase 14's home-page hero, but per-region). Likely KTO `detailImage2`-sourced, so ties
-  into Phase 23's live-gallery-data work and Phase 14's Type3 crop-policy decision.
 
 ## Cut / descoped
 

@@ -1,6 +1,7 @@
 node_modules/
 _site/
 .env
+.dev.vars
 .DS_Store
 .wrangler/
 *.swp

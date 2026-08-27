@@ -26,6 +26,10 @@ OpenAPI. Built for the 2026 관광데이터 활용 공모전, ②-2 웹·앱 구
   declining regions." Hashtags to anchor features on: **#workation #month-long-stay
   #2030s-youth #local-tourism**. Every major feature should be traceable to one of these in the
   eventual 기능설명서 (functional spec submission).
+- **Attribution format is fixed by the contest FAQ**, not a style choice: plain text
+  "출처: ⓒ한국관광공사" (English: "Source: © Korea Tourism Organization"), always naming the
+  institution — never its CI/BI logo image, never the API/service name ("TourAPI") alone as the
+  sole identifier. Applied to every `.data-provenance`/photo-credit line site-wide.
 - Submission needs one live URL. No app-store step, no login required for judges.
 - Team size / eligibility not a technical concern (solo dev, already confirmed eligible).
 
@@ -125,8 +129,6 @@ worknstay_korea/
 ├── .nvmrc
 ├── package.json / package-lock.json
 ├── eleventy.config.js
-├── eleventy/
-│   └── event-calendar.mjs      # build-time month-grid date math (Eleventy shortcode)
 ├── CLAUDE.md
 ├── architecture.md
 ├── SCAFFOLDING_TODO.md
@@ -151,16 +153,21 @@ worknstay_korea/
 │   │   ├── transport.json      # Living Info tab
 │   │   ├── communities.json    # communities page links
 │   │   ├── populationDeclineAreas.json  # MOIS 인구감소지역 list (§7/§11)
-│   │   └── mock/{attractions,events,gallery}.json  # KTO-shaped fixtures; the dev-only fallback
-│   │                            # once functions/api/** makes real live calls
+│   │   ├── mock/{attractions,events,gallery}.json  # KTO-shaped fixtures; the dev-only fallback
+│   │   │                        # once functions/api/** makes real live calls
+│   │   └── regionHeroPhotos.json, regionHeroCredits.json  # hand-picked cover photo per region
+│   │                            # (slug → filename in assets/img/hero/) + its KOGL credit
 │   ├── _includes/
 │   │   ├── layouts/{base,page}.njk
-│   │   └── partials/{header,footer,region-card,korea-map,tabs,event-calendar,empty-state}.njk
+│   │   └── partials/{header,footer,region-card,korea-map,tabs,empty-state}.njk
 │   ├── assets/
 │   │   ├── css/  tokens.css, base.css, components/*.css
 │   │   ├── js/   main.js, nav.js, calculator.js, eligibility.js,
-│   │   │         korea-map.js, region-card.js, tabs.js
-│   │   ├── img/  hero/, food/, og/  # planned subfolders; empty until real assets are sourced
+│   │   │         korea-map.js, region-card.js, tabs.js, region-data.js,
+│   │   │         region-hero-gallery.js
+│   │   ├── img/  hero/  # home + region-page cover photos (KOGL Type1, credited in
+│   │   │         #       _data/heroCredits.json / regionHeroCredits.json)
+│   │   │         food/, og/  # planned subfolders; empty until real assets are sourced
 │   │   ├── fonts/               # empty until a real webfont is added
 │   │   └── svg/  korea-regions.svg
 │   │              source/korea-provinces-blank.svg  # raw Wikimedia source (public domain)
@@ -373,7 +380,7 @@ No library, no store. Three tiers:
   below it (portrait phones). This is the one boundary decision that matters most for the
   homepage; the breakpoint value itself needs empirical tuning against real landscape-phone
   widths during build, not just standard device presets.
-- Region page Overview tab: cities list + event calendar are a 2-column grid ≥900px, stacked
+- Region page Overview tab: cities list + event timeline are a 2-column grid ≥900px, stacked
   below that, cities first (primary answer to "where would I live"); Attractions and Local food
   render as further stacked blocks below the grid, inside the same tab (Living Info is the only
   other tab, holding just cost-of-living + transport).

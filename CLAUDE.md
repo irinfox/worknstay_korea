@@ -26,8 +26,8 @@ the durable, brief set of project-scope agreements.
 - The user runs all `git add`/`git commit` themselves — only propose the
   `git add` file list and commit message after each phase, never execute git commands that stage
   or commit.
-- Dev server: `npm run serve` (port 8080, `eleventy --serve`); stop with
-  `lsof -ti:8080 -sTCP:LISTEN | xargs -r kill` before relaunching to avoid `EADDRINUSE`.
+- Dev server: `npm run pages:dev` (port 8788; runs Pages Functions, reads KTO keys from
+  `.dev.vars`). Kill the port first: `lsof -ti:8788 -sTCP:LISTEN | xargs -r kill`.
 - `architecture.md` is a decisions record, not a scratchpad. So keep two rules:
 1. Never reference ROADMAP_TODO.md phase numbers inside architecture.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; architecture.md is supposed to be "independent of project scheduling" per its own header.
 2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.

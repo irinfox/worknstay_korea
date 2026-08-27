@@ -1,0 +1,9 @@
+{
+  "note": "Region-page cover photo(s). Each slug maps to an ORDERED array of filenames, each of which must exist in src/assets/img/hero/ with a matching entry in regionHeroCredits.json (license/attribution/caption). A single-item array renders as a static (non-carousel) cover; 2+ items render the auto-scrolling gallery (region-hero-gallery.js). All six regions are now finalized multi-photo galleries — preselect/region-pages/<slug>/ folders are emptied (files moved to their backup/ subfolder) and heroCandidates.js no longer contributes slides.",
+  "gyeonggi-do": ["seoul-night-view.jpg", "ikseon-dong-hanok-street.jpg", "heyri-art-village-paju.jpg", "ilsan-lake-park-goyang.jpg", "songdo-central-park-incheon.jpg", "suwon-hwahongmun-gate.jpg", "hwadam-botanic-garden-gwangju.jpg"],
+  "gangwon-do": ["seoraksan-national-park.jpg", "sokcho-ferris-wheel-view.jpg", "chuncheon-daegyo-bridge.jpg", "yeongjin-beach-gangneung.jpg", "alpensia-resort-pyeongchang.jpg", "sogeumsan-grand-valley.jpg"],
+  "chungcheong-do": ["cheongju-ullidan-street.jpg", "sejong-lake-park.jpg", "gongju-heritage-night-tour.jpg", "daejeon-expo-science-park.jpg", "boryeong-ziptrek-korea.jpg", "boeun-maltijae-observatory.jpg", "danyang-dodamsambong-peaks.jpg"],
+  "gyeongsang-do": ["busan-gwangan-bridge-skyline.jpg", "busan-haeparang-trail.jpg", "andong-woryeonggyo-bridge.jpg", "daegu-apsan-observatory.jpg", "gyeongju-historic-areas.jpg", "ulsan-taehwagang-national-garden.jpg", "yecheon-hoeryongpo-bend.jpg"],
+  "jeolla-do": ["taejo-ro-jeonju.jpg", "gunsan-dongguksa-temple.jpg", "jucheon-ecological-park.jpg", "uhwajeong-pavilion.jpg", "yeosu-romantic-pocha-street.png"],
+  "jeju-do": ["jeju-batdam-theme-park.jpg", "sinchang-windmill-coastal-road.jpg", "jeju-mandarins.jpg", "dumaengi-gil-mural-alley.jpg", "olle-trail-course-2.jpg", "seogwipo-hallasan-view.jpg", "haenyeo-divers.jpg"]
+}

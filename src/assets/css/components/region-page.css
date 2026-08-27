@@ -27,8 +27,15 @@
 }
 
 .region-header {
-  max-width: 65ch;
   margin-bottom: var(--space-6);
+}
+
+.region-header h1 {
+  max-width: 65ch;
+}
+
+.region-header__tags {
+  max-width: 65ch;
 }
 
 .region-header__ko {
@@ -48,6 +55,148 @@
 
 .region-header__intro {
   margin-top: var(--space-3);
+}
+
+/* Region cover photo (ROADMAP_TODO.md Phase 23) — shorter/contained version of the home-page
+   hero's media+credit pattern (hero.css), not full-bleed: region pages have a lot of content
+   below and aren't the landing page, so it sits inside .content-page's normal width instead of
+   breaking out edge-to-edge. */
+.region-hero {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-6);
+}
+
+.region-hero--placeholder {
+  background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+}
+
+.region-hero__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Gallery track: plain CSS scroll-snap strip, one full-width slide per "page" — swipeable/
+   scrollable with zero JS (same pattern as .attraction-list). region-hero-gallery.js only adds
+   the optional prev/next buttons + dot indicators on top. */
+.region-hero-gallery__track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.region-hero-gallery__track::-webkit-scrollbar {
+  display: none;
+}
+
+.region-hero-gallery__slide {
+  position: relative;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  scroll-snap-align: start;
+}
+
+.region-hero-gallery__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  transform: translateY(-50%);
+  border: none;
+  border-radius: 50%;
+  background: rgba(10, 10, 10, 0.45);
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.region-hero-gallery__nav:hover,
+.region-hero-gallery__nav:focus-visible {
+  background: rgba(10, 10, 10, 0.7);
+}
+
+.region-hero-gallery__nav--prev {
+  left: var(--space-3);
+}
+
+.region-hero-gallery__nav--next {
+  right: var(--space-3);
+}
+
+.region-hero-gallery__dots {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  gap: var(--space-2);
+  transform: translateX(-50%);
+}
+
+.region-hero-gallery__dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.region-hero-gallery__dot[aria-current="true"] {
+  background: #fff;
+}
+
+.region-hero__credit {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+  z-index: 2;
+  margin: 0;
+  padding: 2px var(--space-2);
+  color: #fff;
+  font-size: var(--font-size-xs, 0.75rem);
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: 999px;
+}
+
+.region-hero__credit a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Per-slide attraction/city caption (EN + KO, ROADMAP_TODO.md Phase 23 finalization) — left side,
+   opposite .region-hero__credit, so the two never overlap. Korean line is a plain search aid
+   (CLAUDE.md rule 9), not a translation UI, so it's set smaller/muted rather than paired 1:1. */
+.region-hero__caption {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-2);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  max-width: calc(100% - var(--space-6) * 3);
+  color: #fff;
+  background: rgba(10, 10, 10, 0.55);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.region-hero__caption-ko {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: var(--font-size-xs, 0.75rem);
 }
 
 .region-section {
@@ -77,6 +226,28 @@
   padding: var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+}
+
+.city-list__photo {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+}
+
+.city-list__photo-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: -6px 0 var(--space-2);
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--color-text-muted);
+}
+
+.city-list__photo-caption-ko {
+  color: var(--color-text-muted);
 }
 
 .city-list__ko {
@@ -126,6 +297,9 @@
 
 .attraction-card__media {
   aspect-ratio: 4 / 3;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
 }
 
 .attraction-card__address {

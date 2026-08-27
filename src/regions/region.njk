@@ -12,9 +12,9 @@ eleventyComputed:
 {% set cost = costOfLiving | findBySlug(region.slug) %}
 {% set transportInfo = transport | findBySlug(region.slug) %}
 {% set regionCities = cities | byRegion(region.slug) %}
-{% set regionAttractions = mock.attractions | byRegion(region.slug) %}
-{% set regionEvents = mock.events | byRegion(region.slug) %}
 {% set regionFood = food | byRegion(region.slug) %}
+{% set heroPhotos = regionHeroPhotos[region.slug] or [] %}
+{% set slideCount = heroPhotos.length %}
 <div class="content-page">
 <header class="region-header">
   <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
@@ -25,6 +25,37 @@ eleventyComputed:
   </ul>
   <p class="region-header__intro">{{ region.longIntro }}</p>
 </header>
+
+{# Region cover photo gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
+   finalized, credited, license-checked picks per slug. Nav/dots/autoplay (region-hero-gallery.js)
+   are pure enhancement — the track is a plain CSS scroll-snap strip, swipeable with zero JS
+   (same no-JS pattern as .attraction-list), so nothing here gates content behind JS. #}
+<div class="region-hero{% if slideCount == 0 %} region-hero--placeholder{% endif %}"{% if slideCount > 0 %} data-region-hero-gallery{% endif %}>
+  {% if slideCount > 0 %}
+  <div class="region-hero-gallery__track">
+    {% for filename in heroPhotos %}
+    {% set credit = regionHeroCredits.photos[filename] %}
+    <figure class="region-hero-gallery__slide">
+      <img class="region-hero__img" src="/assets/img/hero/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+      {% if credit.titleEn %}
+      <figcaption class="region-hero__caption">
+        <span class="region-hero__caption-en">{{ credit.titleEn }}{% if credit.cityEn %}, {{ credit.cityEn }}{% endif %}</span>
+        {% if credit.titleKo %}
+        <span class="region-hero__caption-ko">{{ credit.titleKo }}{% if credit.cityKo %}, {{ credit.cityKo }}{% endif %}</span>
+        {% endif %}
+      </figcaption>
+      {% endif %}
+    </figure>
+    {% endfor %}
+  </div>
+  {% if slideCount > 1 %}
+  <button class="region-hero-gallery__nav region-hero-gallery__nav--prev" type="button" aria-label="Previous photo">‹</button>
+  <button class="region-hero-gallery__nav region-hero-gallery__nav--next" type="button" aria-label="Next photo">›</button>
+  <div class="region-hero-gallery__dots"></div>
+  {% endif %}
+  <p class="region-hero__credit">Photo source: © Korea Tourism Organization (한국관광공사)</p>
+  {% endif %}
+</div>
 
 {% set tabs = [
   { id: "overview", label: "Overview" },
@@ -62,30 +93,29 @@ eleventyComputed:
       {% endif %}
     </div>
     <div class="region-overview-grid__events">
-      <h3>Upcoming festivals &amp; events</h3>
-      {% set events = regionEvents %}
-      {% include "partials/event-calendar.njk" %}
+      <h3>Festivals &amp; events</h3>
+      {# Phase 23: live per-request data (functions/api/region/[slug]/events.js), fetched and
+         rendered by region-data.js — can't be a build-time shortcode any more. The <noscript>
+         message is the real no-JS content; JS never lets a browser see it (region-data.js
+         overwrites this container's innerHTML on load), so it's inert whenever JS runs. #}
+      <div class="event-timeline" data-region-events data-region-slug="{{ region.slug }}">
+        <noscript>
+          <p class="empty-state">Live festival/event data needs JavaScript. <a href="https://english.visitkorea.or.kr/">Browse the Korea Tourism Organization's English site instead →</a></p>
+        </noscript>
+      </div>
+      <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
     </div>
   </div>
 
   <div class="region-block">
     <h3>Attractions</h3>
-    {% if regionAttractions.length %}
-    <ul class="attraction-list">
-      {% for a in regionAttractions %}
-      <li class="attraction-card">
-        <div class="media-placeholder attraction-card__media" aria-hidden="true"></div>
-        <h4>{{ a.titleEn }}</h4>
-        <p>{{ a.summary }}</p>
-        <p class="attraction-card__address">{{ a.address }}</p>
-      </li>
-      {% endfor %}
+    {# Same live-fetch pattern as the events timeline above. #}
+    <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}">
+      <noscript>
+        <li class="empty-state">Live attraction data needs JavaScript. <a href="https://english.visitkorea.or.kr/">Browse the Korea Tourism Organization's English site instead →</a></li>
+      </noscript>
     </ul>
-    {% else %}
-    {% set message = "No attractions currently listed for this region." %}
-    {% include "partials/empty-state.njk" %}
-    {% endif %}
-    <p class="data-provenance">Data from the Korea Tourism Organization (KTO) OpenAPI — currently mock data, live via the proxy layer in a later phase.</p>
+    <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
   </div>
 
   {% if regionFood.length %}

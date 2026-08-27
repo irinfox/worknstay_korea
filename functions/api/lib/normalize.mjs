@@ -123,7 +123,7 @@ export function normalizeGalleryImage(raw, fallbackTitleEn) {
     imageThumbUrl: toHttps(raw.smallimageurl),
     imageLicense,
     caption: containsKorean(decodedName) ? fallbackTitleEn || "" : decodedName || fallbackTitleEn || "",
-    attribution: "Data from the Korea Tourism Organization",
+    attribution: "Source: © Korea Tourism Organization (한국관광공사)",
     sourceModifiedAt: null,
   };
 }
