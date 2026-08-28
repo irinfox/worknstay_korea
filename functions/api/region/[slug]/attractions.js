@@ -9,15 +9,27 @@ import { normalizeAttraction } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
 const CONTENT_TYPE_ID_ATTRACTION = 76; // v4 renumbered content types (architecture.md §5)
-// arrange=Q: view-count order, representative image required. KTO files medical-tourism venues
-// (Gangnam clinics, dental hospitals, 한의원) under contentTypeId 76; alphabetical order floats
-// those to the top of our per-code sample, Q sinks them and guarantees a usable card image.
-const ARRANGE = "Q";
+// arrange=P: view-count order, representative image required. Undocumented in the EngService2
+// spec (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on
+// every region code. The documented "Q" is *modified-date* order, not view-count — it surfaces
+// whatever was last edited in the CMS (shop branches, recent listings) and buries stable
+// landmark records, so it was the wrong default. See notes/attraction-feed-curation.md.
+const ARRANGE = "P";
+// KTO files medical-tourism venues (plastic-surgery clinics, dental/oriental hospitals,
+// medical-tourism agencies) under contentTypeId 76. Sort order does NOT sink them — they're
+// removed here. cat3 "A02020500" is KTO's 의료관광 category and is 100% medical venues across
+// all six region feeds; the name regex is the fallback for the few records that carry no
+// category code at all (verified against live data).
+const MEDICAL_CAT3 = "A02020500";
+const MEDICAL_NAME_RE =
+  /병원|의원|한의원|성형외과|치과|피부과|안과|clinic|hospital|plastic surgery|dermatolog/i;
+const isMedicalVenue = (raw) =>
+  raw.cat3 === MEDICAL_CAT3 || MEDICAL_NAME_RE.test(raw.title || "");
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
 // A region page shows a representative sample, not an exhaustive attraction database (a 3-code
 // region fully paginated returns 100s of items — too many for the horizontal scroll-snap card
 // list, and needless KTO call volume). One page per code, deduped, is enough variety.
-const ROWS_PER_CODE = 12;
+const ROWS_PER_CODE = 15;
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
@@ -46,6 +58,7 @@ export async function onRequestGet({ params, env }) {
   for (const result of pages) {
     if (result.status !== "fulfilled" || result.value.degraded) continue;
     for (const raw of result.value.items) {
+      if (isMedicalVenue(raw)) continue;
       const attraction = normalizeAttraction(raw);
       attraction.regionSlug = slug;
       byContentId.set(attraction.contentId, attraction);

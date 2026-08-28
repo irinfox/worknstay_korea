@@ -88,10 +88,11 @@ until Phase 19.
 ## Phase 24 — Region editorial + attraction curation
 Iterative editorial/research work, mostly hand-curation — do one region at a time.
 
-- [x] Attraction feed: `areaBasedList2` with `arrange=Q` (view-count order, representative image
-      required) — drops the medical-tourism venues KTO files under 관광지.
-- [ ] Attraction curation: eyeball each region's list for junk, add a name blocklist if needed,
-      decide per-region count + whether to dedupe same-name branches.
+- [x] Attraction feed: `areaBasedList2` with `arrange=P` (view-count order); medical-tourism
+      venues dropped by `cat3` A02020500 + name regex.
+- [ ] Attraction curation (re-research): per-region pinned allowlist of flagship sites (palaces
+      etc. rank below the row window), content-type mix (관광지 vs 문화시설), high no-image rate,
+      per-region count, same-name branch dedupe.
 - [ ] Region description rewrite (all 6).
 - [ ] Home region cards: vibe-tags.
 - [ ] Home region cards: real money figures (replace MOCK).
