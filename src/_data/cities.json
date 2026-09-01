@@ -8,9 +8,7 @@
     "lng": 126.78,
     "blurb": "Quiet border-area city with a growing arts/publishing district (Heyri) and easy access to Seoul.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Paju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "ganghwa",
@@ -21,21 +19,164 @@
     "lng": 126.49,
     "blurb": "Incheon county with a distinct rural, historic character — a population-decline-designated area inside the capital-tier region (MOIS-confirmed 2026-08-18).",
     "isPopulationDeclineArea": true,
+    "workationCenters": []
+  },
+  {
+    "slug": "seoul",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Seoul",
+    "nameKo": "서울특별시",
+    "lat": 37.5665,
+    "lng": 126.978,
+    "blurb": "South Korea's capital and largest city — outside this site's non-capital eligibility focus, kept here as coworking reference data since several Seoul-based chains also operate branches in eligible regions.",
+    "isPopulationDeclineArea": false,
     "workationCenters": [
-      { "name": "Ganghwa Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+      {
+        "name": "Hoppin",
+        "url": "https://www.hoppin.life/hoppinhouse/coliving",
+        "instagram": "hoppin.life",
+        "address": "7-10 Yeonhui-ro 2-an-gil, Seodaemun-gu, Seoul (03784)",
+        "addressKo": "서울 서대문구 연희로2안길 7-10 (03784)",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Coworking + coliving. Address corrected from the article's original listing per direct verification."
+      },
+      {
+        "name": "Seoul Nooks",
+        "url": "https://www.seoulnooks.org/home",
+        "instagram": "seoulnooks",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Community and coliving space, not a dedicated coworking-desk operation."
+      },
+      {
+        "name": "FiveSpot",
+        "url": "https://fivespot.io/",
+        "instagram": "fivespot_official",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Korean-only site. No specific branch address captured — check site for current Seoul locations."
+      },
+      {
+        "name": "JustCo",
+        "url": "https://www.justcoglobal.com/en/",
+        "instagram": "justcoglobal",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Best foreigner-friendly website/onboarding among the big Seoul coworking chains (English available). No specific branch address captured."
+      },
+      {
+        "name": "Fastfive",
+        "url": "https://www.fastfive.co.kr/",
+        "instagram": "fastfive_official",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Korean-only site; one of Seoul's largest coworking chains, locations easily found via their site's map. Also has branches in Incheon and Seongnam — see those city entries."
+      },
+      {
+        "name": "Seoul Startup Hub (Gongdeok)",
+        "url": "https://hubgongdeok.startup-plus.kr/en",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Free startup space, English page available."
+      },
+      {
+        "name": "Google for Startups Campus (Gangnam)",
+        "url": "",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "CLOSED — kept as a record only, do not surface as an active listing."
+      }
     ]
   },
   {
-    "slug": "chuncheon",
-    "regionSlug": "gangwon-do",
-    "nameEn": "Chuncheon",
-    "nameKo": "춘천시",
-    "lat": 37.88,
-    "lng": 127.73,
-    "blurb": "Lakeside provincial capital, about an hour from Seoul by train, with a small coworking scene.",
+    "slug": "incheon",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Incheon",
+    "nameKo": "인천광역시",
+    "lat": 37.4563,
+    "lng": 126.7052,
+    "blurb": "Port city and international-airport gateway just west of Seoul, part of the capital-tier region for visa purposes.",
     "isPopulationDeclineArea": false,
     "workationCenters": [
-      { "name": "Chuncheon Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+      {
+        "name": "Fastfive (Songdo / Yeonsu-gu branch)",
+        "url": "https://www.fastfive.co.kr/",
+        "instagram": "fastfive_official",
+        "address": "185 Incheon Tower-daero, Yeonsu-gu, Incheon, Central Biz Hanra 5-6F (main lounge on 5F)",
+        "addressKo": "인천 연수구 인천타워대로 185 센트럴비즈한라 5-6층 (메인 라운지 5층)",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Part of the Fastfive chain (Korean-only site)."
+      }
+    ]
+  },
+  {
+    "slug": "seongnam",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Seongnam",
+    "nameKo": "성남시",
+    "lat": 37.3826,
+    "lng": 127.1189,
+    "blurb": "Gyeonggi-do tech hub adjoining Seoul, known for the Bundang district's business and IT sector.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      {
+        "name": "Fastfive (Bundang branch)",
+        "url": "https://www.fastfive.co.kr/",
+        "instagram": "fastfive_official",
+        "address": "670 Sampyeong-dong, Bundang-gu, Seongnam-si, Gyeonggi-do",
+        "addressKo": "경기 성남시 분당구 삼평동 670",
+        "mapUrl": "",
+        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
+        "actualizedAt": "2026-09-01",
+        "note": "Part of the Fastfive chain (Korean-only site)."
+      }
+    ]
+  },
+  {
+    "slug": "sokcho",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Sokcho",
+    "nameKo": "속초시",
+    "lat": 38.207,
+    "lng": 128.5918,
+    "blurb": "Lots of study cafes, the closest city to Seoraksan, not far from the Yangyang surf beaches, with direct buses from Seoul.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      {
+        "name": "Dadoo Coworking",
+        "url": "",
+        "instagram": "dadoocoworking",
+        "address": "4331 Donghae-daero, Sokcho-si, Gangwon-do, 2F",
+        "addressKo": "강원 속초시 동해대로 4331 2층",
+        "mapUrl": "https://naver.me/5NMkq2DM",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Coworking. Korean only — no separate website found. Naver Map-verified 2026-09-01."
+      }
     ]
   },
   {
@@ -44,11 +185,88 @@
     "nameEn": "Gangneung",
     "nameKo": "강릉시",
     "lat": 37.75,
-    "lng": 128.90,
-    "blurb": "East-coast surf and coffee town, KTX-connected to Seoul in under two hours.",
+    "lng": 128.9,
+    "blurb": "Several coworking spaces from Padosalon plus plenty of study cafes; famous for its coffee culture and festivals, and as a filming location for \"The Goblin.\" About 2.5 hours from Seoul by train.",
     "isPopulationDeclineArea": false,
     "workationCenters": [
-      { "name": "Gangneung Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+      {
+        "name": "Padosalon — Kyodong Branch",
+        "url": "https://www.thewavecompany.co.kr/padosalon",
+        "instagram": "padosalon",
+        "address": "2F, 198 Gangneung-daero, Gangneung-si, Gangwon-do",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "CLOSED — only the Myeongju branch is still operating as of the 2026-09-01 verification pass. Kept as a record only, do not surface as an active listing."
+      },
+      {
+        "name": "Padosalon — Myeongju Branch",
+        "url": "https://www.thewavecompany.co.kr/padosalon",
+        "instagram": "padosalon",
+        "address": "2F, 2023 Gyeonggang-ro, Gangneung-si, Gangwon-do",
+        "addressKo": "",
+        "mapUrl": "https://naver.me/FK5IIXCU",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Pricing: https://www.thewavecompany.co.kr/membership. Korean only. Naver Map-verified 2026-09-01."
+      }
+    ]
+  },
+  {
+    "slug": "yangyang",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Yangyang",
+    "nameKo": "양양군",
+    "lat": 38.075,
+    "lng": 128.619,
+    "blurb": "Known as \"Korean Bali,\" with Surfyy Beach its most famous surf spot — though the surf season here is notably short. Has its own international airport and a handful of study cafes.",
+    "isPopulationDeclineArea": true,
+    "workationCenters": []
+  },
+  {
+    "slug": "chuncheon",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Chuncheon",
+    "nameKo": "춘천시",
+    "lat": 37.88,
+    "lng": 127.73,
+    "blurb": "Capital of Gangwon-do and a popular student city near its lakes, reachable from Seoul by subway or train.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "wonju",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Wonju",
+    "nameKo": "원주시",
+    "lat": 37.3422,
+    "lng": 127.92,
+    "blurb": "The biggest and most industrial city in Gangwon-do, with a national park nearby and the scenic Sogeumsan Grand Valley sky bridge. Plenty of study cafes around the city center.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "goseong-gangwon",
+    "regionSlug": "gangwon-do",
+    "nameEn": "Goseong",
+    "nameKo": "고성군",
+    "lat": 38.3806,
+    "lng": 128.468,
+    "blurb": "Rural border county on Gangwon-do's northeast coast near the DMZ and Unification Observatory; a MOIS-designated population-decline area.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      {
+        "name": "Mangrove (Goseong branch)",
+        "url": "https://mangrove.city/locations/goseong",
+        "instagram": "mangrove.city",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Coliving/workation brand, on the pricier side and fairly remote. Also has multiple Seoul locations and one in Jeju (not itemized — no separate coworking-specific address found for those)."
+      }
     ]
   },
   {
@@ -60,9 +278,7 @@
     "lng": 127.49,
     "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Cheongju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "boryeong",
@@ -73,9 +289,7 @@
     "lng": 126.61,
     "blurb": "Coastal city best known for the Mud Festival, with a slower off-season pace.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Boryeong Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "gyeongju",
@@ -86,9 +300,7 @@
     "lng": 129.22,
     "blurb": "Former Silla-dynasty capital — living among UNESCO heritage sites, an hour from Busan.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Gyeongju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "andong",
@@ -99,8 +311,52 @@
     "lng": 128.73,
     "blurb": "Traditional Confucian-heritage city, quieter and more rural than the region's coastal metros.",
     "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "busan",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Busan",
+    "nameKo": "부산광역시",
+    "lat": 35.1796,
+    "lng": 129.0756,
+    "blurb": "South Korea's second-largest city and main southern port, with beaches and a growing coworking scene.",
+    "isPopulationDeclineArea": false,
     "workationCenters": [
-      { "name": "Andong Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+      {
+        "name": "Busaness",
+        "url": "https://www.busaness.com",
+        "instagram": "busaness_workation",
+        "address": "7-8, Jungang-daero 214beon-gil, Dong-gu, Busan, Asti Hotel 24th floor",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Central branch listed; several other locations exist. Provides accommodation and coworking spaces; requires proof of employment. Unconfirmed whether use is free after registration."
+      }
+    ]
+  },
+  {
+    "slug": "tongyeong",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Tongyeong",
+    "nameKo": "통영시",
+    "lat": 34.8544,
+    "lng": 128.4331,
+    "blurb": "Coastal city in Gyeongsangnam-do known for its harbor and islands; on MOIS's population 'watch' list.",
+    "isPopulationDeclineArea": false,
+    "workationCenters": [
+      {
+        "name": "Local Stitch Tongyeong",
+        "url": "https://www.localstitch.kr",
+        "instagram": "localstitch_tongyeong",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Coliving + coworking. Korean only. Local Stitch also operates multiple locations in Seoul (not itemized here)."
+      }
     ]
   },
   {
@@ -112,9 +368,7 @@
     "lng": 127.15,
     "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Jeonju Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "yeosu",
@@ -125,22 +379,18 @@
     "lng": 127.66,
     "blurb": "Harbor city with a night-view reputation and a growing short-stay rental market.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Yeosu Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "jeju-city",
     "regionSlug": "jeju-do",
     "nameEn": "Jeju City",
     "nameKo": "제주시",
-    "lat": 33.50,
+    "lat": 33.5,
     "lng": 126.53,
     "blurb": "The island's main airport city, with the highest concentration of coworking spaces on Jeju.",
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      { "name": "Jeju City Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "seogwipo",
@@ -152,7 +402,17 @@
     "blurb": "South-coast Jeju city, calmer than Jeju City, popular for month-long guesthouse stays.",
     "isPopulationDeclineArea": false,
     "workationCenters": [
-      { "name": "Seogwipo Workation Center (placeholder)", "url": "", "note": "MOCK — verify against current local-government workation program listings" }
+      {
+        "name": "O-peace",
+        "url": "http://o-peace.com",
+        "instagram": "o.peace.jeju",
+        "address": "214 Hyanggyo-ro, Andeok-myeon, Seogwipo-si, Jeju-do, 1F",
+        "addressKo": "제주 서귀포시 안덕면 향교로 214 1층",
+        "mapUrl": "https://naver.me/5Q37rwlK",
+        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
+        "actualizedAt": "2026-09-01",
+        "note": "Coworking + coliving (workation). Website Korean only."
+      }
     ]
   }
 ]
