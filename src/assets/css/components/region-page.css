@@ -16,6 +16,15 @@
   color: var(--color-text-muted);
 }
 
+/* Thin rule separating major page sections (Rough map+guides / Living hubs+Festivals /
+   Places to see nearby / Local food / Living Info) — the page reads as one undifferentiated
+   block without it. */
+.section-divider {
+  margin: var(--space-8) 0;
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
 .empty-state {
   padding: var(--space-4);
   border: 1px dashed var(--color-border);
@@ -51,8 +60,42 @@
   color: var(--color-text-muted);
 }
 
+/* Activity pills (Gangwon-do first; other regions still fall back to the plain hashtag
+   list above until they get their own activityTags entry in regions.json). */
+.region-header__tags--activity li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-primary-tint-border);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-dark);
+  border-radius: 999px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
 .region-header__intro {
   margin-top: var(--space-3);
+}
+
+/* Telegraph-style season line: same row shape as the tags above it, but plain text columns
+   (icon + shorthand) instead of pill badges — a table's alignment without table borders.
+   Dropping the 65ch cap (inherited from .region-header__tags) and indenting from the body
+   text keeps surf/ski/hiking on one row instead of wrapping under the paragraph width. */
+/* ul.region-header__tags--season (not just .region-header__tags--season): base.css's
+   `ul[class] { margin: 0 }` reset has equal specificity to a bare class selector and would
+   otherwise silently win and zero out margin-top. */
+ul.region-header__tags--season {
+  max-width: none;
+  gap: var(--space-1) var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.region-header__tags--season li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
 }
 
 /* Region cover photo (ROADMAP_TODO.md Phase 23) — shorter/contained version of the home-page
@@ -202,6 +245,25 @@
   scroll-margin-top: var(--space-4);
 }
 
+/* base.css zeroes all heading margins, so every block title on this page sat flush against its
+   content until this rule — restore the gap only within region-page contexts rather than
+   globally, since other pages rely on the zeroed default. */
+.region-section > h2,
+.region-section > h3,
+.region-block > h3,
+.region-overview-grid__cities > h3,
+.region-overview-grid__events > h3 {
+  margin-bottom: var(--space-3);
+}
+
+/* "Useful guides" reads as supporting/source material, not a page section on the level of
+   "Rough region map" or "Living hubs" above and below it — smaller and muted rather than the
+   full h3 treatment so it doesn't compete with the actual section titles. */
+.region-block__title--sub {
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
+}
+
 /* Overview tab: cities + event calendar, cities first when stacked (architecture.md §9). */
 .region-overview-grid {
   display: grid;
@@ -211,6 +273,36 @@
 @media (min-width: 900px) {
   .region-overview-grid {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Gangwon-do only: a third "cost of living" block. Named areas put it right after Living hubs
+   when the grid stacks to one column (mobile), but as a full-width row below both columns on
+   desktop — source order alone can't give it two different positions like that. */
+.region-overview-grid--gangwon {
+  grid-template-areas:
+    "cities"
+    "cost"
+    "events";
+}
+
+.region-overview-grid--gangwon .region-overview-grid__cities {
+  grid-area: cities;
+}
+
+.region-overview-grid--gangwon .region-overview-grid__cost {
+  grid-area: cost;
+}
+
+.region-overview-grid--gangwon .region-overview-grid__events {
+  grid-area: events;
+}
+
+@media (min-width: 900px) {
+  .region-overview-grid--gangwon {
+    grid-template-areas:
+      "cities events"
+      "cost cost";
   }
 }
 
@@ -270,8 +362,21 @@
   color: var(--color-text-muted);
 }
 
-.city-list__workation .note {
-  font-style: italic;
+/* Same icon+text pictogram treatment as .region-header__tags--season (ul.* selector for the
+   same reason: base.css's `ul[class] { margin: 0 }` reset ties with a bare class selector). */
+ul.city-list__travel-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.city-list__travel-times li {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
 }
 
 /* --- Gyeonggi-do population-decline counties (population-decline-counties.njk) -------------
@@ -434,6 +539,39 @@
   margin-bottom: var(--space-6);
 }
 
+/* "Useful guides" — same accent-bordered card treatment as .cost-card (region-block h3 title
+   above, callout box below) for visual consistency between the two source-backed blocks on this
+   page. Each guide's label (SURF/SKI) and its linked source domain sit on the same line/baseline
+   rather than stacked, so the link reads at the same level as the naming instead of below it. */
+.region-guides-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.region-guides-card__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.region-guides-card__label {
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.region-guides-card__link {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
 .mock-note {
   font-size: var(--font-size-sm);
   font-weight: 400;
@@ -444,7 +582,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--space-3);
-  margin: var(--space-3) 0 0;
+  margin: 0;
 }
 
 .cost-summary dt {
@@ -458,6 +596,29 @@
 }
 
 .transport-summary__airports {
-  margin: var(--space-2) 0;
+  margin: 0 0 var(--space-2);
   padding-left: var(--space-5);
+}
+
+/* Callout-style card (matches the site's "Quick answer" reference pattern): a left accent
+   stripe rather than an even border-all-around box, so the cost paragraph reads as a called-out
+   fact rather than a plain text block. */
+.cost-card {
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.cost-card p {
+  margin: 0;
+}
+
+/* Muted/de-emphasized inline figures within the Cost-of-living paragraph — grey rather than
+   bold-black, since these are approximate estimates, not the confident stat-chip numbers used
+   elsewhere on this page. */
+.cost-figure {
+  color: var(--color-text-muted);
+  font-weight: 600;
 }

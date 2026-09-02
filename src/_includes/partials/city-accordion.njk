@@ -1,0 +1,63 @@
+{# Collapsible city card for Gangwon-do's "Living hubs" column (region.njk) — native
+   <details>/<summary> disclosure, closed by default, no JS required. Collapsed state shows just
+   the name plus a couple of at-a-glance icons (city.summaryIcons); expanding reveals the full
+   description, a "Where to work" list (named coworking spaces plus generic entries like
+   city.otherWorkspaces, same card shape, muted styling), and a "Getting around" travel-time
+   callout. Param: city (City, required). #}
+{% set instagramIcon = '<svg class="city-accordion__icon-svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="13" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11.5" cy="4.5" r="1" fill="currentColor"/></svg>' %}
+{# Same pin glyph as the Festivals & events address line (region-data.js's PIN_ICON) — one visual
+   language for "this links to a map" across the page. #}
+{% set mapIcon = '<svg class="city-accordion__icon-svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>' %}
+<details class="city-accordion">
+  <summary class="city-accordion__summary">
+    <span class="city-accordion__name">{{ city.nameEn }} <span class="city-accordion__name-ko">{{ city.nameKo }}</span></span>
+    {% if city.summaryIcons.length %}
+    <span class="city-accordion__icons" aria-hidden="true">{% for icon in city.summaryIcons %}{{ icon }}{% endfor %}</span>
+    {% endif %}
+  </summary>
+  <div class="city-accordion__body">
+    {% if city.blurb %}
+    <p class="city-accordion__blurb">{{ city.blurb }}</p>
+    {% endif %}
+    {% if city.workationCenters.length or city.otherWorkspaces.length %}
+    <div class="city-accordion__workspaces">
+      <p class="city-accordion__section-title">Where to work</p>
+      <div class="workspace-list">
+        {% for wc in city.workationCenters %}
+        <div class="workspace-card">
+          <p class="workspace-card__name">
+            {{ wc.name }}
+            {% if wc.url or wc.instagram or wc.mapUrl %}
+            <span class="workspace-card__icon-links">
+              {% if wc.url %}<a class="workspace-card__icon-link" href="{{ wc.url }}" target="_blank" rel="noopener" aria-label="Website"><span aria-hidden="true">🌐</span></a>{% endif %}
+              {% if wc.instagram %}<a class="workspace-card__icon-link" href="https://instagram.com/{{ wc.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{{ instagramIcon | safe }}</a>{% endif %}
+              {% if wc.mapUrl %}<a class="workspace-card__icon-link" href="{{ wc.mapUrl }}" target="_blank" rel="noopener" aria-label="Map">{{ mapIcon | safe }}</a>{% endif %}
+            </span>
+            {% endif %}
+          </p>
+          {% if wc.address %}<p class="workspace-card__address">{{ wc.address }}</p>{% endif %}
+        </div>
+        {% endfor %}
+        {% for space in city.otherWorkspaces %}
+        <div class="workspace-card workspace-card--muted">
+          <p class="workspace-card__name">{{ space.name }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    {% if city.gettingAround.length %}
+    <div class="rough-estimates">
+      <p class="rough-estimates__title">Getting around</p>
+      <div class="rough-estimates__grid">
+        {% for g in city.gettingAround %}
+        <span class="rough-estimates__chip">
+          <span aria-hidden="true">{% if g.mode == "train" %}🚆{% elif g.mode == "taxi" %}🚕{% elif g.mode == "car" %}🚗{% else %}🚌{% endif %}</span>
+          <strong>{{ g.label }}</strong> • {{ g.value }}
+        </span>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</details>

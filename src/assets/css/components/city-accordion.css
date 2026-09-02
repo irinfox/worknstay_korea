@@ -1,0 +1,205 @@
+/*
+ * city-accordion.njk — Gangwon-do's "Living hubs" column (region.njk), left of Festivals &
+ * events in the region-overview-grid. Native <details>/<summary>: closed by default, no JS,
+ * keyboard/screen-reader accessible for free.
+ */
+.city-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.city-accordion {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.city-accordion__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  cursor: pointer;
+  list-style: none;
+}
+
+.city-accordion__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Custom chevron, rotates open (replaces the removed native marker). */
+.city-accordion__summary::after {
+  content: "";
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: auto;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+
+.city-accordion[open] .city-accordion__summary::after {
+  transform: rotate(-135deg);
+}
+
+.city-accordion__name {
+  font-weight: 700;
+}
+
+.city-accordion__name-ko {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.city-accordion__icons {
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.city-accordion__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.city-accordion__blurb {
+  margin: 0;
+}
+
+.city-accordion__workspaces {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Bold accent-colored caption ("Where to work" / "Getting around" inside .rough-estimates) —
+   same treatment as region-guides-card__label and region-page.css's h3 rule, just orange
+   (--color-accent) instead of muted grey, since these headers double as the section's visual
+   anchor in the reference design. */
+.city-accordion__section-title {
+  margin: 0;
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.workspace-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.workspace-card {
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* Generic entries (city.otherWorkspaces — "Plenty of study cafés" and the like) reuse the same
+   card shape as a named coworking space but stay visually quieter: no named venue to point to,
+   so a bordered-but-flat, greyer treatment keeps it from reading as equally "confirmed" as a
+   verified coworking listing. Still its own card so more entries can be added later. */
+.workspace-card--muted {
+  background: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+.workspace-card__name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-weight: 700;
+}
+
+.workspace-card--muted .workspace-card__name {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.workspace-card__address {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Icon-only Website/Instagram/Map links — pushed to the end of the name row (not a separate
+   labeled-button row below) since there's no room for a text label at this size and the venue
+   name is already the thing they're attached to. */
+.workspace-card__icon-links {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-left: auto;
+}
+
+.workspace-card__icon-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+}
+
+.workspace-card__icon-link:hover,
+.workspace-card__icon-link:focus-visible {
+  color: var(--color-primary);
+  background: var(--color-surface);
+}
+
+/* Instagram/Map glyphs (city-accordion.njk's inline SVGs). */
+.city-accordion__icon-svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+/* "Rough estimates" — accent-tinted callout box (same left-accent-border pattern as .cost-card,
+   orange instead of teal), holding one-line "🚌 Label • value" chips per CLAUDE.md's data-driven
+   rule — the "~" approx marker is dropped here since the box title already signals "rough". */
+.rough-estimates {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent-tint-border);
+  border-left: 4px solid var(--color-accent);
+  border-radius: var(--radius-md);
+}
+
+.rough-estimates__title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-xs, 0.75rem);
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Fixed 2-column grid rather than flex-wrap — a wrap-based row let any long-label entry claim a
+   full row by itself and push shorter chips down one at a time, wasting a lot of vertical space.
+   Two columns always, text wraps inside the cell instead. */
+.rough-estimates__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2);
+}
+
+.rough-estimates__chip {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  line-height: 1.3;
+}

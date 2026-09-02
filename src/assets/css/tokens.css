@@ -16,6 +16,9 @@
   --color-badge-thismonth-bg: #fef3c7;
   --color-badge-thismonth-text: #92400e;
   --color-accent: #c96f34;
+  /* Pale accent wash — "Rough estimates" callout background (city-accordion.css). */
+  --color-accent-tint: #f7ead9;
+  --color-accent-tint-border: #ecd2ab;
   --color-link: var(--color-primary);
   --color-link-visited: #3d4f6b;
   --color-focus-ring: #2f6fed;

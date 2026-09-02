@@ -163,7 +163,14 @@
     "nameKo": "속초시",
     "lat": 38.207,
     "lng": 128.5918,
-    "blurb": "Lots of study cafes, the closest city to Seoraksan, not far from the Yangyang surf beaches, with direct buses from Seoul.",
+    "blurb": "Small coastal city with good infrastructure, a convenient base for Seoraksan National Park and the surf beaches of Yangyang.",
+    "summaryIcons": ["🏔️", "🏄"],
+    "otherWorkspaces": [{ "name": "Plenty of study cafés" }],
+    "gettingAround": [
+      { "label": "Seoraksan", "value": "40 min" },
+      { "label": "Yangyang Beaches", "value": "1.2h" },
+      { "label": "Seoul", "value": "2.5–3h (Direct)" }
+    ],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -186,20 +193,16 @@
     "nameKo": "강릉시",
     "lat": 37.75,
     "lng": 128.9,
-    "blurb": "Several coworking spaces from Padosalon plus plenty of study cafes; famous for its coffee culture and festivals, and as a filming location for \"The Goblin.\" About 2.5 hours from Seoul by train.",
+    "blurb": "Known as Korea's coffee capital, with an annual coffee festival and plenty of sea-view cafes. The biggest coastal city in Gangwon-do (~200K population). Also known as a filming location for \"Goblin.\"",
+    "summaryIcons": ["🏄", "⛷️"],
+    "otherWorkspaces": [{ "name": "Plenty of study cafés" }],
+    "gettingAround": [
+      { "label": "Yangyang Beaches", "value": "1h" },
+      { "label": "Alpensia Ski", "value": "40 min", "mode": "taxi" },
+      { "label": "Seoul", "value": "2.5h", "mode": "train" }
+    ],
     "isPopulationDeclineArea": false,
     "workationCenters": [
-      {
-        "name": "Padosalon — Kyodong Branch",
-        "url": "https://www.thewavecompany.co.kr/padosalon",
-        "instagram": "padosalon",
-        "address": "2F, 198 Gangneung-daero, Gangneung-si, Gangwon-do",
-        "addressKo": "",
-        "mapUrl": "",
-        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
-        "actualizedAt": "2026-09-01",
-        "note": "CLOSED — only the Myeongju branch is still operating as of the 2026-09-01 verification pass. Kept as a record only, do not surface as an active listing."
-      },
       {
         "name": "Padosalon — Myeongju Branch",
         "url": "https://www.thewavecompany.co.kr/padosalon",
@@ -220,7 +223,7 @@
     "nameKo": "양양군",
     "lat": 38.075,
     "lng": 128.619,
-    "blurb": "Known as \"Korean Bali,\" with Surfyy Beach its most famous surf spot — though the surf season here is notably short. Has its own international airport and a handful of study cafes.",
+    "blurb": "Often called a Korean Bali, with Surfyy Beach being its most famous surf spot. A small, village-like town with limited study-café options.",
     "isPopulationDeclineArea": true,
     "workationCenters": []
   },
@@ -231,7 +234,13 @@
     "nameKo": "춘천시",
     "lat": 37.88,
     "lng": 127.73,
-    "blurb": "Capital of Gangwon-do and a popular student city near its lakes, reachable from Seoul by subway or train.",
+    "blurb": "The capital of Gangwon-do and a popular student city surrounded by beautiful lakes.",
+    "summaryIcons": ["⛷️"],
+    "otherWorkspaces": [{ "name": "Study cafés" }],
+    "gettingAround": [
+      { "label": "Elysian Ski Resort", "value": "50 min" },
+      { "label": "Seoul", "value": "1.5h", "mode": "train" }
+    ],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -242,7 +251,13 @@
     "nameKo": "원주시",
     "lat": 37.3422,
     "lng": 127.92,
-    "blurb": "The biggest and most industrial city in Gangwon-do, with a national park nearby and the scenic Sogeumsan Grand Valley sky bridge. Plenty of study cafes around the city center.",
+    "blurb": "The largest city and one of the industrial hubs in Gangwon-do, with Chiaksan National Park nearby and the scenic Sogeumsan Grand Valley. Relatively far from other attractions in the region.",
+    "summaryIcons": ["⛷️"],
+    "otherWorkspaces": [{ "name": "Study cafés" }],
+    "gettingAround": [
+      { "label": "Oak Valley Ski Resort", "value": "30 min", "mode": "car" },
+      { "label": "Seoul", "value": "1.5h", "mode": "train" }
+    ],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
