@@ -228,12 +228,25 @@ eleventyComputed:
     <ul class="dish-list">
       {% for dish in regionFood %}
       <li class="dish-card">
+        {% if dish.photo %}
+        <img class="dish-card__media" src="{{ dish.imagePath }}" alt="{{ dish.nameEn }}" loading="lazy" decoding="async">
+        {% else %}
         <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
+        {% endif %}
         <h4>{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h4>
+        {% if dish.city or dish.spiciness == "spicy" %}
+        <p class="dish-card__meta">
+          {% if dish.city %}<span class="dish-card__city">{{ dish.city }}</span>{% endif %}
+          {% if dish.spiciness == "spicy" %}<span class="dish-card__spice">🌶 Spicy</span>{% endif %}
+        </p>
+        {% endif %}
         <p>{{ dish.caption }}</p>
       </li>
       {% endfor %}
     </ul>
+    {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
+    <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }}</a>{% endif %}.{% endif %}{% endfor %}</p>
+    {% endif %}
   </div>
   {% endif %}
 </section>

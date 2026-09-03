@@ -510,27 +510,51 @@ ul.city-list__travel-times {
   color: var(--color-text-muted);
 }
 
-/* Food: stays a wrapping grid — a handful of dishes per region, not a scrolling set. */
+/* Food: horizontal scroll-snap strip, same pattern as .attraction-list — no carousel
+   library, no JS. One shared credit line sits below the strip (.data-provenance). */
 .dish-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  display: flex;
   gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-2);
 }
 
 .dish-card {
+  flex: 0 0 auto;
+  width: 240px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
 .dish-card__media {
+  width: 100%;
   aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
 }
 
 .dish-card__ko {
   font-weight: 400;
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+}
+
+.dish-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.dish-card__spice {
+  color: var(--color-primary-dark);
+  font-weight: 500;
 }
 
 /* Generic spaced block within a tab panel — used by Overview's Attractions/Local food blocks
