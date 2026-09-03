@@ -43,7 +43,13 @@
   font-size: 10px;
   font-weight: 600;
   fill: var(--color-text);
-  text-anchor: middle;
+  /* text-anchor deliberately NOT set here — every <text class="map-pin__label"> in the SVG sets
+     its own text-anchor attribute (middle/start/end per pin), and a CSS declaration here would
+     override that per-instance choice (a stylesheet rule beats an SVG presentation attribute
+     regardless of specificity). Confirmed the hard way 2026-09-03: a hardcoded value here was
+     silently forcing every label to render as if text-anchor="middle" regardless of what its own
+     attribute said, which is how the Yangyang beaches pin's text-anchor="end" fix visibly did
+     nothing — don't reintroduce this. */
   paint-order: stroke;
   stroke: var(--color-bg);
   stroke-width: 3px;
@@ -76,6 +82,35 @@
 .map-pin--ski:hover .map-pin__label,
 .map-pin--ski:focus .map-pin__label,
 .map-pin--ski:focus-within .map-pin__label {
+  opacity: 1;
+}
+
+/* Yangyang surf pin: the "Yangyang beaches" label itself stays always-on (there's only one pin
+   here, unlike the 8-deep ski cluster above), but a second line naming the individual beaches
+   (Jukdo/Surfyy/Gisamun/Ingu) stays hidden until hover/focus — same reveal mechanism as the
+   ski-resort labels, just layered under an always-visible label instead of replacing it. */
+.map-pin--surf {
+  cursor: pointer;
+}
+
+.map-pin__detail {
+  font-family: var(--font-family-base);
+  font-size: 9px;
+  fill: var(--color-text-muted);
+  /* text-anchor NOT set here either — see the comment on .map-pin__label above; same bug, same
+     reason. */
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.map-pin--surf:hover .map-pin__detail,
+.map-pin--surf:focus .map-pin__detail,
+.map-pin--surf:focus-within .map-pin__detail {
   opacity: 1;
 }
 

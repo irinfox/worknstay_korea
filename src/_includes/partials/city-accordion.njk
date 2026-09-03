@@ -3,12 +3,14 @@
    the name plus a couple of at-a-glance icons (city.summaryIcons); expanding reveals the full
    description, a "Where to work" list (named coworking spaces plus generic entries like
    city.otherWorkspaces, same card shape, muted styling), and a "Getting around" travel-time
-   callout. Param: city (City, required). #}
+   callout. Param: city (City, required). The first card in the list (loop.first, from the
+   calling {% for %} in region.njk) renders open by default so a first-time visitor sees what's
+   inside an accordion entry without having to click one first. #}
 {% set instagramIcon = '<svg class="city-accordion__icon-svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="13" height="13" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="11.5" cy="4.5" r="1" fill="currentColor"/></svg>' %}
 {# Same pin glyph as the Festivals & events address line (region-data.js's PIN_ICON) — one visual
    language for "this links to a map" across the page. #}
 {% set mapIcon = '<svg class="city-accordion__icon-svg" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>' %}
-<details class="city-accordion">
+<details class="city-accordion"{% if loop.first %} open{% endif %}>
   <summary class="city-accordion__summary">
     <span class="city-accordion__name">{{ city.nameEn }} <span class="city-accordion__name-ko">{{ city.nameKo }}</span></span>
     {% if city.summaryIcons.length %}
@@ -49,14 +51,9 @@
     {% if city.gettingAround.length %}
     <div class="rough-estimates">
       <p class="rough-estimates__title">Getting around</p>
-      <div class="rough-estimates__grid">
-        {% for g in city.gettingAround %}
-        <span class="rough-estimates__chip">
-          <span aria-hidden="true">{% if g.mode == "train" %}🚆{% elif g.mode == "taxi" %}🚕{% elif g.mode == "car" %}🚗{% else %}🚌{% endif %}</span>
-          <strong>{{ g.label }}</strong> • {{ g.value }}
-        </span>
-        {% endfor %}
-      </div>
+      <p class="rough-estimates__line">
+        {% for g in city.gettingAround %}<span class="rough-estimates__item"><span aria-hidden="true">{% if g.mode == "train" %}🚆{% elif g.mode == "taxi" %}🚕{% elif g.mode == "car" %}🚗{% else %}🚌{% endif %}</span> {{ g.label }} {{ g.value }}</span>{% if not loop.last %} <span aria-hidden="true">•</span> {% endif %}{% endfor %}
+      </p>
     </div>
     {% endif %}
   </div>
