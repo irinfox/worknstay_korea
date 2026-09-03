@@ -18,12 +18,33 @@ eleventyComputed:
 <div class="content-page">
 <header class="region-header">
   <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
+  {% if region.activityTags.length %}
+  <ul class="region-header__tags region-header__tags--activity">
+    {% for tag in region.activityTags %}
+    <li><span aria-hidden="true">{{ tag.emoji }}</span> {{ tag.label }}</li>
+    {% endfor %}
+  </ul>
+  {% else %}
   <ul class="region-header__tags">
     {% for tag in region.vibeTags %}
     <li>{{ tag }}</li>
     {% endfor %}
   </ul>
+  {% endif %}
+  {% if region.longIntro | isArray %}
+  {% for para in region.longIntro %}
+  <p class="region-header__intro">{{ para }}</p>
+  {% endfor %}
+  {% else %}
   <p class="region-header__intro">{{ region.longIntro }}</p>
+  {% endif %}
+  {% if region.seasonTags.length %}
+  <ul class="region-header__tags region-header__tags--season">
+    {% for tag in region.seasonTags %}
+    <li><span aria-hidden="true">{{ tag.emoji }}</span> {{ tag.label }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 </header>
 
 {# Region cover photo gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
@@ -57,16 +78,70 @@ eleventyComputed:
   {% endif %}
 </div>
 
+{% if region.slug == "gangwon-do" %}
+{% set tabs = [{ id: "overview", label: "Overview" }] %}
+{% else %}
 {% set tabs = [
   { id: "overview", label: "Overview" },
   { id: "living-info", label: "Living Info" }
 ] %}
 {% include "partials/tabs.njk" %}
+{% endif %}
 
 <section id="overview" class="region-section">
-  <h2>Overview</h2>
-  <div class="region-overview-grid">
+  {% if region.slug == "gangwon-do" %}
+  <hr class="section-divider">
+
+  {# Hand-authored detail map (src/assets/svg/gangwon-detail-map.svg) — Gangwon-do only for now.
+     Pin coordinates are looked up via the KTO OpenAPI (searchKeyword2) where a place is in its
+     catalog, then run through one lat/lng-to-local-xy linear fit calibrated on the 5 city pins —
+     not a real map projection, so treat spacing as illustrative, not survey-accurate. #}
+  <h3>Rough region map</h3>
+  <div class="region-detail-map">
+    <div class="region-detail-map__scroll">
+      {% inlineSvg "gangwon-detail-map.svg" %}
+    </div>
+    <p class="region-detail-map__legend">
+      <span>🏙️ City</span>
+      <span>🏔️ Mountain</span>
+      <span>🏄 Surf beach</span>
+      <span>⛷️ Ski resort</span>
+    </p>
+  </div>
+
+  {% if region.usefulLinks.length %}
+  <div class="region-block">
+    <h3 class="region-block__title--sub">Useful guides</h3>
+    <div class="cost-card region-guides-card">
+      {% for link in region.usefulLinks %}
+      <p class="region-guides-card__item">
+        <span class="region-guides-card__label">{{ link.activityLabel }}</span>
+        <a class="region-guides-card__link" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.sourceLabel }} ↗</a>
+      </p>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <hr class="section-divider">
+  {% endif %}
+
+  <div class="region-overview-grid{% if region.slug == "gangwon-do" %} region-overview-grid--gangwon{% endif %}">
     <div class="region-overview-grid__cities">
+      {% if region.slug == "gangwon-do" %}
+      {# Living hubs: the 4 cities with real coworking/study-café options (Yangyang is a
+         surf-village day trip, not somewhere to base a month-long stay, so it's map-only — see
+         its surf-beach pin above). Native <details>/<summary> disclosure — collapsed by default,
+         no JS needed — so the grid stays scannable: just names + a couple of at-a-glance icons
+         (city.summaryIcons) until a card is opened. #}
+      <h3>Living hubs</h3>
+      <div class="city-accordion-list">
+        {% for slug in ["sokcho", "gangneung", "chuncheon", "wonju"] %}
+        {% set city = cities | findBySlug(slug) %}
+        {% include "partials/city-accordion.njk" %}
+        {% endfor %}
+      </div>
+      {% else %}
       <h3>Where you'd live</h3>
       {% if regionCities.length %}
       <ul class="city-list">
@@ -74,13 +149,24 @@ eleventyComputed:
         <li class="city-list__item">
           <h4>{{ city.nameEn }} <span class="city-list__ko">{{ city.nameKo }}</span></h4>
           <p>{{ city.blurb }}</p>
-          {% if city.isPopulationDeclineArea %}
+          {% if city.travelTimes.length %}
+          <ul class="city-list__travel-times">
+            {% for t in city.travelTimes %}
+            <li><span aria-hidden="true">{{ t.emoji }}</span> {{ t.label }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+          {% if city.isPopulationDeclineArea and region.isCapitalArea %}
+          {# Only meaningful in capital-area regions, where decline-county status is what
+             unlocks the lower non-capital visa income threshold (see regions.json's
+             gyeonggi-do longIntro). Non-capital regions already sit at that threshold
+             regardless, so the badge would be a no-op distinction there. #}
           <p class="city-list__badge">Population-decline-designated area</p>
           {% endif %}
           {% if city.workationCenters.length %}
           <ul class="city-list__workation">
             {% for wc in city.workationCenters %}
-            <li>{{ wc.name }}{% if wc.note %} <span class="note">({{ wc.note }})</span>{% endif %}</li>
+            <li>{{ wc.name }}{% if wc.address %} — {{ wc.address }}{% endif %}</li>
             {% endfor %}
           </ul>
           {% endif %}
@@ -91,7 +177,21 @@ eleventyComputed:
       {% set message = "No workation-centre cities currently listed for this region." %}
       {% include "partials/empty-state.njk" %}
       {% endif %}
+      {% endif %}
     </div>
+    {% if region.slug == "gangwon-do" %}
+    {# Named grid areas (region-page.css) place this right after Living hubs when the grid
+       stacks to one column (mobile) but as a full-width row below both columns on desktop —
+       source order alone can't give it two different positions like that. #}
+    <div class="region-overview-grid__cost">
+      <div class="region-block region-block--living-info">
+        <h3>Cost of living</h3>
+        <div class="cost-card">
+          <p>Short-term accommodation for foreigners typically costs around <span class="cost-figure">₩1–1.4M</span> per month without a large upfront deposit or long-term contract. And you often get more space for your money than in Seoul — around <span class="cost-figure">23–30+ m²</span> vs. 13–16+m². Sokcho offers the widest range of flexible options, while Wonju is the most budget-friendly overall.</p>
+        </div>
+      </div>
+    </div>
+    {% endif %}
     <div class="region-overview-grid__events">
       <h3>Festivals &amp; events</h3>
       {# Phase 23: live per-request data (functions/api/region/[slug]/events.js), fetched and
@@ -107,8 +207,10 @@ eleventyComputed:
     </div>
   </div>
 
+  <hr class="section-divider">
+
   <div class="region-block">
-    <h3>Attractions</h3>
+    <h3>Places to see nearby</h3>
     {# Same live-fetch pattern as the events timeline above. #}
     <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}">
       <noscript>
@@ -119,20 +221,38 @@ eleventyComputed:
   </div>
 
   {% if regionFood.length %}
+  <hr class="section-divider">
+
   <div class="region-block">
     <h3>Local food</h3>
     <ul class="dish-list">
       {% for dish in regionFood %}
       <li class="dish-card">
+        {% if dish.photo %}
+        <img class="dish-card__media" src="{{ dish.imagePath }}" alt="{{ dish.nameEn }}" loading="lazy" decoding="async">
+        {% else %}
         <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
+        {% endif %}
         <h4>{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h4>
+        {% if dish.city or dish.spiciness == "spicy" %}
+        <p class="dish-card__meta">
+          {% if dish.city %}<span class="dish-card__city">{{ dish.city }}</span>{% endif %}
+          {% if dish.spiciness == "spicy" %}<span class="dish-card__spice">🌶 Spicy</span>{% endif %}
+        </p>
+        {% endif %}
         <p>{{ dish.caption }}</p>
       </li>
       {% endfor %}
     </ul>
+    {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
+    <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }}</a>{% endif %}.{% endif %}{% endfor %}</p>
+    {% endif %}
   </div>
   {% endif %}
 </section>
+
+{% if region.slug != "gangwon-do" %}
+<hr class="section-divider">
 
 <section id="living-info" class="region-section">
   <h2>Living Info</h2>
@@ -168,4 +288,5 @@ eleventyComputed:
   </div>
   {% endif %}
 </section>
+{% endif %}
 </div>

@@ -4,9 +4,10 @@
    sub-tab chips with counts). Each event is a primary-tinted card with a calendar-style date
    chip; the address shows as city + pin with a copy-full-address icon button. */
 
-/* Breathing room under the "Festivals & events" heading before the tabs / month chips. */
+/* Breathing room under the "Festivals & events" heading (region-page.css's h3 rule) before the
+   tabs / month chips is handled there now — this used to duplicate it with its own margin-top. */
 .event-timeline {
-  margin-top: var(--space-2);
+  margin-top: 0;
 }
 
 /* --- Tab strip (Ongoing / Upcoming) — a segmented slider ---------------- */

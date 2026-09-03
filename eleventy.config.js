@@ -33,6 +33,12 @@ export default function (eleventyConfig) {
     return (arr || []).filter((item) => item.regionSlug === slug);
   });
 
+  // region.longIntro is a single string for most regions, an array of paragraphs where a
+  // region needs more than one (region.njk renders each form differently).
+  eleventyConfig.addFilter("isArray", function (value) {
+    return Array.isArray(value);
+  });
+
   return {
     dir: {
       input: "src",

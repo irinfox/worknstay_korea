@@ -1,0 +1,134 @@
+/* Gangwon-do's hand-authored region map (region.njk). Static pictogram overlay on a cropped
+   copy of korea-regions.svg's province polygon — same hand-positioned-pin approach as the
+   home-page map infographic (CLAUDE.md feedback log), not a projection-computed layer, so a
+   province shape edit means re-checking every pin by eye, not re-running a formula. */
+.region-detail-map {
+  margin-bottom: var(--space-4);
+}
+
+/* The map's ~13 hand-placed pin labels are sized to stay legible around 360–640px; below that,
+   shrinking the whole SVG with the viewport (as korea-map.js's picker does) would blur them past
+   reading. Scrolling a fixed-size map (like a wide data table) beats shrinking text that small.
+   The 360px floor (down from an earlier 480px) is only reachable because the viewBox itself
+   (gangwon-detail-map.svg) was trimmed of the empty margin the Seoul/Gyeonggi-do orientation
+   labels used to need — same label pixel size, narrower canvas to stretch it across, so this
+   isn't a legibility trade. .page's padding leaves ~380px of content width on a Pixel 9
+   (412px viewport); 360px keeps a real margin instead of landing right on that edge. */
+.region-detail-map__scroll {
+  overflow-x: auto;
+}
+
+.region-detail-map__svg {
+  display: block;
+  width: 100%;
+  min-width: 360px;
+  max-width: 640px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.region-detail-map__shape {
+  fill: var(--color-primary-tint);
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.map-pin__icon {
+  text-anchor: middle;
+  font-size: 20px;
+}
+
+.map-pin__label {
+  font-family: var(--font-family-base);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--color-text);
+  /* text-anchor deliberately NOT set here — every <text class="map-pin__label"> in the SVG sets
+     its own text-anchor attribute (middle/start/end per pin), and a CSS declaration here would
+     override that per-instance choice (a stylesheet rule beats an SVG presentation attribute
+     regardless of specificity). Confirmed the hard way 2026-09-03: a hardcoded value here was
+     silently forcing every label to render as if text-anchor="middle" regardless of what its own
+     attribute said, which is how the Yangyang beaches pin's text-anchor="end" fix visibly did
+     nothing — don't reintroduce this. */
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+
+.map-pin--city .map-pin__label {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.map-pin__note {
+  font-weight: 400;
+  font-size: 9px;
+  fill: var(--color-text-muted);
+}
+
+/* Ski-resort labels stay hidden until hovered/focused — 8 resort pins is too dense to keep every
+   label on-screen at once without them running into each other or the city labels. */
+.map-pin--ski {
+  cursor: pointer;
+}
+
+.map-pin--ski .map-pin__label {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.map-pin--ski:hover .map-pin__label,
+.map-pin--ski:focus .map-pin__label,
+.map-pin--ski:focus-within .map-pin__label {
+  opacity: 1;
+}
+
+/* Yangyang surf pin: the "Yangyang beaches" label itself stays always-on (there's only one pin
+   here, unlike the 8-deep ski cluster above), but a second line naming the individual beaches
+   (Jukdo/Surfyy/Gisamun/Ingu) stays hidden until hover/focus — same reveal mechanism as the
+   ski-resort labels, just layered under an always-visible label instead of replacing it. */
+.map-pin--surf {
+  cursor: pointer;
+}
+
+.map-pin__detail {
+  font-family: var(--font-family-base);
+  font-size: 9px;
+  fill: var(--color-text-muted);
+  /* text-anchor NOT set here either — see the comment on .map-pin__label above; same bug, same
+     reason. */
+  paint-order: stroke;
+  stroke: var(--color-bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.map-pin--surf:hover .map-pin__detail,
+.map-pin--surf:focus .map-pin__detail,
+.map-pin--surf:focus-within .map-pin__detail {
+  opacity: 1;
+}
+
+/* Orientation-only labels for neighbouring regions, placed outside the province outline. */
+.region-detail-map__neighbor {
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-style: italic;
+  fill: var(--color-text-muted);
+  opacity: 0.75;
+}
+
+.region-detail-map__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

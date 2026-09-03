@@ -13,9 +13,98 @@
     "nameEn": "Chuncheon Dakgalbi",
     "nameKo": "춘천닭갈비",
     "romanized": "Chuncheon Dakgalbi",
-    "imagePath": "/assets/img/food/chuncheon-dakgalbi.jpg",
-    "caption": "Spicy stir-fried marinated chicken with rice cakes and cabbage, cooked tableside.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
+    "city": "Chuncheon",
+    "spiciness": "spicy",
+    "imagePath": "/assets/img/food/gangwon-do/chuncheon-dakgalbi.jpg",
+    "caption": "Stir-fried marinated chicken with rice cakes and vegetables, originally cooked over charcoal at your table, now often on a hot iron plate. Has non-spicy versions.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221263",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2824454",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/54/2824454.jpg",
+      "author": "Studio 4cats / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "nameEn": "Chodang Sundubu",
+    "nameKo": "초당순두부",
+    "romanized": "Chodang Sundubu",
+    "city": "Gangneung",
+    "spiciness": "mild",
+    "imagePath": "/assets/img/food/gangwon-do/chodang-sundubu.jpg",
+    "caption": "Soft, nutty tofu curdled with seawater. Can be served warm and unseasoned, with soy sauce on the side, or as part of a spicy stew with seafood.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221275",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1190452",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/52/1190452.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "nameEn": "Ojingeosundae",
+    "nameKo": "오징어순대",
+    "romanized": "Ojingeosundae",
+    "city": "Sokcho",
+    "spiciness": "mild",
+    "imagePath": "/assets/img/food/gangwon-do/ojingeosundae.jpg",
+    "caption": "Squid stuffed with rice, tofu and bean sprouts. Usually served with a dipping sauce.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=178750",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:%EC%86%8D%EC%B4%88%EC%98%A4%EC%A7%95%EC%96%B4%EC%88%9C%EB%8C%80_(93860947).jpeg",
+      "author": "태오 윤 (Taeo Yun)",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0/"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "nameEn": "Dakgangjeong",
+    "nameKo": "닭강정",
+    "romanized": "Dakgangjeong",
+    "city": "Sokcho",
+    "spiciness": "spicy",
+    "imagePath": "/assets/img/food/gangwon-do/dakgangjeong.jpg",
+    "caption": "Boneless deep-fried chicken glazed with sweet and spicy sauce and sprinkled with nuts. Best with beer; has non-spicy versions.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=178893",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2562877",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/77/2562877.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "nameEn": "Makguksu",
+    "nameKo": "막국수",
+    "romanized": "Makguksu",
+    "city": "Chuncheon",
+    "spiciness": "mild",
+    "imagePath": "/assets/img/food/gangwon-do/makguksu.jpg",
+    "caption": "Buckwheat noodles served cold, often in radish-water kimchi broth or beef broth.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178829",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2536161",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/61/2536161.jpg",
+      "author": "IR Studio / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
   },
   {
     "regionSlug": "chungcheong-do",
