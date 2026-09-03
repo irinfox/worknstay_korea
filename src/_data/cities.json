@@ -165,7 +165,7 @@
     "lng": 128.5918,
     "blurb": "Small coastal city with good infrastructure, a convenient base for Seoraksan National Park and the surf beaches of Yangyang.",
     "summaryIcons": ["🏔️", "🏄"],
-    "otherWorkspaces": [{ "name": "Plenty of study cafés" }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 1 }],
     "gettingAround": [
       { "label": "Seoraksan", "value": "40 min" },
       { "label": "Yangyang Beaches", "value": "1.2h" },
@@ -195,7 +195,7 @@
     "lng": 128.9,
     "blurb": "Known as Korea's coffee capital, with an annual coffee festival and plenty of sea-view cafes. The biggest coastal city in Gangwon-do (~200K population). Also known as a filming location for \"Goblin.\"",
     "summaryIcons": ["🏄", "⛷️"],
-    "otherWorkspaces": [{ "name": "Plenty of study cafés" }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "gettingAround": [
       { "label": "Yangyang Beaches", "value": "1h" },
       { "label": "Alpensia Ski", "value": "40 min", "mode": "taxi" },
@@ -236,7 +236,7 @@
     "lng": 127.73,
     "blurb": "The capital of Gangwon-do and a popular student city surrounded by beautiful lakes.",
     "summaryIcons": ["⛷️"],
-    "otherWorkspaces": [{ "name": "Study cafés" }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "gettingAround": [
       { "label": "Elysian Ski Resort", "value": "50 min" },
       { "label": "Seoul", "value": "1.5h", "mode": "train" }
@@ -253,7 +253,7 @@
     "lng": 127.92,
     "blurb": "The largest city and one of the industrial hubs in Gangwon-do, with Chiaksan National Park nearby and the scenic Sogeumsan Grand Valley. Relatively far from other attractions in the region.",
     "summaryIcons": ["⛷️"],
-    "otherWorkspaces": [{ "name": "Study cafés" }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "gettingAround": [
       { "label": "Oak Valley Ski Resort", "value": "30 min", "mode": "car" },
       { "label": "Seoul", "value": "1.5h", "mode": "train" }

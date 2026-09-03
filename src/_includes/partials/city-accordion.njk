@@ -42,7 +42,13 @@
         {% endfor %}
         {% for space in city.otherWorkspaces %}
         <div class="workspace-card workspace-card--muted">
-          <p class="workspace-card__name">{{ space.name }}</p>
+          <p class="workspace-card__name">
+            {% if space.level %}
+            <span class="level-dots" aria-hidden="true">{% for n in range(1, 4) %}<span class="level-dots__dot{% if n <= space.level %} level-dots__dot--filled{% endif %}"></span>{% endfor %}</span>
+            <span class="sr-only">({{ space.level }} of 3) </span>
+            {% endif %}
+            {{ space.name }}
+          </p>
         </div>
         {% endfor %}
       </div>
