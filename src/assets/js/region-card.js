@@ -6,9 +6,9 @@
 // run from the home page anymore — a region page reached any other way (direct link, search,
 // nav) had no such run to remember, so the badge only ever showed for one specific navigation
 // path and looked like a stale/broken feature the rest of the time.
-// Matches --bp-region-info-wide in tokens.css (768px) — same hardcode-and-comment constraint
+// Matches --bp-region-info-wide in tokens.css (1120px) — same hardcode-and-comment constraint
 // noted there, since custom properties aren't readable from JS media queries either.
-const NARROW_QUERY = "(max-width: 767px)";
+const NARROW_QUERY = "(max-width: 1119px)";
 
 function isNarrowViewport() {
   return window.matchMedia(NARROW_QUERY).matches;

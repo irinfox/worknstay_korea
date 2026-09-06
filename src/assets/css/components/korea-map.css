@@ -1,5 +1,11 @@
 .korea-map {
   width: 100%;
+  /* Below the infographic breakpoint the map is a standalone block above the carousel — cap and
+     centre it so a wide phone / tablet doesn't blow it up to full column width. Inside the
+     infographic grid (>=1120px) the 420fr centre column governs the width instead — see the
+     min-width:0 override in that media block. */
+  max-width: 460px;
+  margin-inline: auto;
   /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). The
      sea tint stays as the panel ground (CLAUDE.md feedback log: Jeju's true sea gap is kept,
      not inset) rather than the reference's #F7F9F8, since this is real geography over water. */
@@ -201,7 +207,9 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-top: var(--space-4);
+  /* Sits between the section head and the map — needs air on both sides so it doesn't read as
+     glued to the map panel below it. */
+  margin: var(--space-5) 0 var(--space-6);
   padding: 13px 16px;
   border: 1px solid var(--color-primary-tint-border);
   border-radius: 10px;
@@ -254,9 +262,9 @@
   display: none;
 }
 
-/* 768px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
+/* 1120px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
    activation — the cross-hover pairs the infographic grid with the map shapes. */
-@media (min-width: 768px) {
+@media (min-width: 1120px) {
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,

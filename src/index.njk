@@ -78,17 +78,19 @@ layout: layouts/page.njk
     </div>
 
     {#
-      Card columns are 240px wide (region-card.css). Every coordinate below is authored against
-      that: the two column-edge x1 anchors (240, 700) and every map-side x2 (a point inside the
-      map, whose left edge sits at x=260). y-values follow each card's vertical slot.
+      Card columns are 270px wide (region-card.css). x1 anchors sit on the column inner edges
+      (270 left, 730 right); x2 is a point inside the map. Each y1 is its card's vertical centre
+      in this viewBox, pulled ~8% toward the map's own centre line (475) so the six lines read as
+      a tidy fan rather than converging steeply; x2/y2 point at the region's map centroid.
+      Re-derive y1 if .region-card--infographic's height changes; shift x2 with the column width.
     #}
-    <svg class="region-infographic__lines" viewBox="0 0 940 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <line data-slug="gyeonggi-do" x1="240" y1="221.2" x2="388.8" y2="193.5" />
-      <line data-slug="chungcheong-do" x1="240" y1="390.4" x2="407.9" y2="352.6" />
-      <line data-slug="jeolla-do" x1="240" y1="559.6" x2="374.5" y2="587.3" />
-      <line data-slug="jeju-do" x1="240" y1="728.8" x2="315.9" y2="911.3" />
-      <line data-slug="gangwon-do" x1="700" y1="390.4" x2="519.6" y2="160.2" />
-      <line data-slug="gyeongsang-do" x1="700" y1="559.6" x2="559.9" y2="462.3" />
+    <svg class="region-infographic__lines" viewBox="0 0 1000 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <line data-slug="gyeonggi-do" x1="270" y1="142.7" x2="418.8" y2="193.5" />
+      <line data-slug="chungcheong-do" x1="270" y1="364.2" x2="437.9" y2="352.6" />
+      <line data-slug="jeolla-do" x1="270" y1="585.8" x2="404.5" y2="587.3" />
+      <line data-slug="jeju-do" x1="270" y1="807.3" x2="345.9" y2="911.3" />
+      <line data-slug="gangwon-do" x1="730" y1="364.2" x2="549.6" y2="160.2" />
+      <line data-slug="gyeongsang-do" x1="730" y1="585.8" x2="589.9" y2="462.3" />
     </svg>
   </div>
 

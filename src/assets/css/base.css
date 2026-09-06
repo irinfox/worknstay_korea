@@ -106,9 +106,9 @@ a {
   color: var(--color-link);
 }
 
-a:visited {
-  color: var(--color-link-visited);
-}
+/* No global :visited dimming — nearly every link on this site is navigation or a CTA (nav,
+   region cards, "Open <region>", map, breadcrumbs), and slate-blue "visited" links there read
+   as broken. Prose links can opt back in via a scoped rule if that's ever wanted. */
 
 /* Accessible focus state, visible on keyboard nav only */
 a:focus-visible,

@@ -85,11 +85,9 @@
    */
   --bp-tablet: 768px;
   --bp-desktop: 1280px;
-  /* Region-info infographic/single-card switch (architecture.md §3/§9) — starting point, tune
-     empirically against real landscape-phone widths. The infographic grid's natural size is
-     940px (region-card.css) but its columns are `fr`-sized with a max-width cap, so it scales
-     down fluidly below that instead of overflowing — this breakpoint just needs to be wide
-     enough for the flanking columns' content to stay legible once shrunk, not wide enough to
-     fit 940px exactly. */
-  --bp-region-info-wide: 768px;
+  /* Region-info infographic/carousel switch (architecture.md §3/§9). The infographic grid's
+     natural size is 1000px (region-card.css); its columns are `fr`-sized and scale down, but
+     below this a card gets too narrow to hold the longest region name + its rent figure on one
+     line, so the carousel takes over there instead. */
+  --bp-region-info-wide: 1120px;
 }

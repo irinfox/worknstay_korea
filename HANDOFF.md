@@ -187,13 +187,17 @@ Tick the box, then stop.
   hatch. New microcopy added inline in `index.njk` (section H2 "The six regions" + its intro
   line + the "Partly eligible" note-plate sentence) — no `_data` home for these yet.
 
-⏸ **CHECKPOINT B** — viewport pass, then stop for review.
-  *Outstanding:* the full 1280/900/390/360 viewport pass is NOT done — the local Chrome renderer
-  freezes whenever the inline Korea SVG map scrolls into view (window-resize via the tooling
-  also stopped working). Verified instead: `npm run build` clean, `verify-calculator` +
-  `verify-eligibility` pass, built-HTML structure correct, and hero + section-head/legend/
-  note-plate render correctly at ~310px. The map, the carousel, and every desktop-width view
-  still need a real visual check.
+⏸ **CHECKPOINT B** — [x] viewport pass done (1280 / 900 / 390 / 360). No h-scroll; calculator
+  messages + cross-hover + carousel links intact. Fixed:
+  - Infographic card back to the design: name + rent inline (rent bold), 270px column.
+    `--bp-region-info-wide` 768→1120px (below that the carousel shows); leader-line coords
+    re-derived.
+  - Hero rebuilt per design ref 5a: calculator + scroll cue inside `.hero__cover`; desktop
+    cover `100svh`. `.map-note` spacing fixed.
+  - Dropped the global `a:visited` rule — was greying out nav/CTA/card links once clicked.
+  - Header top-gradient so the white wordmark/nav read over the photo; scroll cue pure white.
+  - Calculator copy per design ref 5a (title + subtitle, "…gross (KRW)", "Reset the map", etc.).
+  New inline strings (index.njk + calculator) match the committed hero-copy pattern.
 
 - [ ] **05 — Region page headline block + cover gallery.** Orange rule → H1 → Korean name →
   vibe tags → intro paragraphs, then the gallery. Reuse the existing `isArray` branch in

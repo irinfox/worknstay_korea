@@ -1,13 +1,12 @@
 /*
- * Home-page hero (DESIGN.md § "Homepage"): full-bleed cover photo, transparent header floating
- * over its top portion (.has-hero in header.css), a left-aligned headline block (orange 56×3
- * rule → H1 → tagline → intro) anchored toward the bottom of the frame, then a white calculator
- * card that overlaps the photo's lower edge at every width.
+ * Home-page hero (DESIGN.md § "Homepage" / design reference 5a): full-bleed cover photo,
+ * transparent header floating over its top portion (.has-hero in header.css). The headline
+ * block (orange 56×3 rule → H1 → tagline → intro), the white calculator card, and the
+ * "Scroll down" cue all stack *inside* .hero__cover and bottom-align against the photo's lower
+ * edge (justify-content:flex-end), the cue last so it reads as the foot of the photo.
  *
- * .hero is a plain full-bleed container. The photo lives on .hero__cover (which clips its own
- * overflow), so .hero__calculator — a sibling, not a child of the cover — can hang below the
- * photo bounds. Mobile-first: the layout keeps its shape across breakpoints, only spacing and
- * min-height scale up.
+ * Phone: the cover is sized by its content (a partial-height hero). Desktop: the cover fills
+ * the viewport, so the flex-end stack sits in the photo's lower portion.
  */
 .hero {
   /* Break out of .page's padding to sit full-bleed (matches the old behaviour). */
@@ -19,11 +18,8 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  overflow: hidden;
   min-height: 70svh;
-  /* Bottom padding has to clear the calculator card, which overlaps up into it by
-     .hero__calculator's negative margin-top — the headline block sits above that overlap. */
-  padding: 0 var(--space-4) 96px;
+  padding: 0 var(--space-4) var(--space-6);
   color: #fff;
 }
 
@@ -141,45 +137,46 @@
   color: rgba(255, 255, 255, 0.82);
 }
 
-/* Calculator wrapper — sits outside .hero__cover so the card can hang past the photo's lower
-   edge. Left edge aligns with .hero__content (same padding-inline, card pinned left). */
+/* Calculator wrapper — a flex child of .hero__cover, stretched full width so .calculator-mount's
+   own max-width + margin-right:auto pin the card to the left under the headline block. */
 .hero__calculator {
   position: relative;
   z-index: 3;
-  padding: 0 var(--space-4);
-  margin-top: -72px;
+  align-self: stretch;
+  margin-top: var(--space-5);
 }
 
+/* Foot-of-the-photo scroll cue — light ink over the darkened lower band of the photo.
+   position/z-index lift it above .hero__scrim (an absolutely-positioned sibling). */
 .hero__scroll-cue {
+  position: relative;
+  z-index: 2;
   display: block;
-  width: fit-content;
-  margin: var(--space-5) auto 0;
-  padding: var(--space-1) var(--space-2);
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  margin-top: var(--space-5);
+  color: #fff;
+  font-size: 0.9375rem;
   font-weight: 500;
   text-decoration: none;
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.9),
+    0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero__scroll-cue:hover,
 .hero__scroll-cue:focus-visible {
-  color: var(--color-accent);
   text-decoration: underline;
 }
 
 @media (min-width: 768px) {
   .hero__cover {
-    min-height: 84svh;
-    padding: 0 40px 120px;
+    /* Desktop: the cover photo fills the viewport; the flex-end stack (headline → calculator →
+       cue) sits in its lower portion, all above the fold. */
+    min-height: 100svh;
+    padding: 0 40px 40px;
   }
 
   .hero__content {
     gap: 16px;
     padding-top: var(--space-10);
-  }
-
-  .hero__calculator {
-    padding: 0 40px;
-    margin-top: -96px;
   }
 }

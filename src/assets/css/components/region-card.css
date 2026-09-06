@@ -96,34 +96,44 @@
   text-decoration: none;
 }
 
-/* Infographic (wide) variant — fixed height so the hand-positioned leader lines in index.njk
-   line up with each card's vertical slot; content is clamped to fit. */
+/* Infographic (wide) variant. The card keeps the base layout (name + rent on one line, ink
+   rent, 16px name — DESIGN.md § "Region card") and only adds a fixed height + clamps so the
+   hand-positioned leader lines in index.njk line up; the 270px column (region-card.css grid
+   below) is wide enough for the longest name + its rent figure on one line. */
 .region-card--infographic {
-  height: 152px;
+  height: 190px;
   overflow: hidden;
-}
-
-.region-card--infographic .region-card__header {
-  flex-wrap: nowrap;
 }
 
 .region-card--infographic .region-card__name {
-  overflow: hidden;
   min-width: 0;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .region-card--infographic .region-card__intro {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+/* One non-wrapping tag row — Gangwon-do's 4th tag is dropped rather than clipped mid-pill. */
+.region-card--infographic .region-card__tags {
+  flex-wrap: nowrap;
+  gap: 4px;
   overflow: hidden;
 }
 
-.region-card--infographic .region-card__tags {
-  flex-wrap: nowrap;
-  overflow: hidden;
+.region-card--infographic .region-card__tags li {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.region-card--infographic .region-card__tags li:nth-child(n + 4) {
+  display: none;
 }
 
 /* Carousel (narrow) variant — fills its scroll-snap item's height. */
@@ -185,7 +195,7 @@
 }
 
 /* Narrow-viewport carousel — breaks out of .page's padding so cards can scroll to the screen
-   edge, with its own inner track padding. Hidden at >=768px. */
+   edge, with its own inner track padding. Hidden at >=1120px (--bp-region-info-wide). */
 .region-carousel {
   margin: 4px calc(var(--space-4) * -1) 0;
 }
@@ -230,25 +240,26 @@
   background: var(--color-primary);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1120px) {
   .region-carousel {
     display: none;
   }
 
   /*
-   * The grid's natural size is 940px (240+420+240 + two 20px gaps). Narrower than that it
-   * scales down fluidly: `fr` tracks keep the 240:420:240 ratio while shrinking, and the
+   * The grid's natural size is 1000px (270+420+270 + two 20px gaps). Narrower than that it
+   * scales down fluidly: `fr` tracks keep the 270:420:270 ratio while shrinking, and the
    * map/leader-lines SVGs (viewBox-scaled, width:100%) shrink in step. `min-width: 0` on the
    * flanking columns is load-bearing — grid tracks won't otherwise shrink past their content's
-   * intrinsic min-content width.
+   * intrinsic min-content width. The 270px column fits the longest region name + its rent
+   * figure on one line; index.njk's leader-line viewBox (0 0 1000 950) tracks this width.
    */
   .region-infographic {
     display: grid;
-    grid-template-columns: 240fr 420fr 240fr;
+    grid-template-columns: 270fr 420fr 270fr;
     column-gap: 20px;
     align-items: center;
     width: 100%;
-    max-width: 940px;
+    max-width: 1000px;
     margin-inline: auto;
   }
 
@@ -271,11 +282,14 @@
     z-index: 0;
   }
 
-  /* Map stacks above the lines layer so they read as passing under the land, not over labels. */
+  /* Map stacks above the lines layer so they read as passing under the land, not over labels.
+     The 420fr grid column governs its width here, so drop the standalone cap/centring. */
   .korea-map {
     position: relative;
     z-index: 1;
     min-width: 0;
+    max-width: none;
+    margin-inline: 0;
   }
 
   .region-infographic__lines line {

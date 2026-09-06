@@ -36,10 +36,16 @@
   gap: 10px;
 }
 
-/* Explanatory line above the fields (DESIGN.md places it as the card's subtitle). Copy is
-   visaRules.salaryGrossNote from _data — not invented here. */
+/* Card title + subtitle (design reference 5a): bold heading, then a muted explanatory line. */
+.calculator-form__title {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
 .calculator-form__note {
-  margin: 0 0 4px;
+  margin: 0 0 14px;
   font-size: 13px;
   line-height: 1.5;
   color: var(--color-text-muted);
@@ -70,7 +76,7 @@
 
 .calculator-form__field label {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-text);
 }
 
@@ -133,6 +139,7 @@
 .calculator-form__field--checkbox label {
   font-size: 13px;
   font-weight: 400;
+  white-space: nowrap;
   color: var(--color-text-soft);
 }
 

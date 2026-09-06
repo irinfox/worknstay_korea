@@ -12,7 +12,9 @@
   inset-inline: 0;
   top: 0;
   z-index: var(--z-header);
-  background: transparent;
+  /* Not a bar — a short dark fade at the very top of the photo so the white wordmark and nav
+     links keep contrast over bright/light parts of the cover image. */
+  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0));
 }
 
 .has-hero.js-nav-ready .nav-toggle {
