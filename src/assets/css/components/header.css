@@ -1,8 +1,7 @@
-/* Dark primary nav (DESIGN.md § Recurring parts): #16201C bar, a #54C79A dot on the wordmark,
-   links at 75% white, active item white with a 2px #E08A2E underline. Hexes are inline here
-   rather than tokenised — the redesign palette isn't in tokens.css yet (see CHECKPOINT A note). */
+/* Dark primary nav (DESIGN.md § Recurring parts): dark bar, a green dot on the wordmark,
+   links at 75% white, active item white with a 2px orange-rule underline. */
 .site-header {
-  background: #16201c;
+  background: var(--color-nav-bg);
 }
 
 /* Home page / 404 only: header floats transparent over the hero cover photo instead of taking
@@ -23,7 +22,7 @@
 .has-hero.js-nav-ready .nav-toggle__bar,
 .has-hero.js-nav-ready .nav-toggle__bar::before,
 .has-hero.js-nav-ready .nav-toggle__bar::after {
-  background: #fff;
+  background: var(--color-nav-link-active);
 }
 
 /* Below 768px the open list becomes a slide-out drawer (see the .js-nav-ready block further
@@ -61,7 +60,7 @@
   font-weight: 600;
   font-size: 16px;
   letter-spacing: -0.01em;
-  color: #fff;
+  color: var(--color-nav-link-active);
   text-decoration: none;
 }
 
@@ -70,7 +69,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #54c79a;
+  background: var(--color-nav-dot);
 }
 
 /*
@@ -96,11 +95,11 @@
   padding: var(--space-2) 0;
   text-decoration: none;
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--color-nav-link);
 }
 
 .site-nav__item a[aria-current="page"] {
-  color: #fff;
+  color: var(--color-nav-link-active);
   font-weight: 500;
 }
 
@@ -119,7 +118,7 @@
      nav — in the mobile drawer the active link is just dark text (media block above). */
   .site-nav__item a[aria-current="page"] {
     padding-bottom: 2px;
-    border-bottom: 2px solid #e08a2e;
+    border-bottom: 2px solid var(--color-accent-rule);
   }
 }
 
@@ -146,7 +145,7 @@
   z-index: calc(var(--z-header) + 2);
 }
 
-/* Closed burger sits on the dark #16201C bar (or the hero photo) — white bars. When open, the
+/* Closed burger sits on the dark nav bar (or the hero photo) — white bars. When open, the
    X sits over the light slide-out panel, so its two bars flip back to dark (further down). */
 .js-nav-ready .nav-toggle__bar,
 .js-nav-ready .nav-toggle__bar::before,
@@ -154,7 +153,7 @@
   display: block;
   width: 20px;
   height: 2px;
-  background: #fff;
+  background: var(--color-nav-link-active);
   transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
 }
 

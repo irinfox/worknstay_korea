@@ -1,21 +1,27 @@
 :root {
-  /* Color */
-  --color-bg: #f9f6f0;
-  --color-surface: #f5f4f1;
-  --color-text: #1c1b19;
-  --color-text-muted: #5c5952;
-  --color-border: #ddd9d1;
-  --color-primary: #1f5c4d;
-  --color-primary-dark: #143d33;
-  /* Pale primary wash — background for the region-page event cards (event-timeline.css). */
-  --color-primary-tint: #e4ede9;
-  --color-primary-tint-border: #cadfd8;
+  /*
+   * Color — the DESIGN.md palette. "Reference tool, not a magazine": white ground, quiet type,
+   * two accent colours only (green = ours / in-site, orange = external / seasonal).
+   */
+  --color-bg: #ffffff;
+  --color-surface: #f7f9f8; /* Panel: info cards, guides strip, map panel */
+  --color-text: #16201c; /* Ink: body text, dark nav bar */
+  --color-text-soft: #33443c; /* Ink soft: secondary paragraphs */
+  --color-text-muted: #5c6660; /* Muted: captions, addresses, source lines */
+  --color-border: #e4e7e4; /* Hairline: card borders */
+  --color-border-soft: #edf0ee; /* Hairline (lighter): row dividers, footer/card-footer rule */
+  --color-primary: #0f7b54; /* Green: primary accent, in-site links, eligible state */
+  --color-primary-dark: #0b5c3f; /* Green deep: vibe-tag text, link hover */
+  /* Pale primary wash — tinted bands, vibe-tag bg, note plates, calculator result plate. */
+  --color-primary-tint: #eaf4ef;
+  --color-primary-tint-border: #a9d8c2;
   /* Event-card sticky-note badges: "long-term" (taupe) vs "this month" (cream). */
   --color-badge-longterm-bg: #d4c4b7;
   --color-badge-longterm-text: #3e2723;
   --color-badge-thismonth-bg: #fef3c7;
   --color-badge-thismonth-text: #92400e;
-  --color-accent: #c96f34;
+  --color-accent: #c2531a; /* Orange text: outbound links, festival dates, spicy tag */
+  --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
   /* Pale accent wash — "Rough estimates" callout background (city-accordion.css). */
   --color-accent-tint: #f7ead9;
   --color-accent-tint-border: #ecd2ab;
@@ -23,9 +29,15 @@
   --color-link-visited: #3d4f6b;
   --color-focus-ring: #2f6fed;
 
-  /* Region-eligibility states (map + region cards, wired in a later phase) */
+  /* Dark primary nav (DESIGN.md § Recurring parts). */
+  --color-nav-bg: #16201c;
+  --color-nav-dot: #54c79a;
+  --color-nav-link: rgba(255, 255, 255, 0.75);
+  --color-nav-link-active: #ffffff;
+
+  /* Region-eligibility states (map + region cards). */
   --color-region-active: var(--color-primary);
-  --color-region-partial: #b8862f;
+  --color-region-partial: #a8d8c2; /* Green light: "Partly eligible" map fill */
   --color-region-ineligible: #b7b2a7;
   --color-map-sea: #dbe6ea;
 

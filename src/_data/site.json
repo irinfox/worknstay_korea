@@ -5,7 +5,7 @@
   "nav": [
     { "label": "Regions", "href": "/" },
     { "label": "Visa info", "href": "/visa-info/" },
-    { "label": "Settling in", "href": "/communities/" },
+    { "label": "Settling in", "href": "/settling-in/" },
     { "label": "About", "href": "/about/" }
   ],
   "footer": {

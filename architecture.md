@@ -154,7 +154,7 @@ worknstay_korea/
 │   │   ├── img/hero/{home,<region-slug>,gyeonggi-do-population-decline}/  # KOGL Type1 cover
 │   │   │         #   photos, credited in _data/{hero,regionHero,countyHero}Credits.json
 │   │   └── svg/  korea-regions.svg  (+ source/korea-provinces-blank.svg — Wikimedia, public domain)
-│   ├── index.njk / visa-info.njk / communities.njk / 404.njk
+│   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
 │   └── regions/region.njk                        # pagination over regions.json → /regions/<slug>/
 │       regions/gyeonggi-do/population-decline-counties.njk
 ├── scripts/                    # verify-{eligibility,calculator,kto-client,normalize}.mjs
