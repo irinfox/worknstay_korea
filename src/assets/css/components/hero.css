@@ -1,23 +1,29 @@
 /*
- * Home-page hero (ROADMAP_TODO.md Phase 14): full-bleed cover photo, transparent header
- * floating over its top portion (.has-hero in header.css), heading/tagline/intro/calculator
- * anchored toward the bottom of the frame. Mobile-first — the layout doesn't change shape
- * across breakpoints, only spacing/min-height scale up.
- * .hero__media--placeholder is a gradient stand-in — swapped for a real photo (own or
- * KTO-sourced) once that decision is made; cover-vs-contain for Type3 KTO images is still open
- * (see ROADMAP), so .hero__media img defaults to object-fit: cover, the generic safe choice.
+ * Home-page hero (DESIGN.md § "Homepage"): full-bleed cover photo, transparent header floating
+ * over its top portion (.has-hero in header.css), a left-aligned headline block (orange 56×3
+ * rule → H1 → tagline → intro) anchored toward the bottom of the frame, then a white calculator
+ * card that overlaps the photo's lower edge at every width.
+ *
+ * .hero is a plain full-bleed container. The photo lives on .hero__cover (which clips its own
+ * overflow), so .hero__calculator — a sibling, not a child of the cover — can hang below the
+ * photo bounds. Mobile-first: the layout keeps its shape across breakpoints, only spacing and
+ * min-height scale up.
  */
 .hero {
+  /* Break out of .page's padding to sit full-bleed (matches the old behaviour). */
+  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-6);
+}
+
+.hero__cover {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
   min-height: 70svh;
-  /* Bottom margin matches .page's own padding-bottom (base.css) exactly — that's also the gap
-     the map section leaves before the footer, so hero→map and map→footer read as the same,
-     smaller gap instead of the hero carrying extra breathing room the rest of the page doesn't. */
-  margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-5);
+  /* Bottom padding has to clear the calculator card, which overlaps up into it by
+     .hero__calculator's negative margin-top — the headline block sits above that overlap. */
+  padding: 0 var(--space-4) 96px;
   color: #fff;
 }
 
@@ -33,18 +39,10 @@
   background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
 }
 
-.hero__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* .hero__content sits at flex-end, so its height isn't fixed — once the eligibility result
-   appears below the form, everything above (heading included) gets pushed further up the
-   photo, into whatever's there. A gradient with a light dip in the middle (the old version)
-   looks fine with the form alone but leaves the heading/intro exposed over open sky once the
-   result box adds height. Keeping the floor no lower than 0.58 anywhere in the 0–75% band fixes
-   that — dark enough wherever content ends up, without going flat/opaque top-to-bottom. */
+/* .hero__content sits at flex-end, so its height isn't fixed. A gradient with a light dip in
+   the middle looks fine with a short headline but leaves the heading exposed over open sky once
+   the intro wraps to several lines. Keeping the floor no lighter than 0.58 across the 0–75%
+   band fixes that — dark enough wherever content ends up, without going flat top-to-bottom. */
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -73,11 +71,12 @@
 /* KOGL Type1 attribution (see hero.njk) — small, out of the way, but legible over any photo. */
 .hero__credit {
   position: absolute;
-  right: var(--space-2);
+  right: var(--space-3);
   bottom: var(--space-2);
   z-index: 2;
   margin: 0;
-  font-size: var(--font-size-xs, 0.75rem);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 .hero__credit a {
@@ -89,33 +88,33 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  /* width:100% is load-bearing, not decorative: .hero__content is a flex item of a
-     column-direction .hero, and an auto cross-axis margin (needed below for desktop centering)
-     disables flexbox's default stretch-to-container sizing — without an explicit width, this
-     box was sizing to its content's preferred width instead and overflowing narrow viewports
-     (confirmed on a real Pixel 9: ~337px box in a 294px viewport). */
+  align-items: flex-start;
+  gap: 14px;
   width: 100%;
-  max-width: 860px;
-  margin-inline: auto;
-  /* Top padding needs to clear .site-header, which is position:absolute over the photo (see
-     .has-hero in header.css) — not just look-nice spacing. .hero uses justify-content:flex-end,
-     so when content (form + result) grows taller than .hero's min-height, the flex-end gap that
-     would otherwise sit above the heading shrinks to zero and the heading crowds the header.
-     72px comfortably clears the header's real height on a narrow phone (measured 68px on a
-     Pixel 9) regardless of how tall the rest of the content gets. */
-  padding: 72px var(--space-4) var(--space-8);
-  text-align: center;
+  max-width: 600px;
+  /* Top padding clears .site-header (position:absolute over the photo, see .has-hero in
+     header.css) — .hero__cover is justify-content:flex-end, so the flex-end gap above the
+     heading collapses to zero once the content grows tall, and without this the heading would
+     crowd the header. 72px comfortably clears a narrow-phone header height. */
+  padding-top: 72px;
+  text-align: left;
 }
 
-/* 3-layer shadow — near-opaque + tight (a crisp edge, does most of the work against busy
-   detail like leaves/branches), a mid layer to reinforce it, and a soft wide halo for the rest
-   — belt-and-suspenders with .hero__scrim for legibility over whichever photo is live. The
-   previous single soft shadow read as "a bit tiring" over textured backgrounds; this reads
-   closer to a hard outline without looking stroked. */
+/* Orange 56×3 rule above every page headline (DESIGN.md § Recurring parts). */
+.hero__rule {
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+}
+
+/* 3-layer shadow — a near-opaque tight layer does most of the work against busy detail
+   (leaves, branches), a mid layer reinforces it, a soft wide halo covers the rest — paired
+   with .hero__scrim for legibility over whichever photo is live. */
 .hero__heading,
 .hero__tagline,
 .hero__intro {
+  margin: 0;
   text-shadow:
     0 1px 2px rgba(0, 0, 0, 0.95),
     0 2px 5px rgba(0, 0, 0, 0.85),
@@ -123,82 +122,64 @@
 }
 
 .hero__heading {
-  margin-bottom: var(--space-2);
-  font-size: var(--font-size-3xl);
+  font-size: clamp(1.85rem, 1.15rem + 2.9vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
   color: #fff;
 }
 
 .hero__tagline {
   font-size: var(--font-size-lg);
+  font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .hero__intro {
-  margin-top: calc(var(--space-8) + 10px);
-  max-width: 82ch;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.82);
 }
 
-.calculator-mount {
-  width: 100%;
-  margin-top: var(--space-5);
+/* Calculator wrapper — sits outside .hero__cover so the card can hang past the photo's lower
+   edge. Left edge aligns with .hero__content (same padding-inline, card pinned left). */
+.hero__calculator {
+  position: relative;
+  z-index: 3;
+  padding: 0 var(--space-4);
+  margin-top: -72px;
 }
 
-.calculator-mount__noscript {
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-}
-
-.eligibility-result {
-  width: 100%;
-  margin-top: var(--space-3);
-  padding: var(--space-3);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  color: var(--color-text);
-  font-weight: 700;
-}
-
-.eligibility-result a {
-  color: var(--color-link);
-  font-weight: 400;
-}
-
-.eligibility-result--error {
-  color: var(--color-error, #b91c1c);
-}
-
-/* A translucent dark pill still washed out against the darker parts of the photo (which is
-   exactly where this sits, low in the scrim gradient) — a light, opaque background guarantees
-   contrast against any part of the image, but then needs genuinely dark text, not the white the
-   rest of the hero uses; white-on-beige would just recreate the same problem inverted. */
 .hero__scroll-cue {
-  display: inline-block;
-  margin-top: var(--space-5);
-  padding: var(--space-1) var(--space-3);
-  border-radius: 999px;
-  background: var(--color-surface);
-  color: var(--color-text);
+  display: block;
+  width: fit-content;
+  margin: var(--space-5) auto 0;
+  padding: var(--space-1) var(--space-2);
+  color: var(--color-text-muted);
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 500;
   text-decoration: none;
 }
 
 .hero__scroll-cue:hover,
 .hero__scroll-cue:focus-visible {
-  background: #fff;
-  color: var(--color-primary-dark);
+  color: var(--color-accent);
   text-decoration: underline;
 }
 
 @media (min-width: 768px) {
-  .hero {
-    min-height: 85svh;
+  .hero__cover {
+    min-height: 84svh;
+    padding: 0 40px 120px;
   }
 
   .hero__content {
-    padding: var(--space-8) var(--space-4) var(--space-10);
+    gap: 16px;
+    padding-top: var(--space-10);
+  }
+
+  .hero__calculator {
+    padding: 0 40px;
+    margin-top: -96px;
   }
 }
