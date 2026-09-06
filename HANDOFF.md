@@ -74,7 +74,7 @@ If a task looks like it needs one of these changed, stop and say so instead.
 
 ## Decisions already made (override in one line if wrong)
 
-- **Nav:** `Home · Regions · Visa info · Settling in · About`. "Settling in" **is** the existing
+- **Nav:** `Regions · Visa info · Settling in · About`. "Settling in" **is** the existing
   Communities tab, renamed — same page, same route, new label. Rename the label in `site.json`
   only; do not move, rename or re-route `/communities/`, and do not create a new page for it.
 - **Region page section order:** design order, minus anything unbuilt —
@@ -153,7 +153,7 @@ Everything else: `DESIGN.md` § Geometry and § Type. Nothing below 12px. Phone 
 
 Tick the box, then stop.
 
-- [ ] **01 — Data prep + nav.** Overwrite `activityTags` / `vibeTags` / `summaryTags` in
+- [x] **01 — Data prep + nav.** Overwrite `activityTags` / `vibeTags` / `summaryTags` in
   `regions.json` and `cities.json` with the design's fresher values; update the cost figures the
   design carries; set the nav and page labels in `site.json` to the decided set. Data only — no
   template or CSS changes in this task.
