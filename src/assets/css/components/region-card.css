@@ -1,115 +1,108 @@
 /*
- * region-card.njk is one partial rendered in two contexts:
- *   .region-card--infographic — compact, fixed-height, used inside the wide-viewport grid
- *   .region-card--single      — full-size, used for the narrow-viewport single card
+ * region-card.njk in two contexts (DESIGN.md § "Region card"):
+ *   .region-card--infographic — fixed-height, used in the wide-viewport grid around the map
+ *   .region-card--carousel    — natural height, used in the narrow-viewport scroll-snap row
+ * Both: name + rent header, Korean name, blurb, vibe tags, then an "Open <region> →" row on a
+ * hairline. The whole card highlights on hover; the footer row is the real <a href>.
  */
 .region-card {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-3);
+  padding: 14px 16px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
+  border-radius: 10px;
+  background: var(--color-bg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.region-card:hover,
+.region-card:focus-within {
+  border-color: var(--color-primary);
 }
 
 .region-card__header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-2);
+  gap: 10px;
 }
 
 .region-card__name {
   margin: 0;
-  font-size: var(--font-size-base);
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-/* Second row under the English name/score header (not inline with it — inline was getting
-   ellipsis-truncated away for any region whose English name alone already filled the header
-   line, e.g. Chungcheong-do/Gyeongsang-do; only the two shortest names, Jeju-do/Jeolla-do, ever
-   had room left over for it). Own line always renders in full, regardless of name length. */
-.region-card__name-ko {
-  margin: 0;
-  font-weight: 400;
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-}
-
-.region-card__score {
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--color-primary);
+.region-card__rent {
+  font-size: 14px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
-.region-card__score::after {
-  content: " / 100";
+.region-card__name-ko {
+  margin: 2px 0 8px;
   font-weight: 400;
+  font-size: 12px;
   color: var(--color-text-muted);
+}
+
+.region-card__intro {
+  margin: 0 0 9px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
 }
 
 .region-card__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  gap: 5px;
 }
 
-.region-card__intro {
-  font-size: var(--font-size-sm);
-  line-height: 1.35;
-}
-
-.region-card__cost {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-2);
-  font-size: var(--font-size-sm);
-}
-
-.region-card__cost-label {
-  color: var(--color-text-muted);
-}
-
-.region-card__cost-value {
-  font-weight: 700;
-  white-space: nowrap;
+.region-card__tags li {
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: var(--color-primary-tint);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 500;
 }
 
 .region-card__link {
-  margin-top: auto;
-  padding-top: var(--space-1);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px solid var(--color-border-soft);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
   text-decoration: none;
 }
 
-/* Phase 17: gated the same way as the map shape (korea-map.js) — href removed, so this is
-   already inert; the muted color + no-pointer-events just stop it from looking clickable. */
+.region-card__link:hover,
+.region-card__link:focus-visible {
+  text-decoration: underline;
+}
+
+/* Gated the same way as the map shape (korea-map.js) — href removed, so this is already inert;
+   the muted colour + no-pointer-events just stop it from looking clickable. */
 .region-card__link[aria-disabled="true"] {
   color: var(--color-text-muted);
   pointer-events: none;
   cursor: default;
+  text-decoration: none;
 }
 
-/* Infographic (wide-viewport) variant — fixed height so the hand-positioned leader lines
-   in index.njk line up with each card's vertical slot; content is clamped to fit. */
+/* Infographic (wide) variant — fixed height so the hand-positioned leader lines in index.njk
+   line up with each card's vertical slot; content is clamped to fit. */
 .region-card--infographic {
   height: 152px;
   overflow: hidden;
 }
 
-.region-card--infographic .region-card__tags {
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
-/* A long name ("Chungcheong-do") plus the score badge was wrapping the header onto 2 lines
-   inside the fixed 130px height, pushing "Learn more →" past the overflow:hidden boundary so
-   it clipped. Keeping the name to one line (ellipsis as a last resort) is cheaper than growing
-   the card, which would also require re-tuning every hand-positioned leader line in index.njk. */
 .region-card--infographic .region-card__header {
   flex-wrap: nowrap;
 }
@@ -128,25 +121,59 @@
   overflow: hidden;
 }
 
-/* Single (narrow-viewport) variant — full-size, normal document flow. */
-.region-card--single {
-  padding: var(--space-4);
+.region-card--infographic .region-card__tags {
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* Carousel (narrow) variant — fills its scroll-snap item's height. */
+.region-card--carousel {
+  height: 100%;
 }
 
 /*
- * Region-info shell layout (architecture.md §3/§9): mobile-first — the map (a child of
- * .region-infographic, see index.njk) stays visible at every width; only the two flanking
- * columns and their leader lines are wide-viewport-only. Breakpoint is width-only (768px,
- * matching --bp-region-info-wide in tokens.css — hardcoded here because custom properties
- * aren't readable inside @media conditions, same constraint noted there).
- * The grid's own natural size is 940px (240+420+240 plus two 20px gaps) — narrower than that
- * (anywhere between 768px and ~972px, once .page's padding is subtracted) it now scales down
- * fluidly instead of overflowing: `fr` column tracks keep the 240:420:240 ratio while shrinking
- * to fit, and the map/leader-lines SVGs (viewBox-scaled, width:100%) shrink in step with their
- * grid cells, so the hand-positioned lines stay aligned to the map at any size. `min-width: 0`
- * on the flanking columns (below) is load-bearing — without it, a grid track won't shrink past
- * its content's intrinsic min-content width (nowrap region names, etc.), which would silently
- * reintroduce the same overflow this is fixing.
+ * ── Homepage "The six regions" section ────────────────────────────────────────────────────
+ */
+.home-regions {
+  max-width: var(--content-max-width);
+  margin-inline: auto;
+}
+
+.home-regions__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-bottom: 18px;
+}
+
+.home-regions__intro h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.home-regions__intro p {
+  margin: 0;
+  max-width: 54ch;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+.home-regions__source {
+  margin-top: 20px;
+  max-width: 860px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/*
+ * Region-info shell (architecture.md §3/§9): mobile-first — the map (a child of
+ * .region-infographic) stays visible at every width; the two flanking columns and their leader
+ * lines are wide-viewport-only, and below the breakpoint the .region-carousel takes over.
  */
 .region-infographic {
   position: relative;
@@ -157,11 +184,64 @@
   display: none;
 }
 
-.region-single {
-  margin-top: var(--space-5);
+/* Narrow-viewport carousel — breaks out of .page's padding so cards can scroll to the screen
+   edge, with its own inner track padding. Hidden at >=768px. */
+.region-carousel {
+  margin: 4px calc(var(--space-4) * -1) 0;
+}
+
+.region-carousel__track {
+  display: flex;
+  gap: 12px;
+  padding: 0 var(--space-4) 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.region-carousel__track::-webkit-scrollbar {
+  display: none;
+}
+
+.region-carousel__item {
+  display: flex;
+  flex: 0 0 272px;
+  scroll-snap-align: start;
+}
+
+.region-carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.region-carousel__dots li {
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--color-border);
+}
+
+.region-carousel__dots li:first-child {
+  width: 20px;
+  background: var(--color-primary);
 }
 
 @media (min-width: 768px) {
+  .region-carousel {
+    display: none;
+  }
+
+  /*
+   * The grid's natural size is 940px (240+420+240 + two 20px gaps). Narrower than that it
+   * scales down fluidly: `fr` tracks keep the 240:420:240 ratio while shrinking, and the
+   * map/leader-lines SVGs (viewBox-scaled, width:100%) shrink in step. `min-width: 0` on the
+   * flanking columns is load-bearing — grid tracks won't otherwise shrink past their content's
+   * intrinsic min-content width.
+   */
   .region-infographic {
     display: grid;
     grid-template-columns: 240fr 420fr 240fr;
@@ -176,26 +256,12 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    /* Lets the fr-sized grid track actually shrink below the column's content's intrinsic
-       min-content width — grid tracks default to never shrinking past that otherwise, which
-       would silently overflow again exactly like the fixed-940px version did. */
     min-width: 0;
   }
 
-  /* Explicitly placed into row 1 (map's own height) spanning all 3 columns — without this, an
-     absolutely-positioned grid item with no explicit placement sizes to the *whole* grid
-     container by default, including row 2 once the legend (index.njk) added one. inset:0 was
-     then stretching this 950-unit-tall coordinate system over a taller box than it was drawn
-     for, dragging every line (worst on jeju-do's, anchored near the bottom of the 950 range)
-     down into the legend instead of stopping at the map. */
   .region-infographic__lines {
     display: block;
     position: absolute;
-    /* Explicit start AND end on both axes — "grid-row: 1" alone (shorthand for
-       grid-row-start:1; grid-row-end:auto) reads as non-definite placement for an
-       out-of-flow grid item, so its containing block still fell back to the whole grid
-       container (both rows) instead of just row 1. That's what let this stretch into the
-       legend row again after it was first "fixed" without an explicit end line. */
     grid-column: 1 / -1;
     grid-row: 1 / 2;
     inset: 0;
@@ -205,9 +271,7 @@
     z-index: 0;
   }
 
-  /* Map must stack above the lines layer (it's a plain grid item otherwise, painted below any
-     positioned sibling regardless of DOM order) — lines should read as going *under* the land,
-     not crossing over labels. */
+  /* Map stacks above the lines layer so they read as passing under the land, not over labels. */
   .korea-map {
     position: relative;
     z-index: 1;
@@ -221,13 +285,7 @@
     transition: stroke 0.15s ease, stroke-width 0.15s ease, stroke-opacity 0.15s ease;
   }
 
-  .region-card {
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  }
-
   /* Cross-hover: hovering/focusing a map region highlights its card too (Phase 18). */
-  .region-card:hover,
-  .region-card:focus-within,
   .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) [data-region-slug="gyeonggi-do"],
   .region-infographic:has(.region[data-slug="gangwon-do"]:hover) [data-region-slug="gangwon-do"],
   .region-infographic:has(.region[data-slug="chungcheong-do"]:hover) [data-region-slug="chungcheong-do"],
@@ -272,9 +330,5 @@
     stroke: var(--color-primary-dark);
     stroke-width: 2.5;
     stroke-opacity: 1;
-  }
-
-  .region-single {
-    display: none;
   }
 }

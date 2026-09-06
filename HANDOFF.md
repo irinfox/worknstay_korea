@@ -166,20 +166,34 @@ Tick the box, then stop.
 
 ⏸ **CHECKPOINT A** — viewport pass, then stop for review.
 
-- [ ] **03 — Homepage hero + calculator.** Cover photo behind header and headline, calculator card
+- [x] **03 — Homepage hero + calculator.** Cover photo behind header and headline, calculator card
   overlapping the photo's lower edge. Restyle the calculator completely from the design — card,
   field row, salary field width, control height, checkbox, reset link, result plate. The
   comparison logic and its messages are frozen; everything visual is not.
   *Checks:* 1280 / 900 / 390 / 360px; same inputs still produce the same messages; result plate styled
   per the design; no logic edits in the diff.
 
-- [ ] **04 — Homepage map + legend + region cards.** Three-column grid, legend, "Partly eligible"
+- [x] **04 — Homepage map + legend + region cards.** Three-column grid, legend, "Partly eligible"
   note plate, six region cards each ending in an `Open <region> →` row on a hairline.
   Ineligible regions stay non-navigable (CLAUDE.md feedback log).
   *Checks:* hover card ↔ map highlight both ways; phone falls back to the dynamic card per the
   existing width breakpoint; every region link is a real `<a href>`.
+  *Deviations (approved in-session):* phone now uses the 6-card scroll-snap carousel + dots from
+  CLAUDE.md's feedback log, not the old `.region-single`; `region-card.js` tap-to-fill became
+  tap-to-scroll-the-carousel. `.region-single` is removed. Region card drops the nomad-score
+  badge for a rent figure and swaps "Learn more →" for the `Open <region> →` hairline row.
+  Infographic grid kept at 240px columns (not the design's 262px) to avoid re-tuning the
+  hand-positioned leader-line coordinates; partial map fill is now flat "Green light", not the
+  hatch. New microcopy added inline in `index.njk` (section H2 "The six regions" + its intro
+  line + the "Partly eligible" note-plate sentence) — no `_data` home for these yet.
 
 ⏸ **CHECKPOINT B** — viewport pass, then stop for review.
+  *Outstanding:* the full 1280/900/390/360 viewport pass is NOT done — the local Chrome renderer
+  freezes whenever the inline Korea SVG map scrolls into view (window-resize via the tooling
+  also stopped working). Verified instead: `npm run build` clean, `verify-calculator` +
+  `verify-eligibility` pass, built-HTML structure correct, and hero + section-head/legend/
+  note-plate render correctly at ~310px. The map, the carousel, and every desktop-width view
+  still need a real visual check.
 
 - [ ] **05 — Region page headline block + cover gallery.** Orange rule → H1 → Korean name →
   vibe tags → intro paragraphs, then the gallery. Reuse the existing `isArray` branch in

@@ -1,9 +1,12 @@
 .korea-map {
   width: 100%;
-  /* Sea color lives here (not as an opaque <rect> inside the SVG) so the leader-lines layer
-     behind the map (see region-card.css's z-index) shows through, dimmed, under the
-     semi-transparent region shapes — fully hidden only under opaque label text. */
+  /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). The
+     sea tint stays as the panel ground (CLAUDE.md feedback log: Jeju's true sea gap is kept,
+     not inset) rather than the reference's #F7F9F8, since this is real geography over water. */
   background-color: var(--color-map-sea);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .korea-map svg {
@@ -63,9 +66,12 @@
    .region--active — the base .region__shape/.region__city rules above already render that
    state, since it's also what the map shows before any calculator run (architecture.md §8:
    "un-gated by default"). */
+/* Flat "Green light" fill for the partly-eligible state (DESIGN.md palette), not the old hatch —
+   the legend swatch below matches. */
 .region--partial .region__shape,
 .region--partial .region__city {
-  fill: url(#region-partial-hatch);
+  fill: var(--color-region-partial);
+  fill-opacity: 0.85;
 }
 
 .region--ineligible {
@@ -153,101 +159,104 @@
   transform: scale(1.2);
 }
 
-/* Static color key beneath the map (index.njk) — see korea-map.js's setLegendDetail() for the
-   one dynamic line. Colors are literal hex, matching korea-regions.svg's own pattern defs
-   (CSS custom properties aren't visible inside an SVG <pattern>, so that file already keeps its
-   own hand-synced copies — same constraint applies here for the hatch swatch). */
+/* Colour key (index.njk — .home-regions__head): a small horizontal row of 10px swatches,
+   top-right of the section heading on desktop, wrapping under it on phone. DESIGN.md § "Homepage". */
 .map-legend {
-  margin-top: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  font-size: var(--font-size-sm);
-}
-
-.map-legend__list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 
 .map-legend__item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 6px;
   margin: 0;
-  padding: var(--space-1) 0;
-  text-align: left;
 }
 
 .map-legend__swatch {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid var(--color-primary-dark);
-  border-radius: var(--radius-sm);
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
 }
 
 .map-legend__swatch--active {
   background-color: var(--color-region-active);
-  opacity: 0.55;
 }
 
 .map-legend__swatch--partial {
-  background-color: #b8862f;
-  background-image: repeating-linear-gradient(
-    45deg,
-    #143d33 0,
-    #143d33 2px,
-    transparent 2px,
-    transparent 8px
-  );
-  opacity: 0.7;
+  background-color: var(--color-region-partial);
 }
 
 .map-legend__swatch--ineligible {
   background-color: var(--color-region-ineligible);
-  opacity: 0.5;
 }
 
-.map-legend__detail {
-  margin: var(--space-2) 0 0;
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
+/* "Partly eligible" note plate (DESIGN.md § Recurring parts). The __detail line stays hidden
+   until korea-map.js's setLegendDetail() fills it with the county list after a calculator run. */
+.map-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: var(--space-4);
+  padding: 13px 16px;
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: 10px;
+  background: var(--color-primary-tint);
+}
+
+.map-note__chip {
+  flex: 0 0 26px;
+  height: 16px;
+  margin-top: 3px;
+  border-radius: 3px;
+  background: var(--color-region-partial);
+}
+
+.map-note__body {
+  min-width: 0;
+}
+
+.map-note__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+.map-note__lead {
+  font-weight: 600;
+}
+
+.map-note__text a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.map-note__detail {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
   color: var(--color-text-muted);
-  text-align: left;
 }
 
-.map-legend__detail a {
-  font-weight: 700;
+.map-note__detail a {
+  color: var(--color-primary);
+  font-weight: 500;
   white-space: nowrap;
 }
 
-.map-legend__detail[hidden] {
+.map-note__detail[hidden] {
   display: none;
 }
 
 /* 768px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
-   activation — this grid only exists once that grid does. */
+   activation — the cross-hover pairs the infographic grid with the map shapes. */
 @media (min-width: 768px) {
-  /* Full grid width (spans the map + both card columns), not just the map's own middle column —
-     plenty of room to lay the 3 key items out in one row instead of stacking them. */
-  .map-legend {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin-top: var(--space-4);
-  }
-
-  .map-legend__list {
-    flex-direction: row;
-    justify-content: center;
-    gap: var(--space-6);
-  }
-
-  .map-legend__item {
-    padding: 0;
-  }
-
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,
