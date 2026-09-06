@@ -1,27 +1,19 @@
+/* Dark primary nav (DESIGN.md § Recurring parts): #16201C bar, a #54C79A dot on the wordmark,
+   links at 75% white, active item white with a 2px #E08A2E underline. Hexes are inline here
+   rather than tokenised — the redesign palette isn't in tokens.css yet (see CHECKPOINT A note). */
 .site-header {
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: #16201c;
 }
 
-/* Home page only: header floats transparent over the hero cover photo instead of taking its
-   own row — .hero (hero.css) supplies the negative top margin that lets it reach y:0 under
-   this. Every other page keeps the normal solid in-flow header above. */
+/* Home page / 404 only: header floats transparent over the hero cover photo instead of taking
+   its own row — .hero (hero.css) supplies the negative top margin that lets it reach y:0 under
+   this. The link treatment below is identical either way; only the bar background differs. */
 .has-hero .site-header {
   position: absolute;
   inset-inline: 0;
   top: 0;
   z-index: var(--z-header);
-  border-bottom: none;
   background: transparent;
-}
-
-.has-hero .site-header__logo,
-.has-hero .site-nav__item a {
-  color: #fff;
-}
-
-.has-hero .site-nav__item a[aria-current="page"] {
-  color: var(--color-accent);
 }
 
 .has-hero.js-nav-ready .nav-toggle {
@@ -35,23 +27,26 @@
 }
 
 /* Below 768px the open list becomes a slide-out drawer (see the .js-nav-ready block further
-   down) — an opaque panel, never floating translucently over the hero photo — so its links
-   stay normal dark text there, overriding the white-on-photo color above which is only correct
-   for the closed header row (and for the desktop inline nav, which stays over the photo). */
+   down) — an opaque light panel — so its links flip to dark text, overriding the 75%-white
+   nav-bar color which is only correct for the closed header row and the desktop inline nav. */
 @media (max-width: 767.98px) {
-  .has-hero.js-nav-ready .site-nav__list .site-nav__item a {
+  .js-nav-ready .site-nav__list .site-nav__item a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
     color: var(--color-text);
   }
 
-  .has-hero.js-nav-ready .site-nav__list .site-nav__item a[aria-current="page"] {
+  .js-nav-ready .site-nav__list .site-nav__item a[aria-current="page"] {
     color: var(--color-primary);
+    border-bottom-color: transparent;
   }
 }
 
 .site-header__inner {
   max-width: var(--content-max-width);
   margin-inline: auto;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-4);
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -60,10 +55,22 @@
 }
 
 .site-header__logo {
-  font-weight: 700;
-  font-size: var(--font-size-lg);
-  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: #fff;
   text-decoration: none;
+}
+
+.site-header__dot {
+  flex: 0 0 9px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #54c79a;
 }
 
 /*
@@ -88,23 +95,31 @@
   display: block;
   padding: var(--space-2) 0;
   text-decoration: none;
-  color: var(--color-text);
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .site-nav__item a[aria-current="page"] {
-  color: var(--color-primary);
-  font-weight: 700;
+  color: #fff;
+  font-weight: 500;
 }
 
 @media (min-width: 768px) {
   .site-nav__list {
     flex-direction: row;
     width: auto;
-    gap: var(--space-5);
+    gap: 28px;
   }
 
   .site-nav__item a {
     padding: var(--space-1) 0;
+  }
+
+  /* Active item: white with a 2px orange underline (DESIGN.md). Scoped to the desktop inline
+     nav — in the mobile drawer the active link is just dark text (media block above). */
+  .site-nav__item a[aria-current="page"] {
+    padding-bottom: 2px;
+    border-bottom: 2px solid #e08a2e;
   }
 }
 
@@ -131,13 +146,15 @@
   z-index: calc(var(--z-header) + 2);
 }
 
+/* Closed burger sits on the dark #16201C bar (or the hero photo) — white bars. When open, the
+   X sits over the light slide-out panel, so its two bars flip back to dark (further down). */
 .js-nav-ready .nav-toggle__bar,
 .js-nav-ready .nav-toggle__bar::before,
 .js-nav-ready .nav-toggle__bar::after {
   display: block;
   width: 20px;
   height: 2px;
-  background: var(--color-text);
+  background: #fff;
   transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
 }
 
@@ -183,8 +200,9 @@
   background: transparent;
 }
 
-.has-hero.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::before,
-.has-hero.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
+/* Open X sits over the light slide-out panel on every page — dark bars for contrast. */
+.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::before,
+.js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
   background: var(--color-text);
 }
 

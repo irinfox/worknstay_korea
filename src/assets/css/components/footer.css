@@ -1,18 +1,52 @@
+/* Footer (DESIGN.md): white ground, a single #EDF0EE hairline on top, muted 13px disclaimer on
+   the left and a green "About" text link on the right. Row on desktop, stacked on phone with
+   the link dropping to the right. Hexes inline — the redesign palette isn't in tokens.css yet
+   (see CHECKPOINT A note). */
 .site-footer {
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  border-top: 1px solid #edf0ee;
+  background: #fff;
+  color: #5c6660;
 }
 
 .site-footer__inner {
   max-width: var(--content-max-width);
   margin-inline: auto;
-  /* Block padding only, 20% shorter than the site's standard var(--space-5) — this is what
-     actually shrinks the visible grey bar's height; the text itself still gets the full
-     content width above so the one-line disclaimer never wraps on desktop. */
-  padding: calc(var(--space-5) * 0.8) var(--space-4);
+  padding: 20px var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.site-footer__disclaimer {
+  align-self: stretch;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.site-footer__link,
+.site-footer__link:visited {
+  font-size: 14px;
+  font-weight: 500;
+  color: #0f7b54;
+  text-decoration: none;
+}
+
+.site-footer__link:hover,
+.site-footer__link:focus-visible {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .site-footer__inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px var(--space-4);
+  }
+
+  .site-footer__disclaimer {
+    align-self: auto;
+  }
 }
