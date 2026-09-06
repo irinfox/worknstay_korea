@@ -1,13 +1,14 @@
 {
-  "name": "Work&Stay Korea",
+  "name": "worknstay korea",
   "tagline": "Find your region. Stay a while.",
   "noindex": true,
   "nav": [
-    { "label": "Home", "href": "/" },
-    { "label": "Visa Info", "href": "/visa-info/" },
-    { "label": "Communities", "href": "/communities/" }
+    { "label": "Regions", "href": "/" },
+    { "label": "Visa info", "href": "/visa-info/" },
+    { "label": "Settling in", "href": "/communities/" },
+    { "label": "About", "href": "/about/" }
   ],
   "footer": {
-    "disclaimer": "© 2026 Work&Stay Korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
+    "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
   }
 }

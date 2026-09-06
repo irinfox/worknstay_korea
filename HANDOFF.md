@@ -160,7 +160,7 @@ Tick the box, then stop.
   *Checks:* `npm run build` clean; no `MOCK`/`PLACEHOLDER` introduced; Gangwon-do's existing
   verified `longIntro` and `seasonTags` untouched.
 
-- [ ] **02 — Dark nav + footer.** `#16201C` bar, wordmark with `#54C79A` dot, links 75% white,
+- [x] **02 — Dark nav + footer.** `#16201C` bar, wordmark with `#54C79A` dot, links 75% white,
   active white with 2px `#E08A2E` underline. Footer disclaimer from `site.json`.
   *Checks:* renders on every page; keyboard-navigable; JS disabled still fine (CLAUDE.md rule 6).
 
