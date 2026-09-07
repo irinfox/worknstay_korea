@@ -15,8 +15,9 @@ eleventyComputed:
 {% set regionFood = food | byRegion(region.slug) %}
 {% set heroPhotos = regionHeroPhotos[region.slug] or [] %}
 {% set slideCount = heroPhotos.length %}
-<div class="content-page">
+<div class="content-page region-page">
 <header class="region-header">
+  <span class="region-header__rule" aria-hidden="true"></span>
   <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
   {% if region.activityTags.length %}
   <ul class="region-header__tags region-header__tags--activity">
@@ -25,7 +26,7 @@ eleventyComputed:
     {% endfor %}
   </ul>
   {% else %}
-  <ul class="region-header__tags">
+  <ul class="region-header__tags region-header__tags--vibe">
     {% for tag in region.vibeTags %}
     <li>{{ tag }}</li>
     {% endfor %}
@@ -47,36 +48,47 @@ eleventyComputed:
   {% endif %}
 </header>
 
-{# Region cover photo gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
-   finalized, credited, license-checked picks per slug. Nav/dots/autoplay (region-hero-gallery.js)
-   are pure enhancement — the track is a plain CSS scroll-snap strip, swipeable with zero JS
-   (same no-JS pattern as .attraction-list), so nothing here gates content behind JS. #}
-<div class="region-hero{% if slideCount == 0 %} region-hero--placeholder{% endif %}"{% if slideCount > 0 %} data-region-hero-gallery{% endif %}>
-  {% if slideCount > 0 %}
-  <div class="region-hero-gallery__track">
-    {% for filename in heroPhotos %}
-    {% set credit = regionHeroCredits.photos[filename] %}
-    <figure class="region-hero-gallery__slide">
-      <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
-      {% if credit.titleEn %}
-      <figcaption class="region-hero__caption">
-        <span class="region-hero__caption-en">{{ credit.titleEn }}{% if credit.cityEn %}, {{ credit.cityEn }}{% endif %}</span>
-        {% if credit.titleKo %}
-        <span class="region-hero__caption-ko">{{ credit.titleKo }}{% if credit.cityKo %}, {{ credit.cityKo }}{% endif %}</span>
-        {% endif %}
-      </figcaption>
-      {% endif %}
-    </figure>
-    {% endfor %}
+{# "Around the region" cover gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
+   finalized, credited, license-checked picks per slug. The track is a plain CSS scroll-snap
+   strip, swipeable/scrollable with zero JS (same no-JS pattern as .attraction-list) — the
+   counter + prev/next arrows + autoplay (region-hero-gallery.js) are pure enhancement layered
+   on top, so nothing here gates content behind JS. #}
+{% if slideCount > 0 %}
+<section class="region-gallery" aria-labelledby="region-gallery-heading"{% if slideCount > 1 %} data-region-hero-gallery{% endif %}>
+  <div class="region-gallery__head">
+    <div class="region-gallery__intro">
+      <h2 id="region-gallery-heading">Around the region</h2>
+      <p class="region-gallery__sub">A few views from around {{ region.nameEn }} — scroll or swipe to see more.</p>
+    </div>
+    {% if slideCount > 1 %}
+    <div class="region-gallery__controls">
+      <span class="region-gallery__counter" data-region-hero-counter aria-hidden="true">1 / {{ slideCount }}</span>
+      <button class="region-hero-gallery__nav region-hero-gallery__nav--prev" type="button" aria-label="Previous photo">←</button>
+      <button class="region-hero-gallery__nav region-hero-gallery__nav--next" type="button" aria-label="Next photo">→</button>
+    </div>
+    {% endif %}
   </div>
-  {% if slideCount > 1 %}
-  <button class="region-hero-gallery__nav region-hero-gallery__nav--prev" type="button" aria-label="Previous photo">‹</button>
-  <button class="region-hero-gallery__nav region-hero-gallery__nav--next" type="button" aria-label="Next photo">›</button>
-  <div class="region-hero-gallery__dots"></div>
-  {% endif %}
+  <div class="region-hero">
+    <div class="region-hero-gallery__track">
+      {% for filename in heroPhotos %}
+      {% set credit = regionHeroCredits.photos[filename] %}
+      <figure class="region-hero-gallery__slide">
+        <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+        {% if credit.titleEn %}
+        <figcaption class="region-hero__caption">
+          <span class="region-hero__caption-title">{{ credit.titleEn }}</span>
+          {% if credit.cityEn or credit.titleKo %}
+          <span class="region-hero__caption-sub">{{ credit.cityEn }}{% if credit.cityEn and credit.titleKo %} · {% endif %}{{ credit.titleKo }}</span>
+          {% endif %}
+        </figcaption>
+        {% endif %}
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
   <p class="region-hero__credit">Photo source: © Korea Tourism Organization (한국관광공사)</p>
-  {% endif %}
-</div>
+</section>
+{% endif %}
 
 {% if region.slug == "gangwon-do" %}
 {% set tabs = [{ id: "overview", label: "Overview" }] %}

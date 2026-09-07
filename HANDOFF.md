@@ -199,17 +199,33 @@ Tick the box, then stop.
   - Calculator copy per design ref 5a (title + subtitle, "…gross (KRW)", "Reset the map", etc.).
   New inline strings (index.njk + calculator) match the committed hero-copy pattern.
 
-- [ ] **05 — Region page headline block + cover gallery.** Orange rule → H1 → Korean name →
+- [x] **05 — Region page headline block + cover gallery.** Orange rule → H1 → Korean name →
   vibe tags → intro paragraphs, then the gallery. Reuse the existing `isArray` branch in
   `region.njk` for `longIntro` — restyle it, don't replace it.
   *Checks:* Gangwon-do matches the reference; one other region renders with no `activityTags` and
-  no visible gap.
+  no visible gap. Verified 1280 / 900 / 390 / 360; no h-scroll; visa/settling `.region-header`
+  untouched.
+  *Deviations:* redesign scoped to a new `.region-page` wrapper (visa/settling share
+  `.region-header`). Page stays reading-width, headline stays one column — the 1280px width, the
+  two-column headline grid + rent-summary card + capital-area note plate + breadcrumb are left
+  for task 06 (rent figures in `costOfLiving.json` are all `MOCK`).
 
 - [ ] **06 — Region page body sections.** Map, guides, cities, costs + festivals in one tinted
   band, attractions, dishes — in the decided order, both viewports. Festivals keep their
   pagination, fixed reserved height, tag chips and copy-address control (44px on phone).
   *Checks:* a region with zero upcoming festivals shows the designed empty state, not a gap; no
   reflow jump when paging festivals; attractions and festivals still hit the live proxy.
+  *Scope calls made in-session (before 06 started):*
+  - **Widen the region page to ~1280px** (like the homepage). This task also picks up what 05
+    deferred: two-column headline grid + rent-summary card + capital-area note plate + breadcrumb.
+  - **Remove the Overview / Living Info tabs** — flat scroll in the decided section order. Drop
+    the `tabs.njk` include from `region.njk` (check `tabs.js` isn't needed elsewhere first).
+  - **Costs:** Gangwon-do only gets a real cost block (rent-summary card + "What a month costs"
+    prose) — figures backed by `src/_data/rentalMarketScan.js`; keep the existing Gangwon cost
+    copy. The other five regions show the cost heading + a plain "not compiled yet" empty state
+    (an honest empty state, **not** a `MOCK` value). Do not render `costOfLiving.json` (all MOCK).
+  - **Festival pager:** keep the existing `‹ 1 / 3 ›` control, restyled in the new palette, and
+    add a `1–5 of 17 in October`-style range line beneath it. Pagination math stays frozen.
 
 ⏸ **CHECKPOINT C** — viewport pass, then stop for review.
 
