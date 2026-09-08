@@ -210,22 +210,13 @@ Tick the box, then stop.
   two-column headline grid + rent-summary card + capital-area note plate + breadcrumb are left
   for task 06 (rent figures in `costOfLiving.json` are all `MOCK`).
 
-- [ ] **06 — Region page body sections.** Map, guides, cities, costs + festivals in one tinted
-  band, attractions, dishes — in the decided order, both viewports. Festivals keep their
-  pagination, fixed reserved height, tag chips and copy-address control (44px on phone).
-  *Checks:* a region with zero upcoming festivals shows the designed empty state, not a gap; no
-  reflow jump when paging festivals; attractions and festivals still hit the live proxy.
-  *Scope calls made in-session (before 06 started):*
-  - **Widen the region page to ~1280px** (like the homepage). This task also picks up what 05
-    deferred: two-column headline grid + rent-summary card + capital-area note plate + breadcrumb.
-  - **Remove the Overview / Living Info tabs** — flat scroll in the decided section order. Drop
-    the `tabs.njk` include from `region.njk` (check `tabs.js` isn't needed elsewhere first).
-  - **Costs:** Gangwon-do only gets a real cost block (rent-summary card + "What a month costs"
-    prose) — figures backed by `src/_data/rentalMarketScan.js`; keep the existing Gangwon cost
-    copy. The other five regions show the cost heading + a plain "not compiled yet" empty state
-    (an honest empty state, **not** a `MOCK` value). Do not render `costOfLiving.json` (all MOCK).
-  - **Festival pager:** keep the existing `‹ 1 / 3 ›` control, restyled in the new palette, and
-    add a `1–5 of 17 in October`-style range line beneath it. Pagination math stays frozen.
+- [x] **06 — Region page body sections.** Map, guides, cities, costs+festivals band, attractions,
+  dishes in the decided order; Overview/Living-Info tabs removed; page widened to ~1280px with the
+  two-column headline (Gangwon-do only). Verified 1280 / 900 / 390 / 360, no h-scroll.
+  *Deviations:* `cities.json` edited (no-touch file) — Sokcho/Chuncheon getting-around, on the
+  user's instruction; standalone "Getting around" section dropped, `transport.json` kept for a
+  later per-city revival; Gangwon-do is the only region with a real cost block, the rest get an
+  honest empty state (`costOfLiving.json` left unrendered — all `MOCK`).
 
 ⏸ **CHECKPOINT C** — viewport pass, then stop for review.
 

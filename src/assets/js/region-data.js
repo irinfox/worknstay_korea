@@ -53,7 +53,6 @@ function renderAttractions(container, attractions) {
 const EVENTS_PAGE_SIZE = 5;
 
 // Small inline glyphs (project rule: inline SVG, zero icon libraries).
-const CAL_ICON = `<svg class="event-cal__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M5 1a1 1 0 0 1 1 1v1h4V2a1 1 0 1 1 2 0v1h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h1V2a1 1 0 0 1 1-1Zm8 5H3v7h10V6Z"/></svg>`;
 const PIN_ICON = `<svg class="event-place__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
 const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
 // Tear-off desk calendar with a blank page — the empty state ("no dates listed").
@@ -68,12 +67,12 @@ function monthKeyOf(isoDate) {
   return isoDate.slice(0, 7);
 }
 
-// Short, international month label for a "YYYY-MM" key; appends the year only when it isn't the
-// current one so a same-year list stays compact ("Oct (3)") but a cross-year one stays
-// unambiguous ("Jan 2027 (1)").
-function monthLabel(key) {
+// Full month name for the month sub-tabs ("October · 3") and the pager's "1–5 of 17 in October"
+// range line; appends the year only when it isn't the current one so a same-year list stays
+// compact but a cross-year one stays unambiguous ("January 2027 · 1").
+function monthLabelLong(key) {
   const [y, m] = key.split("-").map(Number);
-  const mon = new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "short" });
+  const mon = new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "long" });
   return y === new Date().getFullYear() ? mon : `${mon} ${y}`;
 }
 
@@ -86,29 +85,17 @@ function readableRange(start, end) {
   return `${s} to ${e}`;
 }
 
-// The visible date block, styled like a calendar tear-off. Fixed size for every form so the
-// chips line up in a list: a single day / same-month span puts the number(s) on row 1 and the
-// month on row 2; a cross-month range puts "<day> <MON>" on each of two rows. Two text rows
-// either way, one font size (event-timeline.css). The old under-title date line is gone.
-function calChip(ev) {
+// The visible date, as one plain orange line (design reference 5b): "4 – 13 SEP" for a
+// same-month span, "4 APR – 27 NOV" across months, "9 SEP" for a single day. The full,
+// screen-reader-facing range sits in an adjacent .sr-only span.
+function dateRangeShort(ev) {
   const s = new Date(`${ev.startDate}T00:00:00`);
   const e = new Date(`${ev.endDate}T00:00:00`);
   const MON = (d) => d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
-  let face;
-  if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth()) {
-    const days = ev.startDate === ev.endDate ? s.getDate() : `${s.getDate()}–${e.getDate()}`;
-    face =
-      `<span class="event-cal__row event-cal__row--num">${days}</span>` +
-      `<span class="event-cal__row event-cal__row--mon">${MON(s)}</span>`;
-  } else {
-    face =
-      `<span class="event-cal__row"><b>${s.getDate()}</b>&nbsp;${MON(s)}</span>` +
-      `<span class="event-cal__row event-cal__row--end"><b>${e.getDate()}</b>&nbsp;${MON(e)}</span>`;
-  }
-  return `<span class="event-cal">
-    <span class="sr-only">${readableRange(ev.startDate, ev.endDate)}</span>
-    <span class="event-cal__face" aria-hidden="true">${CAL_ICON}${face}</span>
-  </span>`;
+  if (ev.startDate === ev.endDate) return `${s.getDate()} ${MON(s)}`;
+  if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth())
+    return `${s.getDate()} – ${e.getDate()} ${MON(s)}`;
+  return `${s.getDate()} ${MON(s)} – ${e.getDate()} ${MON(e)}`;
 }
 
 // Ongoing-panel badge shown inline after the event name: multi-month festivals are "Long-term",
@@ -160,13 +147,16 @@ function renderEventCard(ev, { badge = false } = {}) {
     ? `<span class="event-place" title="${addr}">
          ${PIN_ICON}<span class="event-place__city">${escapeHtml(cityFromAddress(ev.address))}</span>
          <button type="button" class="event-place__copy" data-address="${addr}"
-           aria-label="Copy full address" title="Copy full address">${COPY_ICON}</button>
+           aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label">Copy address</span></button>
          <span class="event-place__status" role="status" aria-live="polite"></span>
        </span>`
     : "";
   return `
     <li class="event-card">
-      ${calChip(ev)}
+      <span class="event-card__date">
+        <span class="sr-only">${readableRange(ev.startDate, ev.endDate)}</span>
+        <span aria-hidden="true">${dateRangeShort(ev)}</span>
+      </span>
       <div class="event-card__body">
         <p class="event-card__title">${escapeHtml(ev.titleEn)}${badge ? ongoingBadge(ev) : ""}</p>
         ${place}
@@ -176,18 +166,20 @@ function renderEventCard(ev, { badge = false } = {}) {
 
 // A card list, plus a pager when it runs past one page. Every item is in the DOM; the pager just
 // toggles `hidden` on the out-of-page ones (setupPagers), so it degrades to a full list if the
-// pager JS never runs.
-function renderCardList(events, opts) {
+// pager JS never runs. `opts.rangeContext` (e.g. " in October" or " running now") is appended
+// to the "1–5 of 17" range line under the pager.
+function renderCardList(events, opts = {}) {
   const ul = `<ul class="event-list">${events.map((e) => renderEventCard(e, opts)).join("")}</ul>`;
   if (events.length <= EVENTS_PAGE_SIZE) return `<div class="event-list-wrap">${ul}</div>`;
   const pages = Math.ceil(events.length / EVENTS_PAGE_SIZE);
   return `
-    <div class="event-list-wrap" data-paged>
+    <div class="event-list-wrap" data-paged data-range-suffix="${escapeHtml(opts.rangeContext || "")}">
       ${ul}
       <div class="event-pager">
         <button type="button" class="event-pager__btn" data-dir="-1" aria-label="Previous events">‹</button>
         <span class="event-pager__status">1 / ${pages}</span>
         <button type="button" class="event-pager__btn" data-dir="1" aria-label="More events">›</button>
+        <span class="event-pager__range" data-range aria-live="polite"></span>
       </div>
     </div>`;
 }
@@ -203,21 +195,21 @@ function buildUpcomingPanel(later) {
 
   // One month → skip the month-tab strip, it'd just be a single chip.
   if (keys.length === 1) {
-    return `<div class="event-monthpanel">${renderCardList(byMonth.get(keys[0]))}</div>`;
+    return `<div class="event-monthpanel">${renderCardList(byMonth.get(keys[0]), { rangeContext: ` in ${monthLabelLong(keys[0])}` })}</div>`;
   }
 
   const tabs = keys
     .map(
       (key, i) =>
         `<button type="button" role="tab" class="event-months__tab" aria-selected="${i === 0}"
-           tabindex="${i === 0 ? 0 : -1}" data-month="${key}">${monthLabel(key)} (${byMonth.get(key).length})</button>`
+           tabindex="${i === 0 ? 0 : -1}" data-month="${key}">${monthLabelLong(key)} · ${byMonth.get(key).length}</button>`
     )
     .join("");
   const panels = keys
     .map(
       (key, i) =>
         `<div class="event-monthpanel" role="tabpanel" data-month="${key}"${i === 0 ? "" : " hidden"}>
-           ${renderCardList(byMonth.get(key))}
+           ${renderCardList(byMonth.get(key), { rangeContext: ` in ${monthLabelLong(key)}` })}
          </div>`
     )
     .join("");
@@ -269,7 +261,7 @@ function renderEventsTimeline(container, events) {
     return;
   }
 
-  const ongoingInner = renderCardList(ongoing, { badge: true });
+  const ongoingInner = renderCardList(ongoing, { badge: true, rangeContext: " running now" });
 
   if (hasOngoing && hasLater) {
     container.innerHTML = `
@@ -350,6 +342,8 @@ function setupPagers(container) {
   container.querySelectorAll(".event-list-wrap[data-paged]").forEach((wrap) => {
     const items = Array.from(wrap.querySelectorAll(".event-list > .event-card"));
     const status = wrap.querySelector(".event-pager__status");
+    const range = wrap.querySelector("[data-range]");
+    const rangeSuffix = wrap.dataset.rangeSuffix || "";
     const prev = wrap.querySelector('.event-pager__btn[data-dir="-1"]');
     const next = wrap.querySelector('.event-pager__btn[data-dir="1"]');
     const pages = Math.ceil(items.length / EVENTS_PAGE_SIZE);
@@ -360,6 +354,12 @@ function setupPagers(container) {
         li.hidden = Math.floor(i / EVENTS_PAGE_SIZE) !== page - 1;
       });
       status.textContent = `${page} / ${pages}`;
+      // Presentational readout only — pagination math above is unchanged (HANDOFF task 06).
+      if (range) {
+        const from = (page - 1) * EVENTS_PAGE_SIZE + 1;
+        const to = Math.min(page * EVENTS_PAGE_SIZE, items.length);
+        range.textContent = `${from}–${to} of ${items.length}${rangeSuffix}`;
+      }
       prev.disabled = page === 1;
       next.disabled = page === pages;
     };

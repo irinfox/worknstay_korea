@@ -170,7 +170,7 @@
     "gettingAround": [
       { "label": "Seoraksan", "value": "40 min" },
       { "label": "Yangyang Beaches", "value": "1.2h" },
-      { "label": "Seoul", "value": "2.5–3h (Direct)" }
+      { "label": "Seoul", "value": "2.5–3h", "mode": "bus" }
     ],
     "isPopulationDeclineArea": false,
     "workationCenters": [
@@ -242,7 +242,7 @@
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "gettingAround": [
       { "label": "Elysian Ski Resort", "value": "50 min" },
-      { "label": "Seoul", "value": "1.5h", "mode": "train" }
+      { "label": "Seoul", "value": "1.5h", "mode": "train", "alt": [{ "value": "2h", "mode": "subway" }] }
     ],
     "isPopulationDeclineArea": false,
     "workationCenters": []

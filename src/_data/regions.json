@@ -41,16 +41,16 @@
     "costOfLivingKey": "gangwon-do",
     "usefulLinks": [
       {
-        "label": "Surfing guide",
-        "activityLabel": "Surf",
+        "label": "Surfing in Korea",
         "url": "https://pack-lightly.com/south-korea/surfspots/",
-        "sourceLabel": "pack-lightly.com"
+        "sourceLabel": "pack-lightly.com",
+        "sourceDate": "May 2026"
       },
       {
-        "label": "Ski resorts guide",
-        "activityLabel": "Ski",
+        "label": "Ski resorts in Korea",
         "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=251052",
-        "sourceLabel": "english.visitkorea.or.kr (KTO)"
+        "sourceLabel": "visitkorea.or.kr",
+        "sourceDate": "Nov 2025"
       }
     ]
   },

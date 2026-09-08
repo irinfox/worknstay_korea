@@ -1,0 +1,258 @@
+/*
+ * city-card.njk — Gangwon-do's "Cities in this region" cards (region.njk), design reference
+ * 5b/5d. White bordered card: name + Korean name + vibe tags, blurb, a grey "Where to work"
+ * panel (named venues with text links + a 4-cell study-café battery), then a "Getting around"
+ * line. No accordion — every card is fully expanded.
+ */
+.city-card-list {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .city-card-list {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.city-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 22px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.city-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 20px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* Below the two-column grid the card is too narrow to hold the name and its tags on one row,
+   or the study-café row on one line — let both wrap (design reference 5d). */
+@media (max-width: 767.98px) {
+  .city-card {
+    padding: 16px;
+  }
+
+  .city-card__head {
+    flex-direction: column;
+  }
+
+  .city-card__tags {
+    justify-content: flex-start;
+  }
+
+  .work-venue__name {
+    flex-wrap: wrap;
+  }
+
+  .study-cafes {
+    flex-wrap: wrap;
+  }
+
+  .study-cafes__search {
+    margin-left: 0;
+    flex-basis: 100%;
+  }
+}
+
+.city-card__name {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.city-card__ko {
+  font-family: "Noto Sans KR", var(--font-family-base);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.city-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.city-card__tags li {
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-primary-dark);
+  background: var(--color-vibe-tag-bg);
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: 22px;
+  white-space: nowrap;
+}
+
+.city-card__blurb {
+  margin: 0 0 16px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+/* Grey "Where to work" panel. */
+.city-work {
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border-radius: 10px;
+}
+
+.city-work__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.city-work__tick {
+  flex-shrink: 0;
+  width: 3px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--color-primary);
+}
+
+.work-venue {
+  margin-bottom: 12px;
+}
+
+.work-venue__name {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.work-venue__kind {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.work-venue__addr {
+  margin: 3px 0 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.work-venue__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.work-venue__links a {
+  color: var(--color-text-soft);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.work-venue__links a:hover {
+  color: var(--color-primary);
+}
+
+/* 4-cell study-café battery + count label + Naver Map search link, one non-wrapping row on a
+   hairline (DESIGN.md § "Study cafés"). */
+.study-cafes {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+.study-cafes:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.study-cafes__label {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.study-cafes__battery {
+  display: flex;
+  gap: 3px;
+  flex-shrink: 0;
+}
+
+.study-cafes__cell {
+  width: 15px;
+  height: 9px;
+  border-radius: 2px;
+  background: #dce3df;
+}
+
+.study-cafes__cell--on {
+  background: var(--color-primary);
+}
+
+.study-cafes__count {
+  font-weight: 600;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+.study-cafes__search {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.city-card__around {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 5px 18px;
+  margin: 12px 0 0;
+  font-size: 13px;
+}
+
+.city-card__around-label {
+  color: var(--color-text-muted);
+}
+
+.city-card__leg {
+  white-space: nowrap;
+  color: var(--color-text-soft);
+}
+
+.city-card__leg strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.city-card__mode {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,61 @@
+{# Gangwon-do "Cities in this region" card (design reference 5b/5d). White bordered card:
+   name + Korean name + vibe tags, blurb, a grey "Where to work" panel (named coworking venues
+   with Website / Instagram / Naver Map text links, plus a 4-cell study-café battery), then a
+   "Getting around" line. No accordion — always open. Param: city (City, required). #}
+<article class="city-card">
+  <div class="city-card__head">
+    <h3 class="city-card__name">{{ city.nameEn }} <span class="city-card__ko">{{ city.nameKo }}</span></h3>
+    {% if city.vibeTags.length %}
+    <ul class="city-card__tags">
+      {% for tag in city.vibeTags %}<li>{{ tag }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  {% if city.blurb %}<p class="city-card__blurb">{{ city.blurb }}</p>{% endif %}
+
+  {% if city.workationCenters.length or city.otherWorkspaces.length %}
+  <div class="city-work">
+    <p class="city-work__title"><span class="city-work__tick" aria-hidden="true"></span>Where to work</p>
+
+    {% for wc in city.workationCenters %}
+    <div class="work-venue">
+      <p class="work-venue__name">{{ wc.name }} <span class="work-venue__kind">coworking</span></p>
+      {% if wc.address %}<p class="work-venue__addr">{{ wc.address }}</p>{% endif %}
+      <p class="work-venue__links">
+        {% if wc.url %}<a href="{{ wc.url }}" target="_blank" rel="noopener">Website ↗</a>{% endif %}
+        {% if wc.instagram %}<a href="https://instagram.com/{{ wc.instagram }}" target="_blank" rel="noopener">Instagram ↗</a>{% endif %}
+        {% if wc.mapUrl %}<a href="{{ wc.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}
+      </p>
+    </div>
+    {% endfor %}
+
+    {% for space in city.otherWorkspaces %}
+    <div class="study-cafes">
+      <span class="study-cafes__label">Study cafés</span>
+      <span class="study-cafes__battery" aria-hidden="true">
+        {% for n in range(1, 5) %}<span class="study-cafes__cell{% if n <= space.level %} study-cafes__cell--on{% endif %}"></span>{% endfor %}
+      </span>
+      <span class="study-cafes__count">
+        {%- if space.level == 1 -%}not many{%- elif space.level == 2 -%}enough{%- else -%}plenty{%- endif -%}
+      </span>
+      <span class="sr-only">({{ space.level }} of 3)</span>
+      <a class="study-cafes__search" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map search ↗</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if city.gettingAround.length %}
+  <p class="city-card__around">
+    <span class="city-card__around-label">Getting around:</span>
+    {% for g in city.gettingAround -%}
+      {#- `alt` holds any second way to the same place (e.g. Chuncheon: train + subway); each
+         time stays bold, each mode grey -#}
+      <span class="city-card__leg">{{ g.label }} <strong>{{ g.value }}</strong> <span class="city-card__mode">{{ g.mode or "bus" }}</span>
+        {%- for a in g.alt %} <span class="city-card__mode" aria-hidden="true">·</span> <strong>{{ a.value }}</strong> <span class="city-card__mode">{{ a.mode }}</span>{% endfor -%}
+      </span>
+    {%- endfor %}
+  </p>
+  {% endif %}
+</article>

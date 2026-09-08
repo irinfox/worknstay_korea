@@ -33,9 +33,15 @@
   stroke-width: 2;
 }
 
-.map-pin__icon {
-  text-anchor: middle;
-  font-size: 20px;
+/* Line-icon pin glyphs (design reference 5b) — city in ink, nature types (mountain / surf / ski)
+   in green. Replaces the emoji <text> pins the SVG used to carry. */
+.map-pin__glyph {
+  color: var(--color-text);
+  overflow: visible;
+}
+
+.map-pin__glyph--nature {
+  color: var(--color-primary);
 }
 
 .map-pin__label {
@@ -76,6 +82,9 @@
 .map-pin--ski .map-pin__label {
   opacity: 0;
   pointer-events: none;
+  /* lighter than the always-on city/mountain labels — a resort name revealed on hover reads as
+     a soft annotation, matching the Yangyang beach-detail line, not a permanent map label. */
+  font-weight: 400;
   transition: opacity 0.15s ease;
 }
 
@@ -131,4 +140,20 @@
   margin-top: var(--space-2);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+}
+
+.region-detail-map__legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.region-detail-map__legend svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-primary);
+}
+
+.region-detail-map__legend span:first-child svg {
+  color: var(--color-text);
 }
