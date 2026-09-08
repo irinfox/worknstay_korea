@@ -105,6 +105,12 @@
   color: var(--color-text-soft);
 }
 
+/* Regions where a city carries only name + blurb (the five mock regions): the blurb is the last
+   thing in the card, so drop its trailing gap. */
+.city-card__blurb:last-child {
+  margin-bottom: 0;
+}
+
 /* Grey "Where to work" panel. */
 .city-work {
   padding: 16px 18px;

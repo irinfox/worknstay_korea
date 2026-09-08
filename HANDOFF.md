@@ -233,7 +233,7 @@ Tick the box, then stop.
   now>` ("yet" = static gaps, "right now" = live KTO); noscript pair made parallel.
   - `visa-info.njk`'s `.empty-state`-as-disclaimer left as-is (pre-07, ROADMAP Phase 27).
 
-- [ ] **07d — Redesign the Gyeonggi-do decline-counties page** (`population-decline-counties.njk`)
+- [x] **07d — Redesign the Gyeonggi-do decline-counties page** (`population-decline-counties.njk`)
   to the redesign style. Design ref: user's screenshot (2026-09-08, "Gyeonggi counties — desktop
   + phone"). Layout: two-column headline (H1 "Where Gyeonggi-do still qualifies" + 경기도
   인구감소지역 + intro left; tinted threshold-summary card right with a mini key/value table +
@@ -241,20 +241,26 @@ Tick the box, then stop.
   / `Watch-list · 3` count chips over rows of dark photo cards (county name over the photo, KTO
   attraction label + Korean + metro under it), KTO photo credit, an **"Optional: a map with
   distance from Seoul"** placeholder plate, footer ("Regions →").
-  - Threshold figures: pull the real non-capital vs capital numbers from `visaRules.json`.
-  - Source is confirmed: 「(지정주기) 5년 단위 지정 (’21.10월 최초 지정)」 — cite it.
-  - Build the map placeholder plate now; the map itself is a later decision.
-  - Data: `populationDeclineAreas.json`, `countyHeroPhotos.json` / `countyHeroCredits.json`.
-    Keep the existing route/permalink.
+  *Done:*
+  - Wrapper reuses `region-page` + `region-header--split`; threshold figures from `visaRules.json`
+    shown as age-banded ranges. Map plate tagged `TBD`. Source: no date, no 지정주기 string.
+  - Breadcrumb + outro link `/` (also fixed `region.njk`'s dead `/regions/` crumb).
+  - Old `.county-*` CSS removed.
 
-- [ ] **07e — Non-Gangwon region pages inherit Gangwon's city + cost view.** Decision: **option
+- [x] **07e — Non-Gangwon region pages inherit Gangwon's city + cost view.** Decision: **option
   (a)** — render `city-card.njk` for all six regions with graceful-empty sections (the five mock
   regions only carry `nameEn`/`nameKo`/`blurb` today). Same for the cost block: Gangwon's
   cost-table shell everywhere, honest empty state where figures are still `MOCK`. Drop the bare
   `.city-list` fallback in `region.njk`.
+  *Done:*
+  - `.city-list` markup + CSS removed; `city-card.njk` skips `CLOSED` venues; `city-list__badge`
+    dropped (now the 07d page).
+  - Cost empty state (task 06) kept, dashed frame stripped inside the band.
+  - All region headers now `region-header--split` — visa note plate fills the right column.
+  - Open: Gyeonggi-do still lists Seoul/Incheon/Seongnam cities; may want a per-region filter.
 
-⏸ **CHECKPOINT D** — [ ] viewport pass after 07d + 07e, then stop. (07a–c passed a review round
-  2026-09-08.)
+⏸ **CHECKPOINT D** — [x] viewport pass done (1280 / 900 / 390 / 360, county + non-Gangwon
+  regions). No h-scroll; headline collapses cleanly; tier strips scroll-snap.
 
 - [ ] **08 — Final pass.** Full viewport pass across every page in scope, plus a real iOS Safari
   pass (CLAUDE.md rule 7).

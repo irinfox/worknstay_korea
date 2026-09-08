@@ -193,7 +193,9 @@ ul.region-seasons {
 
 /* ── Headline block: two columns on desktop (design reference 5b) ─────────────────────────────
    Left = rule → H1 → vibe tags → intro → season line. Right = (Gangwon only) furnished-rent
-   recap card, then the capital-area note plate. One column below 900px, aside after the intro. */
+   recap card, then the capital-area note plate. One column below 900px, aside after the intro.
+   Every region page uses the split so the note plate fills the right column at a consistent
+   width; the county page (07d) reuses this block too. */
 .region-page .region-header {
   display: grid;
   gap: 24px;
@@ -204,23 +206,13 @@ ul.region-seasons {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 440px;
 }
 
-/* Two columns only where the aside carries the furnished-rent recap card (Gangwon-do). Other
-   regions have just the note plate, which reads better below the intro at its own width. */
 @media (min-width: 900px) {
   .region-page .region-header--split {
     grid-template-columns: 1.35fr 1fr;
     gap: 40px;
     align-items: start;
-  }
-
-  /* In two-column mode the rent card + note plate fill the whole right column, so their right
-     edge lines up with the gallery and every section below (design reference 5b). The 440px cap
-     only applies to the one-column, note-plate-only layout other regions use. */
-  .region-page .region-header--split .region-header__aside {
-    max-width: none;
   }
 }
 
@@ -645,174 +637,315 @@ ul.region-seasons {
   text-decoration: underline;
 }
 
-.city-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+/* The cost column's "no figures yet" line is plain muted text, not a framed plate — inside the
+   tinted band a dashed box reads as broken. */
+.region-band__col--costs .empty-state {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
 }
 
-.city-list__item {
-  padding: 20px 22px;
-  border: 1px solid var(--color-border);
+/* ── Gyeonggi-do population-decline counties (population-decline-counties.njk) ─────────────────
+   Redesign style: reuses the wide .region-page shell + two-column .region-header--split headline
+   (rule → H1 → Korean name → intro; aside holds the threshold card instead of the rent recap).
+   Below: a source note, a "by tier" section with two chip-labelled scroll strips of dark photo
+   cards, and a placeholder plate for the future distance-from-Seoul map. */
+.county-page__ko {
+  margin: 6px 0 0;
+  font-family: "Noto Sans KR", var(--font-family-base);
+  font-size: 17px;
+  color: var(--color-text-muted);
+}
+
+/* Tinted threshold-summary card (design reference 6c). Sits in the headline aside; rows and the
+   lead line are divided by the soft primary hairline, no inner card. */
+.threshold-card {
+  padding: 18px 20px;
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
   border-radius: 12px;
 }
 
-.city-list__photo {
-  width: 100%;
-  max-width: 320px;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-2);
-}
-
-.city-list__photo-caption {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  margin: -6px 0 var(--space-2);
-  font-size: var(--font-size-xs, 0.75rem);
-  color: var(--color-text-muted);
-}
-
-.city-list__photo-caption-ko {
-  color: var(--color-text-muted);
-}
-
-.city-list__name {
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.city-list__blurb {
-  margin-top: 8px;
+.threshold-card__lead {
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-primary-tint-border-soft);
   font-size: 15px;
   line-height: 1.6;
   color: var(--color-text-soft);
 }
 
-.city-list__ko {
-  font-weight: 400;
-  color: var(--color-text-muted);
-}
-
-.city-list__badge {
-  display: inline-block;
-  margin-top: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--color-primary-dark);
-  background: var(--color-surface);
-  border-radius: var(--radius-sm);
-}
-
-.city-list__workation {
-  margin-top: var(--space-2);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-/* --- Gyeonggi-do population-decline counties (population-decline-counties.njk) -------------
-   Two labelled rows (designated / watch-list), each a responsive card grid. County name sits
-   above the photo; the photo's attraction label overlays the image bottom-left, same treatment
-   as the region hero-gallery captions (.region-hero__caption). */
-
-/* One notch down from the shared region h1 so this longer title clears the reading column on a
-   single line at desktop width (still wraps on narrow, which is fine there). */
-.county-header h1 {
-  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
-}
-
-/* Trim the trailing whitespace before the footer — this page ends on a one-line photo credit,
-   not a full content block. */
-.content-page--tight-end .region-section:last-child {
-  margin-bottom: var(--space-2);
-}
-
-.county-group {
-  margin-top: var(--space-5);
-}
-
-.county-group__title {
-  margin-bottom: var(--space-3);
-  font-size: var(--font-size-lg);
-}
-
-/* Horizontal scroll-snap strip (same pattern as .attraction-list) rather than a wrapping grid,
-   so each group stays one row and the watch-list group below stays in view. */
-.county-grid {
-  display: flex;
-  gap: var(--space-4);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  list-style: none;
+.threshold-card__table {
   margin: 0;
-  padding: 0 0 var(--space-2);
 }
 
-.county-card {
-  flex: 0 0 240px;
-  scroll-snap-align: start;
+.threshold-card__table > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.threshold-card__table > div:last-child {
+  border-bottom: 0;
+}
+
+.threshold-card__table dt {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.threshold-card__table dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.threshold-card__note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.threshold-card__links {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-3);
+  gap: 7px;
+  margin: 12px 0 0;
+}
+
+.threshold-card__links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.threshold-card__links a:hover {
+  text-decoration: underline;
+}
+
+/* Source note — panel with an orange tick, "Source:" on its own line, body below (design ref 6c). */
+.source-note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px 18px;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: 10px;
 }
 
-.county-card__name {
-  margin: 0;
-  font-size: var(--font-size-base);
-}
-
-.county-card__ko {
-  font-weight: 400;
+.source-note__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
-.county-card__metro {
-  margin: var(--space-1) 0 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+.source-note__tick {
+  flex-shrink: 0;
+  width: 3px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
 }
 
-.county-card__figure {
-  position: relative;
+.source-note__text {
   margin: 0;
-  border-radius: var(--radius-sm);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+}
+
+.source-note__text a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* "The seven, by tier" — one chip-labelled row + a horizontal scroll-snap strip per tier
+   (same no-JS pattern as .attraction-list / .region-hero-gallery__track). */
+.tier-group {
+  margin-top: 22px;
+}
+
+.tier-group:first-of-type {
+  margin-top: 0;
+}
+
+.tier-label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.tier-chip {
+  flex-shrink: 0;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tier-chip--designated {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  color: var(--color-primary);
+}
+
+.tier-chip--watch {
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent-tint-border);
+  color: var(--color-accent);
+}
+
+.tier-grid {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.tier-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.tier-card {
+  flex: 0 0 264px;
+  scroll-snap-align: start;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   overflow: hidden;
 }
 
-.county-card__photo {
-  display: block;
+.tier-card__figure {
+  position: relative;
+  margin: 0;
+  height: 150px;
+  background: var(--color-surface);
+}
+
+.tier-card__img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
 }
 
-.county-card__caption {
+.tier-card__spot {
   position: absolute;
-  left: var(--space-2);
-  bottom: var(--space-2);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: calc(100% - var(--space-4));
-  padding: 2px var(--space-2);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 40px 14px 12px;
+  background: linear-gradient(
+    rgba(22, 32, 28, 0),
+    rgba(22, 32, 28, 0.4) 45%,
+    rgba(22, 32, 28, 0.9)
+  );
   color: #fff;
-  background: rgba(10, 10, 10, 0.55);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs, 0.75rem);
-  line-height: 1.3;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
 }
 
-.county-card__caption-ko {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.6875rem;
+.tier-card__spot-en {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.tier-card__spot-ko {
+  display: block;
+  font-family: "Noto Sans KR", var(--font-family-base);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tier-card__body {
+  padding: 14px 16px;
+}
+
+.tier-card__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tier-card__ko {
+  font-family: "Noto Sans KR", var(--font-family-base);
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.tier-card__metro {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .tier-card {
+    flex-basis: 288px;
+  }
+}
+
+/* Placeholder plate for the future "distance from Seoul" map (design reference 6c). */
+.map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.map-placeholder__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.map-placeholder__sub {
+  color: var(--color-text-muted);
+}
+
+.map-placeholder__tag {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.county-outro {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.county-outro a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.county-outro a:hover {
+  text-decoration: underline;
 }
 
 /* Attractions + dishes: horizontal scroll-snap strips (no carousel library, no JS). The

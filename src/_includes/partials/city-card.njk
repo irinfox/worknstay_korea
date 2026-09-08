@@ -19,6 +19,7 @@
     <p class="city-work__title"><span class="city-work__tick" aria-hidden="true"></span>Where to work</p>
 
     {% for wc in city.workationCenters %}
+    {% if (wc.note or "").indexOf("CLOSED") == -1 %}
     <div class="work-venue">
       <p class="work-venue__name">{{ wc.name }} <span class="work-venue__kind">coworking</span></p>
       {% if wc.address %}<p class="work-venue__addr">{{ wc.address }}</p>{% endif %}
@@ -28,6 +29,7 @@
         {% if wc.mapUrl %}<a href="{{ wc.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}
       </p>
     </div>
+    {% endif %}
     {% endfor %}
 
     {% for space in city.otherWorkspaces %}

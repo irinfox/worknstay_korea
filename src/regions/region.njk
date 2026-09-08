@@ -22,10 +22,10 @@ eleventyComputed:
 <div class="content-page region-page">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
-  <a href="/regions/">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
+  <a href="/">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
 </nav>
 
-<header class="region-header{% if isGangwon %} region-header--split{% endif %}">
+<header class="region-header region-header--split">
   <div class="region-header__main">
     <span class="region-header__rule" aria-hidden="true"></span>
     <h1>{{ region.nameEn }} <span class="region-header__ko">{{ region.nameKo }}</span></h1>
@@ -178,33 +178,17 @@ eleventyComputed:
     {% include "partials/city-card.njk" %}
     {% endfor %}
   </div>
-  {% else %}
-  <h2>Where you'd live</h2>
-  {% if regionCities.length %}
-  <ul class="city-list">
+  {% elif regionCities.length %}
+  <h2>Cities in this region</h2>
+  <div class="city-card-list">
     {% for city in regionCities %}
-    <li class="city-list__item">
-      <h3 class="city-list__name">{{ city.nameEn }} <span class="city-list__ko">{{ city.nameKo }}</span></h3>
-      <p class="city-list__blurb">{{ city.blurb }}</p>
-      {% if city.isPopulationDeclineArea and region.isCapitalArea %}
-      {# Only meaningful in capital-area regions, where decline-county status is what unlocks the
-         lower non-capital visa income threshold. #}
-      <p class="city-list__badge">Population-decline-designated area</p>
-      {% endif %}
-      {% if city.workationCenters.length %}
-      <ul class="city-list__workation">
-        {% for wc in city.workationCenters %}
-        <li>{{ wc.name }}{% if wc.address %} — {{ wc.address }}{% endif %}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-    </li>
+    {% include "partials/city-card.njk" %}
     {% endfor %}
-  </ul>
+  </div>
   {% else %}
+  <h2>Cities in this region</h2>
   {% set message = "No cities listed for this region yet." %}
   {% include "partials/empty-state.njk" %}
-  {% endif %}
   {% endif %}
 </section>
 

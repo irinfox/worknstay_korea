@@ -1,74 +1,143 @@
 ---
 layout: layouts/page.njk
 title: "Gyeonggi-do Population-Decline Counties"
-description: "The Gyeonggi-do counties designated as population-decline or watch-list areas, which qualify for the F-1-D visa's lower, non-capital income threshold."
+description: "The Gyeonggi-do and Incheon counties that qualify for the F-1-D visa's lower, non-capital income threshold despite sitting inside the capital area."
 permalink: "/regions/gyeonggi-do/population-decline-counties/"
 ---
-{# Not paginated like regions/region.njk — there's only one region this data can ever affect
-   (architecture.md §7: Gyeonggi-do is the only capital-tier region, so it's the only place a
-   population-decline county can change the eligibility outcome). Built the same way as a region
-   page otherwise: same .content-page/.region-header shell, same .city-list pattern already used
-   for cities.json entries (region.njk) reused here for county entries — same shape (English/
-   Korean name + a category badge), just a different data source. #}
-<div class="content-page content-page--tight-end">
-<header class="region-header county-header">
-  <h1>Gyeonggi-do population-decline counties</h1>
-  <p class="region-header__intro">
-    Gyeonggi-do is a capital-tier F-1-D region with the country's highest income threshold. Some
-    counties — though administratively part of Gyeonggi-do — still qualify at the lower,
-    non-capital threshold, because the government lists them as population-decline or watch-list
-    areas.
-  </p>
-  <p class="region-header__intro">
-    See the <a href="/visa-info/">visa info</a> for the rules and the
-    <a href="/regions/gyeonggi-do/">Gyeonggi-do region page</a> for living info.
-  </p>
-</header>
+{# Not paginated like regions/region.njk — Gyeonggi-do is the only capital-tier region, so it's
+   the only place a population-decline county can change the eligibility outcome (architecture.md
+   §7). Redesign style: same wide .region-page shell + two-column headline as region.njk, with a
+   tinted threshold-summary card in place of the rent recap. #}
+{% set declineCounties = [] %}
+{% set watchCounties = [] %}
+{% for c in populationDeclineAreas %}
+{% if c.category == "decline" %}{% set pushed = declineCounties.push(c) %}{% else %}{% set pushed = watchCounties.push(c) %}{% endif %}
+{% endfor %}
 
-{% macro countyCard(county) %}
-{% set countyPhoto = countyHeroPhotos[county.countyNameEn] %}
-{% set countyCredit = countyHeroCredits.photos[countyPhoto] %}
-<li class="county-card">
-  <div class="county-card__head">
-    <h4 class="county-card__name">{{ county.countyNameEn }} <span class="county-card__ko">{{ county.countyNameKo }}</span></h4>
-    <p class="county-card__metro">{{ county.metroEn }}</p>
-  </div>
-  {% if countyPhoto %}
-  <figure class="county-card__figure">
-    <img class="county-card__photo" src="/assets/img/hero/gyeonggi-do-population-decline/{{ countyPhoto }}" alt="{{ countyCredit.titleEn }}" loading="lazy">
-    {% if countyCredit.titleEn %}
-    <figcaption class="county-card__caption">
-      <span class="county-card__caption-en">{{ countyCredit.titleEn }}</span>
-      {% if countyCredit.titleKo %}<span class="county-card__caption-ko">{{ countyCredit.titleKo }}</span>{% endif %}
+{% macro tierCard(c) %}
+{% set photo = countyHeroPhotos[c.countyNameEn] %}
+{% set credit = countyHeroCredits.photos[photo] %}
+<li class="tier-card">
+  <figure class="tier-card__figure">
+    {% if photo %}<img class="tier-card__img" src="/assets/img/hero/gyeonggi-do-population-decline/{{ photo }}" alt="{{ credit.titleEn }}" loading="lazy">{% endif %}
+    {% if credit.titleEn %}
+    <figcaption class="tier-card__spot">
+      <span class="tier-card__spot-en">{{ credit.titleEn }}</span>
+      {% if credit.titleKo %}<span class="tier-card__spot-ko" lang="ko">{{ credit.titleKo }}</span>{% endif %}
     </figcaption>
     {% endif %}
   </figure>
-  {% endif %}
+  <div class="tier-card__body">
+    <p class="tier-card__name">{{ c.countyNameEn }} <span class="tier-card__ko" lang="ko">{{ c.countyNameKo }}</span></p>
+    <p class="tier-card__metro">{{ c.metroEn }}</p>
+  </div>
 </li>
 {% endmacro %}
 
+<div class="content-page region-page county-page">
+
+<nav class="region-breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Regions</a> <span aria-hidden="true">/</span>
+  <a href="/regions/gyeonggi-do/">Gyeonggi-do</a> <span aria-hidden="true">/</span>
+  <span class="region-breadcrumb__here">Decline counties</span>
+</nav>
+
+<header class="region-header region-header--split">
+  <div class="region-header__main">
+    <span class="region-header__rule" aria-hidden="true"></span>
+    <h1>Where Gyeonggi-do still qualifies</h1>
+    <p class="county-page__ko" lang="ko">경기도 인구감소지역</p>
+    <p class="region-header__intro">
+      Gyeonggi-do is a capital-area region, so its F-1-D income threshold is the country's
+      highest. Seven counties are the exception.
+    </p>
+    <p class="region-header__intro">
+      They sit inside the capital area administratively, but the government lists them as
+      population-decline or watch-list areas — so they are assessed at the lower, non-capital
+      threshold. Everything else in Gyeonggi-do and Incheon uses the capital figure.
+    </p>
+  </div>
+
+  <aside class="region-header__aside">
+    <div class="threshold-card">
+      <p class="threshold-card__lead">
+        These seven counties are assessed at Korea's non-capital F-1-D income threshold — the
+        same as Gangwon-do or Jeolla-do.
+      </p>
+      <dl class="threshold-card__table">
+        <div>
+          <dt>In these seven counties</dt>
+          <dd>₩{{ visaRules.thresholdsByMultiplier["1"] / 1000000 }}M–{{ visaRules.thresholdsByMultiplier["1.5"] / 1000000 }}M</dd>
+        </div>
+        <div>
+          <dt>Rest of Gyeonggi-do &amp; Incheon</dt>
+          <dd>₩{{ visaRules.thresholdsByMultiplier["1.5"] / 1000000 }}M–{{ visaRules.thresholdsByMultiplier["2"] / 1000000 }}M</dd>
+        </div>
+        <div>
+          <dt>How many qualify</dt>
+          <dd>{{ declineCounties.length }} designated · {{ watchCounties.length }} watch-list</dd>
+        </div>
+      </dl>
+      <p class="threshold-card__note">
+        Non-capital vs capital rate — the exact figure depends on your age and whether family
+        join you.
+      </p>
+      <p class="threshold-card__links">
+        <a href="/visa-info/">Visa info →</a>
+        <a href="/settling-in/">Settling in →</a>
+      </p>
+    </div>
+  </aside>
+</header>
+
 <section class="region-section">
-  <h2>Qualifying counties</h2>
-  <p class="data-provenance">
-    Source:
-    <a href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do">Ministry of the Interior and Safety (행정안전부) 인구감소지역 designation</a>,
-    sourced 2026-08-18.
-  </p>
-
-  <div class="county-group">
-    <h3 class="county-group__title">Population-decline-designated</h3>
-    <ul class="county-grid">
-      {% for county in populationDeclineAreas %}{% if county.category == "decline" %}{{ countyCard(county) }}{% endif %}{% endfor %}
-    </ul>
+  <div class="source-note">
+    <span class="source-note__head"><span class="source-note__tick" aria-hidden="true"></span>Source:</span>
+    <p class="source-note__text">
+      <a href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do" target="_blank" rel="noopener">Ministry of the Interior &amp; Safety (행정안전부) 인구감소지역 designation ↗</a>.
+      Designated every 5 years, due this October — confirm current status with a Korean embassy
+      before applying.
+    </p>
   </div>
-
-  <div class="county-group">
-    <h3 class="county-group__title">Population watch-list</h3>
-    <ul class="county-grid">
-      {% for county in populationDeclineAreas %}{% if county.category == "watch" %}{{ countyCard(county) }}{% endif %}{% endfor %}
-    </ul>
-  </div>
-
-  <p class="data-provenance">Photo source: © Korea Tourism Organization (한국관광공사).</p>
 </section>
+
+<section class="region-section region-section--tiers">
+  <h2>The seven, by tier</h2>
+  <p class="region-section__sub">Formally designated first, then the watch-list.</p>
+
+  <div class="tier-group">
+    <p class="tier-label">
+      <span class="tier-chip tier-chip--designated">Designated · {{ declineCounties.length }}</span>
+      Formally listed as population-decline areas.
+    </p>
+    <ul class="tier-grid">
+      {% for c in declineCounties %}{{ tierCard(c) }}{% endfor %}
+    </ul>
+  </div>
+
+  <div class="tier-group">
+    <p class="tier-label">
+      <span class="tier-chip tier-chip--watch">Watch-list · {{ watchCounties.length }}</span>
+      Monitored, not yet designated — status can change year to year.
+    </p>
+    <ul class="tier-grid">
+      {% for c in watchCounties %}{{ tierCard(c) }}{% endfor %}
+    </ul>
+  </div>
+
+  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+</section>
+
+<section class="region-section">
+  <div class="map-placeholder">
+    <p class="map-placeholder__text">
+      <strong>A map with distance from Seoul</strong><br>
+      <span class="map-placeholder__sub">Seven pins, travel time to each.</span>
+    </p>
+    <span class="map-placeholder__tag">TBD</span>
+  </div>
+</section>
+
+<p class="county-outro"><a href="/">Regions →</a></p>
+
 </div>
