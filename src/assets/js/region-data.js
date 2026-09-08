@@ -24,7 +24,7 @@ async function fetchJson(url) {
 
 function renderAttractions(container, attractions) {
   if (!attractions.length) {
-    container.innerHTML = `<li class="empty-state">No attractions currently listed for this region.</li>`;
+    container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
     return;
   }
   container.innerHTML = attractions
@@ -256,7 +256,7 @@ function renderEventsTimeline(container, events) {
     container.innerHTML = `
       <div class="event-empty">
         <span class="event-empty__chip" aria-hidden="true">${CAL_EMPTY_ICON}</span>
-        <p class="event-empty__text">No local events scheduled right now — check back later.</p>
+        <p class="event-empty__text">No festivals or events listed for this region right now.</p>
       </div>`;
     return;
   }

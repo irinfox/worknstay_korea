@@ -220,24 +220,41 @@ Tick the box, then stop.
 
 ⏸ **CHECKPOINT C** — viewport pass, then stop for review.
 
-- [ ] **07 — Build the About page.** It does not exist in the repo yet — create it, matching the
-  design's About page exactly (layout, section order, spacing, type). Copy comes from
-  `src/_data/*.json`, not from the reference file's placeholder text; if a needed string has no
-  home in `_data`, add it to `site.json` and say which keys you added.
-  *Checks:* matches the reference at 1280px and 390px; nav and footer present; no copy invented.
+- [x] **07 — About page.** `src/about.njk` + `.about-*` in `static-pages.css`; copy in
+  `site.json` `about.*` (author's text, supplied in-session).
+  - Headline block (rule → H1 → calm green credential chips → intro) → tinted "Why this site?"
+    band with 3 cards. Body column `66ch` to match the region pages; 17px lead vs 15px body.
 
-- [ ] **07b — 404 page.** **There is no design for this page** — do not invent a layout and do not
-  copy one from elsewhere. Build it from the system only, exactly this and nothing more:
-  dark nav → orange `56×3px` rule → H1 "Page not found" → one line of body text → two text links
-  (`Home` and `Regions`, green, underlined) → footer. Page section stack gap `32px`, block
-  padding `44px 40px`. No illustration, no card, no search box, no suggested-content grid.
-  *Checks:* nav and footer present; nothing on the page that isn't in the list above.
+- [x] **07b — 404 page.** `src/404.njk` + `not-found.css`: system-only, centred both axes —
+  rule → H1 "Page not found" → one line → Regions / Visa info / Settling in links → footer.
+  No photo; `has-hero` off for `/404.html`.
 
-- [ ] **07c — Empty-state sweep.** Review every empty state introduced in tasks 02–07b for
-  consistency of wording and styling. Report inconsistencies before changing them.
-  *Checks:* one wording pattern across all of them; no orphaned CSS.
+- [x] **07c — Empty-state sweep.** Unified wording: `No <thing> [for this region] <yet|right
+  now>` ("yet" = static gaps, "right now" = live KTO); noscript pair made parallel.
+  - `visa-info.njk`'s `.empty-state`-as-disclaimer left as-is (pre-07, ROADMAP Phase 27).
 
-⏸ **CHECKPOINT D** — viewport pass, then stop for review.
+- [ ] **07d — Redesign the Gyeonggi-do decline-counties page** (`population-decline-counties.njk`)
+  to the redesign style. Design ref: user's screenshot (2026-09-08, "Gyeonggi counties — desktop
+  + phone"). Layout: two-column headline (H1 "Where Gyeonggi-do still qualifies" + 경기도
+  인구감소지역 + intro left; tinted threshold-summary card right with a mini key/value table +
+  "Visa info →" / "Settling in →"), source note plate, "The seven, by tier" with `Designated · 4`
+  / `Watch-list · 3` count chips over rows of dark photo cards (county name over the photo, KTO
+  attraction label + Korean + metro under it), KTO photo credit, an **"Optional: a map with
+  distance from Seoul"** placeholder plate, footer ("Regions →").
+  - Threshold figures: pull the real non-capital vs capital numbers from `visaRules.json`.
+  - Source is confirmed: 「(지정주기) 5년 단위 지정 (’21.10월 최초 지정)」 — cite it.
+  - Build the map placeholder plate now; the map itself is a later decision.
+  - Data: `populationDeclineAreas.json`, `countyHeroPhotos.json` / `countyHeroCredits.json`.
+    Keep the existing route/permalink.
+
+- [ ] **07e — Non-Gangwon region pages inherit Gangwon's city + cost view.** Decision: **option
+  (a)** — render `city-card.njk` for all six regions with graceful-empty sections (the five mock
+  regions only carry `nameEn`/`nameKo`/`blurb` today). Same for the cost block: Gangwon's
+  cost-table shell everywhere, honest empty state where figures are still `MOCK`. Drop the bare
+  `.city-list` fallback in `region.njk`.
+
+⏸ **CHECKPOINT D** — [ ] viewport pass after 07d + 07e, then stop. (07a–c passed a review round
+  2026-09-08.)
 
 - [ ] **08 — Final pass.** Full viewport pass across every page in scope, plus a real iOS Safari
   pass (CLAUDE.md rule 7).

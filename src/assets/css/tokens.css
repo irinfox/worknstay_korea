@@ -59,7 +59,9 @@
   --space-10: 4rem;
 
   /* Type */
-  --font-family-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+  /* Instrument Sans for Latin (self-hosted, @font-face in base.css); the rest of the stack is
+     the system Korean fallback for Hangul, which Instrument Sans doesn't cover. */
+  --font-family-base: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
     "Malgun Gothic", "Segoe UI", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --font-size-base: 1rem;
