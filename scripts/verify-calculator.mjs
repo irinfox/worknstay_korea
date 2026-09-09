@@ -40,9 +40,11 @@ check(
   `${EMPTY_FIELD_PREFIX}your annual salary and age.`
 );
 
-// Regression guard: Number("") is 0, same as Number("0") — a real "0" must NOT be treated as
-// empty, or an empty field silently passes as "salary/age of 0" into a real eligibility result.
-check('salary "0", valid age -> passes (0 is a real, valid salary)', messageFor("0", "30"), null);
+// A salary of 0 — blank, "0", or all-zeros — is not an answer: it's flagged for entry, not run
+// as a trivially "not eligible" result. (Age still needs the raw-string check: Number("") is 0,
+// so a blank age must not read as age 0 → "must be 18+".)
+check('salary "0", valid age -> flags salary', messageFor("0", "30"), `${EMPTY_FIELD_PREFIX}your annual salary.`);
+check('salary "000", valid age -> flags salary', messageFor("000", "30"), `${EMPTY_FIELD_PREFIX}your annual salary.`);
 
 check("negative salary -> rejected", messageFor("-1", "30"), "Enter a salary of 0 or more.");
 check(

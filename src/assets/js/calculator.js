@@ -48,9 +48,12 @@ function parseSalary(raw) {
   return digits === "" ? NaN : Number(digits);
 }
 
+// Groups the digit string itself rather than Number(digits).toLocaleString(), so deleting a
+// leading digit (70,000,000 → 0000000) keeps the remaining places as "0,000,000" instead of
+// Number() collapsing the whole field to "0".
 function formatSalary(raw) {
   const digits = String(raw ?? "").replace(/\D/g, "");
-  return digits === "" ? "" : Number(digits).toLocaleString("en-US");
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 // Reformats the salary field on every keystroke, keeping the caret in the same place relative to
@@ -88,13 +91,12 @@ function readUserInput(form) {
 }
 
 // Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs. Takes the raw input
-// strings alongside the parsed userInput specifically to tell "field left empty" apart from
-// "field filled with a real 0": Number("") is 0, same as Number("0"), so userInput alone can't
-// distinguish them. An empty salary field was silently computing as salaryKrw:0, a technically
-// valid input that produced a real (if trivial) "not eligible" result instead of flagging that
-// nothing was entered.
+// strings alongside the parsed userInput because Number("") === Number("0") === 0: an empty age
+// field would otherwise read as age 0 (→ "must be 18+" instead of "enter your age"). A salary
+// of 0 — blank, "0", or all-zeros like "0,000,000" — is likewise not an answer, so it's flagged
+// for entry rather than run as a real (trivially "not eligible") result.
 export function validate(userInput, rawInput) {
-  const salaryMissing = rawInput.salaryRaw.trim() === "";
+  const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0;
   const ageMissing = rawInput.ageRaw.trim() === "";
 
   if (salaryMissing || ageMissing) {
@@ -166,8 +168,9 @@ function renderCaption(resultEl, result) {
   resultEl.hidden = false;
 }
 
-// `complete` = both fields hold readable numbers. A complete form that still fails validation is
-// a real answer (under 18) → amber; an incomplete/unreadable form → neutral panel (no answer yet).
+// `complete` = both fields hold a real value (salary > 0, age present). A complete form that
+// still fails validation is a real answer (under 18) → amber; an incomplete form (missing or
+// all-zero salary, blank age) → neutral panel (no answer yet).
 function renderError(resultEl, message, complete) {
   setResultTone(resultEl, complete ? RESULT_TONE.ineligible : RESULT_TONE.incomplete);
   resultEl.innerHTML = message + FULL_RULES_LINK;
@@ -179,6 +182,7 @@ function hasReadableInput(userInput, rawInput) {
     rawInput.salaryRaw.trim() !== "" &&
     rawInput.ageRaw.trim() !== "" &&
     Number.isFinite(userInput.salaryKrw) &&
+    userInput.salaryKrw > 0 &&
     Number.isFinite(userInput.age)
   );
 }
