@@ -8,6 +8,21 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.addPassthroughCopy("src/robots.txt");
 
+  // Markdown files living under src/assets/ (e.g. brand/README.md) are docs, not pages —
+  // they're passed through as-is above, don't also render them as templates.
+  eleventyConfig.ignores.add("src/assets/**/*.md");
+
+  // Brand icon files that must be served from the site root (brand/README.md head snippet +
+  // site.webmanifest icon paths). The bare/header marks stay under /assets/img/brand/.
+  eleventyConfig.addPassthroughCopy({
+    "src/assets/img/brand/favicon.svg": "favicon.svg",
+    "src/assets/img/brand/favicon-48.png": "favicon-48.png",
+    "src/assets/img/brand/apple-touch-icon.png": "apple-touch-icon.png",
+    "src/assets/img/brand/icon-192.png": "icon-192.png",
+    "src/assets/img/brand/icon-512.png": "icon-512.png",
+    "src/assets/img/brand/site.webmanifest": "site.webmanifest",
+  });
+
   // Reads an SVG from src/assets/svg and inlines its markup directly into the page
   // (rather than <img src>), so CSS can target region <g>/<a> elements and hover/focus
   // states work without a second network request. No new dependency — plain node:fs.
@@ -37,6 +52,19 @@ export default function (eleventyConfig) {
   // region needs more than one (region.njk renders each form differently).
   eleventyConfig.addFilter("isArray", function (value) {
     return Array.isArray(value);
+  });
+
+  // Prev/next region for the shared footer's between-regions nav. Needed here because the footer
+  // partial only has `page.url` to work from, and no existing filter maps a URL back to its
+  // position in `regions`. Returns null on any page that isn't a region page.
+  eleventyConfig.addFilter("regionFooterNav", function (regions, url) {
+    const list = regions || [];
+    const i = list.findIndex((r) => `/regions/${r.slug}/` === url);
+    if (i === -1) return null;
+    return {
+      prev: i > 0 ? list[i - 1] : null,
+      next: i < list.length - 1 ? list[i + 1] : null,
+    };
   });
 
   return {

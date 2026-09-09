@@ -72,23 +72,18 @@ function pointLinkTo(link, href) {
   link.setAttribute("href", href);
 }
 
-// Static 3-item color key (index.njk) lives beneath the map at every width; this is just its one
-// dynamic line — the actual county list for whichever region is currently hatched, plus a link to
-// the dedicated counties page. Only gyeonggi-do can ever be partial (architecture.md §7 — it's
-// the only capital-tier region), so there's never more than one hatched region to describe at
-// once. innerHTML (not textContent) because of that link — county names are our own build-time
-// data, not user input, so this doesn't open an injection risk.
-function setLegendDetail(html) {
-  const el = document.querySelector("[data-map-legend-detail]");
-  if (!el) return;
-  el.innerHTML = html || "";
-  el.hidden = !html;
+// The "Partly eligible" note plate (index.njk, [data-map-note]) is presentation-only: hidden by
+// default, shown while a calculator run has marked a region partial. The static legend row
+// carries the short meaning for everyone who never runs the calculator.
+function setPartialNoteVisible(visible) {
+  const el = document.querySelector("[data-map-note]");
+  if (el) el.hidden = !visible;
 }
 
 export function applyResult(result, referenceData) {
   const populationDeclineAreas = (referenceData && referenceData.populationDeclineAreas) || [];
 
-  setLegendDetail("");
+  setPartialNoteVisible(result.partialRegionSlugs.length > 0);
 
   regionLinks().forEach((mapLink) => {
     restoreMapLink(mapLink);
@@ -106,12 +101,6 @@ export function applyResult(result, referenceData) {
       markPartial(mapLink, counties);
       pointLinkTo(mapLink, POPULATION_DECLINE_COUNTIES_PAGE);
       cardLinks.forEach((link) => pointLinkTo(link, POPULATION_DECLINE_COUNTIES_PAGE));
-      setLegendDetail(
-        (counties.length > 0
-          ? `Hatched area — eligible counties: ${counties.join(", ")}.`
-          : "Hatched area — eligible counties vary by region.") +
-          ` <a href="${POPULATION_DECLINE_COUNTIES_PAGE}">Learn more →</a>`
-      );
     }
   });
 }

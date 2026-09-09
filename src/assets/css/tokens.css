@@ -32,13 +32,15 @@
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
   --color-accent-tint-border: #ecd2ab;
+  /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
+     calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
+  --color-result-amber: #fdf0e4;
   --color-link: var(--color-primary);
   --color-link-visited: #3d4f6b;
   --color-focus-ring: #2f6fed;
 
   /* Dark primary nav (DESIGN.md § Recurring parts). */
   --color-nav-bg: #16201c;
-  --color-nav-dot: #54c79a;
   --color-nav-link: rgba(255, 255, 255, 0.75);
   --color-nav-link-active: #ffffff;
 
@@ -58,11 +60,11 @@
   --space-8: 3rem;
   --space-10: 4rem;
 
-  /* Type */
-  /* Instrument Sans for Latin (self-hosted, @font-face in base.css); the rest of the stack is
-     the system Korean fallback for Hangul, which Instrument Sans doesn't cover. */
-  --font-family-base: "Instrument Sans", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Malgun Gothic", "Segoe UI", sans-serif;
+  /* Type (DESIGN.md § Type — two families, no others; loaded via the single Google Fonts link
+     in base.njk). --font-family-base is the Latin default set once on body; --font-family-ko is
+     applied only to elements holding Hangul (region/city/dish names, Korean subheads). */
+  --font-family-base: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --font-size-base: 1rem;
   --font-size-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);

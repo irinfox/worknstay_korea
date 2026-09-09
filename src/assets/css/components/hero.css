@@ -79,6 +79,17 @@
   color: rgba(255, 255, 255, 0.75);
 }
 
+/* Holds the headline block + calculator. On desktop it's capped at the content width and
+   vertically centred in the cover, so its left edge lines up with "The six regions" section
+   below and the calculator sits mid-photo rather than pinned to the bottom-left corner. */
+.hero__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .hero__content {
   position: relative;
   z-index: 2;
@@ -108,7 +119,6 @@
    (leaves, branches), a mid layer reinforces it, a soft wide halo covers the rest — paired
    with .hero__scrim for legibility over whichever photo is live. */
 .hero__heading,
-.hero__tagline,
 .hero__intro {
   margin: 0;
   text-shadow:
@@ -123,12 +133,6 @@
   letter-spacing: -0.025em;
   line-height: 1.15;
   color: #fff;
-}
-
-.hero__tagline {
-  font-size: var(--font-size-lg);
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
 }
 
 .hero__intro {
@@ -169,14 +173,29 @@
 
 @media (min-width: 768px) {
   .hero__cover {
-    /* Desktop: the cover photo fills the viewport; the flex-end stack (headline → calculator →
-       cue) sits in its lower portion, all above the fold. */
+    /* Desktop: the cover photo fills the viewport; the headline + calculator block is centred
+       in it, and the scroll cue is pinned to the photo's lower edge. */
     min-height: 100svh;
-    padding: 0 40px 40px;
+    justify-content: center;
+    padding: 0 var(--space-4);
+  }
+
+  .hero__inner {
+    max-width: var(--content-max-width);
+    margin-inline: auto;
   }
 
   .hero__content {
     gap: 16px;
-    padding-top: var(--space-10);
+    padding-top: 0;
+  }
+
+  .hero__scroll-cue {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: var(--space-6);
+    margin-top: 0;
+    text-align: center;
   }
 }

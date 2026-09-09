@@ -40,7 +40,7 @@ OpenAPI. Built for the 2026 관광데이터 활용 공모전, ②-2 웹·앱 구
 | **Static/editorial data** | Build-time JSON in `src/_data/*.json`, hand-authored, committed | Visa rules, cost-of-living snapshot, food, communities, transport — none of this is KTO-sourced, so none of it needs live calls. |
 | Hosting | **Cloudflare Pages** (+ Functions) | One vendor for static hosting and the proxy layer; free `*.pages.dev` URL satisfies the contest's "live URL" requirement even before a custom domain exists. |
 | Analytics | **Cloudflare Web Analytics** (v1) | Free, cookieless, no consent banner. Wired through one script-include point so swapping to GA/Amplitude later (portfolio goal) is a one-line change. |
-| Fonts | Self-hosted **Pretendard** or system stack | Needed for Korean glyphs in place names; no Google Fonts CDN dependency. |
+| Fonts | **Instrument Sans + Noto Sans KR** via one Google Fonts `<link>` | DESIGN.md § Type fixes both families; Noto Sans KR covers Hangul place names. One request, `display=swap`. |
 
 Total dependency footprint: `@11ty/eleventy` as the only direct npm dependency, zero
 client-side libraries, one small serverless layer that ships with the hosting choice (not a

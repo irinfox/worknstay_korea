@@ -1,7 +1,9 @@
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-header__logo" href="/">
-      <span class="site-header__dot" aria-hidden="true"></span>
+    {# The wordmark is the way back to the full homepage (hero + calculator); the "Regions" nav
+       item jumps straight to the map. #}
+    <a class="site-header__logo" href="/" aria-label="{{ site.name }} — home">
+      <img class="site-header__mark" src="/assets/img/brand/mark-white.svg" alt="" width="19" height="19">
       <span class="site-header__name">{{ site.name }}</span>
     </a>
     <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">
@@ -12,8 +14,9 @@
     <nav class="site-nav" aria-label="Primary">
       <ul id="primary-nav" class="site-nav__list">
         {% for item in site.nav %}
+        {% set itemPath = item.href | replace("/#map", "/") %}
         <li class="site-nav__item">
-          <a href="{{ item.href }}"{% if page.url == item.href %} aria-current="page"{% endif %}>{{ item.label }}</a>
+          <a href="{{ item.href }}"{% if page.url == itemPath %} aria-current="page"{% endif %}>{{ item.label }}</a>
         </li>
         {% endfor %}
       </ul>

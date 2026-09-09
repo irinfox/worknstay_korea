@@ -201,8 +201,12 @@
   background-color: var(--color-region-ineligible);
 }
 
-/* "Partly eligible" note plate (DESIGN.md § Recurring parts). The __detail line stays hidden
-   until korea-map.js's setLegendDetail() fills it with the county list after a calculator run. */
+/* "Partly eligible" note plate (DESIGN.md § Recurring parts). Hidden until a calculator run marks
+   a region partial — korea-map.js toggles the `hidden` attribute. */
+.map-note[hidden] {
+  display: none;
+}
+
 .map-note {
   display: flex;
   align-items: flex-start;
@@ -243,23 +247,7 @@
   color: var(--color-primary);
   font-weight: 500;
   text-decoration: underline;
-}
-
-.map-note__detail {
-  margin: 8px 0 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--color-text-muted);
-}
-
-.map-note__detail a {
-  color: var(--color-primary);
-  font-weight: 500;
   white-space: nowrap;
-}
-
-.map-note__detail[hidden] {
-  display: none;
 }
 
 /* 1120px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic

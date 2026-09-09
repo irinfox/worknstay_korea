@@ -16,6 +16,12 @@
   color: var(--color-text-muted);
 }
 
+/* Photo-licence links (e.g. "CC BY 3.0 ↗") are outbound — orange with the ↗, per the palette. */
+.data-provenance a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
 /* On the region page the galleries sit directly above their KTO source line — give it more air
    than the default so the credit reads as its own foot-of-block note (design reference 5b). */
 .region-page .data-provenance {
@@ -51,12 +57,18 @@
   color: var(--color-text);
 }
 
+/* Plain muted line — no framed box (the dashed border read as "broken" / placeholder). */
 .empty-state {
-  padding: var(--space-4);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* The only links inside an empty state are the "browse the KTO site ↗" outbound fallbacks —
+   orange with the ↗, per the DESIGN.md palette. */
+.empty-state a {
+  color: var(--color-accent);
+  text-decoration: underline;
 }
 
 .region-header {
@@ -72,6 +84,7 @@
 }
 
 .region-header__ko {
+  font-family: var(--font-family-ko);
   font-weight: 400;
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
@@ -252,9 +265,10 @@ ul.region-seasons {
   color: var(--color-text-muted);
 }
 
-/* Note plate (DESIGN.md § Recurring parts): one line of text + a → link. Green = "easier"
-   (non-capital, lower income floor), orange = "stricter" (capital area). The whole plate is the
-   link. Copy is inline microcopy — no _data home yet (task-04 pattern). */
+/* Note plate (DESIGN.md § Recurring parts): a line of text + a trailing "Visa info →" link.
+   Green tint = "easier" (non-capital, lower income floor), orange tint = "stricter" (capital
+   area). Capital-area regions also link "population-decline counties" inline. Copy is inline
+   microcopy — no _data home yet (task-04 pattern). */
 .note-plate {
   display: flex;
   align-items: center;
@@ -262,7 +276,6 @@ ul.region-seasons {
   gap: 12px;
   padding: 13px 16px;
   border-radius: 10px;
-  text-decoration: none;
 }
 
 .note-plate--easier {
@@ -281,22 +294,26 @@ ul.region-seasons {
   color: var(--color-text-soft);
 }
 
+/* Inline "population-decline counties" link — in-site, so green (DESIGN.md palette). */
+.note-plate__text a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+/* Both note-plate links point to in-site pages with a → arrow, so both are green
+   (DESIGN.md palette: green = in-site) — only the plate's tint differs by "easier"/"stricter". */
 .note-plate__link {
   flex-shrink: 0;
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
-}
-
-.note-plate--easier .note-plate__link {
   color: var(--color-primary);
+  text-decoration: none;
 }
 
-.note-plate--stricter .note-plate__link {
-  color: var(--color-accent);
-}
-
-.note-plate:hover .note-plate__link {
+.note-plate__link:hover,
+.note-plate__link:focus-visible {
   text-decoration: underline;
 }
 
@@ -637,14 +654,6 @@ ul.region-seasons {
   text-decoration: underline;
 }
 
-/* The cost column's "no figures yet" line is plain muted text, not a framed plate — inside the
-   tinted band a dashed box reads as broken. */
-.region-band__col--costs .empty-state {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-}
-
 /* ── Gyeonggi-do population-decline counties (population-decline-counties.njk) ─────────────────
    Redesign style: reuses the wide .region-page shell + two-column .region-header--split headline
    (rule → H1 → Korean name → intro; aside holds the threshold card instead of the rent recap).
@@ -652,7 +661,7 @@ ul.region-seasons {
    cards, and a placeholder plate for the future distance-from-Seoul map. */
 .county-page__ko {
   margin: 6px 0 0;
-  font-family: "Noto Sans KR", var(--font-family-base);
+  font-family: var(--font-family-ko);
   font-size: 17px;
   color: var(--color-text-muted);
 }
@@ -869,7 +878,7 @@ ul.region-seasons {
 
 .tier-card__spot-ko {
   display: block;
-  font-family: "Noto Sans KR", var(--font-family-base);
+  font-family: var(--font-family-ko);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.72);
 }
@@ -886,7 +895,7 @@ ul.region-seasons {
 }
 
 .tier-card__ko {
-  font-family: "Noto Sans KR", var(--font-family-base);
+  font-family: var(--font-family-ko);
   font-weight: 400;
   font-size: 13px;
   color: var(--color-text-muted);
@@ -1002,7 +1011,7 @@ ul.region-seasons {
 }
 
 .dish-card__ko {
-  font-family: "Noto Sans KR", var(--font-family-base);
+  font-family: var(--font-family-ko);
   font-weight: 400;
   color: var(--color-text-muted);
   font-size: 12px;

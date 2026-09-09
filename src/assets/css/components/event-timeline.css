@@ -104,10 +104,11 @@
 
 .event-card__date {
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.45;
   white-space: nowrap;
-  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-muted);
 }
 
 .event-card__body {
@@ -163,7 +164,6 @@
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  color: var(--color-accent);
 }
 
 .event-place__city {
@@ -296,7 +296,7 @@
 .event-empty__icon {
   width: 22px;
   height: 22px;
-  color: var(--color-accent);
+  color: var(--color-text-muted);
 }
 
 .event-empty__text {

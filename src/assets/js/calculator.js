@@ -19,10 +19,58 @@ const PARTIAL_NOTE =
   " Gyeonggi-do's population-decline-designated counties are open to you too, even though the " +
   "rest of the province isn't.";
 
-const FULL_RULES_LINK = ' <a href="/visa-info/">Check full rules</a>';
+const FULL_RULES_LINK = ' <a href="/visa-info/">Visa info →</a>';
+
+// Plate tint follows the site palette — never red. The calculator gives answers ("not eligible"
+// / "under 18" → amber) and, when the form isn't complete enough to answer, a neutral panel.
+const RESULT_TONE = {
+  all: "eligibility-result--all", // #DCEFE5 — eligible everywhere
+  nonCapitalOnly: "eligibility-result--near", // #EAF4EF — eligible outside the capital area
+  ineligible: "eligibility-result--none", // #FDF0E4 — not eligible yet / under 18
+  incomplete: "eligibility-result--info", // #F7F9F8 — can't answer yet (a field is missing)
+};
+const ALL_RESULT_TONES = Object.values(RESULT_TONE);
+
+function setResultTone(resultEl, tone) {
+  resultEl.classList.remove(...ALL_RESULT_TONES);
+  if (tone) resultEl.classList.add(tone);
+}
 
 function formatKrw(value) {
   return new Intl.NumberFormat("en-US").format(value);
+}
+
+// The salary field is a type="text" input (hero.njk) shown with thousand separators. These two
+// helpers are the whole "input parsing" layer — the eligibility comparison itself is untouched
+// and still receives a plain integer.
+function parseSalary(raw) {
+  const digits = String(raw ?? "").replace(/\D/g, "");
+  return digits === "" ? NaN : Number(digits);
+}
+
+function formatSalary(raw) {
+  const digits = String(raw ?? "").replace(/\D/g, "");
+  return digits === "" ? "" : Number(digits).toLocaleString("en-US");
+}
+
+// Reformats the salary field on every keystroke, keeping the caret in the same place relative to
+// the digits (not the commas) so typing mid-number doesn't jump the cursor to the end.
+function bindSalaryFormatting(input) {
+  input.addEventListener("input", () => {
+    const previous = input.value;
+    const caret = input.selectionStart ?? previous.length;
+    const digitsBeforeCaret = previous.slice(0, caret).replace(/\D/g, "").length;
+    const formatted = formatSalary(previous);
+    input.value = formatted;
+
+    let pos = 0;
+    let seen = 0;
+    while (pos < formatted.length && seen < digitsBeforeCaret) {
+      if (/\d/.test(formatted[pos])) seen += 1;
+      pos += 1;
+    }
+    input.setSelectionRange(pos, pos);
+  });
 }
 
 function readReferenceData() {
@@ -33,7 +81,7 @@ function readReferenceData() {
 function readUserInput(form) {
   const data = new FormData(form);
   return {
-    salaryKrw: Number(data.get("salaryKrw")),
+    salaryKrw: parseSalary(data.get("salaryKrw")),
     age: Number(data.get("age")),
     hasFamily: data.get("hasFamily") === "on",
   };
@@ -105,23 +153,34 @@ function buildShowAllResult() {
   };
 }
 
-// Both render into the same #eligibility-result box (error state via a modifier class) rather
-// than two differently-positioned elements — an in-form error message and a below-form caption
+// Both render into the same #eligibility-result box, distinguished by plate tint (setResultTone)
+// rather than two differently-positioned elements — an in-form message and a below-form caption
 // read as inconsistent UI for what's the same "result of checking" concept.
 function renderCaption(resultEl, result) {
   let text = CAPTIONS[result.tier](result);
   if (result.partialRegionSlugs.length > 0) {
     text += PARTIAL_NOTE;
   }
-  resultEl.classList.remove("eligibility-result--error");
+  setResultTone(resultEl, RESULT_TONE[result.tier]);
   resultEl.innerHTML = text + FULL_RULES_LINK;
   resultEl.hidden = false;
 }
 
-function renderError(resultEl, message) {
-  resultEl.classList.add("eligibility-result--error");
+// `complete` = both fields hold readable numbers. A complete form that still fails validation is
+// a real answer (under 18) → amber; an incomplete/unreadable form → neutral panel (no answer yet).
+function renderError(resultEl, message, complete) {
+  setResultTone(resultEl, complete ? RESULT_TONE.ineligible : RESULT_TONE.incomplete);
   resultEl.innerHTML = message + FULL_RULES_LINK;
   resultEl.hidden = false;
+}
+
+function hasReadableInput(userInput, rawInput) {
+  return (
+    rawInput.salaryRaw.trim() !== "" &&
+    rawInput.ageRaw.trim() !== "" &&
+    Number.isFinite(userInput.salaryKrw) &&
+    Number.isFinite(userInput.age)
+  );
 }
 
 // Permalink covers prefill + caption + map state (via onResult) — nothing is persisted beyond
@@ -130,7 +189,7 @@ function renderError(resultEl, message) {
 function userInputFromParams(params) {
   if (!params.has("salaryKrw") || !params.has("age")) return null;
   return {
-    salaryKrw: Number(params.get("salaryKrw")),
+    salaryKrw: parseSalary(params.get("salaryKrw")),
     age: Number(params.get("age")),
     hasFamily: params.get("hasFamily") === "1",
   };
@@ -161,7 +220,7 @@ export function init(onResult = () => {}) {
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
     const validationMessage = validate(userInput, rawInput);
     if (validationMessage) {
-      renderError(resultEl, validationMessage);
+      renderError(resultEl, validationMessage, hasReadableInput(userInput, rawInput));
       onResult(buildInvalidInputResult(referenceData), referenceData);
       return false;
     }
@@ -176,9 +235,11 @@ export function init(onResult = () => {}) {
   // with no working submit handler is worse than the <noscript> fallback.
   form.hidden = false;
 
+  bindSalaryFormatting(form.elements.salaryKrw);
+
   const prefill = userInputFromParams(new URLSearchParams(window.location.search));
   if (prefill) {
-    form.elements.salaryKrw.value = prefill.salaryKrw;
+    form.elements.salaryKrw.value = formatSalary(prefill.salaryKrw);
     form.elements.age.value = prefill.age;
     form.elements.hasFamily.checked = prefill.hasFamily;
     computeAndRender(prefill);
@@ -199,7 +260,7 @@ export function init(onResult = () => {}) {
       // site was claiming a 17-year-old is eligible everywhere, rather than "no check is active."
       form.reset();
       resultEl.hidden = true;
-      resultEl.classList.remove("eligibility-result--error");
+      setResultTone(resultEl, null);
       history.replaceState(null, "", window.location.pathname);
       onResult(buildShowAllResult(), referenceData);
     });

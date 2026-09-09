@@ -1,6 +1,6 @@
-/* Footer (DESIGN.md): white ground, a single hairline on top, muted 13px disclaimer on the
-   left and a green "About" text link on the right. Row on desktop, stacked on phone with the
-   link dropping to the right. */
+/* Footer (DESIGN.md): white ground, a single hairline on top. The disclaimer + "About" sit on
+   one row (muted 13px disclaimer left, green link right). On region pages, a row of prev/next
+   region links sits above that (design reference). */
 .site-footer {
   border-top: 1px solid var(--color-border-soft);
   background: var(--color-bg);
@@ -8,9 +8,31 @@
 }
 
 .site-footer__inner {
-  max-width: var(--content-max-width);
+  /* Matches .site-header__inner — content lands at --content-max-width, flush with the page
+     sections above it. */
+  max-width: calc(var(--content-max-width) + 2 * var(--space-4));
   margin-inline: auto;
   padding: 20px var(--space-4);
+}
+
+/* Prev/next region links — their own row above the disclaimer: prev flush with the content's
+   left edge, next flush with its right edge (margin-left:auto also right-aligns "next" when
+   it's the only link, e.g. the first region). The wide gap below (in place of a second
+   hairline) keeps this row visually separate from the © / About line. */
+.site-footer__regions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  /* Separates this row from the © / About line without a hairline — ~32px of visible space
+     between the two rows' text. */
+  margin-bottom: 28px;
+}
+
+.site-footer__next {
+  margin-left: auto;
+}
+
+.site-footer__row {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -38,11 +60,14 @@
 
 @media (min-width: 768px) {
   .site-footer__inner {
+    padding: 28px var(--space-4);
+  }
+
+  .site-footer__row {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
-    padding: 28px var(--space-4);
   }
 
   .site-footer__disclaimer {

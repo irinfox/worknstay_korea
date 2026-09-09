@@ -10,7 +10,7 @@ The HTML in `Worknstay Redesign.dc.html` is the source of truth for layout and s
 | --- | --- | --- |
 | Ink | `#16201C` | Body text, dark nav bar, wordmark dot ring |
 | Ink soft | `#23342C` / `#33443C` / `#4A544E` | Secondary paragraphs |
-| Muted | `#5C6660` | Captions, addresses, source lines |
+| Muted | `#5C6660` | Captions, addresses, source lines, festival dates, metadata |
 | Hairline | `#E4E7E4` / `#EDF0EE` | Card borders, row dividers |
 | Panel | `#F7F9F8` | Info cards, guides strip |
 | Green | `#0F7B54` | Primary accent, in-site links, eligible state |
@@ -18,15 +18,40 @@ The HTML in `Worknstay Redesign.dc.html` is the source of truth for layout and s
 | Green deep | `#0B5C3F` | Vibe-tag text |
 | Green light | `#A8D8C2` | "Partly eligible" map fill |
 | Orange rule | `#E08A2E` | 56×3px rule above every page headline, 3×15px section ticks |
-| Orange text | `#C2531A` | Outbound links, festival dates, spicy tag, "Where to eat it" |
+| Orange text | `#C2531A` | Outbound links, spicy tag |
 
 Two accent colours only. Green = ours / easier / in-site. Orange = external / stricter / seasonal.
+Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour (green long-term / orange current).
+Arrows follow colour: `→` for in-site, `↗` for outbound.
 Max two background tones per page (white + one tint band).
 
 ## Type
 
-Instrument Sans 400/500/600. Korean names in Noto Sans KR. No 800 weights, no condensed
-display faces, no mono uppercase eyebrows.
+**Two families, no others.** This is settled — do not re-derive it, do not substitute, do not add
+a third face.
+
+| Script | Family | Weights | Stack |
+| --- | --- | --- | --- |
+| Latin | **Instrument Sans** | 400, 500, 600 | `'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif` |
+| Korean | **Noto Sans KR** | 400, 500 | `'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif` |
+
+One Google Fonts request, exactly this:
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+```
+
+Rules:
+- Instrument Sans is the page default, set once on `body`. Never repeat it per element.
+- The Korean stack is applied **only** to elements holding Hangul — region and city names, dish
+  names, place names, the Korean subhead under an H1. Everything else inherits Latin.
+- Korean sits at 400 (500 only in the festival cards), always one step smaller than the Latin it
+  accompanies, in `#5C6660`, baseline-aligned to it (`align-items:baseline`, never centred).
+- No 800 weights, no condensed display faces, no mono uppercase eyebrows, no italics.
+- If the reference file's font link also names **Archivo** or **IBM Plex Mono**: those belong to
+  the design canvas's own annotation panels, not to the site. Never ship them.
 
 - Page H1: 40–44px / 600 / `-0.028em` (phone 30–32px)
 - Section H2: 20–22px / 600 / `-0.015em`

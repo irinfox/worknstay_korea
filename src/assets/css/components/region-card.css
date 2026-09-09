@@ -42,13 +42,16 @@
 
 .region-card__name-ko {
   margin: 2px 0 8px;
+  font-family: var(--font-family-ko);
   font-weight: 400;
   font-size: 12px;
   color: var(--color-text-muted);
 }
 
 .region-card__intro {
-  margin: 0 0 9px;
+  /* 11px matches the gap below the vibe-tag row (.region-card__link margin-top) so the tags sit
+     with symmetric space above and below. */
+  margin: 0 0 11px;
   font-size: 13px;
   line-height: 1.55;
   color: var(--color-text-soft);
@@ -98,10 +101,10 @@
 
 /* Infographic (wide) variant. The card keeps the base layout (name + rent on one line, ink
    rent, 16px name — DESIGN.md § "Region card") and only adds a fixed height + clamps so the
-   hand-positioned leader lines in index.njk line up; the 270px column (region-card.css grid
-   below) is wide enough for the longest name + its rent figure on one line. */
+   hand-positioned leader lines in index.njk line up; the 300px column (region-card.css grid
+   below) fits the longest name + its rent figure on one line with room to spare. */
 .region-card--infographic {
-  height: 190px;
+  height: 210px;
   overflow: hidden;
 }
 
@@ -117,7 +120,6 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin-bottom: 8px;
 }
 
 /* One non-wrapping tag row — Gangwon-do's 4th tag is dropped rather than clipped mid-pill. */
@@ -147,6 +149,9 @@
 .home-regions {
   max-width: var(--content-max-width);
   margin-inline: auto;
+  /* Landing spot for the "Regions" nav link / hero scroll cue (both target #map) — leaves a
+     little air above the heading instead of jamming it against the viewport top. */
+  scroll-margin-top: var(--space-5);
 }
 
 .home-regions__head {
@@ -174,7 +179,6 @@
 
 .home-regions__source {
   margin-top: 20px;
-  max-width: 860px;
   font-size: 13px;
   line-height: 1.6;
   color: var(--color-text-muted);
@@ -246,21 +250,19 @@
   }
 
   /*
-   * The grid's natural size is 1000px (270+420+270 + two 20px gaps). Narrower than that it
-   * scales down fluidly: `fr` tracks keep the 270:420:270 ratio while shrinking, and the
-   * map/leader-lines SVGs (viewBox-scaled, width:100%) shrink in step. `min-width: 0` on the
-   * flanking columns is load-bearing — grid tracks won't otherwise shrink past their content's
-   * intrinsic min-content width. The 270px column fits the longest region name + its rent
-   * figure on one line; index.njk's leader-line viewBox (0 0 1000 950) tracks this width.
+   * Fills the full .home-regions width (capped at --content-max-width) so the card columns line
+   * up with the section heading and source line, matching the design reference. The 30:44:30
+   * `fr` ratio holds as it scales; the map/leader-line SVGs (viewBox-scaled, width:100%) track
+   * it. `min-width: 0` on the flanking columns is load-bearing — grid tracks won't otherwise
+   * shrink past their content's intrinsic min-content width. index.njk's leader-line viewBox
+   * (0 0 1000 950) is calibrated to the ~1200px full-width layout (left column ≈ 33% wide).
    */
   .region-infographic {
     display: grid;
-    grid-template-columns: 270fr 420fr 270fr;
+    grid-template-columns: 30fr 44fr 30fr;
     column-gap: 20px;
     align-items: center;
     width: 100%;
-    max-width: 1000px;
-    margin-inline: auto;
   }
 
   .region-infographic__col {

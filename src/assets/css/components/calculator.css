@@ -65,7 +65,6 @@
 .calculator-form__field {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   flex: 1 1 120px;
   min-width: 0;
 }
@@ -75,11 +74,13 @@
 }
 
 .calculator-form__field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  margin-bottom: 7px;
 }
 
+.calculator-form__field input[type="text"],
 .calculator-form__field input[type="number"] {
   width: 100%;
   min-width: 0;
@@ -92,6 +93,7 @@
   font-weight: 500;
 }
 
+.calculator-form__field input[type="text"]:focus-visible,
 .calculator-form__field input[type="number"]:focus-visible {
   outline: 2px solid var(--color-focus-ring);
   outline-offset: 1px;
@@ -141,6 +143,7 @@
   font-weight: 400;
   white-space: nowrap;
   color: var(--color-text-soft);
+  margin-bottom: 0;
 }
 
 .calculator-form__reset {
@@ -159,7 +162,8 @@
   color: var(--color-primary-dark);
 }
 
-/* Result caption — the green tint plate (DESIGN.md § Recurring parts "Note plate"). */
+/* Result plate — tint set by calculator.js per eligibility tier, never red (the calculator only
+   gives answers). Green tints for "eligible", the site's amber for "not eligible yet". */
 .eligibility-result {
   margin-top: 14px;
   padding: 13px 15px;
@@ -170,19 +174,27 @@
   line-height: 1.6;
 }
 
+/* In-site link to the visa rules — green with a → (DESIGN.md palette). */
 .eligibility-result a {
   color: var(--color-primary);
   font-weight: 500;
   text-decoration: underline;
 }
 
-.eligibility-result--error {
-  background: #fbeceb;
-  color: var(--color-error, #b91c1c);
+.eligibility-result--all {
+  background: var(--color-vibe-tag-bg); /* #DCEFE5 — eligible everywhere */
 }
 
-.eligibility-result--error a {
-  color: var(--color-error, #b91c1c);
+.eligibility-result--near {
+  background: var(--color-primary-tint); /* #EAF4EF — eligible outside the capital area */
+}
+
+.eligibility-result--none {
+  background: var(--color-result-amber); /* #FDF0E4 — not eligible yet / under 18 */
+}
+
+.eligibility-result--info {
+  background: var(--color-surface); /* #F7F9F8 — neutral, a field is still missing */
 }
 
 @media (min-width: 768px) {

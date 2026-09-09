@@ -45,7 +45,10 @@
 }
 
 .site-header__inner {
-  max-width: var(--content-max-width);
+  /* +2×space-4 so the content inside the inner padding lands at exactly --content-max-width,
+     flush with the page sections below (.home-regions / .region-page), which cap at that width
+     inside .page's own space-4 padding. */
+  max-width: calc(var(--content-max-width) + 2 * var(--space-4));
   margin-inline: auto;
   padding: var(--space-4);
   display: flex;
@@ -60,18 +63,16 @@
   align-items: center;
   gap: 9px;
   font-weight: 600;
-  font-size: 16px;
-  letter-spacing: -0.01em;
+  font-size: 17px;
+  letter-spacing: -0.02em;
   color: var(--color-nav-link-active);
   text-decoration: none;
 }
 
-.site-header__dot {
-  flex: 0 0 9px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--color-nav-dot);
+.site-header__mark {
+  flex: 0 0 19px;
+  width: 19px;
+  height: 19px;
 }
 
 /*

@@ -22,7 +22,7 @@ eleventyComputed:
 <div class="content-page region-page">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
-  <a href="/">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
+  <a href="/#map">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
 </nav>
 
 <header class="region-header region-header--split">
@@ -72,15 +72,15 @@ eleventyComputed:
     </div>
     {% endif %}
     {% if region.isCapitalArea %}
-    <a class="note-plate note-plate--stricter" href="/regions/gyeonggi-do/population-decline-counties/">
-      <span class="note-plate__text">Capital-area region — the higher visa income floor applies, except in the population-decline counties.</span>
-      <span class="note-plate__link">Which counties &rarr;</span>
-    </a>
+    <div class="note-plate note-plate--stricter">
+      <span class="note-plate__text">Capital-area region — the higher visa income floor applies, except in the <a href="/regions/gyeonggi-do/population-decline-counties/">population-decline counties</a>.</span>
+      <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
+    </div>
     {% else %}
-    <a class="note-plate note-plate--easier" href="/visa-info/">
+    <div class="note-plate note-plate--easier">
       <span class="note-plate__text">Outside the capital area — the lower visa income floor applies.</span>
-      <span class="note-plate__link">Visa info &rarr;</span>
-    </a>
+      <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
+    </div>
     {% endif %}
   </aside>
 </header>
@@ -261,7 +261,7 @@ eleventyComputed:
     {% endfor %}
   </ul>
   {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }}</a>{% endif %}.{% endif %}{% endfor %}</p>
+  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
   {% endif %}
 </section>
 {% endif %}
