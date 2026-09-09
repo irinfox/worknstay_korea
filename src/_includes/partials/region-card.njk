@@ -5,8 +5,11 @@
 <div class="region-card region-card--{{ modifier | default("carousel") }}" data-region-slug="{{ region.slug }}">
   <div class="region-card__header">
     <h3 class="region-card__name">{{ region.nameEn }}</h3>
-    {% if cost and cost.rent1brCityCentre %}
-    <span class="region-card__rent">₩{{ cost.rent1brCityCentre | krw }}/mo</span>
+    {# Rent figure only where a real hand-checked range exists (Gangwon-do — see
+       costOfLiving.json furnishedShortTermMonthly). Other regions have no verified figure yet,
+       so the row is omitted rather than filled with a city-centre estimate. #}
+    {% if cost and cost.furnishedShortTermMonthly %}
+    <span class="region-card__rent">{{ cost.furnishedShortTermMonthly }}/mo</span>
     {% endif %}
   </div>
   <p class="region-card__name-ko">{{ region.nameKo }}</p>
