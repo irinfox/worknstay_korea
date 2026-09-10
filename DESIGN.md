@@ -16,7 +16,10 @@ in the repo and is not maintained.
 | Green | `#0F7B54` | Primary accent, in-site links, eligible state |
 | Green tint | `#EAF4EF` / `#DCEFE5`, border `#A9D8C2` / `#C9E3D6` | Tinted bands, vibe tags, note plates |
 | Green deep | `#0B5C3F` | Vibe-tag text |
-| Green light | `#A8D8C2` | "Partly eligible" map fill |
+| Green light | `#A8D8C2` | "Partly eligible" map fill and calculator state |
+| Map grey | `#B7B2A7` | "Not eligible" map fill — data colour, never chrome |
+| Focus ring | `#2F6FED` | Keyboard focus only. Deliberately outside the palette: a focus
+  indicator must be unmistakable and blue is what users recognise. Never for anything else. |
 | Amber | `#F7EAD9` | "Stricter" note plates, not-eligible calculator state |
 | Orange rule | `#E08A2E` | 56×3px rule above every page headline, 3×15px section ticks |
 | Orange text | `#C2531A` | Outbound links, spicy tag |
@@ -25,12 +28,14 @@ Two accent colours only. Green = ours / easier / in-site. Orange = external / st
 Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour
 (green long-term / orange current).
 Arrows follow colour: `→` for in-site, `↗` for outbound.
-Max two background tones per page (white + one tint band).
+One tint band per page at most. Panel `#F7F9F8` is a component fill (cards, strips, map ground)
+and does not count as a page tone.
 
-**Calculator states.** `#F7F9F8` nothing evaluated yet · `#DCEFE5` eligible everywhere ·
-`#EAF4EF` capital-area only · `#F7EAD9` not eligible yet (income short or under 18).
+**Calculator states.** `#F7F9F8` nothing evaluated yet · `#DCEFE5` eligible · `#EAF4EF` partly
+eligible (decline-designated counties only) · `#F7EAD9` not eligible yet (income short or under 18).
 No red — the calculator has no error states, only answers. Colour carries the outcome, text
-carries the reason. The tint never changes the colour of a link inside it.
+carries the reason. The tint never changes the colour of a link inside it. "Partly eligible" is
+the same term the map legend uses — one word per state across the site.
 
 ## Fonts
 
@@ -55,7 +60,9 @@ One Google Fonts request, exactly this:
   names, place names, the Korean subhead under an H1. Everything else inherits Latin.
 - Korean sits at 400 (500 only in the festival cards), always one step smaller than the Latin it
   accompanies, in `#5C6660`, baseline-aligned to it (`align-items:baseline`, never centred).
-- No 800 weights, no condensed display faces, no mono uppercase eyebrows, no italics.
+- No 800 weights, no condensed display faces, no mono uppercase eyebrows, no italics — the one
+  exception is map context labels (neighbouring regions, North Korea), where italic is the
+  cartographic convention for "not the subject of this map".
 
 ## Type scale
 
@@ -66,12 +73,16 @@ One Google Fonts request, exactly this:
 - Form label: 13px / 500 / `#33443C`, 7px above its input
 - Form input: ≥16px (below that iOS Safari zooms on focus)
 - Caption, source, address: 12–13px, `#5C6660`
-- Sentence case everywhere. All-caps only in the festival tag chips.
+- Festival status chip: 11px / 500 / uppercase with letter-spacing — the one place type goes
+  below 12px, because all-caps at 11px reads larger than its nominal size.
+- Sentence case everywhere. All-caps only in the festival status chips. Lowercase is fine in
+  tags and pills (`spicy`, `surf`) — they are labels, not sentences.
 
 ## Geometry
 
-Radius 10–12px cards, 20–22px pills, 8px inputs. Hairlines 1px. Desktop frame 1280px,
-phone frame 390px. Page padding 32px desktop / 16px phone. Section gaps 26–36px.
+Radius 10–12px cards, 20–22px pills, 8px inputs. Hairlines 1px. Designed at a 1280px desktop
+viewport and a 390px phone; the container inside it is 1200px. Page padding 32px desktop /
+16px phone. Section gaps 26–36px.
 Flex/grid with `gap` — never margin-spaced inline siblings.
 
 One container width site-wide. Body text caps at ~70ch (~640px) inside it; tinted bands and card
@@ -100,22 +111,29 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   "Regions" links to `/#map`, not `/`. The wordmark is the home link and stays clickable on the homepage.
 - **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" → `/#map`.
 - **Headline block**: orange 56×3 rule → H1 → Korean name → vibe tags → intro paragraphs.
-- **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, radius 22px. 14–15px/500, padding
-  7px 15px on region-page headers; 13px/500, padding 4px 10px on city cards and homepage region
-  cards. Same colours everywhere — they mean the same thing.
+- **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, radius 22px. 14–15px/500
+  (fluid), padding 7px 15px on region-page headers; 13px/500, padding 4px 10px on city cards and
+  homepage region cards. Same colours everywhere — they mean the same thing; only the size
+  follows the heading it annotates. The About page's credential chips are the same pill at the
+  13px card size — same colours, no variant.
 - **Note plate**: tinted bg, matching border, radius 10px, one line of text + a `→` link.
   Green tint + green border for "easier"; amber `#F7EAD9` + `#E08A2E` border for "stricter".
 - **Source line**: 12–13px `#5C6660`, always dated, at the foot of the block it describes.
 - **Section tick**: 3×15px orange bar before a small heading (Guides, Where to work).
+- **Korean name**: inline beside the title where there is room (page H1, city-card heading,
+  baseline-aligned); on its own line in narrow cards. Placement follows width, not page.
 - **Region prev/next**: the six region pages only — never on the homepage, static pages, or the
-  population-decline counties page (not a region, not in the cycle). Own band above
-  the footer on a hairline, prev at the left container edge, next at the right, 32px clear of the
-  footer text.
+  decline-designated counties page (not a region, not in the cycle). Own band at the end of the
+  page content, prev at the left container edge, next at the right, 32px clear of the footer text.
+  One rule at most — separate it from the footer with space, not a second hairline.
 
 ## Page order (region page — both viewports identical)
 
 cover gallery → map → guides → cities → costs + festivals (one tinted band, costs left,
 festivals right) → attractions → dishes → prev/next → footer.
+
+Sections render only where their data exists; a region without map or guide data omits those
+sections rather than showing an empty state. The order above is the full-data page.
 
 Homepage: cover photo behind header + headline + calculator (card overlaps its lower edge)
 → map with legend and the "Partly eligible" note → six region cards → footer.
@@ -132,18 +150,27 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   venue name 16–17px/600 with its kind as 12px grey at the right, address below, then
   `Website ↗ Instagram ↗ Naver Map ↗` as underlined text links (never buttons).
 - **Study cafés**: 4-cell battery (12–15×9px, `#0F7B54` filled / `#DCE3DF` empty) + count label
-  + `Naver Map search ↗` at the right of the same row, 12px orange. No description. Row never wraps.
+  + `Naver Map search ↗` at the right of the same row, 12px orange. No description. The row never
+  wraps at any width — shorten the label to `Naver Map ↗` at 360 rather than wrapping it.
 - **Chains**: the chain name is the link (`Fastfive ↗`); no separate domain column.
 - **Getting around**: three nearby places + Seoul, journey times in semibold.
 - **Guides**: one strip, each link orange underlined with `↗`, domain and date underneath.
-- **Festivals**: Ongoing / Upcoming toggle, dates in `#5C6660`/500 with `tabular-nums`, name in
-  ink, status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon
-  that copies the full address — icon + tooltip on desktop, icon + "Copy address" label on phone
+- **Festivals**: Ongoing / Upcoming toggle, dates in `#5C6660`/500 with `tabular-nums`, name in ink,
+  status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon that
+  copies the full address — icon + tooltip on desktop, icon + "Copy address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
-  Paginated lists show 5 per page with a `1–5 of 17 in October` range and reserve a fixed height,
-  so switching tabs or pages doesn't move the page.
-- **Map**: real Korea outline, regions filled by eligibility (green / green light / not eligible),
-  legend uses the same fills. Pins are 13–15px line pictograms placed by coordinate.
+- **National map** (homepage): real Korea outline on a Panel `#F7F9F8` ground — not a green tint,
+  which would collide with the partly-eligible fill. Regions filled by eligibility; legend swatches
+  render the *composited* colour the shapes actually show, never the raw token. Metropolitan cities
+  take their parent region's state one shade deeper (~8%) — small enough not to read as a state of
+  its own, so no legend entry. All labels in ink `#16201C`, every state: white fails contrast on
+  the lighter fills. No pins.
+- **Region map** (region pages): the region outline on white with a pale green fill, 13–15px line
+  pictograms placed by coordinate, and a pictogram legend. Place names appear on hover on desktop
+  and on tap on phone. Context labels for neighbouring areas are muted italic.
+- **Map labels** (both maps): ink `#16201C`, no halo or outline — on pale fills the ink carries
+  itself. Add a white halo stroke only where a label genuinely crosses terrain hatching or an
+  outline and becomes hard to read; it is a legibility tool, not a default. No eligibility states, so no ground tint.
 - **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`. Spicy tag only.
 
 ## Copy rules
@@ -158,13 +185,18 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 
 ## Accessibility / layout musts
 
-- Text 4.5:1 against its background; full-opacity ink over photos, never alpha-muted.
-- Phone tap targets ≥44px.
+- Text 4.5:1 against what is behind it. Over photos, alpha white is fine where the measured
+  composite passes — the rule bans muting type for looks, not alpha as such. Scrims and
+  text-shadows over photos are contrast tools and stay.
+- Phone tap targets ≥44px for **controls** — buttons, tabs, checkboxes, pagers, card CTAs. Gain
+  the height with padding; the visual size stays as designed. Inline text links (breadcrumb,
+  source lines, `Naver Map ↗`) are exempt.
 - Reserve height for anything that changes length (paginated lists, carousels) — no reflow jumps.
-- Nothing below 12px.
+- Nothing below 12px, except the 11px uppercase festival status chip.
 
 ## Never
 
-Emoji · colour outside the palette · new fonts or weights · dashed or dotted borders ·
+Emoji · colour outside the palette, data colours and the focus ring excepted · new fonts or
+weights · dashed or dotted borders ·
 decorative gradients or shadows beyond the card shadow (the hero photo scrim stays — it is
 contrast, not decoration) · orange text that is not a link (badge pills excepted).
