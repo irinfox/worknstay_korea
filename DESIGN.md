@@ -89,12 +89,28 @@ One container width site-wide. Body text caps at ~70ch (~640px) inside it; tinte
 grids use the full container. Text never fills the container. A tinted panel may bleed past the
 text column — what must align is the panel's *content*, not its edge.
 
+The container is a maximum, not a fixed width: between 1024 and 1199 it shrinks and nothing
+reflows. Multi-column layouts hold to 1024, then collapse. Where a grid's columns are fractional
+it narrows proportionally and needs no checking; where any column is a fixed width, the remaining
+column absorbs the whole reduction — check those at 1024, not only at 1200.
+
 ## Mobile
 
-Horizontal swipe for image galleries and for card sets, provided there is a dot indicator and the
-copy says to swipe. Carousel cards are equal height so the layout does not jump between slides.
-Repeated stepping (galleries, carousels) groups its arrows in one corner; page-level prev/next
-splits them to the container edges.
+At 900px and below, hover cannot be assumed: every hover behaviour has a tap equivalent.
+Horizontal swipe for galleries and card sets; carousel cards are equal height. Repeated stepping
+groups its arrows in one corner; page-level prev/next splits them to the container edges.
+
+**Dots only exist where a row actually swipes.** A static grid never gets them, at any width.
+Within a swipe row it depends on how much of the next card shows: a sliver is not a cue, so
+full-width cards with a peeking edge (region, city) get dots and the copy says to swipe. Where
+roughly a third or more of the next card is visible, that cut card is the affordance — no dots.
+
+Blurbs are never clamped to make a row line up — equal height comes from `align-items:stretch`.
+`src/_data/` is verified content: the layout adapts to it, never the reverse.
+
+Stepping controls are one size site-wide: the festival pager matches the region-page gallery
+arrows. Where a control is below 44px on phone, it reaches the minimum through padding — the
+visible box stays as designed.
 
 ## Empty & fallback states
 
@@ -159,7 +175,9 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon that
   copies the full address — icon + tooltip on desktop, icon + "Copy address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
-- **National map** (homepage): real Korea outline on a Panel `#F7F9F8` ground — not a green tint,
+- **National map** (homepage): at 900px and below, tapping a region scrolls to its card and selects
+  it; tapping the card itself does nothing — the `Open <region name>` link inside it is the target.
+  Real Korea outline on a Panel `#F7F9F8` ground — not a green tint,
   which would collide with the partly-eligible fill. Regions filled by eligibility; legend swatches
   render the *composited* colour the shapes actually show, never the raw token. Metropolitan cities
   take their parent region's state one shade deeper (~8%) — small enough not to read as a state of
@@ -167,10 +185,11 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   the lighter fills. No pins.
 - **Region map** (region pages): the region outline on white with a pale green fill, 13–15px line
   pictograms placed by coordinate, and a pictogram legend. Place names appear on hover on desktop
-  and on tap on phone. Context labels for neighbouring areas are muted italic.
+  and on tap on phone. Context labels for neighbouring areas are muted italic. No eligibility
+  states, so no ground tint.
 - **Map labels** (both maps): ink `#16201C`, no halo or outline — on pale fills the ink carries
   itself. Add a white halo stroke only where a label genuinely crosses terrain hatching or an
-  outline and becomes hard to read; it is a legibility tool, not a default. No eligibility states, so no ground tint.
+  outline and becomes hard to read; it is a legibility tool, not a default.
 - **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`. Spicy tag only.
 
 ## Copy rules
