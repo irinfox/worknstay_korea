@@ -6,9 +6,9 @@
 // run from the home page anymore — a region page reached any other way (direct link, search,
 // nav) had no such run to remember, so the badge only ever showed for one specific navigation
 // path and looked like a stale/broken feature the rest of the time.
-// Matches --bp-region-info-wide in tokens.css (1120px) — same hardcode-and-comment constraint
+// Matches --bp-region-info-wide in tokens.css (1200px) — same hardcode-and-comment constraint
 // noted there, since custom properties aren't readable from JS media queries either.
-const NARROW_QUERY = "(max-width: 1119px)";
+const NARROW_QUERY = "(max-width: 1199px)";
 
 function isNarrowViewport() {
   return window.matchMedia(NARROW_QUERY).matches;
@@ -30,6 +30,14 @@ function selectRegion(link, slug) {
   link.classList.add("region--selected");
 
   const card = document.querySelector(`.region-carousel [data-region-slug="${slug}"]`);
+
+  // The green "selected" border on the carousel card comes only from a map tap — never from
+  // tapping/focusing the card itself (the card body has no interactive state on phone).
+  document
+    .querySelectorAll(".region-carousel .region-card--selected")
+    .forEach((el) => el.classList.remove("region-card--selected"));
+  if (card) card.classList.add("region-card--selected");
+
   if (!card) return;
 
   const target = card.closest(".region-carousel__item") || card;
@@ -55,6 +63,65 @@ function initTapToFill() {
   });
 }
 
+// Carousel dot indicators (homepage region carousel + region-page city carousel) track the
+// scrolled-to card instead of pinning the first dot: on scroll, the dot for whichever card is
+// nearest the track's centre line gets .is-active. Adding .*-synced hands the "which dot is
+// lit" job from the CSS :first-child fallback to JS.
+function syncCarouselDots({ root, track, items, dots, syncedClass }) {
+  if (!track || items.length < 2 || dots.length !== items.length) return;
+
+  root.classList.add(syncedClass);
+
+  let active = -1;
+  const setActive = (index) => {
+    if (index === active) return;
+    active = index;
+    dots.forEach((dot, i) => dot.classList.toggle("is-active", i === index));
+  };
+
+  const update = () => {
+    const trackRect = track.getBoundingClientRect();
+    const mid = trackRect.left + trackRect.width / 2;
+    let best = 0;
+    let bestDist = Infinity;
+    items.forEach((item, i) => {
+      const rect = item.getBoundingClientRect();
+      const dist = Math.abs(rect.left + rect.width / 2 - mid);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = i;
+      }
+    });
+    setActive(best);
+  };
+
+  track.addEventListener("scroll", update, { passive: true });
+  update();
+}
+
+function initCarouselDots() {
+  document.querySelectorAll(".region-carousel").forEach((root) => {
+    syncCarouselDots({
+      root,
+      track: root.querySelector(".region-carousel__track"),
+      items: [...root.querySelectorAll(".region-carousel__item")],
+      dots: [...root.querySelectorAll(".region-carousel__dots li")],
+      syncedClass: "region-carousel--synced",
+    });
+  });
+
+  document.querySelectorAll(".city-carousel").forEach((root) => {
+    syncCarouselDots({
+      root,
+      track: root.querySelector(".city-card-list"),
+      items: [...root.querySelectorAll(".city-card-list__item")],
+      dots: [...root.querySelectorAll(".city-carousel__dots li")],
+      syncedClass: "city-carousel--synced",
+    });
+  });
+}
+
 export function init() {
   initTapToFill();
+  initCarouselDots();
 }

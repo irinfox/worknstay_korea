@@ -147,18 +147,20 @@ function renderEventCard(ev, { badge = false } = {}) {
     ? `<span class="event-place" title="${addr}">
          ${PIN_ICON}<span class="event-place__city">${escapeHtml(cityFromAddress(ev.address))}</span>
          <button type="button" class="event-place__copy" data-address="${addr}"
-           aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label">Copy address</span></button>
-         <span class="event-place__status" role="status" aria-live="polite"></span>
+           aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label" data-default="Copy address">Copy address</span></button>
+         <span class="event-place__status sr-only" role="status" aria-live="polite"></span>
        </span>`
     : "";
+  // The status chip rides the date line (immediately after the date range), not the name —
+  // dates are short and uniform so it lands consistently; the name then owns its own line.
   return `
     <li class="event-card">
       <span class="event-card__date">
         <span class="sr-only">${readableRange(ev.startDate, ev.endDate)}</span>
-        <span aria-hidden="true">${dateRangeShort(ev)}</span>
+        <span class="event-card__daterange" aria-hidden="true">${dateRangeShort(ev)}</span>${badge ? ongoingBadge(ev) : ""}
       </span>
       <div class="event-card__body">
-        <p class="event-card__title">${escapeHtml(ev.titleEn)}${badge ? ongoingBadge(ev) : ""}</p>
+        <p class="event-card__title">${escapeHtml(ev.titleEn)}</p>
         ${place}
       </div>
     </li>`;
@@ -384,6 +386,8 @@ function setupAddressCopy(container) {
   container.querySelectorAll(".event-place__copy").forEach((btn) => {
     const place = btn.closest(".event-place");
     const status = place.querySelector(".event-place__status");
+    const label = btn.querySelector(".event-place__copy-label");
+    const defaultLabel = (label && label.dataset.default) || "Copy address";
     btn.addEventListener("click", async () => {
       const address = btn.dataset.address || "";
       let ok = false;
@@ -393,11 +397,16 @@ function setupAddressCopy(container) {
       } catch {
         ok = legacyCopy(address);
       }
-      status.textContent = ok ? "Full address copied" : "Press ⌘/Ctrl+C to copy";
+      // Swap the label in place on success — "Copied", same width class, no extra text beside
+      // it that would shift the row. On failure the label stays put; the sr-only status still
+      // tells a screen reader what happened.
+      if (ok && label) label.textContent = "Copied";
+      if (status) status.textContent = ok ? "Full address copied" : "Press Ctrl+C to copy";
       place.classList.toggle("is-copied", ok);
       clearTimeout(btn._copyTimer);
       btn._copyTimer = setTimeout(() => {
-        status.textContent = "";
+        if (label) label.textContent = defaultLabel;
+        if (status) status.textContent = "";
         place.classList.remove("is-copied");
       }, 2000);
     });

@@ -154,39 +154,30 @@ eleventyComputed:
       <span class="region-guides__tick" aria-hidden="true"></span>
       <span class="region-guides__label">Guides:</span>
     </span>
-    {% for link in region.usefulLinks %}
-    <span class="region-guides__item">
-      <a class="region-guides__link" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
-      <span class="region-guides__meta">{{ link.sourceLabel }}{% if link.sourceDate %} · {{ link.sourceDate }}{% endif %}</span>
+    <span class="region-guides__items">
+      {% for link in region.usefulLinks %}
+      <span class="region-guides__item">
+        <a class="region-guides__link" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
+        <span class="region-guides__meta">{{ link.sourceLabel }}{% if link.sourceDate %} · {{ link.sourceDate }}{% endif %}</span>
+      </span>
+      {% endfor %}
     </span>
-    {% endfor %}
-    <span class="region-guides__aside">All open on other sites</span>
   </div>
 </section>
 {% endif %}
 {% endif %}
 
 <section class="region-section region-section--cities">
+  <h2>Cities in this region</h2>
   {% if isGangwon %}
   {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
      not somewhere to base a month-long stay, so it's map-only — see its surf-beach pin above). #}
-  <h2>Cities in this region</h2>
-  <p class="region-section__sub">Four described so far — where you could work from, how many study cafés there are, and how long it takes to get places.</p>
-  <div class="city-card-list">
-    {% for slug in ["sokcho", "gangneung", "chuncheon", "wonju"] %}
-    {% set city = cities | findBySlug(slug) %}
-    {% include "partials/city-card.njk" %}
-    {% endfor %}
-  </div>
+  {% set cityList = cities | bySlugs(["sokcho", "gangneung", "chuncheon", "wonju"]) %}
+  {% include "partials/city-card-list.njk" %}
   {% elif regionCities.length %}
-  <h2>Cities in this region</h2>
-  <div class="city-card-list">
-    {% for city in regionCities %}
-    {% include "partials/city-card.njk" %}
-    {% endfor %}
-  </div>
+  {% set cityList = regionCities %}
+  {% include "partials/city-card-list.njk" %}
   {% else %}
-  <h2>Cities in this region</h2>
   {% set message = "No cities listed for this region yet." %}
   {% include "partials/empty-state.njk" %}
   {% endif %}

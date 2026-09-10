@@ -1,9 +1,12 @@
 {# Home-page hero (architecture.md Phase 14, restyled to DESIGN.md § "Homepage" / design
    reference 5a): full-bleed cover photo behind the transparent site header (see .has-hero in
-   header.css/base.njk). Everything else — headline block (orange 56×3 rule → H1 → tagline →
-   intro), the calculator card, and the "Scroll down" cue — stacks inside .hero__cover and
-   bottom-aligns against the photo's lower edge (the reference puts the calculator and the cue
-   both inside the cover, the cue last). Desktop: the photo fills the viewport.
+   header.css/base.njk), holding the headline block (orange 56×3 rule → H1 → intro) and the
+   photo-credit line. The calculator card overlaps the photo's lower edge — its top sits on the
+   photo, the rest extends onto white below.
+   Desktop: the photo fills the viewport, headline + calculator centred in it (.hero__frame is
+   display:contents there, so media/scrim/credit resolve against .hero__cover as a full-bleed
+   layer). Phone: .hero__frame is a real box sized by the headline block, so the photo keeps a
+   ~1:1 crop instead of being stretched to viewport height.
 
    src/assets/img/hero/home/ holds the chosen photo plus a couple of standby favorites (see
    _data/heroCredits.json for source/license per file — all Type1 KOGL, attribution required).
@@ -14,40 +17,44 @@
 
 <section class="hero" aria-labelledby="hero-heading">
   <div class="hero__cover">
-    <div
-      class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
-      data-hero-media
-      aria-hidden="true"
-      {% if heroPhoto %}style="background-image: url('/assets/img/hero/home/{{ heroPhoto }}')"{% endif %}
-    ></div>
-    <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
-    {% if heroCredit %}
-      {# CLAUDE.md rule 5: each KTO-derived block (region.njk, visa-info.njk) carries its own
-         provenance — same pattern here, phrased the same way as those. #}
-      <p class="hero__credit">
-        Photo source: © Korea Tourism Organization (한국관광공사)
-      </p>
-    {% endif %}
     <div class="hero__inner">
-    <div class="hero__content">
-      <span class="hero__rule" aria-hidden="true"></span>
-      <h1 id="hero-heading" class="hero__heading">{{ site.tagline }}</h1>
-      <p class="hero__intro">
-        Korea's F-1-D Digital Nomad Visa lets you live and work remotely from Korea for up to
-        three years — but the income bar is lower, and life is better, outside the Seoul capital
-        area.<br>
-        Find out which regions you qualify for, then see what a month-long stay actually looks
-        like there.
-      </p>
-    </div>
+      <div class="hero__frame">
+        <div
+          class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
+          data-hero-media
+          aria-hidden="true"
+          {% if heroPhoto %}style="background-image: url('/assets/img/hero/home/{{ heroPhoto }}')"{% endif %}
+        ></div>
+        <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
+        <div class="hero__content">
+          <span class="hero__rule" aria-hidden="true"></span>
+          <h1 id="hero-heading" class="hero__heading">{{ site.tagline }}</h1>
+          <p class="hero__intro">
+            Korea's F-1-D Digital Nomad Visa lets you live and work remotely from Korea for up to
+            three years — but the income bar is lower, and life is better, outside the Seoul capital
+            area.<br>
+            Find out which regions you qualify for, then see what a month-long stay actually looks
+            like there.
+          </p>
+        </div>
+        {% if heroCredit %}
+          {# CLAUDE.md rule 5: each KTO-derived block (region.njk, visa-info.njk) carries its own
+             provenance — same pattern here, phrased the same way as those. Absolute (photo
+             bottom-right) on desktop; in flow at the foot of the photo on phone, clear of the
+             overlapping calculator. #}
+          <p class="hero__credit">
+            Photo source: © Korea Tourism Organization (한국관광공사)
+          </p>
+        {% endif %}
+      </div>
 
-    {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
-     caption itself into #eligibility-result below. JS-only per CLAUDE.md rule 6 — the
-     <noscript> fallback sends no-JS visitors to the static thresholds table instead.
-     Markup order here is free to change (calculator.js keys off data-* / element names, not
-     DOM order); the comparison logic and its messages are frozen. #}
-  <div class="hero__calculator">
-    <div id="calculator" class="calculator-mount" data-calculator-mount>
+      {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
+       caption itself into #eligibility-result below. JS-only per CLAUDE.md rule 6 — the
+       <noscript> fallback sends no-JS visitors to the static thresholds table instead.
+       Markup order here is free to change (calculator.js keys off data-* / element names, not
+       DOM order); the comparison logic and its messages are frozen. #}
+      <div class="hero__calculator">
+        <div id="calculator" class="calculator-mount" data-calculator-mount>
       <noscript>
         <p class="calculator-mount__noscript">
           The eligibility calculator needs JavaScript. See the
@@ -82,10 +89,12 @@
           <button type="submit" class="calculator-form__submit">Check eligibility</button>
         </div>
         <div class="calculator-form__controls">
-          <div class="calculator-form__field calculator-form__field--checkbox">
+          {# Whole row is one <label> so the entire strip (not just the 17px box) is a tap
+             target — min-height 44px on phone (calculator.css). #}
+          <label class="calculator-form__field calculator-form__field--checkbox" for="calc-has-family">
             <input type="checkbox" id="calc-has-family" name="hasFamily">
-            <label for="calc-has-family">Bringing spouse or children</label>
-          </div>
+            <span>Bringing spouse or children</span>
+          </label>
           {# For a visitor who doesn't know their numbers yet (or wants to browse before
              committing to a check) — restores every region to open/active without needing a
              second, throwaway salary/age guess just to unlock the map. calculator.js wires this
@@ -104,15 +113,9 @@
         aria-live="polite"
         hidden
       ></p>
+        </div>
+      </div>
     </div>
-  </div>
-  </div>
-
-    {# Static nudge toward the map below — a real anchor link (CLAUDE.md rule 6: works with JS
-       off, no scroll-triggered JS needed) rather than tied to a calculator result, so it's
-       useful to a visitor who skips the calculator entirely too. Sits at the foot of the cover,
-       over the photo (design reference 5a). #}
-    <a class="hero__scroll-cue" href="#map">Scroll down to explore the regions ↓</a>
   </div>
 
   {# Reference data for calculator.js — assembled at build time (see

@@ -4,12 +4,21 @@
  * panel (named venues with text links + a 4-cell study-café battery), then a "Getting around"
  * line. No accordion — every card is fully expanded.
  */
+/* Desktop: two-column grid. Below 768px .city-card-list becomes the scroll track of the
+   .city-carousel (a horizontal scroll-snap row + dot indicators, matching the homepage region
+   carousel — see the phone media block below). */
 .city-card-list {
   display: grid;
   gap: 14px;
 }
 
-@media (min-width: 768px) {
+.city-card-list__item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet band (768–1199): a single-column grid. Two columns only at desktop width. */
+@media (min-width: 1200px) {
   .city-card-list {
     grid-template-columns: 1fr 1fr;
     align-items: start;
@@ -33,11 +42,83 @@
   margin-bottom: 10px;
 }
 
-/* Below the two-column grid the card is too narrow to hold the name and its tags on one row,
-   or the study-café row on one line — let both wrap (design reference 5d). */
+/* Dot indicators under the phone carousel (hidden on desktop). Same 5px/20px pill treatment as
+   the homepage region carousel; region-card.js adds .city-carousel--synced and toggles
+   .is-active as the track scrolls. Without JS the first dot stays lit. */
+.city-carousel__dots {
+  display: none;
+}
+
+.city-carousel__dots li {
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--color-border);
+}
+
+.city-carousel__dots li:first-child {
+  width: 20px;
+  background: var(--color-primary);
+}
+
+.city-carousel--synced .city-carousel__dots li:first-child {
+  width: 5px;
+  background: var(--color-border);
+}
+
+.city-carousel--synced .city-carousel__dots li.is-active {
+  width: 20px;
+  background: var(--color-primary);
+}
+
+/* Below the two-column grid the card is too narrow to hold the name and its tags on one row —
+   let the head stack. The study-café row still never wraps (DESIGN.md § "Study cafés"); its
+   Naver link shortens instead (see .study-cafes__search-word). */
 @media (max-width: 767.98px) {
+  /* Carousel: break out of the page padding so cards can scroll to the screen edge. */
+  .city-carousel {
+    margin: 0 calc(var(--space-4) * -1);
+  }
+
+  /* ul.* — base.css's `ul[class] { padding: 0 }` reset would otherwise zero the side padding,
+     so the first/last card would touch the screen edge instead of the page gutter. */
+  ul.city-card-list {
+    display: flex;
+    gap: 12px;
+    padding-inline: var(--space-4);
+    /* First / last card snap flush with the page gutter, not the screen edge. */
+    scroll-padding-inline: var(--space-4);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .city-card-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .city-card-list__item {
+    flex: 0 0 86%;
+    max-width: 340px;
+    scroll-snap-align: start;
+  }
+
+  /* Equal card heights so the layout doesn't shift between slides. */
   .city-card {
+    width: 100%;
+    height: 100%;
     padding: 16px;
+  }
+
+  /* ol.* — `ol[class] { margin: 0 }` (base.css) would otherwise zero this and the dots would
+     sit flush against the cards. */
+  ol.city-carousel__dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
   }
 
   .city-card__head {
@@ -50,15 +131,6 @@
 
   .work-venue__name {
     flex-wrap: wrap;
-  }
-
-  .study-cafes {
-    flex-wrap: wrap;
-  }
-
-  .study-cafes__search {
-    margin-left: 0;
-    flex-basis: 100%;
   }
 }
 
@@ -259,4 +331,30 @@
 .city-card__mode {
   font-size: 12px;
   color: var(--color-text-muted);
+}
+
+/* Narrow phones can't fit "Naver Map search ↗" on the no-wrap study-café row — drop "search",
+   tighten the row's gaps and take the battery cells to the low end of their 12–15px range
+   (DESIGN.md § "Study cafés"), and give the carousel card a little more width. Placed after the
+   base .study-cafes rules so these win at equal specificity. */
+@media (max-width: 420px) {
+  .study-cafes__search-word {
+    display: none;
+  }
+
+  .study-cafes {
+    gap: 5px;
+  }
+
+  .study-cafes__battery {
+    gap: 2px;
+  }
+
+  .study-cafes__cell {
+    width: 12px;
+  }
+
+  .city-card-list__item {
+    flex-basis: 92%;
+  }
 }

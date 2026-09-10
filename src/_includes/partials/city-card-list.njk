@@ -1,0 +1,17 @@
+{# "Cities in this region" cards. Two-column grid on desktop; below 768px a horizontal
+   scroll-snap carousel of equal-height cards with dot indicators (same pattern as the
+   homepage region carousel). region-card.js keeps the dots in sync with scroll position;
+   with JS off it's a plain swipeable row and the first dot stays lit.
+   Param: cityList (City[], required). #}
+<div class="city-carousel" data-city-carousel>
+  <ul class="city-card-list">
+    {% for city in cityList %}
+    <li class="city-card-list__item">{% include "partials/city-card.njk" %}</li>
+    {% endfor %}
+  </ul>
+  {% if cityList.length > 1 %}
+  <ol class="city-carousel__dots" aria-hidden="true">
+    {% for city in cityList %}<li></li>{% endfor %}
+  </ol>
+  {% endif %}
+</div>

@@ -87,12 +87,15 @@
    * Breakpoints (reference values only — CSS custom properties cannot be read inside
    * @media conditions, so these document the intent and must be kept in sync by hand with
    * the literal px values used in each component's media queries).
+   *
+   * Three bands: phone (< 768), tablet (768–1199), desktop (>= 1200). Phone rules are the
+   * mobile-first base. The tablet band keeps everything single-column / stacked — multi-column
+   * page layouts (region-page headline+aside, costs+festivals, the homepage map+cards
+   * infographic, the city-card grid) and 3-up card grids only turn on at --bp-desktop.
    */
   --bp-tablet: 768px;
-  --bp-desktop: 1280px;
-  /* Region-info infographic/carousel switch (architecture.md §3/§9). The infographic grid's
-     natural size is 1000px (region-card.css); its columns are `fr`-sized and scale down, but
-     below this a card gets too narrow to hold the longest region name + its rent figure on one
-     line, so the carousel takes over there instead. */
-  --bp-region-info-wide: 1120px;
+  --bp-desktop: 1200px;
+  /* Region-info infographic (flanking cards + leader lines) vs. the stacked map + carousel.
+     Matches --bp-desktop — below it the map stacks above a card carousel. */
+  --bp-region-info-wide: 1200px;
 }

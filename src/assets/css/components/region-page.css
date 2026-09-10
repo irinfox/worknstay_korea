@@ -221,7 +221,9 @@ ul.region-seasons {
   gap: 12px;
 }
 
-@media (min-width: 900px) {
+/* Desktop only (>= --bp-desktop) — the tablet band keeps the headline block single-column with
+   the aside stacked beneath the intro. */
+@media (min-width: 1200px) {
   .region-page .region-header--split {
     grid-template-columns: 1.35fr 1fr;
     gap: 40px;
@@ -315,6 +317,16 @@ ul.region-seasons {
 .note-plate__link:hover,
 .note-plate__link:focus-visible {
   text-decoration: underline;
+}
+
+/* Phone: the notice text wraps, so a trailing action beside it collides with the inline link.
+   Stack — notice first, action on its own line beneath it, left-aligned. */
+@media (max-width: 767.98px) {
+  .note-plate {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 }
 
 /* ── "Around the region" cover gallery (DESIGN.md § region page order; design reference 5b/5d) ──
@@ -507,13 +519,14 @@ ul.region-seasons {
 }
 
 /* ── Guides strip (Gangwon-do only; design reference 5b) ──────────────────────────────────────
-   One panel row: an orange tick + "Guides:" label (a tight pair), then each guide as an orange
-   underlined outbound link with its source + date underneath, and a trailing note. */
+   A panel with the orange tick + "Guides:" label on its own line, then the guide links sitting
+   together on the line below (each an orange underlined outbound link with its source + date
+   underneath). */
 .region-guides {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px 32px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
   padding: 15px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -524,6 +537,27 @@ ul.region-seasons {
   display: flex;
   align-items: center;
   gap: 9px;
+}
+
+.region-guides__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+
+/* Phone: tighten the panel and the gap between the two links so both fit on one line. */
+@media (max-width: 767.98px) {
+  .region-guides {
+    padding: 14px;
+  }
+
+  .region-guides__items {
+    gap: 10px 16px;
+  }
+
+  .region-guides__link {
+    font-size: 13px;
+  }
 }
 
 .region-guides__tick {
@@ -560,13 +594,6 @@ ul.region-seasons {
   white-space: nowrap;
 }
 
-.region-guides__aside {
-  margin-left: auto;
-  font-size: 12px;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
 /* ── Costs + festivals band (DESIGN.md § region page order) ───────────────────────────────────
    One primary-tinted band that does the section-divider job: costs left, festivals right on
    desktop, stacked on phone. The columns sit flush with the page column (same left/right edge as
@@ -594,7 +621,8 @@ ul.region-seasons {
   gap: var(--space-6);
 }
 
-@media (min-width: 900px) {
+/* Costs + festivals sit side by side only at desktop width; the tablet band stacks them. */
+@media (min-width: 1200px) {
   .region-band__inner {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
@@ -942,21 +970,6 @@ ul.region-seasons {
   white-space: nowrap;
 }
 
-.county-outro {
-  margin: 4px 0 0;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.county-outro a {
-  color: var(--color-primary);
-  text-decoration: none;
-}
-
-.county-outro a:hover {
-  text-decoration: underline;
-}
-
 /* Attractions + dishes: horizontal scroll-snap strips (no carousel library, no JS). The
    scrollbar track is hidden (design reference 5b/5d) — the peek of the next card is the
    scroll affordance. */
@@ -1015,6 +1028,24 @@ ul.region-seasons {
   font-weight: 400;
   color: var(--color-text-muted);
   font-size: 12px;
+}
+
+/* Phone: open up the text block so it doesn't crowd the card edges. */
+@media (max-width: 767.98px) {
+  .attraction-card,
+  .dish-card {
+    padding-bottom: 14px;
+  }
+
+  .dish-card__ko {
+    display: block;
+    margin-top: 6px;
+  }
+
+  .attraction-card__address,
+  .dish-card__note {
+    margin-top: 8px;
+  }
 }
 
 /* Spicy badge — a white pill over the top-left of the photo (design reference 5b), not an

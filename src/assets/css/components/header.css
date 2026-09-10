@@ -27,20 +27,27 @@
   background: var(--color-nav-link-active);
 }
 
-/* Below 768px the open list becomes a slide-out drawer (see the .js-nav-ready block further
-   down) — an opaque light panel — so its links flip to dark text, overriding the 75%-white
-   nav-bar color which is only correct for the closed header row and the desktop inline nav. */
+/* Below 768px the open list is a dark drop-down sheet (see the .js-nav-ready block further
+   down) that reads as an extension of the nav bar — so the links keep the same treatment as
+   the desktop inline nav: 75% white, active item white with the 2px orange-rule underline. */
 @media (max-width: 767.98px) {
   .js-nav-ready .site-nav__list .site-nav__item a {
     display: flex;
     align-items: center;
     min-height: 44px;
-    color: var(--color-text);
+    color: var(--color-nav-link);
   }
 
   .js-nav-ready .site-nav__list .site-nav__item a[aria-current="page"] {
-    color: var(--color-primary);
-    border-bottom-color: transparent;
+    color: var(--color-nav-link-active);
+    font-weight: 500;
+    border-bottom: 2px solid var(--color-accent-rule);
+  }
+
+  /* Keep the wordmark legible above the dark sheet when it's open. */
+  .site-header:has(.site-nav__list.is-open) .site-header__logo {
+    position: relative;
+    z-index: calc(var(--z-header) + 2);
   }
 }
 
@@ -202,10 +209,10 @@
   background: transparent;
 }
 
-/* Open X sits over the light slide-out panel on every page — dark bars for contrast. */
+/* Open X sits over the dark drop-down sheet on every page — white bars, matching the nav bar. */
 .js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::before,
 .js-nav-ready .nav-toggle[aria-expanded="true"] .nav-toggle__bar::after {
-  background: var(--color-text);
+  background: var(--color-nav-link-active);
 }
 
 /* Below 768px the open list is a fixed, full-width sheet that drops down from the top edge of
@@ -234,9 +241,11 @@
   /* Top padding matches .site-header__inner's own (var(--space-3)) so "Home" lands on the same
      line as the toggle/X sitting in the corner above it, instead of a whole button-height gap
      pushing the list down below it. */
-  padding: var(--space-3) var(--space-4) var(--space-4);
-  background: var(--color-surface);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  /* Top padding clears the nav bar, so the links start just below it and the sheet reads as
+     the bar dropping down. */
+  padding: 64px var(--space-4) var(--space-4);
+  background: var(--color-nav-bg);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
   z-index: calc(var(--z-header) + 1);
   overflow-y: auto;
   transform: translateY(-100%);

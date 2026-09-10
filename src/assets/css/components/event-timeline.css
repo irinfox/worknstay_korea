@@ -89,7 +89,9 @@
   gap: 14px;
   align-items: start;
   padding: 12px 0;
-  border-bottom: 1px solid var(--color-border);
+  /* Fixed #E4E7E4 hairline — the row divider must not thin out to --color-border-soft on the
+     tinted costs+festivals band. */
+  border-bottom: 1px solid #e4e7e4;
 }
 
 .event-card:last-of-type {
@@ -106,9 +108,14 @@
   font-size: 13px;
   font-weight: 500;
   line-height: 1.45;
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   color: var(--color-text-muted);
+}
+
+/* The date itself never breaks; only the trailing status chip wraps below it in the narrow
+   desktop date column. */
+.event-card__daterange {
+  white-space: nowrap;
 }
 
 .event-card__body {
@@ -188,6 +195,13 @@
 
 .event-place__copy:hover,
 .event-place__copy:focus-visible {
+  color: var(--color-primary);
+  opacity: 1;
+}
+
+/* Just-copied cue — green icon (desktop, where the button is icon-only) and green "Copied"
+   label (phone). region-data.js clears .is-copied after 2s. */
+.event-place.is-copied .event-place__copy {
   color: var(--color-primary);
   opacity: 1;
 }
@@ -308,6 +322,46 @@
 .region-loading {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+}
+
+/* --- Phone: grow control hit areas to >=44px (DESIGN.md § Accessibility) ------------
+   Padding only — the Ongoing/Upcoming pills and pager buttons keep their designed look, the tap
+   target grows. */
+@media (max-width: 767.98px) {
+  .event-tabs__tab {
+    padding-block: 12px;
+  }
+
+  .event-pager__btn {
+    min-width: 44px;
+    height: 44px;
+  }
+
+  /* The month row would read as a second competing set of control pills next to the
+     Ongoing/Upcoming toggle — render it as plain text buttons instead: no fill, no border,
+     active month in ink, the rest muted. 44px tap area kept with padding. */
+  .event-months {
+    gap: 2px 4px;
+  }
+
+  .event-months__tab {
+    padding: 12px 6px;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    color: var(--color-text-muted);
+  }
+
+  .event-months__tab:hover {
+    color: var(--color-text);
+  }
+
+  .event-months__tab[aria-selected="true"] {
+    color: var(--color-text);
+    font-weight: 500;
+    background: none;
+    border-color: transparent;
+  }
 }
 
 /* --- Phone: rows stack (date → name → place) ----------------------- */

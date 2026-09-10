@@ -124,26 +124,35 @@
   gap: 8px 12px;
 }
 
+/* The field itself is now the <label> (hero.njk) — the whole row toggles the box. */
 .calculator-form__field--checkbox {
   flex-direction: row;
   align-items: center;
   gap: 8px;
   flex: 1 1 auto;
+  margin-bottom: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-soft);
+  cursor: pointer;
 }
 
 .calculator-form__field--checkbox input {
   flex: 0 0 17px;
   width: 17px;
   height: 17px;
+  margin: 0;
   accent-color: var(--color-primary);
 }
 
-.calculator-form__field--checkbox label {
-  font-size: 13px;
-  font-weight: 400;
+.calculator-form__field--checkbox span {
   white-space: nowrap;
-  color: var(--color-text-soft);
-  margin-bottom: 0;
+}
+
+@media (max-width: 767.98px) {
+  .calculator-form__field--checkbox {
+    min-height: 44px;
+  }
 }
 
 .calculator-form__reset {
@@ -162,16 +171,39 @@
   color: var(--color-primary-dark);
 }
 
+/* Phone: pad the hit area out to >=44px without moving the visible label (negative margin
+   soaks up the extra), same trick as the festival address-copy button. */
+@media (max-width: 767.98px) {
+  .calculator-form__reset {
+    margin: -12px -4px -12px auto;
+    padding: 12px 4px;
+  }
+
+  /* Trim the card's vertical footprint so the longest result state still clears the viewport
+     (hero.css pulls the whole card up onto the photo). */
+  .calculator-mount {
+    padding: 16px;
+  }
+
+  .calculator-form {
+    gap: 8px;
+  }
+
+  .calculator-form__note {
+    margin-bottom: 10px;
+  }
+}
+
 /* Result plate — tint set by calculator.js per eligibility tier, never red (the calculator only
    gives answers). Green tints for "eligible", the site's amber for "not eligible yet". */
 .eligibility-result {
-  margin-top: 14px;
-  padding: 13px 15px;
+  margin-top: 12px;
+  padding: 12px 14px;
   border-radius: var(--radius-md);
   background: var(--color-primary-tint);
   color: var(--color-text-soft);
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* In-site link to the visa rules — green with a → (DESIGN.md palette). */

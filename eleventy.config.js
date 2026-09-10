@@ -48,6 +48,14 @@ export default function (eleventyConfig) {
     return (arr || []).filter((item) => item.regionSlug === slug);
   });
 
+  // Picks records by an explicit ordered list of slugs (Gangwon-do's city section names four
+  // specific cities in a hand-chosen order — byRegion would return all six in data order).
+  eleventyConfig.addFilter("bySlugs", function (arr, slugs) {
+    return (slugs || [])
+      .map((slug) => (arr || []).find((item) => item.slug === slug))
+      .filter(Boolean);
+  });
+
   // region.longIntro is a single string for most regions, an array of paragraphs where a
   // region needs more than one (region.njk renders each form differently).
   eleventyConfig.addFilter("isArray", function (value) {

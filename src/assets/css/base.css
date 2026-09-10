@@ -12,8 +12,8 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Anchor jumps (e.g. hero.njk's "Scroll down to explore the regions" cue) ease into place
-   instead of snapping — guarded so anyone with reduced-motion set still gets the instant jump. */
+/* Anchor jumps (e.g. the nav "Regions" link and the breadcrumb, both targeting /#map) ease into
+   place instead of snapping — guarded so anyone with reduced-motion set still gets the instant jump. */
 @media (prefers-reduced-motion: no-preference) {
   html {
     scroll-behavior: smooth;

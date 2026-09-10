@@ -1,29 +1,49 @@
 /*
- * Home-page hero (DESIGN.md § "Homepage" / design reference 5a): full-bleed cover photo,
- * transparent header floating over its top portion (.has-hero in header.css). The headline
- * block (orange 56×3 rule → H1 → tagline → intro), the white calculator card, and the
- * "Scroll down" cue all stack *inside* .hero__cover and bottom-align against the photo's lower
- * edge (justify-content:flex-end), the cue last so it reads as the foot of the photo.
+ * Home-page hero (DESIGN.md § "Homepage" / design reference 5a).
  *
- * Phone: the cover is sized by its content (a partial-height hero). Desktop: the cover fills
- * the viewport, so the flex-end stack sits in the photo's lower portion.
+ * Phone (base): .hero__frame is a real flex box whose height is set by the headline block, so
+ * the horizontal cover photo keeps a ~1:1 crop instead of being stretched to the viewport.
+ * The headline (orange 56×3 rule → H1 → intro) and the photo-credit line sit inside it; the
+ * white calculator card follows as a sibling and is pulled up so its top overlaps the photo's
+ * lower edge, the rest extending onto white below.
+ *
+ * Desktop (>=768px): .hero__frame becomes display:contents, so .hero__media / .hero__scrim /
+ * .hero__credit resolve their absolute positioning against .hero__cover and the photo fills the
+ * viewport, with the headline + calculator column centred in it.
  */
 .hero {
-  /* Break out of .page's padding to sit full-bleed (matches the old behaviour). */
+  /* Break out of .page's padding to sit full-bleed. */
   margin: calc(var(--space-5) * -1) calc(var(--space-4) * -1) var(--space-6);
 }
 
 .hero__cover {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  min-height: 70svh;
-  padding: 0 var(--space-4) var(--space-6);
+  padding: 0 var(--space-4);
   color: #fff;
 }
 
-.hero__media {
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* The photo box. Full-bleed past .hero__cover's side padding; its own padding insets the
+   headline block. min-height keeps a floor even when the copy is short — 112vw ≈ a square-ish
+   crop of the landscape photo. */
+.hero__frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 0 calc(var(--space-4) * -1);
+  padding: 64px var(--space-4) 12px;
+  /* Landscape photo cropped by width, never by viewport height. Kept short so the calculator —
+     and its longest ("partly eligible") result state — clears the viewport without scrolling. */
+  min-height: min(108vw, 430px);
+}
+
+.hero__media,
+.hero__scrim {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -35,13 +55,10 @@
   background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
 }
 
-/* .hero__content sits at flex-end, so its height isn't fixed. A gradient with a light dip in
-   the middle looks fine with a short headline but leaves the heading exposed over open sky once
-   the intro wraps to several lines. Keeping the floor no lighter than 0.58 across the 0–75%
-   band fixes that — dark enough wherever content ends up, without going flat top-to-bottom. */
+/* Keeps the heading/intro legible over the photo. A light dip in the middle looks fine with a
+   short headline but exposes it over open sky once the intro wraps; the floor stays >=0.58
+   across the 0–75% band so it's dark enough wherever the copy ends up. */
 .hero__scrim {
-  position: absolute;
-  inset: 0;
   z-index: 1;
   background: linear-gradient(
     to bottom,
@@ -52,8 +69,7 @@
   );
 }
 
-/* Per-photo override (see heroCredits.json's needsDarkerScrim) for bright/high-key shots where
-   the default gradient still doesn't leave enough contrast for the heading/tagline. */
+/* Per-photo override (see heroCredits.json's needsDarkerScrim) for bright/high-key shots. */
 .hero__scrim--dark {
   background: linear-gradient(
     to bottom,
@@ -62,32 +78,6 @@
     rgba(10, 10, 10, 0.75) 55%,
     rgba(10, 10, 10, 0.92) 100%
   );
-}
-
-/* KOGL Type1 attribution (see hero.njk) — small, out of the way, but legible over any photo. */
-.hero__credit {
-  position: absolute;
-  right: var(--space-3);
-  bottom: var(--space-2);
-  z-index: 2;
-  margin: 0;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
-}
-
-.hero__credit a {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* Holds the headline block + calculator. On desktop it's capped at the content width and
-   vertically centred in the cover, so its left edge lines up with "The six regions" section
-   below and the calculator sits mid-photo rather than pinned to the bottom-left corner. */
-.hero__inner {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 }
 
 .hero__content {
@@ -99,15 +89,10 @@
   gap: 14px;
   width: 100%;
   max-width: 600px;
-  /* Top padding clears .site-header (position:absolute over the photo, see .has-hero in
-     header.css) — .hero__cover is justify-content:flex-end, so the flex-end gap above the
-     heading collapses to zero once the content grows tall, and without this the heading would
-     crowd the header. 72px comfortably clears a narrow-phone header height. */
-  padding-top: 72px;
   text-align: left;
 }
 
-/* Orange 56×3 rule above every page headline (DESIGN.md § Recurring parts). */
+/* Orange 56×3 rule above the headline (DESIGN.md § Recurring parts). */
 .hero__rule {
   width: 56px;
   height: 3px;
@@ -115,9 +100,7 @@
   background: var(--color-accent-rule);
 }
 
-/* 3-layer shadow — a near-opaque tight layer does most of the work against busy detail
-   (leaves, branches), a mid layer reinforces it, a soft wide halo covers the rest — paired
-   with .hero__scrim for legibility over whichever photo is live. */
+/* 3-layer shadow paired with .hero__scrim for legibility over whichever photo is live. */
 .hero__heading,
 .hero__intro {
   margin: 0;
@@ -137,47 +120,42 @@
 
 .hero__intro {
   font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-  line-height: 1.65;
+  line-height: 1.5;
   color: rgba(255, 255, 255, 0.82);
 }
 
-/* Calculator wrapper — a flex child of .hero__cover, stretched full width so .calculator-mount's
-   own max-width + margin-right:auto pin the card to the left under the headline block. */
+/* KOGL Type1 attribution (see hero.njk). Phone: in flow at the foot of the photo, above the
+   overlapping calculator. Desktop: absolute, photo bottom-right. */
+.hero__credit {
+  position: relative;
+  z-index: 2;
+  margin: 16px 0 0;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Calculator wrapper — pulled up so the card's top sits on the photo, the rest on white below.
+   The pull is large on phone so the card (and its longest result state) fits the viewport. */
 .hero__calculator {
   position: relative;
   z-index: 3;
-  align-self: stretch;
-  margin-top: var(--space-5);
-}
-
-/* Foot-of-the-photo scroll cue — light ink over the darkened lower band of the photo.
-   position/z-index lift it above .hero__scrim (an absolutely-positioned sibling). */
-.hero__scroll-cue {
-  position: relative;
-  z-index: 2;
-  display: block;
-  margin-top: var(--space-5);
-  color: #fff;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  text-decoration: none;
-  text-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.9),
-    0 2px 8px rgba(0, 0, 0, 0.7);
-}
-
-.hero__scroll-cue:hover,
-.hero__scroll-cue:focus-visible {
-  text-decoration: underline;
+  margin-top: -52px;
 }
 
 @media (min-width: 768px) {
   .hero__cover {
-    /* Desktop: the cover photo fills the viewport; the headline + calculator block is centred
-       in it, and the scroll cue is pinned to the photo's lower edge. */
+    /* Desktop: the cover photo fills the viewport; the headline + calculator column is centred
+       in it. */
     min-height: 100svh;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    padding: 0 var(--space-4);
+  }
+
+  /* Frame contributes no box — media/scrim/credit resolve against .hero__cover (full-bleed),
+     and .hero__content / .hero__calculator become the flex children of .hero__inner as before. */
+  .hero__frame {
+    display: contents;
   }
 
   .hero__inner {
@@ -187,15 +165,18 @@
 
   .hero__content {
     gap: 16px;
-    padding-top: 0;
   }
 
-  .hero__scroll-cue {
+  .hero__credit {
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: var(--space-6);
-    margin-top: 0;
-    text-align: center;
+    right: var(--space-3);
+    bottom: var(--space-2);
+    z-index: 2;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .hero__calculator {
+    margin-top: var(--space-5);
   }
 }

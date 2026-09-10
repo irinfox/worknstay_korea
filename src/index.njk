@@ -5,7 +5,7 @@ layout: layouts/page.njk
 
 {#
   Region-info shell (architecture.md §3): one shared region-card.njk partial feeds two
-  render modes, switched by a width-only CSS breakpoint (768px, see --bp-region-info-wide in
+  render modes, switched by a width-only CSS breakpoint (1200px, see --bp-region-info-wide in
   tokens.css) — never both at once, never recomputed on resize.
     - Wide (region-infographic): all 6 regions permanently visible around the map, in two
       fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
@@ -24,10 +24,12 @@ layout: layouts/page.njk
 <section id="map" class="home-regions" aria-labelledby="home-regions-heading">
   <div class="home-regions__head">
     <div class="home-regions__intro">
-      <h2 id="home-regions-heading">The six regions</h2>
-      <p>
-        Hover a region or its card to highlight it on the map — on a phone, tap the map to jump
-        to a card. Open either to see the region.
+      <h2 id="home-regions-heading">Regions of Korea</h2>
+      <p class="home-regions__lead home-regions__lead--wide">
+        Hover a region or its card to highlight it on the map. Open either to see the region.
+      </p>
+      <p class="home-regions__lead home-regions__lead--narrow">
+        Tap a region on the map to jump to its card, open the card to see the region.
       </p>
     </div>
     <ul class="map-legend" aria-label="Map colour key">
@@ -95,8 +97,8 @@ layout: layouts/page.njk
 
   {#
     Narrow-viewport carousel: all 6 region cards as a horizontal scroll-snap row + dot
-    indicators (CLAUDE.md feedback log). Hidden at >=768px where the infographic takes over.
-    The dots are position indicators only for now (no scroll-sync JS yet).
+    indicators (CLAUDE.md feedback log). Hidden at >=1200px where the infographic takes over.
+    region-card.js keeps the dots in sync with scroll position; first dot stays lit with JS off.
   #}
   <div class="region-carousel" aria-label="All six regions">
     <ul class="region-carousel__track">

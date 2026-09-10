@@ -2,7 +2,7 @@
   width: 100%;
   /* Below the infographic breakpoint the map is a standalone block above the carousel — cap and
      centre it so a wide phone / tablet doesn't blow it up to full column width. Inside the
-     infographic grid (>=1120px) the 420fr centre column governs the width instead — see the
+     infographic grid (>=1200px) the 420fr centre column governs the width instead — see the
      min-width:0 override in that media block. */
   max-width: 460px;
   margin-inline: auto;
@@ -250,9 +250,9 @@
   white-space: nowrap;
 }
 
-/* 1120px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
+/* 1200px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
    activation — the cross-hover pairs the infographic grid with the map shapes. */
-@media (min-width: 1120px) {
+@media (min-width: 1200px) {
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,

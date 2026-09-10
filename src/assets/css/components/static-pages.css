@@ -204,7 +204,14 @@ ul.about-hero__chips {
   text-decoration: underline;
 }
 
+/* Tablet band: two up. Three up only at desktop width. */
 @media (min-width: 768px) {
+  .about-why__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 1200px) {
   .about-why__grid {
     grid-template-columns: repeat(3, 1fr);
   }

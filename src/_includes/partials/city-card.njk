@@ -42,7 +42,7 @@
         {%- if space.level == 1 -%}not many{%- elif space.level == 2 -%}enough{%- else -%}plenty{%- endif -%}
       </span>
       <span class="sr-only">({{ space.level }} of 3)</span>
-      <a class="study-cafes__search" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map search ↗</a>
+      <a class="study-cafes__search" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map<span class="study-cafes__search-word"> search</span> ↗</a>
     </div>
     {% endfor %}
   </div>
