@@ -87,9 +87,9 @@
 }
 
 .city-card__tags li {
-  padding: 5px 12px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 4px 10px;
+  font-size: 13px;
+  font-weight: 500;
   line-height: 1.2;
   color: var(--color-primary-dark);
   background: var(--color-vibe-tag-bg);

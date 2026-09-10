@@ -22,11 +22,6 @@
   /* Slightly deeper mint reserved for the DESIGN.md "Vibe tag" pill (region header + city cards):
      #DCEFE5 bg / #A9D8C2 border / #0B5C3F text. */
   --color-vibe-tag-bg: #dcefe5;
-  /* Event-card sticky-note badges: "long-term" (taupe) vs "this month" (cream). */
-  --color-badge-longterm-bg: #d4c4b7;
-  --color-badge-longterm-text: #3e2723;
-  --color-badge-thismonth-bg: #fef3c7;
-  --color-badge-thismonth-text: #92400e;
   --color-accent: #c2531a; /* Orange text: outbound links, festival dates, spicy tag */
   --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
@@ -34,9 +29,8 @@
   --color-accent-tint-border: #ecd2ab;
   /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
      calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
-  --color-result-amber: #fdf0e4;
+  --color-result-amber: #f7ead9;
   --color-link: var(--color-primary);
-  --color-link-visited: #3d4f6b;
   --color-focus-ring: #2f6fed;
 
   /* Dark primary nav (DESIGN.md § Recurring parts). */
@@ -66,13 +60,13 @@
   --font-family-base: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-family-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
-  --font-size-base: 1rem;
+  --font-size-base: 0.9375rem; /* DESIGN.md § Type — body 15px */
   --font-size-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
   --font-size-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
   --font-size-2xl: clamp(1.625rem, 1.4rem + 1vw, 2.125rem);
   --font-size-3xl: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
   --line-height-tight: 1.2;
-  --line-height-base: 1.55;
+  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65–1.7 */
 
   /* Radius / shadow / z-index */
   --radius-sm: 4px;

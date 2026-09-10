@@ -39,7 +39,7 @@
 .community-card__platform {
   margin-top: var(--space-1);
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-primary-dark);
 }
 

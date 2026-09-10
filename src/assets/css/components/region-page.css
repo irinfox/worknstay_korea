@@ -3,10 +3,10 @@
    the wider .content-page container for grids/galleries. */
 
 /* Shared placeholder box for attraction cards whose KTO record has no licensed image
-   (`imageLicense` null) — never render an unlicensed image; show this instead. */
+   (`imageLicense` null) — never render an unlicensed image; show this instead. A plain #F7F9F8
+   fill holding the slot's shape (DESIGN.md § Empty & fallback states), no wireframe border. */
 .media-placeholder {
   background: var(--color-surface);
-  border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm);
 }
 
@@ -164,7 +164,7 @@ ul.region-seasons {
   align-items: baseline;
   gap: 10px;
   max-width: none;
-  font-size: clamp(2rem, 1.7rem + 1.5vw, 2.375rem);
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.1;
@@ -187,7 +187,7 @@ ul.region-seasons {
   color: var(--color-primary-dark);
   border-radius: 22px;
   font-size: clamp(0.875rem, 0.84rem + 0.15vw, 0.9375rem);
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
 }
 
@@ -285,7 +285,7 @@ ul.region-seasons {
 
 .note-plate--stricter {
   background: var(--color-accent-tint);
-  border: 1px solid var(--color-accent-tint-border);
+  border: 1px solid var(--color-accent-rule);
 }
 
 .note-plate__text {
@@ -400,7 +400,7 @@ ul.region-seasons {
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid #cfd6d2;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-bg);
   color: var(--color-text-soft);
@@ -814,7 +814,7 @@ ul.region-seasons {
 
 .tier-chip--watch {
   background: var(--color-accent-tint);
-  border: 1px solid var(--color-accent-tint-border);
+  border: 1px solid var(--color-accent-rule);
   color: var(--color-accent);
 }
 
@@ -1066,6 +1066,6 @@ ul.region-seasons {
 
 .cost-summary dd {
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
 }
 

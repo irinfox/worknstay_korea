@@ -24,7 +24,7 @@
   font-weight: 500;
   color: var(--color-text-soft);
   background: var(--color-bg);
-  border: 1px solid #cfd6d2;
+  border: 1px solid var(--color-border);
   border-radius: 20px;
   cursor: pointer;
 }
@@ -145,7 +145,7 @@
 
 .event-card__badge--month {
   color: var(--color-accent);
-  background: #fbefe4; /* design-ref festival "this month" chip wash (warmer than --color-accent-tint) */
+  background: var(--color-accent-tint);
 }
 
 /* --- Address: [pin] city [copy] ------------------------------------- */
@@ -239,7 +239,7 @@
   line-height: 1;
   color: var(--color-text-soft);
   background: var(--color-bg);
-  border: 1px solid #cfd6d2;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   cursor: pointer;
 }

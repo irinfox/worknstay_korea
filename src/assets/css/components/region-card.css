@@ -63,13 +63,18 @@
   gap: 5px;
 }
 
+/* Vibe-tag pill, small size (DESIGN.md § Vibe tag) — shared with .city-card__tags li. Same
+   fill/border/text as the region-page header pill, one size down for the card grids. */
 .region-card__tags li {
-  padding: 3px 9px;
-  border-radius: 20px;
-  background: var(--color-primary-tint);
-  color: var(--color-primary);
-  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: 22px;
+  background: var(--color-vibe-tag-bg);
+  color: var(--color-primary-dark);
+  font-size: 13px;
   font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .region-card__link {
@@ -99,27 +104,13 @@
   text-decoration: none;
 }
 
-/* Infographic (wide) variant. The card keeps the base layout (name + rent on one line, ink
-   rent, 16px name — DESIGN.md § "Region card") and only adds a fixed height + clamps so the
-   hand-positioned leader lines in index.njk line up; the 300px column (region-card.css grid
-   below) fits the longest name + its rent figure on one line with room to spare. */
-.region-card--infographic {
-  height: 210px;
-  overflow: hidden;
-}
-
+/* Infographic (wide) variant. Cards size to their own content — the leader lines in index.njk
+   anchor to each card's measured centre, re-derived when card content changes. */
 .region-card--infographic .region-card__name {
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.region-card--infographic .region-card__intro {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 
 /* One non-wrapping tag row — Gangwon-do's 4th tag is dropped rather than clipped mid-pill. */

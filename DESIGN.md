@@ -100,8 +100,9 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   "Regions" links to `/#map`, not `/`. The wordmark is the home link and stays clickable on the homepage.
 - **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" → `/#map`.
 - **Headline block**: orange 56×3 rule → H1 → Korean name → vibe tags → intro paragraphs.
-- **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, 14–15px/600, radius 22px.
-  Same style for regions and cities — they mean the same thing.
+- **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, radius 22px. 14–15px/500, padding
+  7px 15px on region-page headers; 13px/500, padding 4px 10px on city cards and homepage region
+  cards. Same colours everywhere — they mean the same thing.
 - **Note plate**: tinted bg, matching border, radius 10px, one line of text + a `→` link.
   Green tint + green border for "easier"; amber `#F7EAD9` + `#E08A2E` border for "stricter".
 - **Source line**: 12–13px `#5C6660`, always dated, at the foot of the block it describes.
