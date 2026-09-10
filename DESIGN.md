@@ -196,7 +196,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 
 ## Never
 
-Emoji · colour outside the palette, data colours and the focus ring excepted · new fonts or
-weights · dashed or dotted borders ·
-decorative gradients or shadows beyond the card shadow (the hero photo scrim stays — it is
-contrast, not decoration) · orange text that is not a link (badge pills excepted).
+Emoji · new fonts or weights · dashed or dotted borders · decorative gradients or shadows beyond
+the card shadow · colour outside the palette · orange text that is not a link.
+
+Where a section above documents an exception, that exception wins — don't "fix" it.
