@@ -38,10 +38,15 @@
     color: var(--color-nav-link);
   }
 
+  /* Underline the text only, not the full panel width — a full-bleed rule under "Regions" reads
+     as a section header for the items beneath it. Same 2px orange as the desktop nav. */
   .js-nav-ready .site-nav__list .site-nav__item a[aria-current="page"] {
     color: var(--color-nav-link-active);
     font-weight: 500;
-    border-bottom: 2px solid var(--color-accent-rule);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent-rule);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 5px;
   }
 
   /* Keep the wordmark legible above the dark sheet when it's open. */
@@ -164,7 +169,7 @@
   width: 20px;
   height: 2px;
   background: var(--color-nav-link-active);
-  transition: transform 0.25s ease, opacity 0.25s ease, top 0.25s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease, top 0.2s ease;
 }
 
 .js-nav-ready .nav-toggle__bar {
@@ -278,25 +283,40 @@
    visible already in its final position — reading as two disconnected beats (backdrop, then a
    pause, then the panel just appearing) instead of one smooth slide. */
 .js-nav-ready .site-nav__list.nav-animate {
-  transition: transform 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .js-nav-ready .site-nav__list.nav-animate:not(.is-open) {
-  transition: transform 0.3s ease, visibility 0s linear 0.3s;
+  transition: transform 0.2s ease, visibility 0s linear 0.2s;
 }
 
 /* Dims the page behind the drawer and gives a click target to close it; nav.js toggles
-   [hidden] alongside .is-open. Not part of the no-JS fallback — it's created hidden and only
-   ever un-hidden by nav.js, so it's simply inert (and invisible) without JS. */
+   .is-open (and .nav-animate around a real toggle) alongside the panel. Not part of the no-JS
+   fallback — visibility:hidden + opacity:0 leave it inert and invisible until nav.js opens it. */
 .nav-backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.45);
   z-index: var(--z-header);
+  opacity: 0;
+  visibility: hidden;
 }
 
-.nav-backdrop[hidden] {
-  display: none;
+/* Fades on the same 0.2s ease curve as the panel slide, and only while .nav-animate is armed —
+   so a viewport-driven recalc snaps instead of animating (same reasoning as the panel). The
+   close direction delays visibility:hidden until the fade finishes so the dim doesn't vanish
+   mid-slide. */
+.nav-backdrop.nav-animate {
+  transition: opacity 0.2s ease;
+}
+
+.nav-backdrop.nav-animate:not(.is-open) {
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.nav-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
 }
 
 @media (min-width: 768px) {

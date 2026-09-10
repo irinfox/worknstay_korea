@@ -55,7 +55,7 @@
   font-size: 12px;
   color: var(--color-text-soft);
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-primary-tint-border-soft);
   border-radius: 20px;
   cursor: pointer;
 }
@@ -129,9 +129,10 @@
   line-height: 1.35;
 }
 
-/* LONG-TERM / THIS MONTH badge, inline after the name (Ongoing panel only). Design reference 5b:
-   a solid tinted fill, no border — green wash for LONG-TERM, warm wash for THIS MONTH. The text
-   comes through already upper-cased. */
+/* LONG-TERM / THIS MONTH badge (Ongoing panel only). Design reference 5b: a solid tinted fill,
+   no border — green wash for LONG-TERM, warm wash for THIS MONTH. Two render slots (region-data.js
+   emits both): inline after the name from 600px up (design-ref placement), and on the date line
+   below 600px where the stacked card leaves the name row no spare width. */
 .event-card__badge {
   display: inline-block;
   margin-left: 6px;
@@ -155,6 +156,20 @@
   background: var(--color-accent-tint);
 }
 
+.event-card__badge--on-date {
+  display: none;
+}
+
+@media (max-width: 599.98px) {
+  .event-card__badge--on-date {
+    display: inline-block;
+  }
+
+  .event-card__badge--on-name {
+    display: none;
+  }
+}
+
 /* --- Address: [pin] city [copy] ------------------------------------- */
 
 .event-place {
@@ -174,6 +189,7 @@
 }
 
 .event-place__city {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -193,14 +209,20 @@
   transition: opacity 0.12s ease;
 }
 
-.event-place__copy:hover,
-.event-place__copy:focus-visible {
+/* Green is reserved for the just-copied state. Hover turns it green only while the pointer is
+   actually over the icon; keyboard focus just makes it fully opaque so it stays gray once the
+   copied cue clears. */
+.event-place__copy:hover {
   color: var(--color-primary);
   opacity: 1;
 }
 
-/* Just-copied cue — green icon (desktop, where the button is icon-only) and green "Copied"
-   label (phone). region-data.js clears .is-copied after 2s. */
+.event-place__copy:focus-visible {
+  opacity: 1;
+}
+
+/* Just-copied cue — green icon plus the visible "Full address copied" confirmation (same string
+   on phone and desktop). region-data.js clears .is-copied after 2s, and only one row at a time. */
 .event-place.is-copied .event-place__copy {
   color: var(--color-primary);
   opacity: 1;
@@ -211,8 +233,12 @@
   height: 12px;
 }
 
+/* Visible on both viewports (was sr-only) — the copy confirmation. Empty except right after a
+   copy. */
 .event-place__status {
-  font-size: 0.75rem;
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--color-primary);
   white-space: nowrap;
 }
@@ -221,7 +247,9 @@
   display: none;
 }
 
-/* Desktop: icon + tooltip only. Phone: icon + "Copy address" label in a ≥44px tap target. */
+/* Desktop: icon + tooltip only (the confirmation stands alone). Phone: icon + "Copy full
+   address" label in a ≥44px tap target, and the label gives way to the confirmation while
+   copied so the two never sit side by side. */
 .event-place__copy-label {
   display: none;
 }
@@ -241,30 +269,39 @@
   padding-top: 14px;
 }
 
+/* Identical shape to the region-page hero-gallery prev/next arrows (region-page.css
+   .region-hero-gallery__nav) — 34px square, --radius-md corners, same border/hover — only the
+   glyph differs (‹ › vs ← →). The 44px tap target comes from a pseudo-element on phone (below).
+   Keep in sync with .region-hero-gallery__nav. */
 .event-pager__btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 30px;
-  height: 30px;
-  padding: 0 8px;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   font: inherit;
-  font-size: 13px;
+  font-size: 1rem;
   line-height: 1;
   color: var(--color-text-soft);
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
 }
 
-.event-pager__btn:hover:not(:disabled) {
+.event-pager__btn:hover:not(:disabled),
+.event-pager__btn:focus-visible:not(:disabled) {
+  background: var(--color-surface);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
+/* Border stays full strength — only the glyph drops to ~40% ink, so a disabled arrow reads as
+   unavailable, not broken. */
 .event-pager__btn:disabled {
-  opacity: 0.4;
+  color: color-mix(in srgb, var(--color-text-soft) 40%, transparent);
   cursor: default;
 }
 
@@ -332,35 +369,49 @@
     padding-block: 12px;
   }
 
-  .event-pager__btn {
+  /* 44px tap target without resizing the visible pill — an invisible centred hit area
+     (DESIGN.md § Mobile). */
+  .event-pager__btn::before,
+  .event-months__tab::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
     min-width: 44px;
     height: 44px;
-  }
-
-  /* The month row would read as a second competing set of control pills next to the
-     Ongoing/Upcoming toggle — render it as plain text buttons instead: no fill, no border,
-     active month in ink, the rest muted. 44px tap area kept with padding. */
-  .event-months {
-    gap: 2px 4px;
+    transform: translate(-50%, -50%);
   }
 
   .event-months__tab {
-    padding: 12px 6px;
-    background: none;
-    border: 0;
-    border-radius: 0;
-    color: var(--color-text-muted);
+    position: relative;
+  }
+}
+
+/* --- 900 and below: hover can't be assumed (DESIGN.md § Mobile), so the copy control carries
+   its "Copy full address" label like it does on phone, not just a tooltip, and grows to a 44px
+   tap target with padding pulled back by a negative margin. --- */
+@media (max-width: 900px) {
+  .event-place__copy {
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    /* pull the oversized target back so it doesn't inflate the address row */
+    margin: -11px 0 -11px 2px;
+    padding: 11px 6px;
+    opacity: 1;
   }
 
-  .event-months__tab:hover {
-    color: var(--color-text);
+  .event-place__copy-label {
+    display: inline;
+    font-size: 0.8125rem;
   }
 
-  .event-months__tab[aria-selected="true"] {
-    color: var(--color-text);
-    font-weight: 500;
-    background: none;
-    border-color: transparent;
+  /* While copied, the confirmation replaces the label rather than sitting beside it. */
+  .event-place.is-copied .event-place__copy-label {
+    display: none;
   }
 }
 
@@ -383,23 +434,6 @@
   .event-place {
     flex-wrap: wrap;
     gap: 2px 10px;
-  }
-
-  .event-place__copy {
-    min-width: 44px;
-    min-height: 44px;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    /* pull the oversized target back so it doesn't inflate the address row */
-    margin: -11px 0 -11px 2px;
-    padding: 11px 6px;
-    opacity: 1;
-  }
-
-  .event-place__copy-label {
-    display: inline;
-    font-size: 0.8125rem;
   }
 
   .event-pager {

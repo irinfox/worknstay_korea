@@ -116,24 +116,16 @@
   background: var(--color-primary-dark);
 }
 
-/* Checkbox + reset link share one row (DESIGN.md), reset pushed to the right. */
-.calculator-form__controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 12px;
-}
-
-/* The field itself is now the <label> (hero.njk) — the whole row toggles the box. */
+/* The field itself is the <label> (hero.njk) — the whole strip toggles the box. Its own row on
+   phone directly above the submit button; on desktop `order` drops it beside Clear. Label type
+   is 13px / 500 / ink (task audit) — deliberately heavier than the field labels above it. */
 .calculator-form__field--checkbox {
-  flex-direction: row;
+  display: flex;
   align-items: center;
   gap: 8px;
-  flex: 1 1 auto;
-  margin-bottom: 0;
   font-size: 13px;
-  font-weight: 400;
-  color: var(--color-text-soft);
+  font-weight: 500;
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -156,6 +148,7 @@
 }
 
 .calculator-form__reset {
+  align-self: flex-end;
   margin-left: auto;
   padding: 0;
   border: none;
@@ -235,7 +228,27 @@
     box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
   }
 
+  /* Desktop keeps the original two-line arrangement — [salary  age  Check eligibility] on line
+     one, [checkbox … Clear] on line two — via `order` rather than DOM position, since the
+     checkbox now sits above the button in source order for the phone layout (task audit). */
+  .calculator-form {
+    flex-flow: row wrap;
+    align-items: flex-end;
+  }
+
+  .calculator-form__title {
+    order: 1;
+    flex: 1 1 100%;
+  }
+
+  .calculator-form__note {
+    order: 2;
+    flex: 1 1 100%;
+  }
+
   .calculator-form__row {
+    order: 3;
+    flex: 0 0 auto;
     flex-wrap: nowrap;
   }
 
@@ -249,8 +262,18 @@
 
   /* Button takes the width left after the two fixed-width fields, on the same row. */
   .calculator-form__submit {
+    order: 4;
     flex: 1 1 auto;
     height: 42px;
     font-size: 14px;
+  }
+
+  .calculator-form__field--checkbox {
+    order: 5;
+    flex: 0 1 auto;
+  }
+
+  .calculator-form__reset {
+    order: 6;
   }
 }

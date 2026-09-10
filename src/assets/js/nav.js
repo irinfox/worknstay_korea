@@ -20,12 +20,18 @@ export function init() {
   let animateTimer;
   const setOpen = (isOpen) => {
     nav.classList.add("nav-animate");
+    if (backdrop) backdrop.classList.add("nav-animate");
     clearTimeout(animateTimer);
-    animateTimer = setTimeout(() => nav.classList.remove("nav-animate"), 350);
+    animateTimer = setTimeout(() => {
+      nav.classList.remove("nav-animate");
+      if (backdrop) backdrop.classList.remove("nav-animate");
+    }, 250);
 
     nav.classList.toggle("is-open", isOpen);
     toggle.setAttribute("aria-expanded", String(isOpen));
-    if (backdrop) backdrop.hidden = !isOpen;
+    // Same class the panel uses — header.css fades the backdrop dim on the identical duration
+    // and curve so the two land together.
+    if (backdrop) backdrop.classList.toggle("is-open", isOpen);
   };
 
   toggle.addEventListener("click", () => {

@@ -98,12 +98,16 @@ function dateRangeShort(ev) {
   return `${s.getDate()} ${MON(s)} – ${e.getDate()} ${MON(e)}`;
 }
 
-// Ongoing-panel badge shown inline after the event name: multi-month festivals are "Long-term",
-// everything else is "This month".
-function ongoingBadge(ev) {
-  return monthKeyOf(ev.startDate) !== monthKeyOf(ev.endDate)
-    ? ` <span class="event-card__badge event-card__badge--long">long-term</span>`
-    : ` <span class="event-card__badge event-card__badge--month">this month</span>`;
+// Ongoing-panel badge: multi-month festivals are "Long-term", everything else is "This month".
+// Emitted in two slots (event-timeline.css shows exactly one per breakpoint via display:none):
+// `name` sits inline after the event name (≥600px, design-ref placement), `date` rides the date
+// line (<600px, where the stacked card's name row has no spare width). Neither is aria-hidden —
+// a screen reader skips the display:none one and announces only whichever is shown.
+function ongoingBadge(ev, slot) {
+  const long = monthKeyOf(ev.startDate) !== monthKeyOf(ev.endDate);
+  const kind = long ? "long" : "month";
+  const text = long ? "long-term" : "this month";
+  return ` <span class="event-card__badge event-card__badge--${kind} event-card__badge--on-${slot}">${text}</span>`;
 }
 
 const METROS = ["Seoul", "Busan", "Incheon", "Daegu", "Daejeon", "Gwangju", "Ulsan", "Sejong"];
@@ -147,8 +151,8 @@ function renderEventCard(ev, { badge = false } = {}) {
     ? `<span class="event-place" title="${addr}">
          ${PIN_ICON}<span class="event-place__city">${escapeHtml(cityFromAddress(ev.address))}</span>
          <button type="button" class="event-place__copy" data-address="${addr}"
-           aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label" data-default="Copy address">Copy address</span></button>
-         <span class="event-place__status sr-only" role="status" aria-live="polite"></span>
+           aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label" data-default="Copy full address">Copy full address</span></button>
+         <span class="event-place__status" role="status" aria-live="polite"></span>
        </span>`
     : "";
   // The status chip rides the date line (immediately after the date range), not the name —
@@ -157,10 +161,10 @@ function renderEventCard(ev, { badge = false } = {}) {
     <li class="event-card">
       <span class="event-card__date">
         <span class="sr-only">${readableRange(ev.startDate, ev.endDate)}</span>
-        <span class="event-card__daterange" aria-hidden="true">${dateRangeShort(ev)}</span>${badge ? ongoingBadge(ev) : ""}
+        <span class="event-card__daterange" aria-hidden="true">${dateRangeShort(ev)}</span>${badge ? ongoingBadge(ev, "date") : ""}
       </span>
       <div class="event-card__body">
-        <p class="event-card__title">${escapeHtml(ev.titleEn)}</p>
+        <p class="event-card__title">${escapeHtml(ev.titleEn)}${badge ? ongoingBadge(ev, "name") : ""}</p>
         ${place}
       </div>
     </li>`;
@@ -383,11 +387,24 @@ function setupPagers(container) {
 }
 
 function setupAddressCopy(container) {
+  // One shared "currently confirmed" slot — tapping any row clears the previous one immediately,
+  // so only one row is ever in the copied state, and every confirmation reverts after 2s.
+  let activeTimer = null;
+  let activePlace = null;
+
+  const reset = () => {
+    if (!activePlace) return;
+    const label = activePlace.querySelector(".event-place__copy-label");
+    const status = activePlace.querySelector(".event-place__status");
+    if (label) label.textContent = label.dataset.default || "Copy full address";
+    if (status) status.textContent = "";
+    activePlace.classList.remove("is-copied");
+    activePlace = null;
+  };
+
   container.querySelectorAll(".event-place__copy").forEach((btn) => {
     const place = btn.closest(".event-place");
     const status = place.querySelector(".event-place__status");
-    const label = btn.querySelector(".event-place__copy-label");
-    const defaultLabel = (label && label.dataset.default) || "Copy address";
     btn.addEventListener("click", async () => {
       const address = btn.dataset.address || "";
       let ok = false;
@@ -397,18 +414,14 @@ function setupAddressCopy(container) {
       } catch {
         ok = legacyCopy(address);
       }
-      // Swap the label in place on success — "Copied", same width class, no extra text beside
-      // it that would shift the row. On failure the label stays put; the sr-only status still
-      // tells a screen reader what happened.
-      if (ok && label) label.textContent = "Copied";
+      clearTimeout(activeTimer);
+      reset();
+      // Same "Full address copied" string on phone and desktop. On phone the CSS hides the
+      // label while .is-copied, so the confirmation replaces it rather than appending.
       if (status) status.textContent = ok ? "Full address copied" : "Press Ctrl+C to copy";
       place.classList.toggle("is-copied", ok);
-      clearTimeout(btn._copyTimer);
-      btn._copyTimer = setTimeout(() => {
-        if (label) label.textContent = defaultLabel;
-        if (status) status.textContent = "";
-        place.classList.remove("is-copied");
-      }, 2000);
+      activePlace = place;
+      activeTimer = setTimeout(reset, 2000);
     });
   });
 }

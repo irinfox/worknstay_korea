@@ -131,11 +131,11 @@
   text-overflow: ellipsis;
 }
 
-/* One non-wrapping tag row — Gangwon-do's 4th tag is dropped rather than clipped mid-pill. */
+/* Every region's full vibe-tag list from data, same as the region page and the carousel — no
+   count cap. They fit on one line at the infographic card width; wrap is the safety net, not
+   the norm (re-check card centres for the leader lines if a tag list grows past one row). */
 .region-card--infographic .region-card__tags {
-  flex-wrap: nowrap;
   gap: 4px;
-  overflow: hidden;
 }
 
 .region-card--infographic .region-card__tags li {
@@ -143,16 +143,9 @@
   white-space: nowrap;
 }
 
-.region-card--infographic .region-card__tags li:nth-child(n + 4) {
-  display: none;
-}
-
-/* Carousel (narrow) variant — fills its scroll-snap item's height; the wider card lets all four
-   vibe tags sit on one line. */
-.region-card--carousel {
-  height: 100%;
-}
-
+/* Carousel (narrow) variant. Height comes from content and is equalised across a row by the
+   track's `align-items: stretch` (default) — never a hard `height`, which made a card shorter
+   than its own content at 262px and spilled it past the bottom edge. */
 .region-card--carousel .region-card__tags {
   flex-wrap: nowrap;
 }
@@ -191,13 +184,14 @@
   color: var(--color-text-muted);
 }
 
-/* The map interaction copy differs by input: hover wording on wide viewports, tap wording
-   below 768px (no hover on a phone). */
+/* The map interaction copy differs by input: hover wording only where the infographic (and its
+   cross-hover) is live, tap wording everywhere below it — hover can't be assumed at 900 and no
+   infographic is drawn there. */
 .home-regions__lead--narrow {
   display: none;
 }
 
-@media (max-width: 767.98px) {
+@media (max-width: 1023.98px) {
   .home-regions__lead--wide {
     display: none;
   }
@@ -229,9 +223,9 @@
 }
 
 /* Narrow-viewport carousel — breaks out of .page's padding so cards can scroll to the screen
-   edge, with its own inner track padding. Hidden at >=1200px (--bp-region-info-wide). */
+   edge, with its own inner track padding. Hidden at >=1024px (--bp-region-info-wide). */
 .region-carousel {
-  margin: 4px calc(var(--space-4) * -1) 0;
+  margin: 12px calc(var(--space-4) * -1) 0;
 }
 
 /* ul.* — base.css's `ul[class] { padding: 0 }` reset ties with a bare class and would otherwise
@@ -294,7 +288,23 @@ ol.region-carousel__dots {
   background: var(--color-primary);
 }
 
-@media (min-width: 1200px) {
+/* Tablet band (768–1023): the infographic hasn't kicked in yet, so the carousel is the layout.
+   The map is capped and centred above it, the cards keep a fixed 262px so ~3 show with the
+   next clipped, and the dots come off — a row that shows 2+ cards can't map onto per-card dots
+   (DESIGN.md § Mobile), and the clipped card is its own affordance. Phone (<768) is untouched. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .region-carousel__item {
+    flex-basis: 262px;
+    max-width: 262px;
+  }
+
+  /* ol.* to outrank base.css's `ol[class]` / the base ol.region-carousel__dots flex rule. */
+  ol.region-carousel__dots {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
   .region-carousel {
     display: none;
   }
@@ -305,7 +315,9 @@ ol.region-carousel__dots {
    * `fr` ratio holds as it scales; the map/leader-line SVGs (viewBox-scaled, width:100%) track
    * it. `min-width: 0` on the flanking columns is load-bearing — grid tracks won't otherwise
    * shrink past their content's intrinsic min-content width. index.njk's leader-line viewBox
-   * (0 0 1000 950) is calibrated to the ~1200px full-width layout (left column ≈ 33% wide).
+   * (0 0 1000 950) is calibrated to the ~1200px full-width layout (left column ≈ 33% wide); it
+   * activates from 1024 and drifts a little toward the narrow end — Jeju's leader is dropped
+   * 1024–1149 for that reason (see the media query at the foot of this file).
    */
   .region-infographic {
     display: grid;
@@ -396,5 +408,15 @@ ol.region-carousel__dots {
     stroke: var(--color-primary-dark);
     stroke-width: 2.5;
     stroke-opacity: 1;
+  }
+}
+
+/* 1024–1149: the card columns run taller than the map, so the leader layer (viewBox calibrated
+   at ~1200) drifts. Every line but Jeju's keeps enough slack; Jeju's island is tiny and its
+   endpoint lands ~15–55px outside it. Drop that one line in this range — the island already
+   prints "Jeju-do" — and let it back in at 1150+ where it lands true again. */
+@media (min-width: 1024px) and (max-width: 1149.98px) {
+  .region-infographic__lines line[data-slug="jeju-do"] {
+    display: none;
   }
 }

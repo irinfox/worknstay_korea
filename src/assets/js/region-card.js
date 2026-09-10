@@ -6,9 +6,11 @@
 // run from the home page anymore — a region page reached any other way (direct link, search,
 // nav) had no such run to remember, so the badge only ever showed for one specific navigation
 // path and looked like a stale/broken feature the rest of the time.
-// Matches --bp-region-info-wide in tokens.css (1200px) — same hardcode-and-comment constraint
-// noted there, since custom properties aren't readable from JS media queries either.
-const NARROW_QUERY = "(max-width: 1199px)";
+// Matches --bp-region-info-wide in tokens.css (1024px) — same hardcode-and-comment constraint
+// noted there, since custom properties aren't readable from JS media queries either. Below this
+// the infographic isn't drawn, so a map tap scrolls the carousel instead of navigating (the
+// behaviour holds through the 768–1023 tablet band too, where hover can't be assumed).
+const NARROW_QUERY = "(max-width: 1023.98px)";
 
 function isNarrowViewport() {
   return window.matchMedia(NARROW_QUERY).matches;

@@ -221,9 +221,9 @@ ul.region-seasons {
   gap: 12px;
 }
 
-/* Desktop only (>= --bp-desktop) — the tablet band keeps the headline block single-column with
-   the aside stacked beneath the intro. */
-@media (min-width: 1200px) {
+/* From 900px there's room for the aside (rent recap / note plate) beside the intro instead of
+   stacked beneath it — below that it stays single-column. */
+@media (min-width: 900px) {
   .region-page .region-header--split {
     grid-template-columns: 1.35fr 1fr;
     gap: 40px;
@@ -621,12 +621,19 @@ ul.region-seasons {
   gap: var(--space-6);
 }
 
-/* Costs + festivals sit side by side only at desktop width; the tablet band stacks them. */
-@media (min-width: 1200px) {
+/* Costs + festivals sit side by side from 900px; below that they stack, and the cost block is
+   capped to its desktop measure so it doesn't stretch to an unreadable line length. */
+@media (min-width: 900px) {
   .region-band__inner {
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: start;
+  }
+}
+
+@media (max-width: 899.98px) {
+  .region-band__col--costs {
+    max-width: 32rem;
   }
 }
 

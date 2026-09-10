@@ -86,21 +86,20 @@
             <label for="calc-age">Age</label>
             <input type="number" id="calc-age" name="age" inputmode="numeric" min="18" max="120" required>
           </div>
-          <button type="submit" class="calculator-form__submit">Check eligibility</button>
         </div>
-        <div class="calculator-form__controls">
-          {# Whole row is one <label> so the entire strip (not just the 17px box) is a tap
-             target — min-height 44px on phone (calculator.css). #}
-          <label class="calculator-form__field calculator-form__field--checkbox" for="calc-has-family">
-            <input type="checkbox" id="calc-has-family" name="hasFamily">
-            <span>Bringing spouse or children</span>
-          </label>
-          {# For a visitor who doesn't know their numbers yet (or wants to browse before
-             committing to a check) — restores every region to open/active without needing a
-             second, throwaway salary/age guess just to unlock the map. calculator.js wires this
-             to the same applyResult() path a real "all eligible" tier would take. #}
-          <button type="button" class="calculator-form__reset" data-calculator-reset>Clear</button>
-        </div>
+        {# Its own row on phone, directly above "Check eligibility"; on desktop CSS `order` drops
+           it to a second line beside Clear. The whole <label> is the tap target (min-height 44px
+           on phone, calculator.css) — not just the 17px box. #}
+        <label class="calculator-form__field--checkbox" for="calc-has-family">
+          <input type="checkbox" id="calc-has-family" name="hasFamily">
+          <span>Bringing spouse or children</span>
+        </label>
+        <button type="submit" class="calculator-form__submit">Check eligibility</button>
+        {# For a visitor who doesn't know their numbers yet (or wants to browse before committing
+           to a check) — restores every region to open/active without needing a second, throwaway
+           salary/age guess just to unlock the map. calculator.js wires this to the same
+           applyResult() path a real "all eligible" tier would take. #}
+        <button type="button" class="calculator-form__reset" data-calculator-reset>Clear</button>
       </form>
 
       {# Result-caption mount point — calculator.js (Phase 16) owns all caption rendering here;
@@ -116,6 +115,11 @@
         </div>
       </div>
     </div>
+
+    {# Desktop only — the cover photo is full-viewport there, so a foot-of-photo nudge toward the
+       map earns its place. A real anchor (CLAUDE.md rule 6), hidden on phone where the photo is
+       a short crop and the map is already the next thing down. #}
+    <a class="hero__scroll-cue" href="#map">Scroll down to explore Korea regions ↓</a>
   </div>
 
   {# Reference data for calculator.js — assembled at build time (see

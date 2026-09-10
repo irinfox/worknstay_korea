@@ -4,9 +4,10 @@
  * panel (named venues with text links + a 4-cell study-café battery), then a "Getting around"
  * line. No accordion — every card is fully expanded.
  */
-/* Desktop: two-column grid. Below 768px .city-card-list becomes the scroll track of the
-   .city-carousel (a horizontal scroll-snap row + dot indicators, matching the homepage region
-   carousel — see the phone media block below). */
+/* Two-column grid from 900px up. Below that .city-card-list becomes the scroll track of the
+   .city-carousel (a horizontal scroll-snap row + dot indicators) — the dense card content can't
+   shrink into two columns narrower than ~420px without its no-wrap rows overflowing, so a swipe
+   row is the honest small-screen answer, never a one-per-row vertical list. */
 .city-card-list {
   display: grid;
   gap: 14px;
@@ -17,11 +18,10 @@
   flex-direction: column;
 }
 
-/* Tablet band (768–1199): a single-column grid. Two columns only at desktop width. */
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .city-card-list {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
+    /* No align-items:start — let each row's two cards match height (grid default `stretch`). */
   }
 }
 
@@ -71,10 +71,10 @@
   background: var(--color-primary);
 }
 
-/* Below the two-column grid the card is too narrow to hold the name and its tags on one row —
-   let the head stack. The study-café row still never wraps (DESIGN.md § "Study cafés"); its
-   Naver link shortens instead (see .study-cafes__search-word). */
-@media (max-width: 767.98px) {
+/* Below the two-column grid (900px) the card runs as a swipe carousel and is too narrow to hold
+   the name and its tags on one row — let the head stack. The study-café row still never wraps
+   (DESIGN.md § "Study cafés"); its Naver link shortens instead (see .study-cafes__search-word). */
+@media (max-width: 899.98px) {
   /* Carousel: break out of the page padding so cards can scroll to the screen edge. */
   .city-carousel {
     margin: 0 calc(var(--space-4) * -1);
@@ -90,6 +90,11 @@
     scroll-padding-inline: var(--space-4);
     overflow-x: auto;
     overflow-y: hidden;
+    /* Without this the row's scroll overflow leaks into the document's own scroll width (a
+       Chromium quirk for an `auto`/`hidden` scroller inside a negative-margin breakout parent),
+       so a 412px phone renders the whole page zoomed out. `contain: paint` isolates it while
+       keeping the horizontal swipe. */
+    contain: paint;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;

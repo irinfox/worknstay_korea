@@ -204,14 +204,15 @@ ul.about-hero__chips {
   text-decoration: underline;
 }
 
-/* Tablet band: two up. Three up only at desktop width. */
+/* Two up on a small tablet; all three on one row from 900px, where they fit without the third
+   dropping to a second row with slack. */
 @media (min-width: 768px) {
   .about-why__grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .about-why__grid {
     grid-template-columns: repeat(3, 1fr);
   }
