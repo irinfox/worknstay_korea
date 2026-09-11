@@ -103,8 +103,8 @@ groups its arrows in one corner; page-level prev/next splits them to the contain
 
 **Dots only exist where a row actually swipes.** A static grid never gets them, at any width.
 Within a swipe row it depends on how much of the next card shows: a sliver is not a cue, so
-full-width cards with a peeking edge (region, city) get dots and the copy says to swipe. Where
-roughly a third or more of the next card is visible, that cut card is the affordance — no dots.
+full-width cards with a peeking edge (region, city) get dots. Where roughly a third or more of 
+the next card is visible, that cut card is the affordance — no dots.
 
 Blurbs are never clamped to make a row line up — equal height comes from `align-items:stretch`.
 `src/_data/` is verified content: the layout adapts to it, never the reverse.
@@ -162,10 +162,8 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   panel links use the site link rule — `Visa info →`, same label as the region panels.
   (Input types and number parsing are implementation, not design — keep those notes with the code.)
 - **Region card** ends with an `Open <region> →` row on a hairline. Hover highlights the matching
-  map area; click opens the page. Phone: swipe carousel with dots; tapping the map jumps to a card.
-  Hover/selected border: green (`#0F7B54`) for an open region, Muted `#5C6660` for an ineligible
-  one (map shape too, hovered the other way). Hover effects (map and card) only apply on real
-  hover-capable devices, not touch.
+  map area; click opens the page. Phone: tapping the map jumps to a card. Hover/selected border: green   (`#0F7B54`) for an open region, Muted `#5C6660` for an ineligible one (map shape too, hovered the
+   other way). Hover effects (map and card) only apply on real hover-capable devices, not touch.
 - **City card**: name + Korean name, vibe tags, blurb, then a `#F7F9F8` "Where to work" panel —
   venue name 16–17px/600 with its kind as 12px grey at the right, address below, then
   `Website ↗ Instagram ↗ Naver Map ↗` as underlined text links (never buttons).
@@ -177,7 +175,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - **Guides**: one strip, each link orange underlined with `↗`, domain and date underneath.
 - **Festivals**: Ongoing / Upcoming toggle, dates in `#5C6660`/500 with `tabular-nums`, name in ink,
   status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon that
-  copies the full address — icon + tooltip on desktop, icon + "Copy address" label on phone
+  copies the full address — icon + tooltip on desktop, icon + "Copy full address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
 - **National map** (homepage): at 900px and below, tapping a region scrolls to its card and selects
   it; tapping the card itself does nothing. Real Korea outline on a Panel `#F7F9F8` ground, not a
