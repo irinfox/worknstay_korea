@@ -74,6 +74,21 @@ function initTapToFill() {
     event.preventDefault();
     selectRegion(link, link.dataset.slug);
   });
+
+  // Releasing a selection used to only work by tapping blank map area (the branch above) — there
+  // was no way back out by tapping elsewhere on the page at all. Tapping the region-card is the
+  // one exception (DESIGN.md: "tapping the card itself does nothing") — its own tap targets (the
+  // open-region link) should act normally, not clear the very selection that just scrolled it
+  // into view. Bound on document, not the carousel, so any other tap on the page (including the
+  // calculator, nav, footer) releases too. Skips clicks inside the map itself since the listener
+  // above already handles those (select or clear) — without the guard this one would immediately
+  // undo a fresh selection on the same click via bubbling.
+  document.addEventListener("click", (event) => {
+    if (!isNarrowViewport()) return;
+    if (event.target.closest(".korea-map")) return;
+    if (event.target.closest(".region-card")) return;
+    clearSelection();
+  });
 }
 
 // Carousel dot indicators (homepage region carousel + region-page city carousel) track the
