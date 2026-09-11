@@ -27,7 +27,8 @@ in the repo and is not maintained.
 Two accent colours only. Green = ours / easier / in-site. Orange = external / stricter / seasonal.
 Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour
 (green long-term / orange current).
-Arrows follow colour: `→` for in-site, `↗` for outbound.
+Arrows follow colour: `→` for in-site, `↗` for outbound. `‹ ›` are reserved for stepper
+navigation (galleries, pagers) — never for links, so the two read as distinct affordances.
 One tint band per page at most. Panel `#F7F9F8` is a component fill (cards, strips, map ground)
 and does not count as a page tone.
 
@@ -122,7 +123,7 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
 
 ## Recurring parts
 
-- **Dark nav** `#16201C`, wordmark "worknstay korea" with a `#54C79A` dot, links at 75% white,
+- **Dark nav** `#16201C`, wordmark "worknstay korea" with site icon, links at 75% white,
   active item white with a 2px `#E08A2E` underline. Items: Regions · Visa info · Settling in · About.
   "Regions" links to `/#map`, not `/`. The wordmark is the home link and stays clickable on the homepage.
 - **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" → `/#map`.
@@ -210,6 +211,9 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - Phone tap targets ≥44px for **controls** — buttons, tabs, checkboxes, pagers, card CTAs. Gain
   the height with padding; the visual size stays as designed. Inline text links (breadcrumb,
   source lines, `Naver Map ↗`) are exempt.
+  Where controls sit too close for 44px without one swallowing a neighbour's tap area, cap each
+  at just under half the distance to its nearest neighbour instead — don't enlarge past that to
+  "fix" it. Reference example: the region map's ski/surf pins, region-detail-map.css.
 - Reserve height for anything that changes length (paginated lists, carousels) — no reflow jumps.
 - Nothing below 12px, except the 11px uppercase festival status chip.
 

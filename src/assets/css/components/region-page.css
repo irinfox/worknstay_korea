@@ -459,7 +459,8 @@ ul.region-seasons {
   .region-gallery__controls {
     display: flex;
     align-items: center;
-    gap: 10px;
+    /* 8px, matching .event-pager's gap (event-timeline.css) — same stepper control, same rhythm. */
+    gap: 8px;
   }
 }
 
@@ -939,35 +940,6 @@ ul.region-seasons {
   .tier-card {
     flex-basis: 288px;
   }
-}
-
-/* Placeholder plate for the future "distance from Seoul" map (design reference 6c). */
-.map-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 16px 18px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-}
-
-.map-placeholder__text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.map-placeholder__sub {
-  color: var(--color-text-muted);
-}
-
-.map-placeholder__tag {
-  flex-shrink: 0;
-  font-size: 13px;
-  color: var(--color-text-muted);
-  white-space: nowrap;
 }
 
 /* Attractions + dishes: horizontal scroll-snap strips (no carousel library, no JS). The

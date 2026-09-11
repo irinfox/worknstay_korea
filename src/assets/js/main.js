@@ -4,6 +4,7 @@ import { init as initKoreaMap, applyResult } from "./korea-map.js";
 import { init as initRegionCard } from "./region-card.js";
 import { init as initRegionData } from "./region-data.js";
 import { init as initRegionHeroGallery } from "./region-hero-gallery.js";
+import { init as initRegionDetailMap } from "./region-detail-map.js";
 
 initNav();
 initKoreaMap();
@@ -13,3 +14,4 @@ initCalculator(applyResult);
 initRegionCard();
 initRegionData();
 initRegionHeroGallery();
+initRegionDetailMap();

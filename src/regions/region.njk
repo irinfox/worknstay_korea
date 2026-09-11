@@ -99,9 +99,9 @@ eleventyComputed:
     </div>
     {% if slideCount > 1 %}
     <div class="region-gallery__controls">
+      <button class="region-hero-gallery__nav region-hero-gallery__nav--prev" type="button" aria-label="Previous photo">‹</button>
       <span class="region-gallery__counter" data-region-hero-counter aria-hidden="true">1 / {{ slideCount }}</span>
-      <button class="region-hero-gallery__nav region-hero-gallery__nav--prev" type="button" aria-label="Previous photo">←</button>
-      <button class="region-hero-gallery__nav region-hero-gallery__nav--next" type="button" aria-label="Next photo">→</button>
+      <button class="region-hero-gallery__nav region-hero-gallery__nav--next" type="button" aria-label="Next photo">›</button>
     </div>
     {% endif %}
   </div>
@@ -133,7 +133,8 @@ eleventyComputed:
    catalog, then run through one lat/lng-to-local-xy linear fit calibrated on the 5 city pins —
    not a real map projection, so treat spacing as illustrative, not survey-accurate. #}
 <section class="region-section region-section--map">
-  <h2>Rough region map</h2>
+  <h2>Region map</h2>
+  <p class="region-section__sub">Approximate positions, drawn from KTO coordinates.</p>
   <div class="region-detail-map">
     <div class="region-detail-map__scroll">
       {% inlineSvg "gangwon-detail-map.svg" %}

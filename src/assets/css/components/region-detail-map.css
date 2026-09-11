@@ -31,6 +31,7 @@
   fill: var(--color-primary-tint);
   stroke: var(--color-primary);
   stroke-width: 2;
+  stroke-opacity: 0.7;
 }
 
 /* Line-icon pin glyphs (design reference 5b) — city in ink, nature types (mountain / surf / ski)
@@ -44,12 +45,55 @@
   color: var(--color-primary);
 }
 
+/* Invisible tap-target padding for the ski/surf pins (DESIGN.md § Accessibility: "Phone tap
+   targets ≥44px for controls" — gain the height with padding, the visible glyph stays as
+   designed), same technique as korea-map.css's .region__hit-target for Jeju. Without this the
+   only hit-testable area was the glyph's thin icon stroke, a couple of px wide.
+   Radius is per-pin (set on the <circle> in gangwon-detail-map.svg, not here), capped short of
+   44px for the densest pins — documented exception, DESIGN.md § Accessibility / layout musts,
+   don't "fix" it by enlarging past that cap. */
+.map-pin__hit-target {
+  fill: transparent;
+  pointer-events: all;
+}
+
+/* No focus outline, deliberately — these <g tabindex="0"> pins aren't a native interactive
+   element, so :focus-visible's "suppress on pointer interaction" heuristic doesn't reliably apply
+   the way it does for a real <button>/<a>; a tap can trigger the browser's own default
+   rectangular outline (confirmed in a mobile-emulation screenshot, 2026-09-11). The label reveal
+   below (:hover/:focus/:focus-within/.map-pin--revealed) is itself the visible focus indicator —
+   a keyboard user tabbing here sees the name appear, same signal a box around the pin would give,
+   without the boxy artifact. Unlike korea-map.css's .region links (real <a> elements navigating
+   to another page, where an outline is the only focus cue available), don't reintroduce one here.
+   Separately, mobile WebKit/Blink also paint their own translucent tap-highlight rectangle on any
+   tappable element on touchstart, fading out on release — a different mechanism from :focus (it
+   flashes and disappears rather than persisting), confirmed still showing after the outline fix
+   above. -webkit-tap-highlight-color: transparent kills that too, same reasoning: the label
+   reveal is the feedback, not a rectangle flash. */
+.map-pin--ski,
+.map-pin--surf {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.map-pin--ski:focus,
+.map-pin--surf:focus {
+  outline: none;
+}
+
 .map-pin__label {
   font-family: var(--font-family-base);
   font-size: 10px;
-  font-weight: 600;
+  /* Light by default — city is the one bold exception (below). Puts Seoraksan and Yangyang
+     beaches' always-on labels at the same weight/density as the ski pins' reveal-on-hover ones,
+     so all the "nature feature" labels read as one consistent, softer register next to the bold
+     city names. */
+  font-weight: 400;
   fill: var(--color-text);
-  /* text-anchor deliberately NOT set here — every <text class="map-pin__label"> in the SVG sets
+  /* Halo in the map's own fill colour (Green tint #EAF4EF), not white — blends with the pale fill
+     while still separating the label from the terrain hatching / boundary stroke it sits over.
+     Applied unconditionally to every label in this class, not just the ones that currently cross
+     hatching, so a future pin placement doesn't need a case-by-case legibility check.
+     text-anchor deliberately NOT set here — every <text class="map-pin__label"> in the SVG sets
      its own text-anchor attribute (middle/start/end per pin), and a CSS declaration here would
      override that per-instance choice (a stylesheet rule beats an SVG presentation attribute
      regardless of specificity). Confirmed the hard way 2026-09-03: a hardcoded value here was
@@ -57,7 +101,7 @@
      attribute said, which is how the Yangyang beaches pin's text-anchor="end" fix visibly did
      nothing — don't reintroduce this. */
   paint-order: stroke;
-  stroke: var(--color-bg);
+  stroke: var(--color-primary-tint);
   stroke-width: 3px;
   stroke-linejoin: round;
 }
@@ -73,8 +117,10 @@
   fill: var(--color-text-muted);
 }
 
-/* Ski-resort labels stay hidden until hovered/focused — 8 resort pins is too dense to keep every
-   label on-screen at once without them running into each other or the city labels. */
+/* Ski-resort labels stay hidden until hovered/focused/tapped — 8 resort pins is too dense to keep
+   every label on-screen at once without them running into each other or the city labels. Tap
+   reveal (.map-pin--revealed, toggled by region-detail-map.js) is the phone equivalent of hover —
+   it feeds the same opacity rule below rather than a second show/hide path. */
 .map-pin--ski {
   cursor: pointer;
 }
@@ -82,21 +128,32 @@
 .map-pin--ski .map-pin__label {
   opacity: 0;
   pointer-events: none;
-  /* lighter than the always-on city/mountain labels — a resort name revealed on hover reads as
-     a soft annotation, matching the Yangyang beach-detail line, not a permanent map label. */
-  font-weight: 400;
+  /* font-weight: 400 already comes from the base .map-pin__label rule above — a resort name
+     revealed on hover reads as a soft annotation, matching the Yangyang beach-detail line, not a
+     permanent map label. */
   transition: opacity 0.15s ease;
 }
 
-.map-pin--ski:hover .map-pin__label,
+/* :hover scoped to real-hover devices only (CSS Media Queries 4). Touch browsers apply :hover on
+   tap and don't clear it until a different element is tapped — there's no mouse to "leave" the
+   element — which would keep a label visible forever regardless of the JS auto-dismiss timer
+   (region-detail-map.js) clearing .map-pin--revealed on schedule. On a touch-only device the tap
+   class is the sole driver; :focus/:focus-within still cover keyboard use everywhere. */
+@media (hover: hover) {
+  .map-pin--ski:hover .map-pin__label {
+    opacity: 1;
+  }
+}
+
 .map-pin--ski:focus .map-pin__label,
-.map-pin--ski:focus-within .map-pin__label {
+.map-pin--ski:focus-within .map-pin__label,
+.map-pin--ski.map-pin--revealed .map-pin__label {
   opacity: 1;
 }
 
 /* Yangyang surf pin: the "Yangyang beaches" label itself stays always-on (there's only one pin
    here, unlike the 8-deep ski cluster above), but a second line naming the individual beaches
-   (Jukdo/Surfyy/Gisamun/Ingu) stays hidden until hover/focus — same reveal mechanism as the
+   (Jukdo/Surfyy/Gisamun/Ingu) stays hidden until hover/focus/tap — same reveal mechanism as the
    ski-resort labels, just layered under an always-visible label instead of replacing it. */
 .map-pin--surf {
   cursor: pointer;
@@ -106,10 +163,15 @@
   font-family: var(--font-family-base);
   font-size: 9px;
   fill: var(--color-text-muted);
-  /* text-anchor NOT set here either — see the comment on .map-pin__label above; same bug, same
+  /* Same Green-tint halo as .map-pin__label above, same reasoning — this line is one of the
+     "labels" the halo instruction covers too, not just the class literally named __label. Without
+     it, "Ingu" (the end of "Surfyy · Gisamun · Jukdo · Ingu") sat right over the boundary
+     stroke/hatching and was noticeably harder to read than the resort labels next to it, which
+     already had the halo.
+     text-anchor NOT set here either — see the comment on .map-pin__label above; same bug, same
      reason. */
   paint-order: stroke;
-  stroke: var(--color-bg);
+  stroke: var(--color-primary-tint);
   stroke-width: 3px;
   stroke-linejoin: round;
   opacity: 0;
@@ -117,9 +179,16 @@
   transition: opacity 0.15s ease;
 }
 
-.map-pin--surf:hover .map-pin__detail,
+/* Same hover-capable-devices-only scoping as the ski labels above, same reason. */
+@media (hover: hover) {
+  .map-pin--surf:hover .map-pin__detail {
+    opacity: 1;
+  }
+}
+
 .map-pin--surf:focus .map-pin__detail,
-.map-pin--surf:focus-within .map-pin__detail {
+.map-pin--surf:focus-within .map-pin__detail,
+.map-pin--surf.map-pin--revealed .map-pin__detail {
   opacity: 1;
 }
 
