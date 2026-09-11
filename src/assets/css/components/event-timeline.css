@@ -211,10 +211,15 @@
 
 /* Green is reserved for the just-copied state. Hover turns it green only while the pointer is
    actually over the icon; keyboard focus just makes it fully opaque so it stays gray once the
-   copied cue clears. */
-.event-place__copy:hover {
-  color: var(--color-primary);
-  opacity: 1;
+   copied cue clears. Scoped to real-hover devices only (CSS Media Queries 4) — touch browsers
+   apply :hover on tap and don't clear it until a different element is tapped, which left the icon
+   stuck green after the 2s .is-copied confirmation had already reverted (same root cause as the
+   region-detail-map ski/surf pins, region-detail-map.css). */
+@media (hover: hover) {
+  .event-place__copy:hover {
+    color: var(--color-primary);
+    opacity: 1;
+  }
 }
 
 .event-place__copy:focus-visible {
@@ -247,9 +252,9 @@
   display: none;
 }
 
-/* Desktop: icon + tooltip only (the confirmation stands alone). Phone: icon + "Copy full
-   address" label in a ≥44px tap target, and the label gives way to the confirmation while
-   copied so the two never sit side by side. */
+/* Desktop: icon + tooltip only — the label stays hidden here always; .event-place__status
+   (a sibling, outside the button) carries the confirmation instead. Phone overrides this in its
+   own media block below to show the label and drive the confirmation through it in place. */
 .event-place__copy-label {
   display: none;
 }
@@ -269,10 +274,11 @@
   padding-top: 14px;
 }
 
-/* Identical shape to the region-page hero-gallery prev/next arrows (region-page.css
-   .region-hero-gallery__nav) — 34px square, --radius-md corners, same border/hover — only the
-   glyph differs (‹ › vs ← →). The 44px tap target comes from a pseudo-element on phone (below).
-   Keep in sync with .region-hero-gallery__nav. */
+/* Identical to the region-page hero-gallery prev/next arrows (region-page.css
+   .region-hero-gallery__nav) — same 34px square, --radius-md corners, border/hover colours, and
+   now the same ‹ › glyphs and [prev][count][next] order too — one stepper control, two contexts.
+   The 44px tap target comes from a pseudo-element on phone (below). Keep in sync with
+   .region-hero-gallery__nav. */
 .event-pager__btn {
   position: relative;
   display: inline-flex;
@@ -305,10 +311,13 @@
   cursor: default;
 }
 
+/* Same Muted colour as the region-hero-gallery counter (region-page.css's
+   .region-gallery__counter, also a "1 / N" pagination readout) — this was full Ink, noticeably
+   heavier/brighter than its hero-gallery counterpart despite being the same kind of control. */
 .event-pager__status {
   font-size: 13px;
   font-weight: 500;
-  color: var(--color-text);
+  color: var(--color-text-muted);
 }
 
 /* "1–5 of 17 in October" / "… running now" range line, trailing the pager. */
@@ -409,8 +418,13 @@
     font-size: 0.8125rem;
   }
 
-  /* While copied, the confirmation replaces the label rather than sitting beside it. */
-  .event-place.is-copied .event-place__copy-label {
+  /* .event-place__status (the desktop confirmation slot, a sibling outside the button with its
+     own margin-left) is what desktop uses since its label stays permanently hidden — but reusing
+     it here, as a second element popping in beside a now icon-only button, landed at a visibly
+     different indent than where the label text used to sit. Hide it on phone; the label itself
+     carries the confirmation in place instead (region-data.js writes the same "Full address
+     copied" string into both elements, so nothing needs to change here in the future). */
+  .event-place__status {
     display: none;
   }
 }
