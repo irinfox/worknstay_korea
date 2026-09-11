@@ -23,10 +23,26 @@
   .region-card:focus-within {
     border-color: var(--color-primary);
   }
+
+  /* An ineligible region's card has no green anywhere else on it — korea-map.js only toggles
+     href/aria-disabled on the inner .region-card__link (there's no .region-card--ineligible
+     class), so this reads that attribute via :has() instead of needing a JS-added class. Muted
+     grey, not the eligible-state green, since hovering it isn't really "activating" anything. */
+  .region-card:hover:has(.region-card__link[aria-disabled="true"]),
+  .region-card:focus-within:has(.region-card__link[aria-disabled="true"]) {
+    border-color: var(--color-text-muted);
+  }
 }
 
 .region-card--selected {
   border-color: var(--color-primary);
+}
+
+/* Same muted-not-green exception as the :hover rule above, for the tap-selected state — a map
+   tap on an ineligible region (region-card.js) shouldn't border its card in the eligible-state
+   green either. */
+.region-card--selected:has(.region-card__link[aria-disabled="true"]) {
+  border-color: var(--color-text-muted);
 }
 
 .region-card__header {
@@ -122,9 +138,13 @@
   text-decoration: none;
 }
 
-/* Infographic (wide) variant. Cards size to their own content — the leader lines in index.njk
-   anchor to each card's measured centre, re-derived when card content changes. */
-.region-card--infographic .region-card__name {
+/* Lets the name concede space to a rent figure (region-card__rent, white-space: nowrap, never
+   truncated — it's a number) rather than overflowing the card's fixed width: without min-width:0
+   here, .region-card__header's flex children can't shrink past their own content size, and
+   Gangwon-do's "Gangwon-do ₩1–1.4M/mo" bled past the card's right edge into its tablet-carousel
+   neighbour (262px cards, region-card.css tablet band). Applies to both variants — the
+   infographic width has always had room, but nothing stopped this at the narrower carousel width. */
+.region-card__name {
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -146,8 +166,35 @@
 /* Carousel (narrow) variant. Height comes from content and is equalised across a row by the
    track's `align-items: stretch` (default) — never a hard `height`, which made a card shorter
    than its own content at 262px and spilled it past the bottom edge. */
+/* .region-carousel__item is a row-direction flex container (single child) — its default
+   align-items:stretch only stretches the cross axis (height); width is left to the card's own
+   flex-grow, which defaults to 0. Without width:100% here the card sizes to its own max-content
+   instead of the item's fixed width (262px in the tablet band), and a wide header (e.g.
+   Gangwon-do's rent figure) or tag row overflows past the card's own right edge into the next
+   one. min-width:0 lets it actually shrink there too, not just grow up to 100%. */
+.region-card--carousel {
+  width: 100%;
+  min-width: 0;
+}
+
+/* auto, not the fixed 11px above: pins the link to the card's own bottom edge regardless of how
+   much intro/tag content sits above it, so "Open <region> →" lands at the same row across a
+   track-stretched carousel row (all cards in a row already share one height via align-items:
+   stretch — without this, a card with less text above just left blank space below its own link
+   instead of the link landing lower to match). Scoped to the carousel: the infographic variant's
+   cards size to their own content with no extra height to distribute, so `auto` there resolved to
+   0 and collapsed the fixed gap above the hairline instead of doing nothing as intended. */
+.region-card--carousel .region-card__link {
+  margin-top: auto;
+}
+
+/* Wrap, not nowrap: a fixed-width card can't guarantee every region's tag row fits on one line
+   forever (data-driven, CLAUDE.md rule 4 — the layout adapts to _data/regions.json, never the
+   reverse). The tablet-band width below is sized so today's widest set (Gangwon-do's four tags)
+   still fits on one line in the common case; wrap is the safety net if that ever changes, same
+   principle as the infographic variant's tag row. */
 .region-card--carousel .region-card__tags {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 /*
@@ -289,13 +336,15 @@ ol.region-carousel__dots {
 }
 
 /* Tablet band (768–1023): the infographic hasn't kicked in yet, so the carousel is the layout.
-   The map is capped and centred above it, the cards keep a fixed 262px so ~3 show with the
-   next clipped, and the dots come off — a row that shows 2+ cards can't map onto per-card dots
-   (DESIGN.md § Mobile), and the clipped card is its own affordance. Phone (<768) is untouched. */
+   The map is capped and centred above it, the cards keep a fixed width (300px — wide enough for
+   Gangwon-do's four vibe tags on one line without the header/tags row ever overflowing into the
+   next card) so ~3 show with the next clipped, and the dots come off — a row that shows 2+ cards
+   can't map onto per-card dots (DESIGN.md § Mobile), and the clipped card is its own affordance.
+   Phone (<768) is untouched. */
 @media (min-width: 768px) and (max-width: 1023.98px) {
   .region-carousel__item {
-    flex-basis: 262px;
-    max-width: 262px;
+    flex-basis: 300px;
+    max-width: 300px;
   }
 
   /* ol.* to outrank base.css's `ol[class]` / the base ol.region-carousel__dots flex rule. */
@@ -378,6 +427,25 @@ ol.region-carousel__dots {
   .region-infographic:has(.region[data-slug="jeju-do"]:focus-visible) [data-region-slug="jeju-do"] {
     border-color: var(--color-primary);
     box-shadow: var(--shadow-md);
+  }
+
+  /* Same muted-not-green override as the card's own :hover above, for the reverse direction —
+     hovering an ineligible region's map shape shouldn't highlight its card in the eligible-state
+     green either. More specific than the block above (adds .region--ineligible on the source
+     side), so it wins regardless of source order. */
+  .region-infographic:has(.region--ineligible[data-slug="gyeonggi-do"]:hover) [data-region-slug="gyeonggi-do"],
+  .region-infographic:has(.region--ineligible[data-slug="gangwon-do"]:hover) [data-region-slug="gangwon-do"],
+  .region-infographic:has(.region--ineligible[data-slug="chungcheong-do"]:hover) [data-region-slug="chungcheong-do"],
+  .region-infographic:has(.region--ineligible[data-slug="gyeongsang-do"]:hover) [data-region-slug="gyeongsang-do"],
+  .region-infographic:has(.region--ineligible[data-slug="jeolla-do"]:hover) [data-region-slug="jeolla-do"],
+  .region-infographic:has(.region--ineligible[data-slug="jeju-do"]:hover) [data-region-slug="jeju-do"],
+  .region-infographic:has(.region--ineligible[data-slug="gyeonggi-do"]:focus-visible) [data-region-slug="gyeonggi-do"],
+  .region-infographic:has(.region--ineligible[data-slug="gangwon-do"]:focus-visible) [data-region-slug="gangwon-do"],
+  .region-infographic:has(.region--ineligible[data-slug="chungcheong-do"]:focus-visible) [data-region-slug="chungcheong-do"],
+  .region-infographic:has(.region--ineligible[data-slug="gyeongsang-do"]:focus-visible) [data-region-slug="gyeongsang-do"],
+  .region-infographic:has(.region--ineligible[data-slug="jeolla-do"]:focus-visible) [data-region-slug="jeolla-do"],
+  .region-infographic:has(.region--ineligible[data-slug="jeju-do"]:focus-visible) [data-region-slug="jeju-do"] {
+    border-color: var(--color-text-muted);
   }
 
   /* Leader-line highlight, triggered from either end (Phase 18). */

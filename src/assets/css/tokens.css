@@ -38,11 +38,53 @@
   --color-nav-link: rgba(255, 255, 255, 0.75);
   --color-nav-link-active: #ffffff;
 
-  /* Region-eligibility states (map + region cards). */
+  /* Region-eligibility states (map + region cards). Fill-opacity for eligible/partial (set in
+     korea-map.css) was lightened from .55/.85 to .45/.53 — same lightness step between the two
+     states as before (~0.20 in HSL L), just both shifted lighter by the same amount. */
   --color-region-active: var(--color-primary);
   --color-region-partial: #a8d8c2; /* Green light: "Partly eligible" map fill */
   --color-region-ineligible: #b7b2a7;
-  --color-map-sea: #dbe6ea;
+
+  /* Legend swatches render the flat colour the map fills actually composite to (fill token at its
+     fill-opacity over --color-surface, the map ground) — never the raw token at full opacity,
+     which appears nowhere on the map. Recompute these if the fill tokens, their opacities, or the
+     map ground change. */
+  --color-map-legend-active: #8fc0ae; /* #0F7B54 @ .45 over #F7F9F8 */
+  --color-map-legend-partial: #cde8db; /* #A8D8C2 @ .53 over #F7F9F8 */
+  --color-map-legend-ineligible: #d7d6d0; /* #B7B2A7 @ .5 over #F7F9F8 */
+
+  /* Metro/special-city fills (Seoul, Incheon, Daejeon, Sejong, Busan, Daegu, Ulsan, Gwangju) —
+     one explicit flat token per eligibility state, each ~14% darker in lightness than that
+     state's own map-legend fill above, so a city reads as a deeper shade of its province's state
+     rather than a state of its own (no legend entry). Recompute if the legend fills above change. */
+  --color-region-active-metro: #71af98;
+  --color-region-partial-metro: #a3d5bd;
+  --color-region-ineligible-metro: #bcbab0;
+
+  /* Metro hover: the same ~14% lightness cut used above, applied to the *province's own hover*
+     colour instead of to the resting metro tone — same recipe, shifted to start from the hover
+     value, so a metro city's hover jump reads as just as big a jump as the province's own (a
+     smaller/independent hover step looked like the city wasn't reacting at all next to the
+     province's much bigger opacity-driven hover swing). Ineligible reacts on hover too, same as
+     every other state (map hover and region-card cross-hover used to disagree — the card
+     cross-hover already showed a reaction, just the wrong hue, active green — so this makes both
+     react, in this grey tone, rather than picking "neither reacts"). */
+  --color-region-active-metro-hover: #2b7a5e;
+  --color-region-partial-metro-hover: #98d0b5;
+  --color-region-ineligible-metro-hover: #aaa496;
+
+  /* Label halo colours (korea-map.css .region__label) — one per province/metro shape at each
+     state, derived from that shape's own map fill: halo = oklch(min(L_fill + 0.10, 0.96) C_fill
+     H_fill). Same hue and chroma as the fill it sits on (so it reads as "this shape's own colour,
+     lightened" rather than a foreign tint), lightness nudged up just enough to clear the boundary
+     stroke/hatching crossing under the letters. Recompute (see scripts, or any OKLCH calculator)
+     if the corresponding fill token above changes. */
+  --color-halo-active: #aee0ce; /* #8FC0AE (--color-map-legend-active) oklch L+0.10 */
+  --color-halo-active-metro: #90cfb7; /* #71AF98 (--color-region-active-metro) oklch L+0.10 */
+  --color-halo-partial: #def9ec; /* #CDE8DB (--color-map-legend-partial) oklch L+0.10, capped .96 */
+  --color-halo-partial-metro: #c3f6dd; /* #A3D5BD (--color-region-partial-metro) oklch L+0.10 */
+  --color-halo-ineligible: #f3f2ec; /* #D7D6D0 (--color-map-legend-ineligible) oklch L+0.10, capped .96 */
+  --color-halo-ineligible-metro: #dcdad0; /* #BCBAB0 (--color-region-ineligible-metro) oklch L+0.10 */
 
   /* Spacing scale */
   --space-1: 0.25rem;

@@ -404,6 +404,7 @@ function setupAddressCopy(container) {
 
   container.querySelectorAll(".event-place__copy").forEach((btn) => {
     const place = btn.closest(".event-place");
+    const label = place.querySelector(".event-place__copy-label");
     const status = place.querySelector(".event-place__status");
     btn.addEventListener("click", async () => {
       const address = btn.dataset.address || "";
@@ -416,9 +417,14 @@ function setupAddressCopy(container) {
       }
       clearTimeout(activeTimer);
       reset();
-      // Same "Full address copied" string on phone and desktop. On phone the CSS hides the
-      // label while .is-copied, so the confirmation replaces it rather than appending.
-      if (status) status.textContent = ok ? "Full address copied" : "Press Ctrl+C to copy";
+      // Same string written to both slots — .event-place__status is what desktop shows (its
+      // label stays permanently hidden there); .event-place__copy-label is what phone shows (its
+      // own CSS hides .event-place__status instead, event-timeline.css) — so the confirmation
+      // replaces the label's own text in place, rather than a second element popping in beside
+      // a now icon-only button at a different indent.
+      const confirmText = ok ? "Full address copied" : "Press Ctrl+C to copy";
+      if (label) label.textContent = confirmText;
+      if (status) status.textContent = confirmText;
       place.classList.toggle("is-copied", ok);
       activePlace = place;
       activeTimer = setTimeout(reset, 2000);

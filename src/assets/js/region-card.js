@@ -25,21 +25,25 @@ function prefersReducedMotion() {
 // navigating straight there — the card is still a real <a href> the visitor then taps to open
 // the region page. No data is copied anywhere: every card is already rendered from
 // region-card.njk with whatever korea-map.js's applyResult() last wrote onto it.
-function selectRegion(link, slug) {
+// Shared by selectRegion (picks a new one) and deselectRegion (picks none) — both start by
+// clearing whatever's currently marked, so there's never more than one selected region/card pair.
+function clearSelection() {
   document
     .querySelectorAll(".korea-map .region--selected")
     .forEach((el) => el.classList.remove("region--selected"));
-  link.classList.add("region--selected");
-
-  const card = document.querySelector(`.region-carousel [data-region-slug="${slug}"]`);
-
   // The green "selected" border on the carousel card comes only from a map tap — never from
   // tapping/focusing the card itself (the card body has no interactive state on phone).
   document
     .querySelectorAll(".region-carousel .region-card--selected")
     .forEach((el) => el.classList.remove("region-card--selected"));
-  if (card) card.classList.add("region-card--selected");
+}
 
+function selectRegion(link, slug) {
+  clearSelection();
+  link.classList.add("region--selected");
+
+  const card = document.querySelector(`.region-carousel [data-region-slug="${slug}"]`);
+  if (card) card.classList.add("region-card--selected");
   if (!card) return;
 
   const target = card.closest(".region-carousel__item") || card;
@@ -55,8 +59,15 @@ function initTapToFill() {
   if (!map) return;
 
   map.addEventListener("click", (event) => {
+    if (!isNarrowViewport()) return;
+
     const link = event.target.closest(".region[data-slug]");
-    if (!link || !isNarrowViewport()) return;
+    if (!link) {
+      // Tapped the map itself (sea, panel ground, gap between shapes) rather than a region —
+      // there was previously no way to back out of a selection once made.
+      clearSelection();
+      return;
+    }
 
     // Wide viewport lets the click navigate normally (architecture.md §3) — only narrow
     // viewport substitutes tap-to-fill-the-single-card for real navigation.

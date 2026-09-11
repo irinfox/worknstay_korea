@@ -224,8 +224,13 @@ export function init(onResult = () => {}) {
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
     const validationMessage = validate(userInput, rawInput);
     if (validationMessage) {
-      renderError(resultEl, validationMessage, hasReadableInput(userInput, rawInput));
-      onResult(buildInvalidInputResult(referenceData), referenceData);
+      const complete = hasReadableInput(userInput, rawInput);
+      renderError(resultEl, validationMessage, complete);
+      // An incomplete form (nothing typed yet, or cleared back to blank) isn't a real "not
+      // eligible" answer — it's "no check has run," which is the same un-gated map the site
+      // shows before any calculator run. Only a complete-but-failing input (e.g. under 18) is a
+      // real ineligible result, which is what dims every region.
+      onResult(complete ? buildInvalidInputResult(referenceData) : buildShowAllResult(), referenceData);
       return false;
     }
 

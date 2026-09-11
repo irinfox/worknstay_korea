@@ -163,6 +163,9 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   (Input types and number parsing are implementation, not design — keep those notes with the code.)
 - **Region card** ends with an `Open <region> →` row on a hairline. Hover highlights the matching
   map area; click opens the page. Phone: swipe carousel with dots; tapping the map jumps to a card.
+  Hover/selected border: green (`#0F7B54`) for an open region, Muted `#5C6660` for an ineligible
+  one (map shape too, hovered the other way). Hover effects (map and card) only apply on real
+  hover-capable devices, not touch.
 - **City card**: name + Korean name, vibe tags, blurb, then a `#F7F9F8` "Where to work" panel —
   venue name 16–17px/600 with its kind as 12px grey at the right, address below, then
   `Website ↗ Instagram ↗ Naver Map ↗` as underlined text links (never buttons).
@@ -177,20 +180,24 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   copies the full address — icon + tooltip on desktop, icon + "Copy address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
 - **National map** (homepage): at 900px and below, tapping a region scrolls to its card and selects
-  it; tapping the card itself does nothing — the `Open <region name>` link inside it is the target.
-  Real Korea outline on a Panel `#F7F9F8` ground — not a green tint,
-  which would collide with the partly-eligible fill. Regions filled by eligibility; legend swatches
-  render the *composited* colour the shapes actually show, never the raw token. Metropolitan cities
-  take their parent region's state one shade deeper (~8%) — small enough not to read as a state of
-  its own, so no legend entry. All labels in ink `#16201C`, every state: white fails contrast on
-  the lighter fills. No pins.
+  it; tapping the card itself does nothing. Real Korea outline on a Panel `#F7F9F8` ground, not a
+  green tint (collides with the partly-eligible fill). Regions filled by eligibility; legend
+  swatches render the *composited* colour, never the raw token. Metropolitan cities: an explicit
+  flat fill token per state, ~14% darker than that state's own legend fill, plus a heavier
+  boundary stroke — small enough not to read as a state of its own, so no legend entry. Boundary
+  stroke matches the fill family (green on eligible/partly-eligible, grey on not-eligible).
+  Hover/focus reacts uniformly at every eligibility state — shape, metro fill, and label together,
+  not-eligible included (its own grey step, not the green default). Labels: ink `#16201C`, one
+  opacity at every state. No pins.
 - **Region map** (region pages): the region outline on white with a pale green fill, 13–15px line
   pictograms placed by coordinate, and a pictogram legend. Place names appear on hover on desktop
   and on tap on phone. Context labels for neighbouring areas are muted italic. No eligibility
   states, so no ground tint.
-- **Map labels** (both maps): ink `#16201C`, no halo or outline — on pale fills the ink carries
-  itself. Add a white halo stroke only where a label genuinely crosses terrain hatching or an
-  outline and becomes hard to read; it is a legibility tool, not a default.
+- **Map labels** (both maps): ink `#16201C`, `paint-order: stroke` with a tinted halo, 2px —
+  never white or plain green/grey chrome; masks the boundary stroke/hatching under the text.
+  Region-detail map: one flat `--color-primary-tint` halo throughout (no eligibility states to
+  track). National map: halo tracks each shape's own current fill —
+  `oklch(min(L_fill + 0.10, 0.96) C_fill H_fill)`.
 - **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`. Spicy tag only.
 
 ## Copy rules
