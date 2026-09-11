@@ -1,0 +1,41 @@
+---
+layout: layouts/page.njk
+title: "About"
+description: "Who makes worknstay korea, and why."
+permalink: "/about/"
+---
+<div class="about-page">
+  <header class="about-hero">
+    <span class="about-hero__rule" aria-hidden="true"></span>
+    <h1>{{ site.about.heading }}</h1>
+    <ul class="about-hero__chips">
+      {% for chip in site.about.credChips %}
+      <li>{{ chip }}</li>
+      {% endfor %}
+    </ul>
+    <div class="about-hero__body">
+      {% for para in site.about.intro %}
+      <p{% if loop.first %} class="about-hero__lead"{% endif %}>{{ para }}</p>
+      {% endfor %}
+      <p class="about-hero__closing">{{ site.about.closing }}</p>
+      <p class="about-hero__disclaimer">{{ site.about.disclaimer }}</p>
+    </div>
+  </header>
+
+  <section class="about-why" aria-labelledby="about-why-heading">
+    <h2 id="about-why-heading">{{ site.about.why.heading }}</h2>
+    <p class="about-why__sub">{{ site.about.why.sub }}</p>
+    <div class="about-why__grid">
+      {% for card in site.about.why.cards %}
+      <article class="about-why__card">
+        <span class="about-why__card-rule" aria-hidden="true"></span>
+        <h3>{{ card.title }}</h3>
+        <p>{{ card.body }}</p>
+        {% if card.link %}
+        <a class="about-why__card-link" href="{{ card.link.url }}" target="_blank" rel="noopener">{{ card.link.label }} ↗</a>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>

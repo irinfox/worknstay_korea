@@ -1,11 +1,12 @@
 ---
 layout: layouts/page.njk
-title: "Communities"
+title: "Settling in"
 description: "Online communities for digital nomads and expats in Korea."
 ---
 <div class="content-page">
 <header class="region-header">
-  <h1>Communities</h1>
+  <span class="region-header__rule" aria-hidden="true"></span>
+  <h1>Settling in</h1>
   <p class="region-header__intro">
     Online groups where digital nomads and foreign residents in Korea share advice, meet up, and
     swap regional tips. Verify a group is still active before joining — links here are a starting
@@ -18,14 +19,17 @@ description: "Online communities for digital nomads and expats in Korea."
   <ul class="community-list">
     {% for c in communities %}
     <li class="community-card">
-      <h2>{% if c.url %}<a href="{{ c.url }}">{{ c.name }}</a>{% else %}{{ c.name }}{% endif %}</h2>
-      <p class="community-card__platform">{{ c.platform }}</p>
+      <h2>{{ c.name }}</h2>
+      {# Platform badge always links out — to the specific group once c.url is sourced, to the
+         platform's own homepage (platformUrl) as the honest "not yet sourced" state until then.
+         The card name itself stays plain text; the platform is the one outbound link per card. #}
+      <p class="community-card__platform"><a href="{{ c.url or c.platformUrl }}">{{ c.platform }} ↗</a></p>
       <p>{{ c.description }}</p>
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  {% set message = "No communities currently listed." %}
+  {% set message = "No communities listed yet." %}
   {% include "partials/empty-state.njk" %}
   {% endif %}
 </section>

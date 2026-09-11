@@ -165,11 +165,12 @@
     "lng": 128.5918,
     "blurb": "Small coastal city with good infrastructure, a convenient base for Seoraksan National Park and the surf beaches of Yangyang.",
     "summaryIcons": ["🏔️", "🏄"],
+    "vibeTags": ["mountains", "surf"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 1 }],
     "gettingAround": [
       { "label": "Seoraksan", "value": "40 min" },
       { "label": "Yangyang Beaches", "value": "1.2h" },
-      { "label": "Seoul", "value": "2.5–3h (Direct)" }
+      { "label": "Seoul", "value": "2.5–3h", "mode": "bus" }
     ],
     "isPopulationDeclineArea": false,
     "workationCenters": [
@@ -195,6 +196,7 @@
     "lng": 128.9,
     "blurb": "Known as Korea's coffee capital, with an annual coffee festival and plenty of sea-view cafes. The biggest coastal city in Gangwon-do (~200K population). Also known as a filming location for \"Goblin.\"",
     "summaryIcons": ["🏄", "⛷️"],
+    "vibeTags": ["surf", "coffee", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "gettingAround": [
       { "label": "Yangyang Beaches", "value": "1h" },
@@ -204,7 +206,7 @@
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
-        "name": "Padosalon — Myeongju Branch",
+        "name": "Padosalon",
         "url": "https://www.thewavecompany.co.kr/padosalon",
         "instagram": "padosalon",
         "address": "2F, 2023 Gyeonggang-ro, Gangneung-si, Gangwon-do",
@@ -236,10 +238,11 @@
     "lng": 127.73,
     "blurb": "The capital of Gangwon-do and a popular student city surrounded by beautiful lakes.",
     "summaryIcons": ["⛷️"],
+    "vibeTags": ["lakes", "student"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "gettingAround": [
       { "label": "Elysian Ski Resort", "value": "50 min" },
-      { "label": "Seoul", "value": "1.5h", "mode": "train" }
+      { "label": "Seoul", "value": "1.5h", "mode": "train", "alt": [{ "value": "2h", "mode": "subway" }] }
     ],
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -253,6 +256,7 @@
     "lng": 127.92,
     "blurb": "The largest city and one of the industrial hubs in Gangwon-do, with Chiaksan National Park nearby and the scenic Sogeumsan Grand Valley. Relatively far from other attractions in the region.",
     "summaryIcons": ["⛷️"],
+    "vibeTags": ["budget", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "gettingAround": [
       { "label": "Oak Valley Ski Resort", "value": "30 min", "mode": "car" },

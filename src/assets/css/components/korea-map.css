@@ -1,9 +1,19 @@
 .korea-map {
   width: 100%;
-  /* Sea color lives here (not as an opaque <rect> inside the SVG) so the leader-lines layer
-     behind the map (see region-card.css's z-index) shows through, dimmed, under the
-     semi-transparent region shapes — fully hidden only under opaque label text. */
-  background-color: var(--color-map-sea);
+  /* Below the infographic breakpoint the map is a standalone block above the carousel — cap and
+     centre it so a wide phone / tablet doesn't blow it up to full column width. Inside the
+     infographic grid (>=1024px) the centre column governs the width instead — see the
+     min-width:0 override in that media block. */
+  max-width: 460px;
+  margin-inline: auto;
+  /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). Neutral
+     Panel ground, not a green tint — #EAF4EF is already the partly-eligible fill, so a green
+     ground would collide with it. Jeju keeps its true geographic sea gap (CLAUDE.md feedback
+     log) — the ground colour change doesn't touch that, it's a fill colour, not an inset. */
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .korea-map svg {
@@ -13,8 +23,25 @@
   max-width: 100%;
 }
 
+/* Tablet band (768–1023): the infographic isn't drawn yet and a full-column map dominates the
+   viewport. Cap it so it lands a touch wider than a region card (~340px, ~645px tall) and
+   centre it above the swipe row. */
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .korea-map {
+    max-width: 340px;
+  }
+}
+
 .region {
   cursor: pointer;
+  /* Mobile WebKit/Blink paint their own translucent tap-highlight rectangle on tap, sized to the
+     element's bounding box — for a multi-polygon region (Gyeongsang-do's five separate provinces/
+     cities in one <a>) that box spans the whole cluster, so the flash visually bled across the
+     gap between shapes and read as two regions reacting to one tap. Same fix, same reasoning, as
+     region-detail-map.css's map-pin tap-highlight suppression: the state classes
+     (korea-map.js/region-card.js) are the real feedback, this rectangle is just a flash on top of
+     it, and :focus-visible's outline below is unrelated (a separate mechanism) and unaffected. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Jeju's shape alone falls under the 44px hit-target minimum at 360px width (~39px tall) —
@@ -26,32 +53,62 @@
 
 .region__shape {
   fill: var(--color-region-active);
-  fill-opacity: 0.55;
-  stroke: var(--color-primary-dark);
+  fill-opacity: 0.45;
+  /* Mid-green, not Green deep — the deep stroke was dark enough to compete with the ink region
+     labels sitting right on top of it. Same hue and weight as the region-detail map's own
+     boundary stroke (region-detail-map.css); stroke-opacity 0.7 matches it too. */
+  stroke: var(--color-primary);
+  stroke-opacity: 0.7;
   stroke-width: 2;
   transition: fill-opacity 0.15s ease, stroke-width 0.15s ease;
 }
 
 /* Metro/special cities carved out of a province (Seoul, Incheon, Daejeon, Sejong, Busan,
-   Daegu, Ulsan, Gwangju) — a deliberate darker shade, distinct from the plain province fill. */
+   Daegu, Ulsan, Gwangju) — an explicit flat fill token per eligibility state (tokens.css),
+   ~14% darker in lightness than that state's own region fill, rather than a filter darkening
+   whatever the province happens to render — brightness(0.92) all but disappeared once the
+   province fill itself got lighter (task: map fill lightness pass), leaving cities barely
+   distinguishable from their parent region. A heavier stroke than the province boundary at
+   every state (2.5 here vs. the province's 2, both bumped the same +1 on hover/selected) means
+   the city outline itself still reads once the fill step gets subtle. */
 .region__city {
-  fill: var(--color-primary-dark);
-  fill-opacity: 0.7;
-  stroke: var(--color-primary-dark);
-  stroke-width: 1.5;
-  transition: fill-opacity 0.15s ease, stroke-width 0.15s ease;
+  fill: var(--color-region-active-metro);
+  stroke: var(--color-primary);
+  stroke-opacity: 0.7;
+  stroke-width: 2.5;
+  transition: fill 0.15s ease, stroke-width 0.15s ease;
 }
 
-.region:hover .region__shape,
+/* Hover-only, gated behind real hover capability — see the note above .region--selected further
+   down: touch has no way to "leave" an element, so a tapped region's :hover state used to stick
+   until the visitor tapped something else (a region-card, say), at which point it let go, but
+   only for whichever of :hover's own declarations applied (here, the city's fill/stroke-width) —
+   the class-based .region--selected state on the shape stayed exactly as it was, since it isn't
+   :hover-driven. The net effect looked like tapping a card "partially released" the map, which
+   should do nothing at all. Gating :hover to (hover: hover) means touch never sets it in the
+   first place; tap feedback is 100% the JS-driven .region--selected classes below instead. */
+@media (hover: hover) {
+  .region:hover .region__shape {
+    fill-opacity: 0.85;
+    stroke-width: 3;
+  }
+
+  .region:hover .region__city {
+    fill: var(--color-region-active-metro-hover);
+    stroke-width: 3.5;
+  }
+}
+
+/* :focus-visible stays ungated — keyboard users get the same feedback regardless of the device's
+   hover capability, and focus doesn't have the touch "stickiness" problem above. */
 .region:focus-visible .region__shape {
   fill-opacity: 0.85;
   stroke-width: 3;
 }
 
-.region:hover .region__city,
 .region:focus-visible .region__city {
-  fill-opacity: 0.95;
-  stroke-width: 2.5;
+  fill: var(--color-region-active-metro-hover);
+  stroke-width: 3.5;
 }
 
 .region:focus-visible {
@@ -63,9 +120,39 @@
    .region--active — the base .region__shape/.region__city rules above already render that
    state, since it's also what the map shows before any calculator run (architecture.md §8:
    "un-gated by default"). */
-.region--partial .region__shape,
+/* Flat "Green light" fill for the partly-eligible state (DESIGN.md palette), not the old hatch —
+   the legend swatch below matches. */
+.region--partial .region__shape {
+  fill: var(--color-region-partial);
+  fill-opacity: 0.53;
+}
+
 .region--partial .region__city {
-  fill: url(#region-partial-hatch);
+  fill: var(--color-region-partial-metro);
+}
+
+/* The capital region (Gyeonggi-do — the only region this class ever lands on) used to inherit
+   the plain .region:hover fill-opacity (0.85), which was also its own resting opacity before the
+   map-fill-lightness pass — hovering it produced no visible change at all, unlike every other
+   region. Same specificity as .region:hover .region__shape (both 3 class-selectors), placed
+   after it, so source order picks this one. Own step up from partial's own resting opacity, not
+   a re-use of the eligible-state hover value. */
+@media (hover: hover) {
+  .region--partial:hover .region__shape {
+    fill-opacity: 0.7;
+  }
+
+  .region--partial:hover .region__city {
+    fill: var(--color-region-partial-metro-hover);
+  }
+}
+
+.region--partial:focus-visible .region__shape {
+  fill-opacity: 0.7;
+}
+
+.region--partial:focus-visible .region__city {
+  fill: var(--color-region-partial-metro-hover);
 }
 
 .region--ineligible {
@@ -74,64 +161,156 @@
   cursor: default;
 }
 
-.region--ineligible .region__shape,
-.region--ineligible .region__city {
+/* Stroke, not just fill, switches to the grey family here — the base .region__shape rule's
+   green stroke (var(--color-primary)) is right for every green-family state (eligible, partial)
+   but reads as a mistake around an all-grey ineligible shape. Raw --color-region-ineligible at
+   the same 0.7 stroke-opacity as the green stroke — same "raw token as the darker line, diluted
+   fill as the area" relationship, just the grey token instead of the green one. */
+.region--ineligible .region__shape {
   fill: var(--color-region-ineligible);
   fill-opacity: 0.5;
+  stroke: var(--color-region-ineligible);
 }
 
-.region--ineligible .region__label {
-  opacity: 0.55;
+.region--ineligible .region__city {
+  fill: var(--color-region-ineligible-metro);
+  stroke: var(--color-region-ineligible);
 }
 
-/* Dimmed regions don't react to hover/focus like live ones do — there's nothing to activate.
-   Higher specificity than the plain :hover/:focus-visible rules above wins regardless of
-   source order. */
-.region--ineligible:hover .region__shape,
-.region--ineligible:focus-visible .region__shape,
-.region--ineligible:hover .region__city,
+/* Seam-filler patches (korea-regions.svg, Chungcheong-do) sit right against an existing
+   province/metro edge — their own boundary stroke traces almost the same line as the shape next
+   to them, and two overlapping semi-transparent strokes compounded into a visibly darker third
+   colour instead of just blending into the fill. They only need the fill, at every state, so
+   this comes after the per-state stroke-colour overrides above (same specificity, source order
+   decides) rather than only overriding the plain .region__shape default. */
+.region__shape.region__shape--filler {
+  stroke: none;
+}
+
+/* Ineligible regions react on hover/focus like every other state now — grey tones, not the
+   green .region:hover default, but a real reaction. They used to be locked to their resting
+   values here (no reaction at all, on the theory that a dimmed, non-clickable region has nothing
+   to activate) while the region-card cross-hover below reacted anyway, just in the wrong colour —
+   the two disagreeing was the actual bug; reacting (in grey) resolves both. */
+@media (hover: hover) {
+  .region--ineligible:hover .region__city {
+    fill: var(--color-region-ineligible-metro-hover);
+  }
+}
+
 .region--ineligible:focus-visible .region__city {
-  fill-opacity: 0.5;
-  stroke-width: 2;
-}
-
-.region--ineligible:hover .region__label,
-.region--ineligible:focus-visible .region__label {
-  transform: none;
+  fill: var(--color-region-ineligible-metro-hover);
 }
 
 /* Phase 18: narrow-viewport tap selection (region-card.js) — a JS-toggled class, not a :hover
    substitute, because the highlight has to survive after the finger lifts, unlike the
    wide-viewport :has() cross-hover above which is inherently transient. */
-.region--selected .region__shape,
-.region--selected .region__city {
+.region--selected .region__shape {
   fill-opacity: 0.85;
   stroke-width: 3;
+}
+
+/* Same fill step as the hover state's own metro token (per eligibility state below) — .region__city
+   had no fill override here at all before, so a selected/tapped region's metro cities just sat at
+   their resting colour while the province darkened, instead of getting the same distinct "this
+   reacted too" step hover gives them. That made a selected ineligible region's metro fill (still
+   its plain resting grey) look close enough to the now-darker province to read as "the same
+   colour" — nowhere near as distinct as the real hover treatment. */
+.region--selected .region__city {
+  fill: var(--color-region-active-metro-hover);
+  stroke-width: 3.5;
+}
+
+.region--partial.region--selected .region__city {
+  fill: var(--color-region-partial-metro-hover);
+}
+
+.region--ineligible.region--selected .region__city {
+  fill: var(--color-region-ineligible-metro-hover);
 }
 
 .region--selected .region__label {
   transform: scale(1.2);
 }
 
+/* Ink, one colour at every eligibility state (DESIGN.md "National map" / "Map labels") — white
+   failed contrast on the sage/pale-mint fills (~2:1). Same paint-order/stroke halo technique as
+   the region-detail map's pins (region-detail-map.css), but the halo colour tracks each shape's
+   own current fill again (tokens.css: halo = oklch(min(L_fill + 0.10, 0.96) C_fill H_fill)) — the
+   one flat --color-primary-tint wash tried before this didn't hold up well enough in practice. */
 .region__label {
   font-family: var(--font-family-base);
-  fill: #fff;
-  paint-order: stroke;
-  stroke: var(--color-primary-dark);
-  stroke-linejoin: round;
+  fill: var(--color-text);
   text-anchor: middle;
   pointer-events: none;
+  paint-order: stroke;
+  stroke: var(--color-halo-active);
+  stroke-linejoin: round;
   transform-box: fill-box;
   transform-origin: center;
   transition: transform 0.15s ease;
 }
 
+/* Labels sitting on a metro-city shape (Seoul, Incheon, Daejeon, Sejong, Busan, Daegu, Ulsan,
+   Gwangju — korea-regions.svg marks them with this class) get the metro halo instead of the
+   province one, same state-tracking below. */
+.region__label--metro {
+  stroke: var(--color-halo-active-metro);
+}
+
+.region--partial .region__label {
+  stroke: var(--color-halo-partial);
+}
+
+.region--partial .region__label--metro {
+  stroke: var(--color-halo-partial-metro);
+}
+
+.region--ineligible .region__label {
+  stroke: var(--color-halo-ineligible);
+}
+
+.region--ineligible .region__label--metro {
+  stroke: var(--color-halo-ineligible-metro);
+}
+
+/* Tap-selected labels (narrow viewport, region-card.js) react the same way real hover does below
+   — .region--selected's shape/metro fill already reused the hover fill tokens above (Phase 18
+   comment), the halo needs the same parity so mobile tap and desktop hover read as the same
+   effect rather than the shape darkening while the label halo stays frozen at its resting tone.
+   Placed after the resting partial/ineligible overrides above (equal specificity either way) so
+   this wins for a region that's currently both. */
+.region--selected .region__label {
+  stroke: var(--color-halo-active-hover);
+}
+
+.region--selected .region__label--metro {
+  stroke: var(--color-halo-active-metro-hover);
+}
+
+.region--partial.region--selected .region__label {
+  stroke: var(--color-halo-partial-selected);
+}
+
+.region--partial.region--selected .region__label--metro {
+  stroke: var(--color-halo-partial-metro-hover);
+}
+
+.region--ineligible.region--selected .region__label {
+  stroke: var(--color-halo-ineligible-hover);
+}
+
+.region--ineligible.region--selected .region__label--metro {
+  stroke: var(--color-halo-ineligible-metro-hover);
+}
+
 /* Always-visible labels: the 6 main region names + Seoul (Phase 13 request — the capital
-   should be identifiable at every width, not just above the wide breakpoint). */
+   should be identifiable at every width, not just above the wide breakpoint). 2px halo, not 3 —
+   matches the region-detail map's own pin-label halo weight (region-detail-map.css). */
 .region__label--core {
   font-size: 24px;
-  font-weight: 700;
-  stroke-width: 3px;
+  font-weight: 600;
+  stroke-width: 2px;
 }
 
 /* All 17 admin-division names + city carve-outs, at every width — confirmed on a real Pixel 9
@@ -142,112 +321,155 @@
   display: block;
   font-size: 17px;
   font-weight: 600;
-  stroke-width: 2.5px;
+  stroke-width: 2px;
 }
 
 /* Hovering/focusing a region (directly, or via its card — Phase 18 cross-hover) enlarges its
    own labels in place, since there's no other way to read the smaller division names up close
-   short of the browser's own zoom. */
-.region:hover .region__label,
+   short of the browser's own zoom. :hover gated to real hover devices, same reasoning as the
+   fill/stroke rules above — the label shouldn't grow from a touch tap either. */
+@media (hover: hover) {
+  .region:hover .region__label {
+    transform: scale(1.2);
+    stroke: var(--color-halo-active-hover);
+  }
+
+  .region:hover .region__label--metro {
+    stroke: var(--color-halo-active-metro-hover);
+  }
+
+  .region--partial:hover .region__label {
+    stroke: var(--color-halo-partial-hover);
+  }
+
+  .region--partial:hover .region__label--metro {
+    stroke: var(--color-halo-partial-metro-hover);
+  }
+
+  .region--ineligible:hover .region__label {
+    stroke: var(--color-halo-ineligible-hover);
+  }
+
+  .region--ineligible:hover .region__label--metro {
+    stroke: var(--color-halo-ineligible-metro-hover);
+  }
+}
+
 .region:focus-visible .region__label {
   transform: scale(1.2);
+  stroke: var(--color-halo-active-hover);
 }
 
-/* Static color key beneath the map (index.njk) — see korea-map.js's setLegendDetail() for the
-   one dynamic line. Colors are literal hex, matching korea-regions.svg's own pattern defs
-   (CSS custom properties aren't visible inside an SVG <pattern>, so that file already keeps its
-   own hand-synced copies — same constraint applies here for the hatch swatch). */
+.region:focus-visible .region__label--metro {
+  stroke: var(--color-halo-active-metro-hover);
+}
+
+.region--partial:focus-visible .region__label {
+  stroke: var(--color-halo-partial-hover);
+}
+
+.region--partial:focus-visible .region__label--metro {
+  stroke: var(--color-halo-partial-metro-hover);
+}
+
+.region--ineligible:focus-visible .region__label {
+  stroke: var(--color-halo-ineligible-hover);
+}
+
+.region--ineligible:focus-visible .region__label--metro {
+  stroke: var(--color-halo-ineligible-metro-hover);
+}
+
+/* Colour key (index.njk — .home-regions__head): a small horizontal row of 10px swatches,
+   top-right of the section heading on desktop, wrapping under it on phone. DESIGN.md § "Homepage". */
 .map-legend {
-  margin-top: var(--space-3);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  font-size: var(--font-size-sm);
-}
-
-.map-legend__list {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 
 .map-legend__item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 6px;
   margin: 0;
-  padding: var(--space-1) 0;
-  text-align: left;
 }
 
 .map-legend__swatch {
   flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  border: 1.5px solid var(--color-primary-dark);
-  border-radius: var(--radius-sm);
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
 }
 
+/* Composited values (tokens.css), not the raw fill tokens at full opacity on white — those never
+   appear on the map itself. */
 .map-legend__swatch--active {
-  background-color: var(--color-region-active);
-  opacity: 0.55;
+  background-color: var(--color-map-legend-active);
 }
 
 .map-legend__swatch--partial {
-  background-color: #b8862f;
-  background-image: repeating-linear-gradient(
-    45deg,
-    #143d33 0,
-    #143d33 2px,
-    transparent 2px,
-    transparent 8px
-  );
-  opacity: 0.7;
+  background-color: var(--color-map-legend-partial);
 }
 
 .map-legend__swatch--ineligible {
-  background-color: var(--color-region-ineligible);
-  opacity: 0.5;
+  background-color: var(--color-map-legend-ineligible);
 }
 
-.map-legend__detail {
-  margin: var(--space-2) 0 0;
-  padding-top: var(--space-2);
-  border-top: 1px solid var(--color-border);
-  color: var(--color-text-muted);
-  text-align: left;
-}
-
-.map-legend__detail a {
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.map-legend__detail[hidden] {
+/* "Partly eligible" note plate (DESIGN.md § Recurring parts). Hidden until a calculator run marks
+   a region partial — korea-map.js toggles the `hidden` attribute. */
+.map-note[hidden] {
   display: none;
 }
 
-/* 768px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
-   activation — this grid only exists once that grid does. */
-@media (min-width: 768px) {
-  /* Full grid width (spans the map + both card columns), not just the map's own middle column —
-     plenty of room to lay the 3 key items out in one row instead of stacking them. */
-  .map-legend {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    margin-top: var(--space-4);
-  }
+.map-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  /* Sits between the section head and the map — needs air on both sides so it doesn't read as
+     glued to the map panel below it. */
+  margin: var(--space-5) 0 var(--space-6);
+  padding: 13px 16px;
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: 10px;
+  background: var(--color-primary-tint);
+}
 
-  .map-legend__list {
-    flex-direction: row;
-    justify-content: center;
-    gap: var(--space-6);
-  }
+.map-note__chip {
+  flex: 0 0 26px;
+  height: 16px;
+  margin-top: 3px;
+  border-radius: 3px;
+  background: var(--color-region-partial);
+}
 
-  .map-legend__item {
-    padding: 0;
-  }
+.map-note__body {
+  min-width: 0;
+}
 
+.map-note__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+.map-note__lead {
+  font-weight: 600;
+}
+
+.map-note__text a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* 1024px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
+   activation — the cross-hover pairs the infographic grid with the map shapes. */
+@media (min-width: 1024px) {
   /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,
@@ -277,8 +499,38 @@
   .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region[data-slug="gyeongsang-do"] .region__city,
   .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region[data-slug="jeolla-do"] .region__city,
   .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__city {
-    fill-opacity: 0.95;
-    stroke-width: 2.5;
+    /* Matches the direct .region:hover .region__city treatment (fill + stroke-width). The
+       overrides below repoint fill for the partial/ineligible cases — this plain block still
+       covers every region's default (eligible) case and every region's stroke-width regardless
+       of state, since that part doesn't vary. */
+    fill: var(--color-region-active-metro-hover);
+    stroke-width: 3.5;
+  }
+
+  /* Partial override — gyeonggi-do is the only region this class ever lands on. More specific
+     than the block above (adds .region--partial to the target side), so it wins regardless of
+     source order. */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--partial[data-slug="gyeonggi-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--partial[data-slug="gyeonggi-do"] .region__city {
+    fill: var(--color-region-partial-metro-hover);
+  }
+
+  /* Ineligible override — any region can land here once salary/age dims the whole map. Without
+     this, hovering an ineligible region's *card* turned its metro cities the active green instead
+     of a darker grey, disagreeing with what hovering the *map shape* directly now does. */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--ineligible[data-slug="gyeonggi-do"] .region__city,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region--ineligible[data-slug="gangwon-do"] .region__city,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region--ineligible[data-slug="chungcheong-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region--ineligible[data-slug="gyeongsang-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region--ineligible[data-slug="jeolla-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region--ineligible[data-slug="jeju-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--ineligible[data-slug="gyeonggi-do"] .region__city,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region--ineligible[data-slug="gangwon-do"] .region__city,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region--ineligible[data-slug="chungcheong-do"] .region__city,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region--ineligible[data-slug="gyeongsang-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region--ineligible[data-slug="jeolla-do"] .region__city,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region--ineligible[data-slug="jeju-do"] .region__city {
+    fill: var(--color-region-ineligible-metro-hover);
   }
 
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__label,

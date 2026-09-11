@@ -5,86 +5,119 @@ layout: layouts/page.njk
 
 {#
   Region-info shell (architecture.md §3): one shared region-card.njk partial feeds two
-  render modes, switched by a width-only CSS breakpoint (768px, see --bp-region-info-wide in
-  tokens.css) — never both at once, never recomputed on resize. The infographic grid's natural
-  width is 940px but its columns are fr-sized with a max-width cap (region-card.css), so it
-  scales down fluidly below that instead of overflowing.
+  render modes, switched by a width-only CSS breakpoint (1200px, see --bp-region-info-wide in
+  tokens.css) — never both at once, never recomputed on resize.
     - Wide (region-infographic): all 6 regions permanently visible around the map, in two
       fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
-      Cross-hover (card <-> map region <-> leader line, Phase 18) is pure CSS (:has()), no JS —
-      each card/line carries a matching data-slug/data-region-slug for the selectors to key off.
-    - Narrow (region-single): the map alone, full width, followed by one static card in normal
-      flow. Tap-to-fill-this-card-from-the-map is real behavior deferred to a later phase
-      (korea-map.js/region-card.js are still stub init()s) — this card shows Gyeonggi-do as the
-      default so the DOM/CSS structure and mock data wiring are provable now.
+      Cross-hover (card <-> map region <-> leader line) is pure CSS (:has()), no JS — each
+      card/line carries a matching data-slug/data-region-slug for the selectors to key off.
+      The leader-line coordinates below are authored once against a 240px column width and the
+      map's own centroids; keep --infographic cards a fixed height so the lines stay aligned.
+    - Narrow (region-carousel): the map alone, full width, followed by a horizontal scroll-snap
+      carousel of all 6 real region-card links + dot indicators (DESIGN.md § "Region card").
+      korea-map.js's tap handler scrolls the carousel to the tapped region's card instead of
+      navigating straight there; every card is still a real <a href> if JS is off.
   Left/right column assignment follows each region's actual west/east position on the map
-  (verified against live centroid measurement, not eyeballed — Korea's landmass genuinely
-  splits 4-west/2-east, not 3/3: Gyeonggi/Chungcheong/Jeolla/Jeju all sit west of the map's own
-  center line, only Gangwon/Gyeongsang sit east), ordered top-to-bottom (N to S) within each
-  column — see leader-line coordinates below, which target each region's actual centroid on the
-  map (not the map's outer edge) so the lines visually connect to the region itself.
+  (Gyeonggi/Chungcheong/Jeolla/Jeju sit west of the map's own centre line, Gangwon/Gyeongsang
+  east), ordered N-to-S within each column.
 #}
-<section id="map" class="region-infographic" aria-label="Region overview">
-  <div class="region-infographic__col region-infographic__col--left">
-    {% for slug in ["gyeonggi-do", "chungcheong-do", "jeolla-do", "jeju-do"] %}
-    {% set region = regions | findBySlug(slug) %}
-    {% set cost = costOfLiving | findBySlug(slug) %}
-    {% set modifier = "infographic" %}
-    {% include "partials/region-card.njk" %}
-    {% endfor %}
-  </div>
-
-  {% include "partials/korea-map.njk" %}
-
-  {#
-    Static color key, always visible beneath the map (not just once a partial region exists) —
-    same "authored once, nothing computed at runtime" approach as the infographic itself. Its one
-    dynamic piece is the county list for whichever region the calculator just marked partial
-    (korea-map.js's setLegendDetail()); that used to be crammed into the region-card itself,
-    where it clipped mid-word inside the card's fixed 130px height. Explicitly grid-placed (see
-    korea-map.css) to span every column / row 2, so it renders full-width under the map and both
-    card columns rather than as a 4th auto-placed column squeezed into the map's own 420px slot.
-  #}
-  <div class="map-legend" aria-label="Map color key">
-    <div class="map-legend__list">
-      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--active" aria-hidden="true"></span>Fully eligible to stay</p>
-      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--partial" aria-hidden="true"></span>Partially eligible to stay — decline-designated counties only</p>
-      <p class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--ineligible" aria-hidden="true"></span>Not eligible to stay</p>
+<section id="map" class="home-regions" aria-labelledby="home-regions-heading">
+  <div class="home-regions__head">
+    <div class="home-regions__intro">
+      <h2 id="home-regions-heading">Regions of Korea</h2>
+      <p class="home-regions__lead home-regions__lead--wide">
+        Hover a region or its card to highlight it on the map. Open either to see the region.
+      </p>
+      <p class="home-regions__lead home-regions__lead--narrow">
+        Tap a region on the map to jump to its card, open the card to see the region.
+      </p>
     </div>
-    <p class="map-legend__detail" data-map-legend-detail hidden></p>
-  </div>
-
-  <div class="region-infographic__col region-infographic__col--right">
-    {% for slug in ["gangwon-do", "gyeongsang-do"] %}
-    {% set region = regions | findBySlug(slug) %}
-    {% set cost = costOfLiving | findBySlug(slug) %}
-    {% set modifier = "infographic" %}
-    {% include "partials/region-card.njk" %}
-    {% endfor %}
+    <ul class="map-legend" aria-label="Map colour key">
+      <li class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--active" aria-hidden="true"></span>Eligible</li>
+      <li class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--partial" aria-hidden="true"></span>Partly eligible — decline-designated counties</li>
+      <li class="map-legend__item"><span class="map-legend__swatch map-legend__swatch--ineligible" aria-hidden="true"></span>Not eligible</li>
+    </ul>
   </div>
 
   {#
-    Card columns grew from 210px to 240px (region-card.css — room for the English name on one
-    line, ROADMAP feedback). Total grid width grew from 880 to 940 (+30 each side) to match.
-    Every coordinate below shifted by that same +30: the two column-edge x1 anchors (210→240,
-    670→700) and every map-side x2 — the map's own 420px column didn't change size, but its left
-    edge moved from x=230 to x=260, so every x2 (a point *inside* the map) shifts by the same
-    +30 the map itself moved. y-values are untouched — card height changed (item elsewhere), not
-    the column layout's vertical position.
+    Note plate (DESIGN.md § Recurring parts "Note plate") explaining the "Partly eligible" state.
+    Hidden until a calculator run marks a region partial — korea-map.js's applyResult() toggles
+    the `hidden` attribute. The legend row above carries the short meaning for everyone else.
   #}
-  <svg class="region-infographic__lines" viewBox="0 0 940 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <line data-slug="gyeonggi-do" x1="240" y1="221.2" x2="388.8" y2="193.5" />
-    <line data-slug="chungcheong-do" x1="240" y1="390.4" x2="407.9" y2="352.6" />
-    <line data-slug="jeolla-do" x1="240" y1="559.6" x2="374.5" y2="587.3" />
-    <line data-slug="jeju-do" x1="240" y1="728.8" x2="315.9" y2="911.3" />
-    <line data-slug="gangwon-do" x1="700" y1="390.4" x2="519.6" y2="160.2" />
-    <line data-slug="gyeongsang-do" x1="700" y1="559.6" x2="559.9" y2="462.3" />
-  </svg>
-</section>
+  <div class="map-note" data-map-note hidden>
+    <span class="map-note__chip" aria-hidden="true"></span>
+    <div class="map-note__body">
+      <p class="map-note__text">
+        <span class="map-note__lead">Partly eligible</span> means only a region's
+        decline-designated counties are open to you — the rest of the province still
+        needs the higher capital-area income.
+        <a href="/regions/gyeonggi-do/population-decline-counties/">Decline-designated counties →</a>
+      </p>
+    </div>
+  </div>
 
-<section class="region-single" aria-label="Selected region">
-  {% set region = regions | findBySlug("gyeonggi-do") %}
-  {% set cost = costOfLiving | findBySlug("gyeonggi-do") %}
-  {% set modifier = "single" %}
-  {% include "partials/region-card.njk" %}
+  <div class="region-infographic" aria-label="Region overview">
+    <div class="region-infographic__col region-infographic__col--left">
+      {% for slug in ["gyeonggi-do", "chungcheong-do", "jeolla-do", "jeju-do"] %}
+      {% set region = regions | findBySlug(slug) %}
+      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set modifier = "infographic" %}
+      {% include "partials/region-card.njk" %}
+      {% endfor %}
+    </div>
+
+    {% include "partials/korea-map.njk" %}
+
+    <div class="region-infographic__col region-infographic__col--right">
+      {% for slug in ["gangwon-do", "gyeongsang-do"] %}
+      {% set region = regions | findBySlug(slug) %}
+      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set modifier = "infographic" %}
+      {% include "partials/region-card.njk" %}
+      {% endfor %}
+    </div>
+
+    {#
+      The infographic fills the full section width (~1200px). x1 anchors sit on the card columns'
+      inner edges (≈ 279 left, 721 right in this 1000-unit viewBox); x2/y2 is a hand-tuned point
+      inside the matching map region. Each y1 is its card's vertical centre, pulled ~8% toward the
+      map's own centre line (475) so the six lines read as a tidy fan.
+      Re-derive (measure card centres at ≥1200px) if region-card content length or the grid
+      column ratio changes.
+    #}
+    <svg class="region-infographic__lines" viewBox="0 0 1000 950" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <line data-slug="gyeonggi-do" x1="279" y1="159.5" x2="420" y2="180" />
+      <line data-slug="chungcheong-do" x1="279" y1="376.2" x2="450" y2="355" />
+      <line data-slug="jeolla-do" x1="279" y1="583.3" x2="420" y2="515" />
+      <line data-slug="jeju-do" x1="279" y1="790.4" x2="351" y2="908" />
+      <line data-slug="gangwon-do" x1="721" y1="366.7" x2="545" y2="165" />
+      <line data-slug="gyeongsang-do" x1="721" y1="575.6" x2="595" y2="410" />
+    </svg>
+  </div>
+
+  {#
+    Narrow-viewport carousel: all 6 region cards as a horizontal scroll-snap row + dot
+    indicators (CLAUDE.md feedback log). Hidden at >=1200px where the infographic takes over.
+    region-card.js keeps the dots in sync with scroll position; first dot stays lit with JS off.
+  #}
+  <div class="region-carousel" aria-label="All six regions">
+    <ul class="region-carousel__track">
+      {% for slug in ["gyeonggi-do", "gangwon-do", "chungcheong-do", "gyeongsang-do", "jeolla-do", "jeju-do"] %}
+      {% set region = regions | findBySlug(slug) %}
+      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set modifier = "carousel" %}
+      <li class="region-carousel__item">{% include "partials/region-card.njk" %}</li>
+      {% endfor %}
+    </ul>
+    <ol class="region-carousel__dots" aria-hidden="true">
+      {% for slug in ["gyeonggi-do", "gangwon-do", "chungcheong-do", "gyeongsang-do", "jeolla-do", "jeju-do"] %}
+      <li></li>
+      {% endfor %}
+    </ol>
+  </div>
+
+  <p class="home-regions__source">
+    Where a rent figure is shown it is for furnished short-term places, hand-checked from
+    current listings (September 2026) — utilities, food and transport not included.
+  </p>
 </section>

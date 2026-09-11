@@ -1,23 +1,28 @@
-{# Single template for both region-info render modes (architecture.md §3): the wide-viewport
-   infographic loops this 6x into fixed slots, the narrow-viewport single card renders it once.
-   Params: region (Region, required), cost (CostOfLiving | null), modifier ("infographic" | "single") #}
-<div class="region-card region-card--{{ modifier | default("single") }}" data-region-slug="{{ region.slug }}">
+{# Single template for both region-info render modes (architecture.md §3, DESIGN.md § "Region
+   card"): the wide-viewport infographic loops this into fixed slots around the map, the
+   narrow-viewport carousel loops it into a scroll-snap row.
+   Params: region (Region, required), cost (CostOfLiving | null), modifier ("infographic" | "carousel") #}
+<div class="region-card region-card--{{ modifier | default("carousel") }}" data-region-slug="{{ region.slug }}">
   <div class="region-card__header">
     <h3 class="region-card__name">{{ region.nameEn }}</h3>
-    <span class="region-card__score" title="Nomad score (editorial, v1)">{{ region.nomadScore }}</span>
+    {# Rent figure only where a real hand-checked range exists (Gangwon-do — see
+       costOfLiving.json furnishedShortTermMonthly). Other regions have no verified figure yet,
+       so the row is omitted rather than filled with a city-centre estimate. #}
+    {% if cost and cost.furnishedShortTermMonthly %}
+    <span class="region-card__rent">{{ cost.furnishedShortTermMonthly }}/mo</span>
+    {% endif %}
   </div>
   <p class="region-card__name-ko">{{ region.nameKo }}</p>
+  <p class="region-card__intro">{{ region.shortIntro }}</p>
   <ul class="region-card__tags">
     {% for tag in region.vibeTags %}
     <li>{{ tag }}</li>
     {% endfor %}
   </ul>
-  <p class="region-card__intro">{{ region.shortIntro }}</p>
-  {% if cost %}
-  <p class="region-card__cost">
-    <span class="region-card__cost-label">Rent, 1BR city centre</span>
-    <span class="region-card__cost-value">₩{{ cost.rent1brCityCentre | krw }}/mo</span>
-  </p>
-  {% endif %}
-  <a class="region-card__link" href="/regions/{{ region.slug }}/">Learn more →</a>
+  {# The real <a href> both entry points to a region page share (CLAUDE.md rule 6); korea-map.js
+     gates it (href + aria-disabled) for ineligible regions the same way it gates the map shape. #}
+  <a class="region-card__link" href="/regions/{{ region.slug }}/">
+    <span>Open {{ region.nameEn }}</span>
+    <span aria-hidden="true">→</span>
+  </a>
 </div>

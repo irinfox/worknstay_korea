@@ -1,13 +1,51 @@
 {
-  "name": "Work&Stay Korea",
+  "name": "worknstay korea",
   "tagline": "Find your region. Stay a while.",
   "noindex": true,
   "nav": [
-    { "label": "Home", "href": "/" },
-    { "label": "Visa Info", "href": "/visa-info/" },
-    { "label": "Communities", "href": "/communities/" }
+    { "label": "Regions", "href": "/#map" },
+    { "label": "Visa info", "href": "/visa-info/" },
+    { "label": "Settling in", "href": "/settling-in/" },
+    { "label": "About", "href": "/about/" }
   ],
   "footer": {
-    "disclaimer": "© 2026 Work&Stay Korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
+    "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
+  },
+  "about": {
+    "heading": "Hi, I'm Irina",
+    "credChips": [
+      "1.5+ yrs in Korea",
+      "45+ countries visited",
+      "~2 yrs working remotely"
+    ],
+    "intro": [
+      "I've lived in Korea as a Korean language student and previously worked remotely from different countries. I was more of a traveller with a laptop than a proper digital nomad, but I kinda know the vibe.",
+      "I've never worked like this in Korea and for now I'm based in Seoul, but I've travelled through all six major regions of Korea. And most of the cities you'll see here are either places I've been to or would like to visit myself.",
+      "With Korea making its digital nomad visa more accessible, I wanted to show what Korea outside Seoul is like. Though the language barrier and the tendency towards an older population in regional areas are real (with exceptions like Busan and Jeju), good internet and apps like Google Translate and Korea's own Papago can make it all doable."
+    ],
+    "closing": "So, please, enjoy the website, choose the region according to your lifestyle with my vibe-tags. And don't forget to try the regional dishes~",
+    "disclaimer": "No affiliation with any tourism board, agency or landlord. Everything here is checked by hand and dated.",
+    "why": {
+      "heading": "Why this site?",
+      "sub": "Three reasons it exists.",
+      "cards": [
+        {
+          "title": "I really like Korea",
+          "body": "Of all the countries I've been to, Korea personally struck me the most."
+        },
+        {
+          "title": "Beyond Seoul",
+          "body": "Seoul is an obvious choice, but Korea has much more to offer. I wanted to give a quick feel of each region, so you can choose what suits you best."
+        },
+        {
+          "title": "Why now?",
+          "body": "A few things came together: my own desire to explore and structure information, the changes to Korea's digital nomad visa rules, and the KTO contest. That gave me the final push to start building the project.",
+          "link": {
+            "label": "The KTO contest",
+            "url": "https://api.visitkorea.or.kr/#/cntSearchDetail?no=3"
+          }
+        }
+      ]
+    }
   }
 }

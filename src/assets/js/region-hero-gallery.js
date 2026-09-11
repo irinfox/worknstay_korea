@@ -1,9 +1,10 @@
 // Region-page hero photo gallery — pure enhancement. The CSS scroll-snap track
 // (.region-hero-gallery__track, region-page.css) already lets a mouse-wheel/trackpad/touch swipe
 // move between slides with zero JS (same no-JS-required pattern as .attraction-list); this module
-// adds prev/next buttons, dot indicators, and an infinite autoplay loop on top. Nothing here gates
-// content behind JS (rule 6) — with JS disabled it's a normal swipeable strip, just without
-// looping or autoplay.
+// adds prev/next buttons, a "1 / N" counter, and an infinite autoplay loop on top. Nothing here
+// gates content behind JS (rule 6) — with JS disabled it's a normal swipeable strip, just without
+// looping or autoplay. (The dots container is optional: still supported if present, absent on the
+// "Around the region" region-page gallery, which uses the counter instead.)
 const AUTOPLAY_INTERVAL_MS = 4500;
 
 export function init() {
@@ -13,10 +14,19 @@ export function init() {
 function setupGallery(root) {
   const track = root.querySelector(".region-hero-gallery__track");
   const dotsContainer = root.querySelector(".region-hero-gallery__dots");
+  const counter = root.querySelector("[data-region-hero-counter]");
   const realSlides = track ? Array.from(track.children) : [];
   if (!track || realSlides.length <= 1) return;
 
   const count = realSlides.length;
+
+  // Slides no longer fill the track (the "Around the region" strip shows one full slide plus a
+  // peek of the next), so a page step is one slide's width + the flex gap, not track.clientWidth.
+  const stepWidth = () => {
+    const styles = getComputedStyle(track);
+    const gap = parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return realSlides[0].getBoundingClientRect().width + gap;
+  };
 
   // Infinite-loop trick: clone the last slide before the first and the first slide after the
   // last, so a swipe/scroll past either end lands on a visual duplicate. Once scroll settles
@@ -48,11 +58,12 @@ function setupGallery(root) {
 
   function setActive(realIndex) {
     dots.forEach((dot, i) => dot.setAttribute("aria-current", i === realIndex ? "true" : "false"));
+    if (counter) counter.textContent = `${realIndex + 1} / ${count}`;
   }
 
   function goTo(index) {
     internalIndex = index;
-    track.scrollTo({ left: track.clientWidth * index, behavior: "smooth" });
+    track.scrollTo({ left: stepWidth() * index, behavior: "smooth" });
   }
 
   function next() {
@@ -66,13 +77,14 @@ function setupGallery(root) {
   // Snap-correct out of the clone zone, then sync dots — runs after both button-driven smooth
   // scrolls and free-hand swipe/wheel scrolling settle.
   function handleSettle() {
-    const settledIndex = Math.round(track.scrollLeft / track.clientWidth);
+    const step = stepWidth();
+    const settledIndex = Math.round(track.scrollLeft / step);
     if (settledIndex === 0) {
       internalIndex = count;
-      track.scrollLeft = track.clientWidth * internalIndex;
+      track.scrollLeft = step * internalIndex;
     } else if (settledIndex === count + 1) {
       internalIndex = 1;
-      track.scrollLeft = track.clientWidth * internalIndex;
+      track.scrollLeft = step * internalIndex;
     } else {
       internalIndex = settledIndex;
     }
@@ -101,7 +113,7 @@ function setupGallery(root) {
   root.addEventListener("mouseenter", stopAutoplay);
   root.addEventListener("mouseleave", startAutoplay);
 
-  track.scrollLeft = track.clientWidth * internalIndex;
+  track.scrollLeft = stepWidth() * internalIndex;
   setActive(0);
   startAutoplay();
 }

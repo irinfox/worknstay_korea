@@ -1,6 +1,60 @@
-/* visa-info.njk + communities.njk — shared table/list styling for the two remaining static
+/* visa-info.njk + settling-in.njk — shared table/list styling for the two remaining static
    pages (Phase 7). Reuses .region-header / .region-section / .cost-summary / .mock-note /
    .data-provenance / .empty-state from region-page.css rather than duplicating them. */
+
+/* Container width now matches every other page (base.css's .content-page is --content-max-width,
+   DESIGN.md "One container width site-wide") — these two pages no longer run in their own
+   narrower column. Cap each top-level block at ~70ch instead so body text and the table/list
+   below it don't stretch edge-to-edge, the same "text never fills the container" rule the region
+   page applies via its own header/intro caps. Left-aligned (no margin auto), matching that
+   convention rather than centering a text column on the page. */
+.content-page:not(.region-page) > * {
+  max-width: 70ch;
+}
+
+/* Headline block (DESIGN.md § Recurring parts): orange 56×3 rule → H1 → intro. Same rule bar as
+   the region page (region-page.css's .region-page .region-header__rule) but without that page's
+   two-column split / Korean name / vibe tags — these two pages keep the plain single-column
+   .region-header. Scoped by :not(.region-page) so this never doubles up with that rule. */
+.content-page:not(.region-page) .region-header__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 24px;
+}
+
+.content-page:not(.region-page) .region-header h1 {
+  letter-spacing: -0.028em;
+}
+
+/* Body copy (DESIGN.md palette — "Ink soft: secondary paragraphs"), matching how the region page
+   colours its own header intro and section prose (region-page.css) — these two pages were
+   inheriting plain Ink (body.css's default), heavier than every other paragraph on the site.
+   :not(.data-provenance):not(.empty-state) so this doesn't outrank those elements' own, more
+   specific Muted colour (source lines / the disclaimer) — both are direct-child <p>s here too.
+   :not(.community-list) on the <ul> rule for the same reason color would otherwise cascade onto
+   the community-card h2 (a card title, should stay full Ink) — settling-in.njk's community
+   description <p> is targeted directly below instead, next to its own community-card__platform
+   exclusion (that one's Muted, set further down). */
+.content-page:not(.region-page) .region-header__intro,
+.content-page:not(.region-page) .region-section > p:not(.data-provenance):not(.empty-state),
+.content-page:not(.region-page) .region-section > ul:not(.community-list),
+.content-page:not(.region-page) .community-card > p:not(.community-card__platform) {
+  color: var(--color-text-soft);
+}
+
+/* Section H2 (DESIGN.md § Type — 20–22px/600/-0.015em), matching the region page's section
+   headings (region-page.css). The generic h2 rule (base.css) is sized for one-off page titles,
+   not repeated section headers, and rendered far too large here. Scoped to a direct child of
+   .region-section so it doesn't touch settling-in's community-card h2 (a card title, styled
+   below at the DESIGN.md card-title size instead). */
+.content-page:not(.region-page) .region-section > h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
 
 .table-scroll {
   overflow-x: auto;
@@ -36,9 +90,201 @@
   border-radius: var(--radius-md);
 }
 
+/* Card title (DESIGN.md § Type — 16–18px/600), not the Section H2 size above — a community name
+   is a card heading, not a page section. */
+.community-card h2 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 .community-card__platform {
   margin-top: var(--space-1);
   font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-weight: 600;
+}
+
+/* Outbound (DESIGN.md palette: orange = external, and per the "Never: orange text that is not a
+   link" rule, this has to be a real one — settling-in.njk always resolves to *something*: the
+   sourced c.url once a real group is found, or platformUrl (the platform's own homepage) as the
+   honest not-yet-sourced state today. Not primary-dark green — green reads as in-site/interactive,
+   which an outbound link isn't. */
+.community-card__platform a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* ── About page (about.njk; design reference 6a/6b) ───────────────────────────────────────────
+   Wide site-shell column like the homepage, not the .content-page reading width. Headline block
+   on white (orange rule → H1 → credibility chips → intro paragraphs), then a primary-tinted
+   "Why this site?" band whose tint + hairlines bleed 16px past the page column on each side
+   (same ::before technique as region-page.css's .region-band), holding a three-card grid. */
+.about-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.about-hero {
+  max-width: 760px;
+  margin-bottom: var(--space-6);
+}
+
+.about-hero__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 18px;
+}
+
+.about-hero h1 {
+  max-width: none;
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.1;
+}
+
+/* ul.* — base.css's `ul[class] { margin: 0 }` reset outranks a bare `.about-hero__chips` and
+   would zero these margins (same gotcha noted in region-page.css). */
+ul.about-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 560px;
+  margin: 18px 0 24px;
+}
+
+/* Deliberately quieter than the DESIGN.md vibe-tag pill (which is a loud, load-bearing filter
+   control): these are just background credentials — pale fill, soft border, 500 — but the text
+   stays green, same family as the vibe tags. */
+.about-hero__chips li {
+  padding: 5px 12px;
+  border: 1px solid var(--color-primary-tint-border-soft);
+  background: var(--color-primary-tint);
   color: var(--color-primary-dark);
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* 66ch matches .region-page .region-header__intro so the About text column lines up with the
+   region pages. Paragraph sizes track region.njk too: first paragraph one notch up, the rest
+   at 0.9375rem — a small step, not a lede blow-up. */
+.about-hero__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 66ch;
+}
+
+.about-hero__body > p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+
+.about-hero__body > .about-hero__lead {
+  font-size: 17px;
+}
+
+.about-hero__body > .about-hero__closing {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.about-hero__body > .about-hero__disclaimer {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.about-why {
+  position: relative;
+  padding-block: var(--space-8);
+}
+
+.about-why::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  background: var(--color-primary-tint);
+  border-block: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.about-why h2 {
+  margin-bottom: 4px;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.about-why__sub {
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: var(--color-text-soft);
+}
+
+.about-why__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.about-why__card {
+  padding: 20px 22px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.about-why__card-rule {
+  display: block;
+  width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 14px;
+}
+
+.about-why__card h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.about-why__card p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+.about-why__card-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Two up on a small tablet; all three on one row from 900px, where they fit without the third
+   dropping to a second row with slack. */
+@media (min-width: 768px) {
+  .about-why__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .about-why__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }

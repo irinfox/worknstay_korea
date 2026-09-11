@@ -1,102 +1,114 @@
 /*
- * Eligibility calculator form (ROADMAP_TODO.md Phase 16). Sits inside the hero's
- * `.hero__content` (hero.css), on top of the cover photo/scrim, so inputs need their own solid
- * background rather than inheriting the hero's transparent/white text styling.
+ * Eligibility calculator (Phase 16), restyled to DESIGN.md § "Homepage": a white card that
+ * overlaps the hero photo's lower edge (positioning is in hero.css — .hero__calculator). The
+ * comparison logic and its messages are frozen; this file is layout, colour and states only.
+ *
+ * .calculator-mount is the card. .calculator-form is layout inside it. #eligibility-result sits
+ * inside the card but outside the <form> (hero.njk) so form.reset() never touches it.
  */
+.calculator-mount {
+  width: 100%;
+  max-width: 520px;
+  /* Pinned to the left of .hero__calculator so the card's left edge lines up with the headline
+     block above it; full-width on phone where .hero__calculator's own padding is the inset. */
+  margin-right: auto;
+  padding: 18px;
+  border-radius: 12px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+}
+
+.calculator-mount__noscript {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--color-text-soft);
+}
+
+.calculator-mount__noscript a {
+  color: var(--color-link);
+}
+
 .calculator-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  width: 100%;
-  padding: var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  text-align: left;
+  gap: 10px;
+}
+
+/* Card title + subtitle (design reference 5a): bold heading, then a muted explanatory line. */
+.calculator-form__title {
+  margin: 0 0 3px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.calculator-form__note {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
 }
 
 .calculator-form__row {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
-  gap: var(--space-3);
+  align-items: flex-end;
+  gap: 10px;
   min-width: 0;
 }
 
-/* Label + input inline, both fields sharing one row, below 768px — real Pixel 9 devtools check
-   showed plenty of spare width even with both fields at a readable size, so there was no need
-   to spend 2 rows on this. Salary and age deliberately do NOT share flex-grow equally: age is
-   a 2-3 digit number that only needs a small fixed box (.calculator-form__field--age below);
-   letting it grow like salary just wasted the width salary actually needs for a 9-digit KRW
-   figure. At ≥768px this switches back to label-above-input (column) — with the row's other
-   items (checkbox, button) alongside, there isn't the same spare width to spend on inline
-   labels there. */
+/* Salary and age do NOT share flex-grow: age is a 2–3 digit number that needs only a small
+   fixed box, salary needs room for a 9-digit KRW figure. Below 768px salary grows to fill the
+   row; at ≥768px it's a fixed 196px and the button takes the remaining width. */
 .calculator-form__field {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-2);
-  flex: 3 1 140px;
+  flex-direction: column;
+  flex: 1 1 120px;
   min-width: 0;
 }
 
 .calculator-form__field--age {
-  flex: 0 1 auto;
+  flex: 0 0 66px;
 }
 
 .calculator-form__field label {
-  flex: 0 0 auto;
-  white-space: nowrap;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  margin-bottom: 7px;
 }
 
+.calculator-form__field input[type="text"],
 .calculator-form__field input[type="number"] {
-  min-width: 0;
-  min-height: 44px;
-  padding: 0 var(--space-2);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-base);
-}
-
-.calculator-form__field:not(.calculator-form__field--age) input[type="number"] {
-  flex: 1 1 auto;
   width: 100%;
+  min-width: 0;
+  height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.calculator-form__field--age input[type="number"] {
-  /* 2-3 digits only needs about this much — was 4.5em, still read as too close to salary's
-     width (~60/40 rather than the intended 70-30/80-20 split). */
-  flex: 0 0 3em;
-}
-
-.calculator-form__field--checkbox {
-  flex-direction: row;
-  align-items: center;
-  gap: var(--space-2);
-  /* flex-basis 100% forces this onto its own line when .calculator-form__row wraps (<768px) —
-     load-bearing there. At ≥768px the row is nowrap instead; reset below so it doesn't fight
-     salary/age for space. */
-  flex: 1 1 100%;
-}
-
-.calculator-form__field--checkbox input {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
+.calculator-form__field input[type="text"]:focus-visible,
+.calculator-form__field input[type="number"]:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 1px;
 }
 
 .calculator-form__submit {
-  min-height: 44px;
-  padding: 0 var(--space-4);
+  flex: 1 1 100%;
+  height: 46px;
+  padding: 0 16px;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background: var(--color-primary);
   color: #fff;
-  /* Smaller below 768px — at the compact card width the default size wrapped to "Check" /
-     "eligibility" on two lines, bulkier than the rest of the now-tightened form. */
-  font-size: var(--font-size-sm);
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
 }
 
@@ -104,19 +116,45 @@
   background: var(--color-primary-dark);
 }
 
-.calculator-form__note {
+/* The field itself is the <label> (hero.njk) — the whole strip toggles the box. Its own row on
+   phone directly above the submit button; on desktop `order` drops it beside Clear. Label type
+   is 13px / 500 / ink (task audit) — deliberately heavier than the field labels above it. */
+.calculator-form__field--checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.calculator-form__field--checkbox input {
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
   margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  accent-color: var(--color-primary);
+}
+
+.calculator-form__field--checkbox span {
+  white-space: nowrap;
+}
+
+@media (max-width: 767.98px) {
+  .calculator-form__field--checkbox {
+    min-height: 44px;
+  }
 }
 
 .calculator-form__reset {
-  align-self: flex-start;
+  align-self: flex-end;
+  margin-left: auto;
   padding: 0;
   border: none;
   background: none;
-  color: var(--color-link);
-  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-size: 13px;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -126,58 +164,116 @@
   color: var(--color-primary-dark);
 }
 
+/* Phone: pad the hit area out to >=44px without moving the visible label (negative margin
+   soaks up the extra), same trick as the festival address-copy button. */
+@media (max-width: 767.98px) {
+  .calculator-form__reset {
+    margin: -12px -4px -12px auto;
+    padding: 12px 4px;
+  }
+
+  /* Trim the card's vertical footprint so the longest result state still clears the viewport
+     (hero.css pulls the whole card up onto the photo). */
+  .calculator-mount {
+    padding: 16px;
+  }
+
+  .calculator-form {
+    gap: 8px;
+  }
+
+  .calculator-form__note {
+    margin-bottom: 10px;
+  }
+}
+
+/* Result plate — tint set by calculator.js per eligibility tier, never red (the calculator only
+   gives answers). Green tints for "eligible", the site's amber for "not eligible yet". */
+.eligibility-result {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-tint);
+  color: var(--color-text-soft);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* In-site link to the visa rules — green with a → (DESIGN.md palette). */
+.eligibility-result a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.eligibility-result--all {
+  background: var(--color-vibe-tag-bg); /* #DCEFE5 — eligible everywhere */
+}
+
+.eligibility-result--near {
+  background: var(--color-primary-tint); /* #EAF4EF — eligible outside the capital area */
+}
+
+.eligibility-result--none {
+  background: var(--color-result-amber); /* #FDF0E4 — not eligible yet / under 18 */
+}
+
+.eligibility-result--info {
+  background: var(--color-surface); /* #F7F9F8 — neutral, a field is still missing */
+}
+
 @media (min-width: 768px) {
+  .calculator-mount {
+    padding: 20px;
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+  }
+
+  /* Desktop keeps the original two-line arrangement — [salary  age  Check eligibility] on line
+     one, [checkbox … Clear] on line two — via `order` rather than DOM position, since the
+     checkbox now sits above the button in source order for the phone layout (task audit). */
+  .calculator-form {
+    flex-flow: row wrap;
+    align-items: flex-end;
+  }
+
+  .calculator-form__title {
+    order: 1;
+    flex: 1 1 100%;
+  }
+
+  .calculator-form__note {
+    order: 2;
+    flex: 1 1 100%;
+  }
+
   .calculator-form__row {
+    order: 3;
+    flex: 0 0 auto;
     flex-wrap: nowrap;
-    /* Salary is capped at max-width:240px and nothing else grows, so on a wide card there's
-       leftover row space with nowhere to go — it was stranding itself as a gap after the
-       button. space-between spreads it across the gaps between fields instead, so the button
-       lands flush against the card's right edge rather than floating with dead space beside
-       it. */
-    justify-content: space-between;
   }
 
-  /* Fields sit side by side here instead of stacking full-width, and share the row with the
-     checkbox + button too — less spare width per field than the <768px single-column card, so
-     label-above-input reads better than cramming both inline. */
   .calculator-form__field {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-1);
-    /* Base rule's flex-grow:3 (tuned for the <768px salary-vs-age split) was too aggressive
-       here — salary doesn't need to compete with age for space anymore, it's competing with
-       the checkbox and button that share this row, and grabbing 3x the free space crowded the
-       checkbox label. Capped with max-width too: flex-grow:1 alone still stretched salary to
-       ~330px on a 900px-wide screen, more than a salary figure needs. */
-    flex: 1 1 140px;
-    max-width: 240px;
-  }
-
-  .calculator-form__field label {
-    white-space: normal;
+    flex: 0 0 196px;
   }
 
   .calculator-form__field--age {
-    flex: 0 1 80px;
+    flex: 0 0 66px;
   }
 
-  .calculator-form__field--age input[type="number"] {
+  /* Button takes the width left after the two fixed-width fields, on the same row. */
+  .calculator-form__submit {
+    order: 4;
     flex: 1 1 auto;
-    width: 100%;
+    height: 42px;
+    font-size: 14px;
   }
 
   .calculator-form__field--checkbox {
-    /* .calculator-form__field above sets flex-direction:column at this width — same
-       specificity as .calculator-form__field--checkbox's base flex-direction:row (both one
-       class), and this rule comes later in the file, so without restating it here the general
-       rule silently wins and stacks the checkbox above its label instead of beside it. */
-    flex-direction: row;
-    align-items: center;
+    order: 5;
     flex: 0 1 auto;
-    max-width: none;
   }
 
-  .calculator-form__submit {
-    font-size: var(--font-size-base);
+  .calculator-form__reset {
+    order: 6;
   }
 }

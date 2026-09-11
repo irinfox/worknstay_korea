@@ -40,7 +40,7 @@ OpenAPI. Built for the 2026 관광데이터 활용 공모전, ②-2 웹·앱 구
 | **Static/editorial data** | Build-time JSON in `src/_data/*.json`, hand-authored, committed | Visa rules, cost-of-living snapshot, food, communities, transport — none of this is KTO-sourced, so none of it needs live calls. |
 | Hosting | **Cloudflare Pages** (+ Functions) | One vendor for static hosting and the proxy layer; free `*.pages.dev` URL satisfies the contest's "live URL" requirement even before a custom domain exists. |
 | Analytics | **Cloudflare Web Analytics** (v1) | Free, cookieless, no consent banner. Wired through one script-include point so swapping to GA/Amplitude later (portfolio goal) is a one-line change. |
-| Fonts | Self-hosted **Pretendard** or system stack | Needed for Korean glyphs in place names; no Google Fonts CDN dependency. |
+| Fonts | **Instrument Sans + Noto Sans KR** via one Google Fonts `<link>` | DESIGN.md § Type fixes both families; Noto Sans KR covers Hangul place names. One request, `display=swap`. |
 
 Total dependency footprint: `@11ty/eleventy` as the only direct npm dependency, zero
 client-side libraries, one small serverless layer that ships with the hosting choice (not a
@@ -54,16 +54,17 @@ live-API-call requirement at all.
 ## 3. UX decisions locked in
 
 **Region info panel (map interaction):** two render modes swapped by a **width-only** media
-query at 768px (`--bp-region-info-wide`) — never a hover-triggered floating popup. Width, not
-device class, so wide landscape phones get the infographic too.
+query at 1120px (`--bp-region-info-wide`) — never a hover-triggered floating popup. Width, not
+device class. Breakpoint is high because a narrower card can't hold the longest region name
+plus its rent figure on one line.
 
 - **Wide:** all 6 region callouts render at once, arranged around the map, each joined to its
   region by a static hand-positioned SVG leader line (fixed viewBox coordinates, never computed
-  at runtime). Layout is a 240/420/240 grid, natural width 940px, scaling down fluidly to the
-  breakpoint; callouts sit in fixed left/right slots ordered by each region's `centroid.y`.
-  Each shows hashtags, cost-of-living snapshot, nomad score, "Learn more →".
-- **Narrow:** single column, one card in normal flow below the map. Tap a region → card fills +
-  smooth-scrolls in. Navigation only via "Learn more →".
+  at runtime). Layout is a 270/420/270 grid, natural width 1000px; callouts sit in fixed
+  left/right slots ordered by each region's `centroid.y`. Each shows name + rent, Korean name,
+  blurb, vibe tags, "Open <region> →".
+- **Narrow:** the map alone above a horizontal scroll-snap carousel of all 6 cards + dots.
+  Tapping a region scrolls the carousel to its card.
 - Both modes render from the same region-card partial and per-region data.
 
 **Hover/focus highlight (both modes):** hovering/focusing a region or its callout bolds that
@@ -154,7 +155,7 @@ worknstay_korea/
 │   │   ├── img/hero/{home,<region-slug>,gyeonggi-do-population-decline}/  # KOGL Type1 cover
 │   │   │         #   photos, credited in _data/{hero,regionHero,countyHero}Credits.json
 │   │   └── svg/  korea-regions.svg  (+ source/korea-provinces-blank.svg — Wikimedia, public domain)
-│   ├── index.njk / visa-info.njk / communities.njk / 404.njk
+│   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
 │   └── regions/region.njk                        # pagination over regions.json → /regions/<slug>/
 │       regions/gyeonggi-do/population-decline-counties.njk
 ├── scripts/                    # verify-{eligibility,calculator,kto-client,normalize}.mjs
@@ -336,7 +337,7 @@ No library, no store. Three tiers:
 
 - Header/nav: one `<ul>` in the DOM at all times; `nav.js` toggles `[aria-expanded]` on the
   burger. Never render two navs. Burger under ~768px.
-- Region info: two render modes swapped by a width-only 768px media query — see §3.
+- Region info: two render modes swapped by a width-only 1120px media query — see §3.
 - Region page Overview tab: cities list + event timeline are a 2-column grid ≥900px, stacked
   below that, cities first (primary answer to "where would I live"); Attractions and Local food
   render as stacked blocks below. Living Info is the only other tab (cost-of-living + transport).
@@ -348,8 +349,8 @@ No library, no store. Three tiers:
   summary fallback.
 - iOS Safari specifics: use `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent
   focus-zoom, `-webkit-text-size-adjust: 100%`.
-- Test matrix (CLAUDE.md rule 7) plus a landscape-phone width (~700–850px) to check the
-  infographic mode reads there, not just on desktop.
+- Test matrix (CLAUDE.md rule 7) plus a width just above/below 1120px to check the
+  infographic↔carousel switch.
 
 ## 10. Designated Task #4 alignment (for the eventual 기능설명서)
 

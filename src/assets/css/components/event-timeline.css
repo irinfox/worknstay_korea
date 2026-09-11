@@ -1,90 +1,62 @@
-/* ROADMAP_TODO.md Phase 23 — client-side event timeline (region-data.js), restyled Phase 23.
-   Segmented-slider tabs: "Ongoing" (festivals running now + ones starting later this month, one
-   list, each card badged "Long-term" / "This month") and "Upcoming" (later months, as month
-   sub-tab chips with counts). Each event is a primary-tinted card with a calendar-style date
-   chip; the address shows as city + pin with a copy-full-address icon button. */
+/* Client-side festivals & events timeline (region-data.js), design reference 5b/5d. Lives inside
+   the region page's primary-tinted costs+festivals band, so cards are plain hairline-divided
+   rows (not filled cards). "Ongoing" / "Upcoming" are pill toggles; "Upcoming" adds month chips.
+   Each row: a plain orange date, the name + an optional LONG-TERM / THIS MONTH badge, then the
+   address as city + pin + a copy-full-address control. The list area reserves a fixed height so
+   switching tabs / paging never shifts the page. */
 
-/* Breathing room under the "Festivals & events" heading (region-page.css's h3 rule) before the
-   tabs / month chips is handled there now — this used to duplicate it with its own margin-top. */
 .event-timeline {
   margin-top: 0;
 }
 
-/* --- Tab strip (Ongoing / Upcoming) — a segmented slider ---------------- */
+/* --- Ongoing / Upcoming pill toggles ------------------------------------ */
 
 .event-tabs {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: max-content;
-  margin-bottom: var(--space-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-/* The sliding fill: half-width, parked under the active segment, moved by [data-active]
-   (set in setupEventTabs). */
-.event-tabs::before {
-  content: "";
-  position: absolute;
-  inset: 0 50% 0 0;
-  background: var(--color-primary);
-  transition: transform 0.18s ease;
-}
-
-.event-tabs[data-active="upcoming"]::before {
-  transform: translateX(100%);
+  display: flex;
+  gap: 7px;
+  margin-bottom: 12px;
 }
 
 .event-tabs__tab {
-  position: relative;
-  padding: var(--space-2) var(--space-5);
+  padding: 7px 14px;
   font: inherit;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  text-align: center;
-  color: var(--color-text-muted);
-  background: none;
-  border: 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
   cursor: pointer;
-  transition: color 0.18s ease;
 }
 
 .event-tabs__tab:hover {
-  color: var(--color-text);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .event-tabs__tab[aria-selected="true"] {
   color: #fff;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .event-tabs::before,
-  .event-tabs__tab,
-  .event-place__copy {
-    transition: none;
-  }
-}
-
-/* --- Month sub-tabs inside the Upcoming panel ------------------------- */
+/* --- Month chips inside the Upcoming panel ---------------------------- */
 
 .event-months {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .event-months__tab {
-  padding: var(--space-1) var(--space-3);
+  padding: 6px 12px;
   font: inherit;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
+  font-size: 12px;
+  color: var(--color-text-soft);
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  border-radius: 20px;
   cursor: pointer;
 }
 
@@ -98,7 +70,7 @@
   border-color: var(--color-primary);
 }
 
-/* --- Event cards ----------------------------------------------------- */
+/* --- Event rows ----------------------------------------------------- */
 
 .event-list {
   list-style: none;
@@ -106,108 +78,44 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  /* Fixed reserved height (design reference: ~355px) so tab switches and paging never move the
+     rest of the page. */
+  min-height: 22.25rem;
 }
 
 .event-card {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-3);
-  align-items: center;
-  padding: var(--space-3);
-  background: var(--color-primary-tint);
-  border: 1px solid var(--color-primary-tint-border);
-  border-radius: var(--radius-md);
+  grid-template-columns: 104px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 12px 0;
+  /* Fixed #E4E7E4 hairline — the row divider must not thin out to --color-border-soft on the
+     tinted costs+festivals band. */
+  border-bottom: 1px solid #e4e7e4;
 }
 
-/* Pager hides out-of-page items with the `hidden` attribute; `.event-card`'s own `display`
-   would otherwise override the UA `[hidden] { display: none }`. */
+.event-card:last-of-type {
+  border-bottom: 0;
+}
+
+/* Pager hides out-of-page rows with the `hidden` attribute; the grid `display` would otherwise
+   beat the UA `[hidden] { display: none }`. */
 .event-card[hidden] {
   display: none;
 }
 
-/* Region-wide empty state — same card shape as an event, struck-through calendar chip. */
-.event-empty {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-3);
-  align-items: center;
-  padding: var(--space-3);
-  background: var(--color-primary-tint);
-  border: 1px solid var(--color-primary-tint-border);
-  border-radius: var(--radius-md);
-}
-
-.event-empty__chip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 3.75rem;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-}
-
-.event-empty__icon {
-  width: 24px;
-  height: 24px;
-  color: var(--color-accent); /* same as the calendar chip icon on real event cards */
-}
-
-.event-empty__text {
-  margin: 0;
-  font-size: var(--font-size-sm);
+.event-card__date {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
   color: var(--color-text-muted);
 }
 
-/* Calendar tear-off chip — one fixed size for every form (single day, same-month span, or
-   cross-month range), always two text rows so the chips line up down a list. */
-.event-cal__face {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 4rem;
-  height: 3.75rem;
-  padding: 3px 7px;
-  overflow: hidden;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  line-height: 1.2;
-  text-align: center;
-}
-
-.event-cal__icon {
-  width: 11px;
-  height: 11px;
-  margin-bottom: 2px;
-  color: var(--color-accent);
-}
-
-/* One font size for every chip form so they read as a set. */
-.event-cal__row {
-  font-size: 0.8rem;
-  color: var(--color-text);
+/* The date itself never breaks; only the trailing status chip wraps below it in the narrow
+   desktop date column. */
+.event-card__daterange {
   white-space: nowrap;
-}
-
-.event-cal__row b,
-.event-cal__row--num {
-  font-weight: 700;
-}
-
-/* Row 1 and row 2 of the chip read as one unit — same text colour, hairline separator only.
-   (Previous state, if reverting: --row--mon color var(--color-text-muted) + letter-spacing;
-    --row--end color var(--color-text-muted) + 1px solid var(--color-border) top border.) */
-.event-cal__row--mon {
-  letter-spacing: 0.03em;
-}
-
-.event-cal__row--end {
-  margin-top: 1px;
-  padding-top: 2px;
 }
 
 .event-card__body {
@@ -216,56 +124,61 @@
 
 .event-card__title {
   margin: 0;
-  font-weight: 600;
-  line-height: var(--line-height-tight);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.35;
 }
 
-/* --- Ongoing-panel badge — inline after the event name, sticky-note style ------ */
-
+/* LONG-TERM / THIS MONTH badge (Ongoing panel only). Design reference 5b: a solid tinted fill,
+   no border — green wash for LONG-TERM, warm wash for THIS MONTH. Two render slots (region-data.js
+   emits both): inline after the name from 600px up (design-ref placement), and on the date line
+   below 600px where the stacked card leaves the name row no spare width. */
 .event-card__badge {
-  position: relative;
   display: inline-block;
-  margin-left: 5px;
-  padding: 3px 7px 3px 6px;
-  font-size: 0.625rem;
+  margin-left: 6px;
+  padding: 3px 9px;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   white-space: nowrap;
   vertical-align: middle;
-  border-radius: 1px;
-  box-shadow: 1px 1px 0 rgba(28, 27, 25, 0.14);
-}
-
-/* Turned-up corner — the "sticky note" edge. */
-.event-card__badge::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  border-width: 0 5px 5px 0;
-  border-style: solid;
-  border-color: transparent rgba(28, 27, 25, 0.18) transparent transparent;
-}
-
-.event-card__badge--month {
-  color: var(--color-badge-thismonth-text);
-  background: var(--color-badge-thismonth-bg);
+  border-radius: 20px;
 }
 
 .event-card__badge--long {
-  color: var(--color-badge-longterm-text);
-  background: var(--color-badge-longterm-bg);
+  color: var(--color-primary);
+  background: var(--color-primary-tint);
 }
 
-/* --- Address: [pin] city [copy] — pin leads, faint copy affordance trails ------ */
+.event-card__badge--month {
+  color: var(--color-accent);
+  background: var(--color-accent-tint);
+}
+
+.event-card__badge--on-date {
+  display: none;
+}
+
+@media (max-width: 599.98px) {
+  .event-card__badge--on-date {
+    display: inline-block;
+  }
+
+  .event-card__badge--on-name {
+    display: none;
+  }
+}
+
+/* --- Address: [pin] city [copy] ------------------------------------- */
 
 .event-place {
   display: flex;
   align-items: center;
   gap: 2px;
-  margin-top: var(--space-2);
+  margin-top: 4px;
   max-width: 100%;
-  font-size: var(--font-size-sm);
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
@@ -273,16 +186,15 @@
   width: 12px;
   height: 12px;
   flex-shrink: 0;
-  color: var(--color-accent);
 }
 
 .event-place__city {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* Faint copy affordance — trails the city at the right edge of the address line. */
 .event-place__copy {
   margin-left: 4px;
   display: inline-flex;
@@ -292,13 +204,31 @@
   background: none;
   border: 0;
   border-radius: var(--radius-sm);
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: pointer;
   transition: opacity 0.12s ease;
 }
 
-.event-place__copy:hover,
+/* Green is reserved for the just-copied state. Hover turns it green only while the pointer is
+   actually over the icon; keyboard focus just makes it fully opaque so it stays gray once the
+   copied cue clears. Scoped to real-hover devices only (CSS Media Queries 4) — touch browsers
+   apply :hover on tap and don't clear it until a different element is tapped, which left the icon
+   stuck green after the 2s .is-copied confirmation had already reverted (same root cause as the
+   region-detail-map ski/surf pins, region-detail-map.css). */
+@media (hover: hover) {
+  .event-place__copy:hover {
+    color: var(--color-primary);
+    opacity: 1;
+  }
+}
+
 .event-place__copy:focus-visible {
+  opacity: 1;
+}
+
+/* Just-copied cue — green icon plus the visible "Full address copied" confirmation (same string
+   on phone and desktop). region-data.js clears .is-copied after 2s, and only one row at a time. */
+.event-place.is-copied .event-place__copy {
   color: var(--color-primary);
   opacity: 1;
 }
@@ -308,8 +238,12 @@
   height: 12px;
 }
 
+/* Visible on both viewports (was sr-only) — the copy confirmation. Empty except right after a
+   copy. */
 .event-place__status {
-  font-size: 0.75rem;
+  margin-left: 4px;
+  font-size: 13px;
+  font-weight: 500;
   color: var(--color-primary);
   white-space: nowrap;
 }
@@ -318,43 +252,210 @@
   display: none;
 }
 
-/* --- Pager (month > 5 events) -------------------------------------- */
+/* Desktop: icon + tooltip only — the label stays hidden here always; .event-place__status
+   (a sibling, outside the button) carries the confirmation instead. Phone overrides this in its
+   own media block below to show the label and drive the confirmation through it in place. */
+.event-place__copy-label {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .event-place__copy {
+    transition: none;
+  }
+}
+
+/* --- Pager (list > 5) — the existing ‹ 1 / 3 › control, restyled --------- */
 
 .event-pager {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  margin-top: var(--space-3);
+  gap: 8px;
+  padding-top: 14px;
 }
 
+/* Identical to the region-page hero-gallery prev/next arrows (region-page.css
+   .region-hero-gallery__nav) — same 34px square, --radius-md corners, border/hover colours, and
+   now the same ‹ › glyphs and [prev][count][next] order too — one stepper control, two contexts.
+   The 44px tap target comes from a pseudo-element on phone (below). Keep in sync with
+   .region-hero-gallery__nav. */
 .event-pager__btn {
-  min-width: 2rem;
-  padding: var(--space-1) var(--space-2);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   font: inherit;
+  font-size: 1rem;
   line-height: 1;
-  color: var(--color-text);
-  background: var(--color-surface);
+  color: var(--color-text-soft);
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   cursor: pointer;
 }
 
-.event-pager__btn:hover:not(:disabled) {
+.event-pager__btn:hover:not(:disabled),
+.event-pager__btn:focus-visible:not(:disabled) {
+  background: var(--color-surface);
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
+/* Border stays full strength — only the glyph drops to ~40% ink, so a disabled arrow reads as
+   unavailable, not broken. */
 .event-pager__btn:disabled {
-  opacity: 0.4;
+  color: color-mix(in srgb, var(--color-text-soft) 40%, transparent);
   cursor: default;
 }
 
+/* Same Muted colour as the region-hero-gallery counter (region-page.css's
+   .region-gallery__counter, also a "1 / N" pagination readout) — this was full Ink, noticeably
+   heavier/brighter than its hero-gallery counterpart despite being the same kind of control. */
 .event-pager__status {
-  font-size: var(--font-size-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+/* "1–5 of 17 in October" / "… running now" range line, trailing the pager. */
+.event-pager__range {
+  margin-left: 4px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.event-pager__range:empty {
+  display: none;
+}
+
+/* --- Zero-events empty state --------------------------------------- */
+
+.event-empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 22.25rem;
+  padding: 0;
+}
+
+.event-empty__chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3rem;
+  flex-shrink: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-primary-tint-border);
+  border-radius: var(--radius-sm);
+}
+
+.event-empty__icon {
+  width: 22px;
+  height: 22px;
+  color: var(--color-text-muted);
+}
+
+.event-empty__text {
+  margin: 0;
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
 .region-loading {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+}
+
+/* --- Phone: grow control hit areas to >=44px (DESIGN.md § Accessibility) ------------
+   Padding only — the Ongoing/Upcoming pills and pager buttons keep their designed look, the tap
+   target grows. */
+@media (max-width: 767.98px) {
+  .event-tabs__tab {
+    padding-block: 12px;
+  }
+
+  /* 44px tap target without resizing the visible pill — an invisible centred hit area
+     (DESIGN.md § Mobile). */
+  .event-pager__btn::before,
+  .event-months__tab::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    min-width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+
+  .event-months__tab {
+    position: relative;
+  }
+}
+
+/* --- 900 and below: hover can't be assumed (DESIGN.md § Mobile), so the copy control carries
+   its "Copy full address" label like it does on phone, not just a tooltip, and grows to a 44px
+   tap target with padding pulled back by a negative margin. --- */
+@media (max-width: 900px) {
+  .event-place__copy {
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    /* pull the oversized target back so it doesn't inflate the address row */
+    margin: -11px 0 -11px 2px;
+    padding: 11px 6px;
+    opacity: 1;
+  }
+
+  .event-place__copy-label {
+    display: inline;
+    font-size: 0.8125rem;
+  }
+
+  /* .event-place__status (the desktop confirmation slot, a sibling outside the button with its
+     own margin-left) is what desktop uses since its label stays permanently hidden — but reusing
+     it here, as a second element popping in beside a now icon-only button, landed at a visibly
+     different indent than where the label text used to sit. Hide it on phone; the label itself
+     carries the confirmation in place instead (region-data.js writes the same "Full address
+     copied" string into both elements, so nothing needs to change here in the future). */
+  .event-place__status {
+    display: none;
+  }
+}
+
+/* --- Phone: rows stack (date → name → place) ----------------------- */
+
+@media (max-width: 599.98px) {
+  .event-list {
+    min-height: 27rem;
+  }
+
+  .event-card {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .event-empty {
+    min-height: 27rem;
+  }
+
+  .event-place {
+    flex-wrap: wrap;
+    gap: 2px 10px;
+  }
+
+  .event-pager {
+    flex-wrap: wrap;
+  }
+
+  .event-pager__range {
+    width: 100%;
+    margin-left: 0;
+  }
 }

@@ -1,12 +1,12 @@
-/* .content-page (base.css) provides the centered reading-width column this page uses;
+/* .content-page (base.css) provides the site-shell-width column every content page uses;
    .region-header keeps its own narrower 65ch cap for the intro text specifically, nested inside
    the wider .content-page container for grids/galleries. */
 
 /* Shared placeholder box for attraction cards whose KTO record has no licensed image
-   (`imageLicense` null) — never render an unlicensed image; show this instead. */
+   (`imageLicense` null) — never render an unlicensed image; show this instead. A plain #F7F9F8
+   fill holding the slot's shape (DESIGN.md § Empty & fallback states), no wireframe border. */
 .media-placeholder {
   background: var(--color-surface);
-  border: 1px dashed var(--color-border);
   border-radius: var(--radius-sm);
 }
 
@@ -16,21 +16,52 @@
   color: var(--color-text-muted);
 }
 
-/* Thin rule separating major page sections (Rough map+guides / Living hubs+Festivals /
-   Places to see nearby / Local food / Living Info) — the page reads as one undifferentiated
-   block without it. */
-.section-divider {
-  margin: var(--space-8) 0;
-  border: none;
-  border-top: 1px solid var(--color-border);
+/* Photo-licence links (e.g. "CC BY 3.0 ↗") are outbound — orange with the ↗, per the palette. */
+.data-provenance a {
+  color: var(--color-accent);
+  text-decoration: underline;
 }
 
+/* On the region page the galleries sit directly above their KTO source line — give it more air
+   than the default so the credit reads as its own foot-of-block note (design reference 5b). */
+.region-page .data-provenance {
+  margin-top: 28px;
+}
+
+/* Breadcrumb row under the nav (DESIGN.md § Recurring parts): 13px muted, hairline underneath. */
+.region-breadcrumb {
+  margin-bottom: 28px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border-soft);
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.region-breadcrumb a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.region-breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.region-breadcrumb__here {
+  color: var(--color-text);
+}
+
+/* Plain muted line — no framed box (the dashed border read as "broken" / placeholder). */
 .empty-state {
-  padding: var(--space-4);
-  border: 1px dashed var(--color-border);
-  border-radius: var(--radius-md);
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
+  line-height: 1.6;
+}
+
+/* The only links inside an empty state are the "browse the KTO site ↗" outbound fallbacks —
+   orange with the ↗, per the DESIGN.md palette. */
+.empty-state a {
+  color: var(--color-accent);
+  text-decoration: underline;
 }
 
 .region-header {
@@ -46,6 +77,7 @@
 }
 
 .region-header__ko {
+  font-family: var(--font-family-ko);
   font-weight: 400;
   color: var(--color-text-muted);
   font-size: var(--font-size-lg);
@@ -60,58 +92,283 @@
   color: var(--color-text-muted);
 }
 
-/* Activity pills (Gangwon-do first; other regions still fall back to the plain hashtag
-   list above until they get their own activityTags entry in regions.json). */
-.region-header__tags--activity li {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: var(--space-1) var(--space-3);
-  border: 1px solid var(--color-primary-tint-border);
-  background: var(--color-primary-tint);
-  color: var(--color-primary-dark);
-  border-radius: 999px;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-}
-
 .region-header__intro {
   margin-top: var(--space-3);
 }
 
-/* Telegraph-style season line: same row shape as the tags above it, but plain text columns
-   (icon + shorthand) instead of pill badges — a table's alignment without table borders.
-   Dropping the 65ch cap (inherited from .region-header__tags) and indenting from the body
-   text keeps surf/ski/hiking on one row instead of wrapping under the paragraph width. */
-/* ul.region-header__tags--season (not just .region-header__tags--season): base.css's
-   `ul[class] { margin: 0 }` reset has equal specificity to a bare class selector and would
-   otherwise silently win and zero out margin-top. */
-ul.region-header__tags--season {
+/* Season line (design reference 5b): orange dot → bold season name → its window, as wrapping
+   plain-text items. ul.* selector — base.css's `ul[class] { margin: 0 }` reset ties with a bare
+   class and would otherwise zero the margin-top. */
+ul.region-seasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 24px;
   max-width: none;
-  gap: var(--space-1) var(--space-4);
-  margin-top: var(--space-4);
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-.region-header__tags--season li {
-  display: inline-flex;
+.region-seasons li {
+  display: flex;
   align-items: baseline;
-  gap: var(--space-1);
+  gap: 8px;
 }
 
-/* Region cover photo (ROADMAP_TODO.md Phase 23) — shorter/contained version of the home-page
-   hero's media+credit pattern (hero.css), not full-bleed: region pages have a lot of content
-   below and aren't the landing page, so it sits inside .content-page's normal width instead of
-   breaking out edge-to-edge. */
+.region-seasons__dot {
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent-rule);
+  transform: translateY(-2px);
+}
+
+.region-seasons strong {
+  font-weight: 600;
+}
+
+.region-seasons li > span:last-child {
+  color: var(--color-text-soft);
+}
+
+.region-seasons strong {
+  color: var(--color-text);
+}
+
+/* ── Region-detail headline block (design reference 5b/5d) ────────────────────────────────────
+   Scoped to .region-page (region.njk's wrapper) so /visa-info/ and /settling-in/ — which reuse
+   the plain .region-header — keep their current styling this round. Layout: orange 56×3 rule →
+   H1 + Korean name → vibe-tag pills → intro paragraphs → (Gangwon-do only) season line. */
+.region-page .region-header__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 24px;
+}
+
+.region-page .region-header h1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  max-width: none;
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.region-page .region-header__ko {
+  font-size: clamp(1rem, 0.9rem + 0.4vw, 1.125rem);
+}
+
+.region-page .region-header__tags--vibe {
+  max-width: none;
+  gap: 7px;
+  margin: 14px 0 0;
+}
+
+.region-page .region-header__tags--vibe li {
+  padding: 7px 15px;
+  border: 1px solid var(--color-primary-tint-border);
+  background: var(--color-vibe-tag-bg);
+  color: var(--color-primary-dark);
+  border-radius: 22px;
+  font-size: clamp(0.875rem, 0.84rem + 0.15vw, 0.9375rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.region-page .region-header__intro {
+  max-width: 66ch;
+  margin-top: 14px;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+
+.region-page .region-header__intro:first-of-type {
+  margin-top: 18px;
+  font-size: var(--font-size-base);
+}
+
+/* ── Headline block: two columns on desktop (design reference 5b) ─────────────────────────────
+   Left = rule → H1 → vibe tags → intro → season line. Right = (Gangwon only) furnished-rent
+   recap card, then the capital-area note plate. One column below 900px, aside after the intro.
+   Every region page uses the split so the note plate fills the right column at a consistent
+   width; the county page (07d) reuses this block too. */
+.region-page .region-header {
+  display: grid;
+  gap: 24px;
+  margin-bottom: var(--space-8);
+}
+
+.region-page .region-header__aside {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* From 900px there's room for the aside (rent recap / note plate) beside the intro instead of
+   stacked beneath it — below that it stays single-column. */
+@media (min-width: 900px) {
+  .region-page .region-header--split {
+    grid-template-columns: 1.35fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+}
+
+/* Furnished short-term rent recap (Gangwon-do only — the one region with a market scan). */
+.rent-summary {
+  padding: 20px 22px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.rent-summary__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.rent-summary__label {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-text-muted);
+}
+
+.rent-summary__figure {
+  font-size: 24px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.rent-summary__note {
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+/* Note plate (DESIGN.md § Recurring parts): a line of text + a trailing "Visa info →" link.
+   Green tint = "easier" (non-capital, lower income floor), orange tint = "stricter" (capital
+   area). Capital-area regions also link "population-decline counties" inline. Copy is inline
+   microcopy — no _data home yet (task-04 pattern). */
+.note-plate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 10px;
+}
+
+.note-plate--easier {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border);
+}
+
+.note-plate--stricter {
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent-rule);
+}
+
+.note-plate__text {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--color-text-soft);
+}
+
+/* Inline "population-decline counties" link — in-site, so green (DESIGN.md palette). */
+.note-plate__text a {
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+/* Both note-plate links point to in-site pages with a → arrow, so both are green
+   (DESIGN.md palette: green = in-site) — only the plate's tint differs by "easier"/"stricter". */
+.note-plate__link {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.note-plate__link:hover,
+.note-plate__link:focus-visible {
+  text-decoration: underline;
+}
+
+/* Phone: the notice text wraps, so a trailing action beside it collides with the inline link.
+   Stack — notice first, action on its own line beneath it, left-aligned. */
+@media (max-width: 767.98px) {
+  .note-plate {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* ── "Around the region" cover gallery (DESIGN.md § region page order; design reference 5b/5d) ──
+   A heading + sub, a horizontal scroll-snap strip of photos (one full slide plus a peek of the
+   next), a "1 / N" counter and prev/next arrows, then the KTO provenance line below. The strip
+   scrolls/swipes with zero JS (same pattern as .attraction-list); region-hero-gallery.js layers
+   the counter, arrows and autoplay loop on top. Region-page-exclusive markup — safe to own these
+   selectors outright (static-pages.css reuses .region-header/.region-section, not .region-hero). */
+.region-gallery {
+  margin: var(--space-6) 0 var(--space-8);
+}
+
+.region-gallery__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px 24px;
+  margin-bottom: 14px;
+}
+
+.region-gallery__head h2 {
+  margin: 0 0 4px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.region-gallery__sub {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Arrows + counter are a desktop convenience only — the phone gallery is swipe-only (design 5d),
+   which also keeps the 34px arrows off the ≥44px-tap-target requirement. */
+.region-gallery__controls {
+  display: none;
+}
+
+.region-gallery__counter {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 .region-hero {
   position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  border-radius: var(--radius-md);
-  margin-bottom: var(--space-6);
-}
-
-.region-hero--placeholder {
-  background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
 }
 
 .region-hero__img {
@@ -120,13 +377,9 @@ ul.region-header__tags--season {
   object-fit: cover;
 }
 
-/* Gallery track: plain CSS scroll-snap strip, one full-width slide per "page" — swipeable/
-   scrollable with zero JS (same pattern as .attraction-list). region-hero-gallery.js only adds
-   the optional prev/next buttons + dot indicators on top. */
 .region-hero-gallery__track {
   display: flex;
-  width: 100%;
-  height: 100%;
+  gap: 14px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
@@ -138,106 +391,77 @@ ul.region-header__tags--season {
 
 .region-hero-gallery__slide {
   position: relative;
-  flex: 0 0 100%;
-  width: 100%;
-  height: 100%;
+  flex: 0 0 min(600px, 82%);
+  height: clamp(210px, 52vw, 400px);
   margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
   scroll-snap-align: start;
 }
 
 .region-hero-gallery__nav {
-  position: absolute;
-  top: 50%;
-  z-index: 2;
-  width: 36px;
-  height: 36px;
-  transform: translateY(-50%);
-  border: none;
-  border-radius: 50%;
-  background: rgba(10, 10, 10, 0.45);
-  color: #fff;
-  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text-soft);
+  font-size: 1rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .region-hero-gallery__nav:hover,
 .region-hero-gallery__nav:focus-visible {
-  background: rgba(10, 10, 10, 0.7);
+  background: var(--color-surface);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.region-hero-gallery__nav--prev {
-  left: var(--space-3);
-}
-
-.region-hero-gallery__nav--next {
-  right: var(--space-3);
-}
-
-.region-hero-gallery__dots {
-  position: absolute;
-  bottom: var(--space-3);
-  left: 50%;
-  z-index: 2;
-  display: flex;
-  gap: var(--space-2);
-  transform: translateX(-50%);
-}
-
-.region-hero-gallery__dot {
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-}
-
-.region-hero-gallery__dot[aria-current="true"] {
-  background: #fff;
-}
-
-.region-hero__credit {
-  position: absolute;
-  right: var(--space-2);
-  bottom: var(--space-2);
-  z-index: 2;
-  margin: 0;
-  padding: 2px var(--space-2);
-  color: #fff;
-  font-size: var(--font-size-xs, 0.75rem);
-  background: rgba(10, 10, 10, 0.55);
-  border-radius: 999px;
-}
-
-.region-hero__credit a {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* Per-slide attraction/city caption (EN + KO, ROADMAP_TODO.md Phase 23 finalization) — left side,
-   opposite .region-hero__credit, so the two never overlap. Korean line is a plain search aid
-   (CLAUDE.md rule 9), not a translation UI, so it's set smaller/muted rather than paired 1:1. */
+/* Per-slide caption: full-width gradient overlay along the bottom edge (design 5b). Title line
+   is the KTO photo title; the sub line carries the city plus the Korean name as a plain
+   cross-reference aid (CLAUDE.md rule 9), not a 1:1 translation. */
 .region-hero__caption {
   position: absolute;
-  left: var(--space-3);
-  bottom: var(--space-2);
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   margin: 0;
-  padding: var(--space-1) var(--space-2);
-  max-width: calc(100% - var(--space-6) * 3);
+  padding: 32px 20px 16px;
   color: #fff;
-  background: rgba(10, 10, 10, 0.55);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+  background: linear-gradient(rgba(22, 32, 28, 0), rgba(22, 32, 28, 0.9));
 }
 
-.region-hero__caption-ko {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: var(--font-size-xs, 0.75rem);
+.region-hero__caption-title {
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
+  font-weight: 600;
+}
+
+.region-hero__caption-sub {
+  font-size: var(--font-size-sm);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.region-hero__credit {
+  margin: 10px 0 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+@media (min-width: 768px) {
+  .region-gallery__controls {
+    display: flex;
+    align-items: center;
+    /* 8px, matching .event-pager's gap (event-timeline.css) — same stepper control, same rhythm. */
+    gap: 8px;
+  }
 }
 
 .region-section {
@@ -245,355 +469,584 @@ ul.region-header__tags--season {
   scroll-margin-top: var(--space-4);
 }
 
+/* Task 06: flat-scroll region page — 32px between sections (DESIGN.md § region page order),
+   scoped so the wider .region-section default still holds on visa-info / settling-in. */
+.region-page .region-section {
+  margin-bottom: 32px;
+}
+
+/* The page ends on a one-line photo credit, not a full block — trim the trailing gap before the
+   footer so it doesn't read as an empty section. */
+.region-page .region-section:last-child {
+  margin-bottom: var(--space-4);
+}
+
 /* base.css zeroes all heading margins, so every block title on this page sat flush against its
    content until this rule — restore the gap only within region-page contexts rather than
    globally, since other pages rely on the zeroed default. */
 .region-section > h2,
 .region-section > h3,
-.region-block > h3,
-.region-overview-grid__cities > h3,
-.region-overview-grid__events > h3 {
+.region-band__col > h2 {
   margin-bottom: var(--space-3);
 }
 
-/* "Useful guides" reads as supporting/source material, not a page section on the level of
-   "Rough region map" or "Living hubs" above and below it — smaller and muted rather than the
-   full h3 treatment so it doesn't compete with the actual section titles. */
-.region-block__title--sub {
-  font-size: var(--font-size-base);
+/* Section headings on the flat region page are the DESIGN.md § Type "Section H2" size — the
+   design reference sets every region-page section heading at 20px / 600 / -0.015em. */
+.region-page .region-section > h2,
+.region-band__col > h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+/* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present. */
+.region-page .region-section > h2:has(+ .region-section__sub),
+.region-band__col > h2:has(+ .region-section__sub) {
+  margin-bottom: 4px;
+}
+
+.region-section__sub {
+  margin: 0 0 18px;
+  max-width: 62ch;
+  font-size: var(--font-size-sm);
   color: var(--color-text-muted);
 }
 
-/* Overview tab: cities + event calendar, cities first when stacked (architecture.md §9). */
-.region-overview-grid {
+/* ── Guides strip (Gangwon-do only; design reference 5b) ──────────────────────────────────────
+   A panel with the orange tick + "Guides:" label on its own line, then the guide links sitting
+   together on the line below (each an orange underlined outbound link with its source + date
+   underneath). */
+.region-guides {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 15px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.region-guides__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.region-guides__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+}
+
+/* Phone: tighten the panel and the gap between the two links so both fit on one line. */
+@media (max-width: 767.98px) {
+  .region-guides {
+    padding: 14px;
+  }
+
+  .region-guides__items {
+    gap: 10px 16px;
+  }
+
+  .region-guides__link {
+    font-size: 13px;
+  }
+}
+
+.region-guides__tick {
+  flex-shrink: 0;
+  width: 3px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+}
+
+.region-guides__label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.region-guides__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.region-guides__link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+.region-guides__meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Costs + festivals band (DESIGN.md § region page order) ───────────────────────────────────
+   One primary-tinted band that does the section-divider job: costs left, festivals right on
+   desktop, stacked on phone. The columns sit flush with the page column (same left/right edge as
+   the gallery and every other section); the tint + hairlines bleed 16px past that on each side
+   via ::before, so it still reads as a full-width colour break without a viewport-wide full-bleed
+   (which would add a scrollbar) and without indenting the content (design reference 5b). */
+.region-band {
+  position: relative;
+  margin-block: 32px;
+  padding-block: var(--space-6);
+}
+
+.region-band::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  background: var(--color-primary-tint);
+  border-block: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.region-band__inner {
   display: grid;
   gap: var(--space-6);
 }
 
+/* Costs + festivals sit side by side from 900px; below that they stack, and the cost block is
+   capped to its desktop measure so it doesn't stretch to an unreadable line length. */
 @media (min-width: 900px) {
-  .region-overview-grid {
+  .region-band__inner {
     grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
   }
 }
 
-/* Gangwon-do only: a third "cost of living" block. Named areas put it right after Living hubs
-   when the grid stacks to one column (mobile), but as a full-width row below both columns on
-   desktop — source order alone can't give it two different positions like that. */
-.region-overview-grid--gangwon {
-  grid-template-areas:
-    "cities"
-    "cost"
-    "events";
-}
-
-.region-overview-grid--gangwon .region-overview-grid__cities {
-  grid-area: cities;
-}
-
-.region-overview-grid--gangwon .region-overview-grid__cost {
-  grid-area: cost;
-}
-
-.region-overview-grid--gangwon .region-overview-grid__events {
-  grid-area: events;
-}
-
-@media (min-width: 900px) {
-  .region-overview-grid--gangwon {
-    grid-template-areas:
-      "cities events"
-      "cost cost";
+@media (max-width: 899.98px) {
+  .region-band__col--costs {
+    max-width: 32rem;
   }
 }
 
-.city-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.city-list__item {
-  padding: var(--space-3);
+/* Gangwon-do cost table (design reference 5b): white card, one figure per row on a light rule. */
+.cost-table {
+  margin: 0 0 14px;
+  padding: 2px 18px;
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: 10px;
 }
 
-.city-list__photo {
-  width: 100%;
-  max-width: 320px;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-2);
+.cost-table > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--color-border-soft);
 }
 
-.city-list__photo-caption {
+.cost-table > div:last-child {
+  border-bottom: 0;
+}
+
+.cost-table dt {
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.cost-table dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cost-note {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+.cost-link {
+  margin: 14px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cost-link a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ── Gyeonggi-do population-decline counties (population-decline-counties.njk) ─────────────────
+   Redesign style: reuses the wide .region-page shell + two-column .region-header--split headline
+   (rule → H1 → Korean name → intro; aside holds the threshold card instead of the rent recap).
+   Below: a source note, a "by tier" section with two chip-labelled scroll strips of dark photo
+   cards, and a placeholder plate for the future distance-from-Seoul map. */
+.county-page__ko {
+  margin: 6px 0 0;
+  font-family: var(--font-family-ko);
+  font-size: 17px;
+  color: var(--color-text-muted);
+}
+
+/* Tinted threshold-summary card (design reference 6c). Sits in the headline aside; rows and the
+   lead line are divided by the soft primary hairline, no inner card. */
+.threshold-card {
+  padding: 18px 20px;
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  border-radius: 12px;
+}
+
+.threshold-card__lead {
+  margin: 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-primary-tint-border-soft);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+.threshold-card__table {
+  margin: 0;
+}
+
+.threshold-card__table > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.threshold-card__table > div:last-child {
+  border-bottom: 0;
+}
+
+.threshold-card__table dt {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.threshold-card__table dd {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.threshold-card__note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.threshold-card__links {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  margin: -6px 0 var(--space-2);
-  font-size: var(--font-size-xs, 0.75rem);
-  color: var(--color-text-muted);
+  gap: 7px;
+  margin: 12px 0 0;
 }
 
-.city-list__photo-caption-ko {
-  color: var(--color-text-muted);
+.threshold-card__links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
 }
 
-.city-list__ko {
-  font-weight: 400;
-  color: var(--color-text-muted);
+.threshold-card__links a:hover {
+  text-decoration: underline;
 }
 
-.city-list__badge {
-  display: inline-block;
-  margin-top: var(--space-1);
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--font-size-sm);
-  font-weight: 700;
-  color: var(--color-primary-dark);
+/* Source note — panel with an orange tick, "Source:" on its own line, body below (design ref 6c). */
+.source-note {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px 18px;
   background: var(--color-surface);
-  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
 }
 
-.city-list__workation {
-  margin-top: var(--space-2);
-  font-size: var(--font-size-sm);
+.source-note__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
-/* Same icon+text pictogram treatment as .region-header__tags--season (ul.* selector for the
-   same reason: base.css's `ul[class] { margin: 0 }` reset ties with a bare class selector). */
-ul.city-list__travel-times {
+.source-note__tick {
+  flex-shrink: 0;
+  width: 3px;
+  height: 15px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+}
+
+.source-note__text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+}
+
+.source-note__text a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* "The seven, by tier" — one chip-labelled row + a horizontal scroll-snap strip per tier
+   (same no-JS pattern as .attraction-list / .region-hero-gallery__track). */
+.tier-group {
+  margin-top: 22px;
+}
+
+.tier-group:first-of-type {
+  margin-top: 0;
+}
+
+.tier-label {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-4);
-  margin-top: var(--space-2);
-  font-size: var(--font-size-sm);
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.tier-chip {
+  flex-shrink: 0;
+  padding: 4px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.tier-chip--designated {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  color: var(--color-primary);
+}
+
+.tier-chip--watch {
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent-rule);
+  color: var(--color-accent);
+}
+
+.tier-grid {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 0 0 4px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.tier-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.tier-card {
+  flex: 0 0 264px;
+  scroll-snap-align: start;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tier-card__figure {
+  position: relative;
+  margin: 0;
+  height: 150px;
+  background: var(--color-surface);
+}
+
+.tier-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tier-card__spot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 40px 14px 12px;
+  background: linear-gradient(
+    rgba(22, 32, 28, 0),
+    rgba(22, 32, 28, 0.4) 45%,
+    rgba(22, 32, 28, 0.9)
+  );
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+
+.tier-card__spot-en {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.tier-card__spot-ko {
+  display: block;
+  font-family: var(--font-family-ko);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tier-card__body {
+  padding: 14px 16px;
+}
+
+.tier-card__name {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.tier-card__ko {
+  font-family: var(--font-family-ko);
+  font-weight: 400;
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
-.city-list__travel-times li {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--space-1);
+.tier-card__metro {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 
-/* --- Gyeonggi-do population-decline counties (population-decline-counties.njk) -------------
-   Two labelled rows (designated / watch-list), each a responsive card grid. County name sits
-   above the photo; the photo's attraction label overlays the image bottom-left, same treatment
-   as the region hero-gallery captions (.region-hero__caption). */
-
-/* One notch down from the shared region h1 so this longer title clears the reading column on a
-   single line at desktop width (still wraps on narrow, which is fine there). */
-.county-header h1 {
-  font-size: clamp(1.75rem, 1.4rem + 1.5vw, 2.25rem);
+@media (min-width: 768px) {
+  .tier-card {
+    flex-basis: 288px;
+  }
 }
 
-/* Trim the trailing whitespace before the footer — this page ends on a one-line photo credit,
-   not a full content block. */
-.content-page--tight-end .region-section:last-child {
-  margin-bottom: var(--space-2);
-}
-
-.county-group {
-  margin-top: var(--space-5);
-}
-
-.county-group__title {
-  margin-bottom: var(--space-3);
-  font-size: var(--font-size-lg);
-}
-
-/* Horizontal scroll-snap strip (same pattern as .attraction-list) rather than a wrapping grid,
-   so each group stays one row and the watch-list group below stays in view. */
-.county-grid {
+/* Attractions + dishes: horizontal scroll-snap strips (no carousel library, no JS). The
+   scrollbar track is hidden (design reference 5b/5d) — the peek of the next card is the
+   scroll affordance. */
+.attraction-list,
+.dish-list {
   display: flex;
-  gap: var(--space-4);
+  gap: 12px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 var(--space-2);
+  scrollbar-width: none;
+  padding-bottom: 2px;
 }
 
-.county-card {
+.attraction-list::-webkit-scrollbar,
+.dish-list::-webkit-scrollbar {
+  display: none;
+}
+
+.attraction-card,
+.dish-card {
   flex: 0 0 240px;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
 }
 
-.county-card__name {
-  margin: 0;
-  font-size: var(--font-size-base);
-}
-
-.county-card__ko {
-  font-weight: 400;
-  color: var(--color-text-muted);
-}
-
-.county-card__metro {
-  margin: var(--space-1) 0 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.county-card__figure {
-  position: relative;
-  margin: 0;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.county-card__photo {
-  display: block;
+.attraction-card__media,
+.dish-card__media {
+  aspect-ratio: 3 / 2;
   width: 100%;
-  aspect-ratio: 4 / 3;
   object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 9px;
 }
 
-.county-card__caption {
-  position: absolute;
-  left: var(--space-2);
-  bottom: var(--space-2);
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  max-width: calc(100% - var(--space-4));
-  padding: 2px var(--space-2);
-  color: #fff;
-  background: rgba(10, 10, 10, 0.55);
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-xs, 0.75rem);
+/* region-data.js renders the attraction title as an <h4> — bring it down to the design's
+   card-title size (15px / 500), not base.css's page-scale h4. */
+.attraction-card h4,
+.dish-card__name {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
   line-height: 1.3;
 }
 
-.county-card__caption-ko {
-  color: rgba(255, 255, 255, 0.75);
-  font-size: 0.6875rem;
-}
-
-/* Attractions: horizontal scroll-snap strip, no carousel library, no JS required. */
-.attraction-list {
-  display: flex;
-  gap: var(--space-4);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: var(--space-2);
-}
-
-.attraction-card {
-  flex: 0 0 auto;
-  width: 220px;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.attraction-card__media {
-  aspect-ratio: 4 / 3;
-  width: 100%;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-}
-
-.attraction-card__address {
-  font-size: var(--font-size-sm);
+.attraction-card__address,
+.dish-card__note {
+  margin: 2px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
   color: var(--color-text-muted);
-}
-
-/* Food: horizontal scroll-snap strip, same pattern as .attraction-list — no carousel
-   library, no JS. One shared credit line sits below the strip (.data-provenance). */
-.dish-list {
-  display: flex;
-  gap: var(--space-4);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: var(--space-2);
-}
-
-.dish-card {
-  flex: 0 0 auto;
-  width: 240px;
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.dish-card__media {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-1);
 }
 
 .dish-card__ko {
+  font-family: var(--font-family-ko);
   font-weight: 400;
   color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
+  font-size: 12px;
 }
 
-.dish-card__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  margin: 0;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+/* Phone: open up the text block so it doesn't crowd the card edges. */
+@media (max-width: 767.98px) {
+  .attraction-card,
+  .dish-card {
+    padding-bottom: 14px;
+  }
+
+  .dish-card__ko {
+    display: block;
+    margin-top: 6px;
+  }
+
+  .attraction-card__address,
+  .dish-card__note {
+    margin-top: 8px;
+  }
+}
+
+/* Spicy badge — a white pill over the top-left of the photo (design reference 5b), not an
+   inline emoji. */
+.dish-card__figure {
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.dish-card__figure .dish-card__media {
+  margin-bottom: 0;
 }
 
 .dish-card__spice {
-  color: var(--color-primary-dark);
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  padding: 3px 9px;
+  font-size: 11px;
   font-weight: 500;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border-radius: 20px;
 }
 
-/* Generic spaced block within a tab panel — used by Overview's Attractions/Local food blocks
-   and Living Info's Cost/Getting-around blocks alike. */
-.region-block {
-  margin-bottom: var(--space-6);
-}
-
-/* "Useful guides" — same accent-bordered card treatment as .cost-card (region-block h3 title
-   above, callout box below) for visual consistency between the two source-backed blocks on this
-   page. Each guide's label (SURF/SKI) and its linked source domain sit on the same line/baseline
-   rather than stacked, so the link reads at the same level as the naming instead of below it. */
-.region-guides-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.region-guides-card__item {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: 0;
-}
-
-.region-guides-card__label {
-  font-size: var(--font-size-xs, 0.75rem);
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.region-guides-card__link {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-link);
-  text-decoration: underline;
+/* Light grey divider between the attractions strip and the dishes strip (design reference 5b). */
+.region-section--food {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-6);
 }
 
 .mock-note {
@@ -616,33 +1069,6 @@ ul.city-list__travel-times {
 
 .cost-summary dd {
   margin: 0;
-  font-weight: 700;
-}
-
-.transport-summary__airports {
-  margin: 0 0 var(--space-2);
-  padding-left: var(--space-5);
-}
-
-/* Callout-style card (matches the site's "Quick answer" reference pattern): a left accent
-   stripe rather than an even border-all-around box, so the cost paragraph reads as a called-out
-   fact rather than a plain text block. */
-.cost-card {
-  padding: var(--space-4) var(--space-5);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-left: 4px solid var(--color-primary);
-  border-radius: var(--radius-md);
-}
-
-.cost-card p {
-  margin: 0;
-}
-
-/* Muted/de-emphasized inline figures within the Cost-of-living paragraph — grey rather than
-   bold-black, since these are approximate estimates, not the confident stat-chip numbers used
-   elsewhere on this page. */
-.cost-figure {
-  color: var(--color-text-muted);
   font-weight: 600;
 }
+

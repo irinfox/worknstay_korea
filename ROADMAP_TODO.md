@@ -125,7 +125,7 @@ Depends on 12.
 - [ ] 360/768/1280 + landscape-phone on hero/calculator/caption/map.
 - [ ] Real iOS Safari, both orientations.
 - [ ] Region-page tabs (single-panel switching) and the shared `.content-page` centered layout
-      (region pages, `/visa-info/`, `/communities/`) still need a real DevTools-preset pass.
+      (region pages, `/visa-info/`, `/settling-in/`) still need a real DevTools-preset pass.
 - Verify: each checkpoint recorded.
 
 ## Phase 29 — Contest deliverables (Sept 8–21)

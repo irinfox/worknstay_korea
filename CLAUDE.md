@@ -33,6 +33,9 @@ the durable, brief set of project-scope agreements.
 2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.
 - keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase or marked as undone during current phase.
 
+## Design conventions
+Follow DESIGN.md for all visual decisions (palette, type, spacing, component rules).
+Keep existing site copy — the design HTML is layout/style reference only.
 
 ## Tech stack (do not add to this list without strong justification)
 
@@ -73,10 +76,14 @@ guardrail, not just the list.
 - Rejected *dynamic, hover-triggered* floating popups for the region map info panel — bug-prone
   (edge clipping, z-index, mobile focus-trap). Adopted instead: a **static, always-visible
   infographic** (6 fixed callouts + hand-positioned leader lines, all authored once, nothing
-  computed at runtime) above a width breakpoint, falling back to a single dynamic card below
-  it. The breakpoint is width-only (not a device/orientation check) specifically so wide
-  landscape phones get the infographic too, not just desktop. Border/leader-line/callout
-  highlight on hover (wide) or tap (narrow) is v1, not deferred polish.
+  computed at runtime) above a width breakpoint. The breakpoint is width-only (not a
+  device/orientation check) specifically so wide landscape phones get the infographic too, not
+  just desktop. Border/leader-line/callout highlight on hover (wide) is v1, not deferred polish.
+- Below the breakpoint: a real horizontal scroll-snap **carousel of all 6 region cards + dot
+  indicators** (redesign, superseding the earlier "single card whose content JS overwrites on
+  map tap" approach) — tapping a map region scrolls to the matching real card instead of
+  rewriting one placeholder's content. Simpler no-JS fallback (every card is a real, always-
+  rendered link) and matches the wide-viewport infographic's "all 6 always present" principle.
 - Rejected pure build-time-fetch-and-commit for KTO data after reading the contest FAQ — judges
   check live call history, not just that OpenAPI was used once during a scrape. This is a
   contest-compliance decision, not a taste preference — don't revert to full static-bake for

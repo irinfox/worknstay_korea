@@ -8,7 +8,7 @@
     "isCapitalArea": true,
     "ktoLDongRegnCds": ["11", "28", "41"],
     "ktoAreaCodes": [1, 2, 31],
-    "vibeTags": ["#workation", "#2030s-youth"],
+    "vibeTags": ["capital area", "commute"],
     "nomadScore": 62,
     "shortIntro": "The capital region — best infrastructure, but the toughest visa income threshold. Includes Seoul and Incheon.",
     "longIntro": "Gyeonggi-do wraps around Seoul and Incheon, giving digital nomads the country's densest transit network, fastest internet, and largest coworking scene. It's the capital-tier region for visa purposes, so the income bar is highest — except in a handful of population-decline-designated counties (see the region page for details), which qualify at the lower non-capital threshold.",
@@ -25,13 +25,7 @@
     "ktoLDongRegnCds": ["51"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; previous code \"42\" returned 0 records.",
     "ktoAreaCodes": [32],
-    "vibeTags": ["#workation", "#month-long-stay", "#local-tourism"],
-    "activityTags": [
-      { "emoji": "🏄", "label": "Surf" },
-      { "emoji": "🏔️", "label": "Hiking" },
-      { "emoji": "☕", "label": "Coffee" },
-      { "emoji": "⛷️", "label": "Winter Sports" }
-    ],
+    "vibeTags": ["surf", "mountains", "coffee", "snow"],
     "nomadScore": 74,
     "shortIntro": "Mountains, beaches, and a growing workation-cabin scene along the east coast.",
     "longIntro": [
@@ -47,16 +41,16 @@
     "costOfLivingKey": "gangwon-do",
     "usefulLinks": [
       {
-        "label": "Surfing guide",
-        "activityLabel": "Surf",
+        "label": "Surfing in Korea",
         "url": "https://pack-lightly.com/south-korea/surfspots/",
-        "sourceLabel": "pack-lightly.com"
+        "sourceLabel": "pack-lightly.com",
+        "sourceDate": "May 2026"
       },
       {
-        "label": "Ski resorts guide",
-        "activityLabel": "Ski",
+        "label": "Ski resorts in Korea",
         "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=251052",
-        "sourceLabel": "english.visitkorea.or.kr (KTO)"
+        "sourceLabel": "visitkorea.or.kr",
+        "sourceDate": "Nov 2025"
       }
     ]
   },
@@ -70,7 +64,7 @@
     "ktoLDongRegnCds": ["30", "36110", "43", "44"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; Sejong is the 5-digit code \"36110\", not \"36\".",
     "ktoAreaCodes": [3, 8, 33, 34],
-    "vibeTags": ["#workation", "#month-long-stay"],
+    "vibeTags": ["central", "KTX", "quiet"],
     "nomadScore": 68,
     "shortIntro": "Central and well-connected — an easy KTX ride from Seoul without capital-area prices or thresholds.",
     "longIntro": "Covering Chungcheongbuk-do, Chungcheongnam-do, Daejeon, and Sejong, this region sits at Korea's geographic center with strong KTX rail links to both Seoul and the south. Daejeon's research-institute density gives it a quietly technical, unpretentious feel — good for nomads who want short trips to the capital without living (or paying) there.",
@@ -86,7 +80,7 @@
     "isCapitalArea": false,
     "ktoLDongRegnCds": ["26", "27", "31", "47", "48"],
     "ktoAreaCodes": [4, 6, 7, 35, 36],
-    "vibeTags": ["#workation", "#local-tourism", "#2030s-youth"],
+    "vibeTags": ["coastal", "city", "food"],
     "nomadScore": 71,
     "shortIntro": "Korea's biggest non-capital cities — Busan, Daegu, Ulsan — plus historic Gyeongju and quiet coastal towns.",
     "longIntro": "Gyeongsangbuk-do, Gyeongsangnam-do, Busan, Daegu, and Ulsan give this region the widest range of any non-capital area: a genuine second-city nomad scene in Busan, ancient temples and tombs around Gyeongju, and industrial-turned-creative pockets in Daegu. Non-capital visa thresholds apply throughout.",
@@ -103,7 +97,7 @@
     "ktoLDongRegnCds": ["12", "52"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; \"12\" = merged Jeollanam-do + Gwangju, \"52\" = Jeollabuk-do.",
     "ktoAreaCodes": [5, 37, 38],
-    "vibeTags": ["#local-tourism", "#month-long-stay"],
+    "vibeTags": ["food", "cheapest", "rural"],
     "nomadScore": 65,
     "shortIntro": "Korea's food capital region — Jeonju and Gwangju anchor a slower, flavor-forward southwest.",
     "longIntro": "Jeollabuk-do, Jeollanam-do, and Gwangju are widely considered the heart of Korean cuisine, and the pace here matches: fewer crowds, lower costs, and a strong sense of place. Some of the lowest population density outside Gangwon, which also means some of the most population-decline-support-eligible counties in the country.",
@@ -119,7 +113,7 @@
     "isCapitalArea": false,
     "ktoLDongRegnCds": ["50"],
     "ktoAreaCodes": [39],
-    "vibeTags": ["#workation", "#month-long-stay", "#local-tourism"],
+    "vibeTags": ["island", "slow", "expat"],
     "nomadScore": 78,
     "shortIntro": "Korea's original workation island — volcanic coastline, and the country's most established remote-work culture.",
     "longIntro": "Jeju-do has the longest track record as a Korean remote-work destination, with coworking spaces and month-long-stay guesthouses concentrated around Jeju City and Seogwipo. Island living means higher import costs than the mainland non-capital average, offset by direct flights from Seoul and a mature short/medium-term rental market.",

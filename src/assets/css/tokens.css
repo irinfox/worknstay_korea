@@ -1,33 +1,113 @@
 :root {
-  /* Color */
-  --color-bg: #f9f6f0;
-  --color-surface: #f5f4f1;
-  --color-text: #1c1b19;
-  --color-text-muted: #5c5952;
-  --color-border: #ddd9d1;
-  --color-primary: #1f5c4d;
-  --color-primary-dark: #143d33;
-  /* Pale primary wash — background for the region-page event cards (event-timeline.css). */
-  --color-primary-tint: #e4ede9;
-  --color-primary-tint-border: #cadfd8;
-  /* Event-card sticky-note badges: "long-term" (taupe) vs "this month" (cream). */
-  --color-badge-longterm-bg: #d4c4b7;
-  --color-badge-longterm-text: #3e2723;
-  --color-badge-thismonth-bg: #fef3c7;
-  --color-badge-thismonth-text: #92400e;
-  --color-accent: #c96f34;
-  /* Pale accent wash — "Rough estimates" callout background (city-accordion.css). */
+  /*
+   * Color — the DESIGN.md palette. "Reference tool, not a magazine": white ground, quiet type,
+   * two accent colours only (green = ours / in-site, orange = external / seasonal).
+   */
+  --color-bg: #ffffff;
+  --color-surface: #f7f9f8; /* Panel: info cards, guides strip, map panel */
+  --color-text: #16201c; /* Ink: body text, dark nav bar */
+  --color-text-soft: #33443c; /* Ink soft: secondary paragraphs */
+  --color-text-muted: #5c6660; /* Muted: captions, addresses, source lines */
+  --color-border: #e4e7e4; /* Hairline: card borders */
+  --color-border-soft: #edf0ee; /* Hairline (lighter): row dividers, footer/card-footer rule */
+  --color-primary: #0f7b54; /* Green: primary accent, in-site links, eligible state */
+  --color-primary-dark: #0b5c3f; /* Green deep: vibe-tag text, link hover */
+  /* Pale primary wash — tinted bands, note plates, calculator result plate, homepage region-card
+     mini tags. */
+  --color-primary-tint: #eaf4ef;
+  --color-primary-tint-border: #a9d8c2;
+  /* Softer tint border (DESIGN.md palette lists both #A9D8C2 and #C9E3D6) — used where a full
+     #A9D8C2 hairline reads too heavy, e.g. the region page costs+festivals band. */
+  --color-primary-tint-border-soft: #c9e3d6;
+  /* Slightly deeper mint reserved for the DESIGN.md "Vibe tag" pill (region header + city cards):
+     #DCEFE5 bg / #A9D8C2 border / #0B5C3F text. */
+  --color-vibe-tag-bg: #dcefe5;
+  --color-accent: #c2531a; /* Orange text: outbound links, festival dates, spicy tag */
+  --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
+  /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
   --color-accent-tint-border: #ecd2ab;
+  /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
+     calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
+  --color-result-amber: #f7ead9;
   --color-link: var(--color-primary);
-  --color-link-visited: #3d4f6b;
   --color-focus-ring: #2f6fed;
 
-  /* Region-eligibility states (map + region cards, wired in a later phase) */
+  /* Dark primary nav (DESIGN.md § Recurring parts). */
+  --color-nav-bg: #16201c;
+  --color-nav-link: rgba(255, 255, 255, 0.75);
+  --color-nav-link-active: #ffffff;
+
+  /* Region-eligibility states (map + region cards). Fill-opacity for eligible/partial (set in
+     korea-map.css) was lightened from .55/.85 to .45/.53 — same lightness step between the two
+     states as before (~0.20 in HSL L), just both shifted lighter by the same amount. */
   --color-region-active: var(--color-primary);
-  --color-region-partial: #b8862f;
+  --color-region-partial: #a8d8c2; /* Green light: "Partly eligible" map fill */
   --color-region-ineligible: #b7b2a7;
-  --color-map-sea: #dbe6ea;
+
+  /* Legend swatches render the flat colour the map fills actually composite to (fill token at its
+     fill-opacity over --color-surface, the map ground) — never the raw token at full opacity,
+     which appears nowhere on the map. Recompute these if the fill tokens, their opacities, or the
+     map ground change. */
+  --color-map-legend-active: #8fc0ae; /* #0F7B54 @ .45 over #F7F9F8 */
+  --color-map-legend-partial: #cde8db; /* #A8D8C2 @ .53 over #F7F9F8 */
+  --color-map-legend-ineligible: #d7d6d0; /* #B7B2A7 @ .5 over #F7F9F8 */
+
+  /* Metro/special-city fills (Seoul, Incheon, Daejeon, Sejong, Busan, Daegu, Ulsan, Gwangju) —
+     one explicit flat token per eligibility state, each ~14% darker in lightness than that
+     state's own map-legend fill above, so a city reads as a deeper shade of its province's state
+     rather than a state of its own (no legend entry). Recompute if the legend fills above change. */
+  --color-region-active-metro: #71af98;
+  --color-region-partial-metro: #a3d5bd;
+  --color-region-ineligible-metro: #bcbab0;
+
+  /* Metro hover: the same ~14% lightness cut used above, applied to the *province's own hover*
+     colour instead of to the resting metro tone — same recipe, shifted to start from the hover
+     value, so a metro city's hover jump reads as just as big a jump as the province's own (a
+     smaller/independent hover step looked like the city wasn't reacting at all next to the
+     province's much bigger opacity-driven hover swing). Ineligible reacts on hover too, same as
+     every other state (map hover and region-card cross-hover used to disagree — the card
+     cross-hover already showed a reaction, just the wrong hue, active green — so this makes both
+     react, in this grey tone, rather than picking "neither reacts"). */
+  --color-region-active-metro-hover: #2b7a5e;
+  --color-region-partial-metro-hover: #98d0b5;
+  --color-region-ineligible-metro-hover: #aaa496;
+
+  /* Label halo colours (korea-map.css .region__label) — one per province/metro shape at each
+     state, derived from that shape's own map fill: halo = oklch(min(L_fill + 0.10, 0.96) C_fill
+     H_fill). Same hue and chroma as the fill it sits on (so it reads as "this shape's own colour,
+     lightened" rather than a foreign tint), lightness nudged up just enough to clear the boundary
+     stroke/hatching crossing under the letters. Recompute (see scripts, or any OKLCH calculator)
+     if the corresponding fill token above changes. */
+  --color-halo-active: #aee0ce; /* #8FC0AE (--color-map-legend-active) oklch L+0.10 */
+  --color-halo-active-metro: #90cfb7; /* #71AF98 (--color-region-active-metro) oklch L+0.10 */
+  --color-halo-partial: #def9ec; /* #CDE8DB (--color-map-legend-partial) oklch L+0.10, capped .96 */
+  --color-halo-partial-metro: #c3f6dd; /* #A3D5BD (--color-region-partial-metro) oklch L+0.10 */
+  --color-halo-ineligible: #f3f2ec; /* #D7D6D0 (--color-map-legend-ineligible) oklch L+0.10, capped .96 */
+  --color-halo-ineligible-metro: #dcdad0; /* #BCBAB0 (--color-region-ineligible-metro) oklch L+0.10 */
+
+  /* Hover-step halo variants (korea-map.css .region:hover/:focus-visible .region__label) — same
+     "this shape's own fill, lightened" formula as the resting halos above, recomputed from the
+     shape's *hover* fill so the halo keeps tracking its current appearance rather than freezing at
+     the resting tone while the shape itself visibly darkens underneath. Every state's province
+     fill-opacity jumps to 0.85 on hover, ineligible included — korea-map.css's generic
+     `.region:hover .region__shape` rule is unguarded, there's no ineligible-specific override
+     pulling it back to the resting 0.5 — so ineligible gets its own hover halo too, not a reuse of
+     the resting one. */
+  --color-halo-active-hover: #54ad8a; /* #0F7B54 @ .85 over #F7F9F8, oklch L+0.10 */
+  --color-halo-active-metro-hover: #4c987b; /* #2B7A5E (--color-region-active-metro-hover) oklch L+0.10 */
+  --color-halo-partial-hover: #d9fbeb; /* #A8D8C2 @ .7 over #F7F9F8, oklch L+0.10 capped .96 */
+  --color-halo-partial-metro-hover: #b8f1d5; /* #98D0B5 (--color-region-partial-metro-hover) oklch L+0.10 */
+  --color-halo-ineligible-hover: #e1ddd3; /* #B7B2A7 @ .85 over #F7F9F8, oklch L+0.10 */
+  --color-halo-ineligible-metro-hover: #cac3b5; /* #AAA496 (--color-region-ineligible-metro-hover) oklch L+0.10 */
+
+  /* Tap-selected halo variant (korea-map.css .region--selected .region__label — narrow viewport,
+     region-card.js). Active and ineligible selected provinces composite identically to their
+     hover state (same 0.85 fill-opacity, nothing overrides it back down), so they reuse the hover
+     tokens above. Partial doesn't: .region--selected has no partial-specific fill-opacity
+     override, so a selected Gyeonggi-do sits at the generic 0.85 rather than partial-hover's 0.7 —
+     this token is computed from that actual composite, not a reuse of --color-halo-partial-hover. */
+  --color-halo-partial-selected: #d3fdea; /* #A8D8C2 @ .85 over #F7F9F8, oklch L+0.10 capped .96 */
 
   /* Spacing scale */
   --space-1: 0.25rem;
@@ -39,17 +119,19 @@
   --space-8: 3rem;
   --space-10: 4rem;
 
-  /* Type */
-  --font-family-base: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
-    "Malgun Gothic", "Segoe UI", sans-serif;
+  /* Type (DESIGN.md § Type — two families, no others; loaded via the single Google Fonts link
+     in base.njk). --font-family-base is the Latin default set once on body; --font-family-ko is
+     applied only to elements holding Hangul (region/city/dish names, Korean subheads). */
+  --font-family-base: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
-  --font-size-base: 1rem;
+  --font-size-base: 0.9375rem; /* DESIGN.md § Type — body 15px */
   --font-size-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
   --font-size-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
   --font-size-2xl: clamp(1.625rem, 1.4rem + 1vw, 2.125rem);
   --font-size-3xl: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
   --line-height-tight: 1.2;
-  --line-height-base: 1.55;
+  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65–1.7 */
 
   /* Radius / shadow / z-index */
   --radius-sm: 4px;
@@ -61,23 +143,22 @@
 
   /* Layout */
   --content-max-width: 1200px;
-  /* Narrower reading-width cap for text-heavy content, applied via base.css's .content-page
-     (region pages, /visa-info/, /communities/) — centered via margin auto, distinct from
-     --content-max-width which is the outer site-shell cap used by header/footer. */
-  --content-reading-width: 860px;
 
   /*
    * Breakpoints (reference values only — CSS custom properties cannot be read inside
    * @media conditions, so these document the intent and must be kept in sync by hand with
    * the literal px values used in each component's media queries).
+   *
+   * Three bands: phone (< 768), tablet (768–1023), desktop (>= 1024). Phone rules are the
+   * mobile-first base. The homepage map+cards infographic turns on at --bp-desktop; its
+   * hand-authored leader-line layer is calibrated for ~1200, so Jeju's leader (the one with no
+   * tolerance) is dropped below 1150 — the island already prints its own name. The region-page
+   * headline+aside, costs+festivals split and About 3-up grid turn on at 900; the city-card
+   * grid goes 2-up at 900.
    */
   --bp-tablet: 768px;
-  --bp-desktop: 1280px;
-  /* Region-info infographic/single-card switch (architecture.md §3/§9) — starting point, tune
-     empirically against real landscape-phone widths. The infographic grid's natural size is
-     940px (region-card.css) but its columns are `fr`-sized with a max-width cap, so it scales
-     down fluidly below that instead of overflowing — this breakpoint just needs to be wide
-     enough for the flanking columns' content to stay legible once shrunk, not wide enough to
-     fit 940px exactly. */
-  --bp-region-info-wide: 768px;
+  --bp-desktop: 1024px;
+  /* Region-info infographic (flanking cards + leader lines) vs. the stacked map + carousel.
+     Matches --bp-desktop — below it the map stacks above a card carousel. */
+  --bp-region-info-wide: 1024px;
 }
