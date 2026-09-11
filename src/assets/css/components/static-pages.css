@@ -1,6 +1,60 @@
-/* visa-info.njk + communities.njk — shared table/list styling for the two remaining static
+/* visa-info.njk + settling-in.njk — shared table/list styling for the two remaining static
    pages (Phase 7). Reuses .region-header / .region-section / .cost-summary / .mock-note /
    .data-provenance / .empty-state from region-page.css rather than duplicating them. */
+
+/* Container width now matches every other page (base.css's .content-page is --content-max-width,
+   DESIGN.md "One container width site-wide") — these two pages no longer run in their own
+   narrower column. Cap each top-level block at ~70ch instead so body text and the table/list
+   below it don't stretch edge-to-edge, the same "text never fills the container" rule the region
+   page applies via its own header/intro caps. Left-aligned (no margin auto), matching that
+   convention rather than centering a text column on the page. */
+.content-page:not(.region-page) > * {
+  max-width: 70ch;
+}
+
+/* Headline block (DESIGN.md § Recurring parts): orange 56×3 rule → H1 → intro. Same rule bar as
+   the region page (region-page.css's .region-page .region-header__rule) but without that page's
+   two-column split / Korean name / vibe tags — these two pages keep the plain single-column
+   .region-header. Scoped by :not(.region-page) so this never doubles up with that rule. */
+.content-page:not(.region-page) .region-header__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 24px;
+}
+
+.content-page:not(.region-page) .region-header h1 {
+  letter-spacing: -0.028em;
+}
+
+/* Body copy (DESIGN.md palette — "Ink soft: secondary paragraphs"), matching how the region page
+   colours its own header intro and section prose (region-page.css) — these two pages were
+   inheriting plain Ink (body.css's default), heavier than every other paragraph on the site.
+   :not(.data-provenance):not(.empty-state) so this doesn't outrank those elements' own, more
+   specific Muted colour (source lines / the disclaimer) — both are direct-child <p>s here too.
+   :not(.community-list) on the <ul> rule for the same reason color would otherwise cascade onto
+   the community-card h2 (a card title, should stay full Ink) — settling-in.njk's community
+   description <p> is targeted directly below instead, next to its own community-card__platform
+   exclusion (that one's Muted, set further down). */
+.content-page:not(.region-page) .region-header__intro,
+.content-page:not(.region-page) .region-section > p:not(.data-provenance):not(.empty-state),
+.content-page:not(.region-page) .region-section > ul:not(.community-list),
+.content-page:not(.region-page) .community-card > p:not(.community-card__platform) {
+  color: var(--color-text-soft);
+}
+
+/* Section H2 (DESIGN.md § Type — 20–22px/600/-0.015em), matching the region page's section
+   headings (region-page.css). The generic h2 rule (base.css) is sized for one-off page titles,
+   not repeated section headers, and rendered far too large here. Scoped to a direct child of
+   .region-section so it doesn't touch settling-in's community-card h2 (a card title, styled
+   below at the DESIGN.md card-title size instead). */
+.content-page:not(.region-page) .region-section > h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
 
 .table-scroll {
   overflow-x: auto;
@@ -36,11 +90,28 @@
   border-radius: var(--radius-md);
 }
 
+/* Card title (DESIGN.md § Type — 16–18px/600), not the Section H2 size above — a community name
+   is a card heading, not a page section. */
+.community-card h2 {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
 .community-card__platform {
   margin-top: var(--space-1);
   font-size: var(--font-size-sm);
   font-weight: 600;
-  color: var(--color-primary-dark);
+}
+
+/* Outbound (DESIGN.md palette: orange = external, and per the "Never: orange text that is not a
+   link" rule, this has to be a real one — settling-in.njk always resolves to *something*: the
+   sourced c.url once a real group is found, or platformUrl (the platform's own homepage) as the
+   honest not-yet-sourced state today. Not primary-dark green — green reads as in-site/interactive,
+   which an outbound link isn't. */
+.community-card__platform a {
+  color: var(--color-accent);
+  text-decoration: underline;
 }
 
 /* ── About page (about.njk; design reference 6a/6b) ───────────────────────────────────────────

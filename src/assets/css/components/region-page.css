@@ -1,4 +1,4 @@
-/* .content-page (base.css) provides the centered reading-width column this page uses;
+/* .content-page (base.css) provides the site-shell-width column every content page uses;
    .region-header keeps its own narrower 65ch cap for the intro text specifically, nested inside
    the wider .content-page container for grids/galleries. */
 
@@ -26,13 +26,6 @@
    than the default so the credit reads as its own foot-of-block note (design reference 5b). */
 .region-page .data-provenance {
   margin-top: 28px;
-}
-
-/* Task 06: the region page is a wide (site-shell width) flat-scroll page, not the narrow
-   reading-width column .content-page gives by default — matches the homepage. Only region.njk
-   carries .region-page; /visa-info/ and /settling-in/ keep .content-page's reading width. */
-.region-page {
-  max-width: var(--content-max-width);
 }
 
 /* Breadcrumb row under the nav (DESIGN.md § Recurring parts): 13px muted, hairline underneath. */

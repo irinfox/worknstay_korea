@@ -72,12 +72,12 @@ body {
   padding: var(--space-5) var(--space-4);
 }
 
-/* Centers text-heavy page content (region pages, visa-info, communities) in a reading-width
-   column instead of stretching edge-to-edge inside .page's full width. Distinct from
-   --content-max-width (tokens.css), which is the wider outer site-shell cap used by the
-   header/footer bar. */
+/* Site-shell width (DESIGN.md "One container width site-wide") — the same --content-max-width
+   cap as the header/footer/hero/region pages, not a page-specific narrower column. Text-heavy
+   content inside caps itself further (static-pages.css, region-page.css's region-header__intro)
+   rather than the whole page running narrow. */
 .content-page {
-  max-width: var(--content-reading-width);
+  max-width: var(--content-max-width);
   margin: 0 auto;
 }
 
