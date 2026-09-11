@@ -86,6 +86,29 @@
   --color-halo-ineligible: #f3f2ec; /* #D7D6D0 (--color-map-legend-ineligible) oklch L+0.10, capped .96 */
   --color-halo-ineligible-metro: #dcdad0; /* #BCBAB0 (--color-region-ineligible-metro) oklch L+0.10 */
 
+  /* Hover-step halo variants (korea-map.css .region:hover/:focus-visible .region__label) — same
+     "this shape's own fill, lightened" formula as the resting halos above, recomputed from the
+     shape's *hover* fill so the halo keeps tracking its current appearance rather than freezing at
+     the resting tone while the shape itself visibly darkens underneath. Every state's province
+     fill-opacity jumps to 0.85 on hover, ineligible included — korea-map.css's generic
+     `.region:hover .region__shape` rule is unguarded, there's no ineligible-specific override
+     pulling it back to the resting 0.5 — so ineligible gets its own hover halo too, not a reuse of
+     the resting one. */
+  --color-halo-active-hover: #54ad8a; /* #0F7B54 @ .85 over #F7F9F8, oklch L+0.10 */
+  --color-halo-active-metro-hover: #4c987b; /* #2B7A5E (--color-region-active-metro-hover) oklch L+0.10 */
+  --color-halo-partial-hover: #d9fbeb; /* #A8D8C2 @ .7 over #F7F9F8, oklch L+0.10 capped .96 */
+  --color-halo-partial-metro-hover: #b8f1d5; /* #98D0B5 (--color-region-partial-metro-hover) oklch L+0.10 */
+  --color-halo-ineligible-hover: #e1ddd3; /* #B7B2A7 @ .85 over #F7F9F8, oklch L+0.10 */
+  --color-halo-ineligible-metro-hover: #cac3b5; /* #AAA496 (--color-region-ineligible-metro-hover) oklch L+0.10 */
+
+  /* Tap-selected halo variant (korea-map.css .region--selected .region__label — narrow viewport,
+     region-card.js). Active and ineligible selected provinces composite identically to their
+     hover state (same 0.85 fill-opacity, nothing overrides it back down), so they reuse the hover
+     tokens above. Partial doesn't: .region--selected has no partial-specific fill-opacity
+     override, so a selected Gyeonggi-do sits at the generic 0.85 rather than partial-hover's 0.7 —
+     this token is computed from that actual composite, not a reuse of --color-halo-partial-hover. */
+  --color-halo-partial-selected: #d3fdea; /* #A8D8C2 @ .85 over #F7F9F8, oklch L+0.10 capped .96 */
+
   /* Spacing scale */
   --space-1: 0.25rem;
   --space-2: 0.5rem;

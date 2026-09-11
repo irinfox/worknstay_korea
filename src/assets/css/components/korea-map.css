@@ -274,6 +274,36 @@
   stroke: var(--color-halo-ineligible-metro);
 }
 
+/* Tap-selected labels (narrow viewport, region-card.js) react the same way real hover does below
+   — .region--selected's shape/metro fill already reused the hover fill tokens above (Phase 18
+   comment), the halo needs the same parity so mobile tap and desktop hover read as the same
+   effect rather than the shape darkening while the label halo stays frozen at its resting tone.
+   Placed after the resting partial/ineligible overrides above (equal specificity either way) so
+   this wins for a region that's currently both. */
+.region--selected .region__label {
+  stroke: var(--color-halo-active-hover);
+}
+
+.region--selected .region__label--metro {
+  stroke: var(--color-halo-active-metro-hover);
+}
+
+.region--partial.region--selected .region__label {
+  stroke: var(--color-halo-partial-selected);
+}
+
+.region--partial.region--selected .region__label--metro {
+  stroke: var(--color-halo-partial-metro-hover);
+}
+
+.region--ineligible.region--selected .region__label {
+  stroke: var(--color-halo-ineligible-hover);
+}
+
+.region--ineligible.region--selected .region__label--metro {
+  stroke: var(--color-halo-ineligible-metro-hover);
+}
+
 /* Always-visible labels: the 6 main region names + Seoul (Phase 13 request — the capital
    should be identifiable at every width, not just above the wide breakpoint). 2px halo, not 3 —
    matches the region-detail map's own pin-label halo weight (region-detail-map.css). */
@@ -301,11 +331,53 @@
 @media (hover: hover) {
   .region:hover .region__label {
     transform: scale(1.2);
+    stroke: var(--color-halo-active-hover);
+  }
+
+  .region:hover .region__label--metro {
+    stroke: var(--color-halo-active-metro-hover);
+  }
+
+  .region--partial:hover .region__label {
+    stroke: var(--color-halo-partial-hover);
+  }
+
+  .region--partial:hover .region__label--metro {
+    stroke: var(--color-halo-partial-metro-hover);
+  }
+
+  .region--ineligible:hover .region__label {
+    stroke: var(--color-halo-ineligible-hover);
+  }
+
+  .region--ineligible:hover .region__label--metro {
+    stroke: var(--color-halo-ineligible-metro-hover);
   }
 }
 
 .region:focus-visible .region__label {
   transform: scale(1.2);
+  stroke: var(--color-halo-active-hover);
+}
+
+.region:focus-visible .region__label--metro {
+  stroke: var(--color-halo-active-metro-hover);
+}
+
+.region--partial:focus-visible .region__label {
+  stroke: var(--color-halo-partial-hover);
+}
+
+.region--partial:focus-visible .region__label--metro {
+  stroke: var(--color-halo-partial-metro-hover);
+}
+
+.region--ineligible:focus-visible .region__label {
+  stroke: var(--color-halo-ineligible-hover);
+}
+
+.region--ineligible:focus-visible .region__label--metro {
+  stroke: var(--color-halo-ineligible-metro-hover);
 }
 
 /* Colour key (index.njk — .home-regions__head): a small horizontal row of 10px swatches,
