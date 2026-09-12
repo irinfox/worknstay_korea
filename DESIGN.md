@@ -23,6 +23,8 @@ in the repo and is not maintained.
 | Amber | `#F7EAD9` | "Stricter" note plates, not-eligible calculator state |
 | Orange rule | `#E08A2E` | 56×3px rule above every page headline, 3×15px section ticks |
 | Orange text | `#C2531A` | Outbound links, spicy tag |
+| Orange ink | `#A8450F` | Small orange text on tinted plates (dish labels). Deeper than
+  Orange text so 12px passes 4.5:1 on amber and panel grounds. |
 
 Two accent colours only. Green = ours / easier / in-site. Orange = external / stricter / seasonal.
 Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour
@@ -196,7 +198,14 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   Region-detail map: one flat `--color-primary-tint` halo throughout (no eligibility states to
   track). National map: halo tracks each shape's own current fill —
   `oklch(min(L_fill + 0.10, 0.96) C_fill H_fill)`.
-- **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`. Spicy tag only.
+- **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`.
+- **Dish plate**: 12px/500 lowercase, radius 20px, padding 3px 10px, opaque fill, 9px inset at the
+  photo's top-left, `gap:5px` row. Heat plates carry `#E08A2E` border + `#A8450F` ink, fill amber
+  `#F7EAD9` if cooked in and panel `#F7F9F8` if removable; all other labels are panel fill, hairline
+  border, `#33443C` ink. Heat first. Any label whose meaning isn't obvious gets one legend line per
+  page, 16px above, no rule.
+- **Dish provenance**: city name only, English, 13px/500 white at the photo's bottom-left over the
+  standard scrim — same overlay as attraction cards. No verb, no Korean, no plate.
 
 ## Copy rules
 

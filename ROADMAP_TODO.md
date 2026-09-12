@@ -95,8 +95,8 @@ Iterative editorial/research work, mostly hand-curation — do one region at a t
       per-region count, same-name branch dedupe.
 - [ ] Region description rewrite (all 6).
 - [ ] Home region cards: vibe-tags.
+- [x] Home region cards: food gallery.
 - [ ] Home region cards: real money figures (replace MOCK).
-- [ ] Home region cards: transportation info.
 
 ## Phase 25 — Workation-city expansion
 Depends on 12.
@@ -105,8 +105,10 @@ Depends on 12.
 - Verify: per-region count scripted, every center URL resolves.
 
 ## Phase 26 — Remaining de-MOCK + Task #4 copy pass
-- [ ] Grep `MOCK`/`PLACEHOLDER` in `_data/*.json`, replace with real values (cost-of-living w/
-      `asOf`/`source`/`sourceUrl`, real community links, food descriptions).
+- [x] Food gallery: real dishes, descriptions, photos, and credits for all 6 regions —
+      `food.json` clean of MOCK/PLACEHOLDER.
+- [ ] Grep `MOCK`/`PLACEHOLDER` in remaining `_data/*.json`, replace with real values
+      (cost-of-living w/ `asOf`/`source`/`sourceUrl`, real community links).
 - [ ] `communities.json` links + `/visa-info/` copy verified against current official sources.
 - [ ] Confirm `#workation #month-long-stay #2030s-youth #local-tourism` show up as real on-page
       copy tied to actual features, not just floating text.

@@ -27,6 +27,7 @@
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
   --color-accent-tint-border: #ecd2ab;
+  --color-accent-ink: #a8450f; /* Orange ink: small orange text on tinted plates (dish labels) */
   /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
      calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
   --color-result-amber: #f7ead9;

@@ -1020,8 +1020,6 @@ ul.region-seasons {
   }
 }
 
-/* Spicy badge — a white pill over the top-left of the photo (design reference 5b), not an
-   inline emoji. */
 .dish-card__figure {
   position: relative;
   margin-bottom: 9px;
@@ -1031,16 +1029,87 @@ ul.region-seasons {
   margin-bottom: 0;
 }
 
-.dish-card__spice {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  padding: 3px 9px;
-  font-size: 11px;
+/* Dish plate — one component, three colour variants (DESIGN.md § Dish plate). Heat (spicy) and
+   kind (spicy ingredient / drink / dessert) are separate axes; heat renders first when both are
+   present. Backgrounds are fully opaque so a plate reads the same on a photo as off it. */
+.dish-plate {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
   font-weight: 500;
-  color: var(--color-accent);
-  background: var(--color-bg);
+  letter-spacing: 0.005em;
   border-radius: 20px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  border: 1px solid transparent;
+}
+
+.dish-plate--spicy {
+  background: var(--color-accent-tint);
+  border-color: var(--color-accent-rule);
+  color: var(--color-accent-ink);
+}
+
+.dish-plate--spicy-ingredient {
+  background: var(--color-surface);
+  border-color: var(--color-accent-rule);
+  color: var(--color-accent-ink);
+}
+
+.dish-plate--drink,
+.dish-plate--dessert {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-soft);
+}
+
+.dish-card__plates {
+  position: absolute;
+  top: 9px;
+  left: 9px;
+  right: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+/* City overlay — English only, same bottom-scrim treatment as the attraction cards. */
+.dish-card__city {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
+  margin: 0;
+  padding: 0 11px 9px;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 0 0 10px 10px;
+  background: linear-gradient(rgba(22, 32, 28, 0), rgba(22, 32, 28, 0.72));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.dish-card__restaurant {
+  display: block;
+  margin-top: auto;
+  padding-top: 10px;
+  font-size: 13px;
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Legend line for any plate whose meaning isn't obvious on its own (DESIGN.md § Dish plate) —
+   only "spicy ingredient" needs one; "spicy", "drink" and "dessert" are self-explanatory. */
+.dish-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
 }
 
 /* Light grey divider between the attractions strip and the dishes strip (design reference 5b). */

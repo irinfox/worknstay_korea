@@ -154,6 +154,8 @@ worknstay_korea/
 │   │   │         region-hero-gallery.js
 │   │   ├── img/hero/{home,<region-slug>,gyeonggi-do-population-decline}/  # KOGL Type1 cover
 │   │   │         #   photos, credited in _data/{hero,regionHero,countyHero}Credits.json
+│   │   ├── img/food/<region-slug>/  # dish photos, credited inline per-record in food.json's
+│   │   │         #   `photo` object (no separate credits file — one photo per dish, not a gallery)
 │   │   └── svg/  korea-regions.svg  (+ source/korea-provinces-blank.svg — Wikimedia, public domain)
 │   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
 │   └── regions/region.njk                        # pagination over regions.json → /regions/<slug>/
@@ -185,9 +187,11 @@ JSON bare — Cloudflare's Functions bundler rejects `with { type: "json" }`; El
   real, periodically-refreshed live call, never a git-committed snapshot.
 ```
 
-Region/county **hero photos** are the one exception: hand-picked once (via KTO PhotoGalleryService1
-/ EngService2 during the dev window, which counts toward call history), then committed as static
-files under `assets/img/hero/` — an editorial choice, not something an API should pick per request.
+Region/county **hero photos** and **dish photos** are the exception: hand-picked once (via KTO
+PhotoGalleryService1 / EngService2 during the dev window, which counts toward call history —
+Wikimedia Commons and the site author's own photos fill the rest of the dish set), then committed
+as static files under `assets/img/hero/` and `assets/img/food/` — an editorial choice, not
+something an API should pick per request.
 
 Static/editorial `_data/*.json` (visa rules, cost of living, food, communities, transport)
 bypasses this pipeline entirely — not KTO-sourced, no "live" requirement.
@@ -239,8 +243,12 @@ Event         contentId, regionSlug, lDongRegnCd, titleEn, titleKo,
               startDate, endDate, address, imageUrl, imageLicense,
               tel, homepageUrl                     // from KTO, via Functions proxy
 
-Dish          regionSlug, nameEn, nameKo, romanized, imagePath,
-              caption, credit                      // static
+Dish          regionSlug, city, nameEn, nameKo, imagePath, heat?: 'spicy',
+              kind?: 'spicy-ingredient' | 'drink' | 'dessert', caption,
+              descriptionSourceUrl?, restaurantUrl?, photo{ src, author,
+              license?, licenseUrl?, sourceUrl?, sourceApi?, galContentId? }
+              // static; heat and kind are independent axes. city omitted for Jeju (no
+              // per-dish city breakdown in the source data)
 
 CostOfLiving  regionSlug, currency, asOf, source, sourceUrl,
               rent1brCityCentre, monthlyBudgetSingle, mealInexpensive,
