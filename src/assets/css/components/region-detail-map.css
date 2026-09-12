@@ -21,7 +21,12 @@
 .region-detail-map__svg {
   display: block;
   width: 100%;
-  min-width: 360px;
+  /* min(360px, 100%) instead of a bare 360px: at exactly a 360px viewport, .page's 16px side
+     padding leaves only 328px of content width, so a bare 360px floor forced a ~32px horizontal
+     scroll for a map that was otherwise fully visible. Capping at 100% lets it shrink to fit that
+     one narrow case while leaving the 360px floor (and the legibility reasoning above) untouched
+     for every viewport that actually has ≥360px of content width to give it. */
+  min-width: min(360px, 100%);
   max-width: 640px;
   height: auto;
   margin: 0 auto;
