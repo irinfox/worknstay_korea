@@ -1,60 +1,9 @@
 [
   {
-    "regionSlug": "gyeonggi-do",
-    "nameEn": "Suwon Galbi",
-    "nameKo": "수원갈비",
-    "romanized": "Suwon Galbi",
-    "imagePath": "/assets/img/food/suwon-galbi.jpg",
-    "caption": "Thick-cut grilled beef short ribs, a Suwon specialty for over a century.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
-  },
-  {
     "regionSlug": "gangwon-do",
-    "nameEn": "Chuncheon Dakgalbi",
-    "nameKo": "춘천닭갈비",
-    "romanized": "Chuncheon Dakgalbi",
-    "city": "Chuncheon",
-    "spiciness": "spicy",
-    "imagePath": "/assets/img/food/gangwon-do/chuncheon-dakgalbi.jpg",
-    "caption": "Stir-fried marinated chicken with rice cakes and vegetables, originally cooked over charcoal at your table, now often on a hot iron plate. Has non-spicy versions.",
-    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221263",
-    "photo": {
-      "src": "Korea Tourism Organization",
-      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
-      "galContentId": "2824454",
-      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/54/2824454.jpg",
-      "author": "Studio 4cats / Korea Tourism Organization",
-      "license": "KOGL Type 1",
-      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
-    }
-  },
-  {
-    "regionSlug": "gangwon-do",
-    "nameEn": "Chodang Sundubu",
-    "nameKo": "초당순두부",
-    "romanized": "Chodang Sundubu",
-    "city": "Gangneung",
-    "spiciness": "mild",
-    "imagePath": "/assets/img/food/gangwon-do/chodang-sundubu.jpg",
-    "caption": "Soft, nutty tofu curdled with seawater. Can be served warm and unseasoned, with soy sauce on the side, or as part of a spicy stew with seafood.",
-    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221275",
-    "photo": {
-      "src": "Korea Tourism Organization",
-      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
-      "galContentId": "1190452",
-      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/52/1190452.jpg",
-      "author": "Kim Ji-ho / Korea Tourism Organization",
-      "license": "KOGL Type 1",
-      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
-    }
-  },
-  {
-    "regionSlug": "gangwon-do",
+    "city": "Sokcho",
     "nameEn": "Ojingeosundae",
     "nameKo": "오징어순대",
-    "romanized": "Ojingeosundae",
-    "city": "Sokcho",
-    "spiciness": "mild",
     "imagePath": "/assets/img/food/gangwon-do/ojingeosundae.jpg",
     "caption": "Squid stuffed with rice, tofu and bean sprouts. Usually served with a dipping sauce.",
     "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=178750",
@@ -68,12 +17,11 @@
   },
   {
     "regionSlug": "gangwon-do",
+    "city": "Sokcho",
     "nameEn": "Dakgangjeong",
     "nameKo": "닭강정",
-    "romanized": "Dakgangjeong",
-    "city": "Sokcho",
-    "spiciness": "spicy",
     "imagePath": "/assets/img/food/gangwon-do/dakgangjeong.jpg",
+    "heat": "spicy",
     "caption": "Boneless deep-fried chicken glazed with sweet and spicy sauce and sprinkled with nuts. Best with beer; has non-spicy versions.",
     "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=178893",
     "photo": {
@@ -88,11 +36,48 @@
   },
   {
     "regionSlug": "gangwon-do",
+    "city": "Gangneung",
+    "nameEn": "Chodang Sundubu",
+    "nameKo": "초당순두부",
+    "imagePath": "/assets/img/food/gangwon-do/chodang-sundubu.jpg",
+    "caption": "Soft, nutty tofu curdled with seawater. Can be served warm and unseasoned, with soy sauce on the side, or as part of a spicy stew with seafood.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221275",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221275",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1190452",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/52/1190452.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "city": "Chuncheon",
+    "nameEn": "Chuncheon Dakgalbi",
+    "nameKo": "춘천닭갈비",
+    "imagePath": "/assets/img/food/gangwon-do/chuncheon-dakgalbi.jpg",
+    "heat": "spicy",
+    "caption": "Stir-fried marinated chicken with rice cakes and vegetables, originally cooked over charcoal at your table, now often on a hot iron plate. Has non-spicy versions.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221263",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221263",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2824454",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/54/2824454.jpg",
+      "author": "Studio 4cats / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gangwon-do",
+    "city": "Chuncheon",
     "nameEn": "Makguksu",
     "nameKo": "막국수",
-    "romanized": "Makguksu",
-    "city": "Chuncheon",
-    "spiciness": "mild",
     "imagePath": "/assets/img/food/gangwon-do/makguksu.jpg",
     "caption": "Buckwheat noodles served cold, often in radish-water kimchi broth or beef broth.",
     "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178829",
@@ -107,39 +92,514 @@
     }
   },
   {
-    "regionSlug": "chungcheong-do",
-    "nameEn": "Kong-guksu",
-    "nameKo": "콩국수",
-    "romanized": "Kong-guksu",
-    "imagePath": "/assets/img/food/kong-guksu.jpg",
-    "caption": "Chilled noodles in a savory cold soybean broth — a Chungcheong-region summer staple.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
+    "regionSlug": "gyeonggi-do",
+    "city": "Seoul",
+    "nameEn": "Seolleongtang",
+    "nameKo": "설렁탕",
+    "imagePath": "/assets/img/food/gyeonggi-do/seolleongtang.jpg",
+    "caption": "Ox bone soup made with various cuts of beef, including intestines. Simmered until the broth becomes milky. Served with rice and topped with green onions.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178349",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "3466933",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/33/3466933.jpg",
+      "author": "Torai Republic / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeonggi-do",
+    "city": "Seoul",
+    "nameEn": "Neobiani",
+    "nameKo": "너비아니",
+    "imagePath": "/assets/img/food/gyeonggi-do/neobiani.jpg",
+    "caption": "Thinly sliced beef marinated and grilled over a gridiron.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=179432",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Neobiani.jpg",
+      "author": "National Institute of Korean Language (국립국어원)",
+      "license": "CC BY-SA 2.0 KR",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/kr/deed.en"
+    }
+  },
+  {
+    "regionSlug": "gyeonggi-do",
+    "city": "Incheon",
+    "nameEn": "Ganjanggejang",
+    "nameKo": "간장게장",
+    "imagePath": "/assets/img/food/gyeonggi-do/ganjanggejang.jpg",
+    "caption": "Soy sauce marinated blue crab, in season from April to June and from October to November. Served with rice.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221242",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221242",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2823610",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/10/2823610.jpg",
+      "author": "Studio 4cats / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeonggi-do",
+    "city": "Uijeongbu",
+    "nameEn": "Budaejjigae",
+    "nameKo": "부대찌개",
+    "imagePath": "/assets/img/food/gyeonggi-do/budaejjigae.jpg",
+    "heat": "spicy",
+    "caption": "Kimchi-based stew with sausages, ham and other toppings such as minced beef, bacon, cheese and ramyeon.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221258",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221258",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:%EC%84%9C%EC%9A%B8-%EB%B6%80%EB%8C%80%EC%B0%8C%EA%B0%9C-002.jpg",
+      "author": "Park Dong-sik",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0"
+    }
   },
   {
     "regionSlug": "gyeongsang-do",
-    "nameEn": "Dwaeji Gukbap",
+    "city": "Busan",
+    "nameEn": "Dwaejigukbap",
     "nameKo": "돼지국밥",
-    "romanized": "Dwaeji Gukbap",
-    "imagePath": "/assets/img/food/dwaeji-gukbap.jpg",
-    "caption": "Pork and rice soup, a Busan comfort-food staple with roots in the Korean War era.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
+    "imagePath": "/assets/img/food/gyeongsang-do/dwaejigukbap.jpg",
+    "caption": "Slow-cooked pork bone broth with rice and slices of pork. Be sure to eat it with seasonings, otherwise it might be too bland.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221285",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221285",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2538893",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/93/2538893.jpg",
+      "author": "IR Studio / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "city": "Busan",
+    "nameEn": "Milmyeon",
+    "nameKo": "밀면",
+    "imagePath": "/assets/img/food/gyeongsang-do/milmyeon.jpg",
+    "kind": "spicy-ingredient",
+    "caption": "Wheat noodles served in a cold broth made with beef, pork or chicken bones, topped with chili paste (spicy). Also available in a broth-free version.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178844",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2011961",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/61/2011961.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "city": "Busan",
+    "nameEn": "Grilled sea eel",
+    "nameKo": "곰장어구이",
+    "imagePath": "/assets/img/food/gyeongsang-do/grilled-sea-eel.jpg",
+    "heat": "spicy",
+    "caption": "Spicy grilled sea eel, a popular food with alcohol.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178637",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2928541",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/41/2928541.jpg",
+      "author": "Busan Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "city": "Daegu",
+    "nameEn": "Daegumakchanggui",
+    "nameKo": "대구막창구이",
+    "imagePath": "/assets/img/food/gyeongsang-do/daegu-makchang-gui.jpg",
+    "caption": "Grilled pork intestines. Especially famous in Daegu. Has spicy variations.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178491",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:2%EB%AF%B8-%EB%A7%89%EC%B0%BD%EA%B5%AC%EC%9D%B4.jpg",
+      "author": "Daegu Metropolitan City (대구광역시)",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0"
+    }
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "city": "Gyeongju",
+    "nameEn": "Gyeongju Hwangnam bread",
+    "nameKo": "경주황남빵",
+    "imagePath": "/assets/img/food/gyeongsang-do/gyeongju-hwangnam-bread.jpg",
+    "kind": "dessert",
+    "caption": "Gyeongju specialty: small bun filled with savory red bean paste.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=352&vcontsId=221823",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=351&vcontsId=174265",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2707176",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/76/2707176.jpg",
+      "author": "Alex Bundo / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "gyeongsang-do",
+    "city": "Andong",
+    "nameEn": "Andong Jjimdak",
+    "nameKo": "안동찜닭",
+    "imagePath": "/assets/img/food/gyeongsang-do/andong-jjimdak.jpg",
+    "heat": "spicy",
+    "caption": "Braised chicken cut into pieces with vegetables and noodles. 2+ people meal.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221295",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221295",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2506067",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/67/2506067.jpg",
+      "author": "IR Studio / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "city": "Daejeon",
+    "nameEn": "Ppang",
+    "nameKo": "빵",
+    "imagePath": "/assets/img/food/chungcheong-do/ppang.jpg",
+    "kind": "dessert",
+    "caption": "Variety of baked goods from Daejeon's beloved Sungsimdang bakery, including its signature Twigim Soboro (튀김소보로), a bun filled with sweet red bean paste.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=352&vcontsId=140069",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=352&vcontsId=140069",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sungsimdang_display_stand.jpg",
+      "author": "Trainholic",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0"
+    }
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "city": "Daejeon",
+    "nameEn": "Dubuduruchigi",
+    "nameKo": "두부두루치기",
+    "imagePath": "/assets/img/food/chungcheong-do/dubuduruchigi.jpg",
+    "heat": "spicy",
+    "caption": "Stir-fried tofu seasoned with red pepper powder and garlic.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=181827",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:%EB%91%90%EB%B6%80%EB%91%90%EB%A3%A8%EC%B9%98%EA%B8%B0.jpg",
+      "author": "이랑이랑",
+      "license": "CC BY 2.0 KR",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0/kr/deed.en"
+    }
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "city": "Cheongju",
+    "nameEn": "Beoseot Jeongol",
+    "nameKo": "버섯전골",
+    "imagePath": "/assets/img/food/chungcheong-do/beoseot-jeongol.jpg",
+    "caption": "Mushroom hot pot with beef, assorted mushrooms and other vegetables in an anchovy broth.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178329",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1237516",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/16/1237516.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "city": "Cheonan",
+    "nameEn": "Hodugwaja",
+    "nameKo": "호두과자",
+    "imagePath": "/assets/img/food/chungcheong-do/hodugwaja.jpg",
+    "kind": "dessert",
+    "caption": "Walnut-shaped pastry filled with red bean paste and Cheonan walnuts, a local specialty.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=182019",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2707178",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/78/2707178.jpg",
+      "author": "Alex Bundo / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "chungcheong-do",
+    "city": "Buyeo",
+    "nameEn": "Yeonnipbap",
+    "nameKo": "연잎밥",
+    "imagePath": "/assets/img/food/chungcheong-do/yeonnipbap.jpg",
+    "caption": "Rice with ingredients such as chestnuts and jujube, wrapped in a lotus leaf and steamed.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178082",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1827175",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/75/1827175.jpg",
+      "author": "Frame Studio / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
   },
   {
     "regionSlug": "jeolla-do",
+    "city": "Jeonju",
     "nameEn": "Jeonju Bibimbap",
     "nameKo": "전주비빔밥",
-    "romanized": "Jeonju Bibimbap",
-    "imagePath": "/assets/img/food/jeonju-bibimbap.jpg",
-    "caption": "Considered the definitive version of Korea's mixed rice dish, from the city widely regarded as its birthplace.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
+    "imagePath": "/assets/img/food/jeolla-do/jeonju-bibimbap.jpg",
+    "kind": "spicy-ingredient",
+    "caption": "Steamed rice cooked in beef broth, topped with vegetables, beef, egg and yellow mung bean jelly. Served with red chili paste (spicy). Mix well before eating.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221301",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221301",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1567529",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/29/1567529.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Jeonju",
+    "nameEn": "Moju",
+    "nameKo": "모주",
+    "imagePath": "/assets/img/food/jeolla-do/moju.jpg",
+    "kind": "drink",
+    "caption": "Low-alcohol drink made by simmering makgeolli (Korean rice wine) with herbs and spices like ginger, jujube and cinnamon. Sweet, with a strong cinnamon flavor.",
+    "photo": {
+      "src": "Wikimedia Commons",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Moju.jpg",
+      "author": "jojo722",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Gwangju",
+    "nameEn": "Hongeosamhap",
+    "nameKo": "홍어삼합",
+    "imagePath": "/assets/img/food/jeolla-do/hongeosamhap.jpg",
+    "kind": "spicy-ingredient",
+    "caption": "Fermented skate and boiled pork served with aged kimchi (spicy). Often paired with makgeolli.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=179555",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2826832",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/32/2826832.jpg",
+      "author": "DNA Studio / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Gwangju",
+    "nameEn": "Yukjeon",
+    "nameKo": "육전",
+    "imagePath": "/assets/img/food/jeolla-do/yukjeon.jpg",
+    "caption": "Pan-fried egg-battered beef sliced into bite-sized pieces and served with soy-based dipping sauce and green onion salad. Best while warm.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221314",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221314",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2670945",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/45/2670945.jpg",
+      "author": "Alex Bundo / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Gwangju",
+    "nameEn": "Tteokgalbi",
+    "nameKo": "떡갈비",
+    "imagePath": "/assets/img/food/jeolla-do/tteokgalbi.jpg",
+    "caption": "Minced beef seasoned with garlic and soy sauce, molded around the bone and grilled over charcoal.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/sp/food/ext/special_view.do?menuSn=913&vcontsId=178521",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2823822",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/22/2823822.jpg",
+      "author": "Studio 4cats / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Yeosu",
+    "nameEn": "Dolmuneoh Samhap",
+    "nameKo": "돌문어삼합",
+    "imagePath": "/assets/img/food/jeolla-do/dolmuneoh-samhap.jpg",
+    "heat": "spicy",
+    "caption": "A combination of three main ingredients: octopus, pork and mustard leaf kimchi — with other seafood such as abalone and shrimp.",
+    "photo": {
+      "src": "Author's own photo",
+      "author": "Author's own photo"
+    }
+  },
+  {
+    "regionSlug": "jeolla-do",
+    "city": "Naju",
+    "nameEn": "Gomtang",
+    "nameKo": "곰탕",
+    "imagePath": "/assets/img/food/jeolla-do/gomtang.jpg",
+    "caption": "Naju specialty: clear beef bone soup with a rich, meaty flavor, cooked with radish and green onions. Served with rice on the side.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178153",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "3367852",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/52/3367852.jpg",
+      "author": "Hwang Seong-hun / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
   },
   {
     "regionSlug": "jeju-do",
-    "nameEn": "Jeju Heuk Dwaeji (Black Pork)",
-    "nameKo": "제주 흑돼지",
-    "romanized": "Jeju Heuk Dwaeji",
-    "imagePath": "/assets/img/food/jeju-heuk-dwaeji.jpg",
-    "caption": "Grilled black pork from Jeju's native pig breed, typically served with the island's own fermented sauces.",
-    "credit": "PLACEHOLDER — image and credit not yet sourced"
+    "nameEn": "Heukdwaeji",
+    "nameKo": "흑돼지",
+    "imagePath": "/assets/img/food/jeju-do/heukdwaeji.jpg",
+    "caption": "Jeju black pork with a firm, chewy texture and rich flavor. Can be served as Black Pork BBQ (흑돼지 구이, most popular), Dombegogi (돔베고기, steamed pork slices), Momguk (몸국, gulfweed soup) and Gogiguksu (고기국수, pork noodles).",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221319",
+    "restaurantUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=904&vcontsId=221319",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1861977",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/77/1861977.jpg",
+      "author": "Lee Beom-su / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Jeonbokjuk",
+    "nameKo": "전복죽",
+    "imagePath": "/assets/img/food/jeju-do/jeonbokjuk.jpg",
+    "caption": "Abalone rice porridge, sometimes called the \"King of porridge\" in Korea. Best from April to June.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=178109",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1923588",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/88/1923588.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Galchigui",
+    "nameKo": "갈치구이",
+    "imagePath": "/assets/img/food/jeju-do/galchigui.jpg",
+    "caption": "Grilled cutlassfish, seasoned only with salt and served whole.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=231566",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2814602",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/02/2814602.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Gamgyul Chicken",
+    "nameKo": "감귤치킨",
+    "imagePath": "/assets/img/food/jeju-do/gamgyul-chicken.jpg",
+    "caption": "Fried chicken in a tangerine cream sauce.",
+    "photo": {
+      "src": "Author's own photo",
+      "author": "Author's own photo"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Omegitteok",
+    "nameKo": "오메기떡",
+    "imagePath": "/assets/img/food/jeju-do/omegitteok.jpg",
+    "kind": "dessert",
+    "caption": "Sweet, chewy millet rice cake rolled in bean powder or mashed red bean.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=179949",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "1940424",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/24/1940424.jpg",
+      "author": "Lee Beom-su / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Seonggemiyeokguk",
+    "nameKo": "성게미역국",
+    "imagePath": "/assets/img/food/jeju-do/seonggemiyeokguk.jpg",
+    "caption": "Seaweed soup with sea urchin roe, seasoned with salt and soy sauce. Served with rice on the side.",
+    "descriptionSourceUrl": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=181&vcontsId=179139",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2814605",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/05/2814605.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
+  },
+  {
+    "regionSlug": "jeju-do",
+    "nameEn": "Tangerines",
+    "nameKo": "귤",
+    "imagePath": "/assets/img/food/jeju-do/tangerines.jpg",
+    "caption": "Most Korean tangerines come from Jeju. Citrus season is from November till March, starting with regular tangerines and ending with Hallabong, a Jeju specialty.",
+    "photo": {
+      "src": "Korea Tourism Organization",
+      "sourceApi": "KTO PhotoGalleryService1 (gallerySearchList1)",
+      "galContentId": "2003487",
+      "sourceUrl": "https://tong.visitkorea.or.kr/cms2/website/87/2003487.jpg",
+      "author": "Kim Ji-ho / Korea Tourism Organization",
+      "license": "KOGL Type 1",
+      "licenseUrl": "https://www.kogl.or.kr/info/licenseType1.do"
+    }
   }
 ]

@@ -236,6 +236,11 @@ eleventyComputed:
 {% if regionFood.length %}
 <section class="region-section region-section--food">
   <h2>Regional dishes</h2>
+  {% if region.slug == "jeju-do" %}
+  <p class="region-section__sub">A few handpicked representative dishes.</p>
+  {% else %}
+  <p class="region-section__sub">A few handpicked representative dishes, each associated with a city known for them.</p>
+  {% endif %}
   <ul class="dish-list">
     {% for dish in regionFood %}
     <li class="dish-card">
@@ -245,13 +250,27 @@ eleventyComputed:
         {% else %}
         <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
         {% endif %}
-        {% if dish.spiciness == "spicy" %}<span class="dish-card__spice">spicy</span>{% endif %}
+        {% if dish.heat or dish.kind %}
+        <div class="dish-card__plates">
+          {% if dish.heat == "spicy" %}<span class="dish-plate dish-plate--spicy">spicy</span>{% endif %}
+          {% if dish.kind == "spicy-ingredient" %}<span class="dish-plate dish-plate--spicy-ingredient">spicy ingredient</span>{% endif %}
+          {% if dish.kind == "drink" %}<span class="dish-plate dish-plate--drink">drink</span>{% endif %}
+          {% if dish.kind == "dessert" %}<span class="dish-plate dish-plate--dessert">dessert</span>{% endif %}
+        </div>
+        {% endif %}
+        {% if dish.city %}<p class="dish-card__city">{{ dish.city }}</p>{% endif %}
       </div>
       <h3 class="dish-card__name">{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h3>
       <p class="dish-card__note">{{ dish.caption }}</p>
+      {% if dish.restaurantUrl %}
+      <a class="dish-card__restaurant" href="{{ dish.restaurantUrl }}" target="_blank" rel="noopener">Where to eat it ↗</a>
+      {% endif %}
     </li>
     {% endfor %}
   </ul>
+  {% if (regionFood | dump).indexOf('"kind":"spicy-ingredient"') !== -1 %}
+  <p class="dish-legend"><span class="dish-plate dish-plate--spicy-ingredient">spicy ingredient</span> can usually be left out or served separately.</p>
+  {% endif %}
   {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
   <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
   {% endif %}
