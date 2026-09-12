@@ -14,6 +14,16 @@ eleventyComputed:
 {% set heroPhotos = regionHeroPhotos[region.slug] or [] %}
 {% set slideCount = heroPhotos.length %}
 {% set isGangwon = region.slug == "gangwon-do" %}
+{# Hand-chosen city set/order per region (mirrors Gangwon-do's existing pattern below) —
+   bySlugs lets cities.json keep other records (e.g. Paju/Ganghwa, Andong/Tongyeong, Boryeong)
+   for later reuse without surfacing them here. #}
+{% set cityOrder = {
+  "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
+  "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
+  "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
+  "jeju-do": ["jeju-city", "seogwipo"],
+  "chungcheong-do": ["daejeon", "sejong", "cheongju", "gongju"]
+} %}
 {# Furnished short-term monthly rent for the headline recap card. Gangwon-do is the only region
    with a market scan behind it (src/_data/rentalMarketScan.js); the figure matches the existing
    "Cost of living" copy below. Inline microcopy — no _data home yet (same pattern as the task-04
@@ -174,6 +184,9 @@ eleventyComputed:
   {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
      not somewhere to base a month-long stay, so it's map-only — see its surf-beach pin above). #}
   {% set cityList = cities | bySlugs(["sokcho", "gangneung", "chuncheon", "wonju"]) %}
+  {% include "partials/city-card-list.njk" %}
+  {% elif cityOrder[region.slug] %}
+  {% set cityList = cities | bySlugs(cityOrder[region.slug]) %}
   {% include "partials/city-card-list.njk" %}
   {% elif regionCities.length %}
   {% set cityList = regionCities %}

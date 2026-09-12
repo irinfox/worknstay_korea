@@ -29,6 +29,7 @@
     "lat": 37.5665,
     "lng": 126.978,
     "blurb": "South Korea's capital and largest city — outside this site's non-capital eligibility focus, kept here as coworking reference data since several Seoul-based chains also operate branches in eligible regions.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -118,6 +119,7 @@
     "lat": 37.4563,
     "lng": 126.7052,
     "blurb": "Port city and international-airport gateway just west of Seoul, part of the capital-tier region for visa purposes.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -141,6 +143,7 @@
     "lat": 37.3826,
     "lng": 127.1189,
     "blurb": "Gyeonggi-do tech hub adjoining Seoul, known for the Bundang district's business and IT sector.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -155,6 +158,18 @@
         "note": "Part of the Fastfive chain (Korean-only site)."
       }
     ]
+  },
+  {
+    "slug": "suwon",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Suwon",
+    "nameKo": "수원시",
+    "lat": 37.2636,
+    "lng": 127.0286,
+    "blurb": "Gyeonggi-do's provincial capital, home to the UNESCO-listed Hwaseong Fortress and the fast-growing Gwanggyo New Town business district.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
   },
   {
     "slug": "sokcho",
@@ -296,6 +311,7 @@
     "lat": 36.64,
     "lng": 127.49,
     "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -311,6 +327,42 @@
     "workationCenters": []
   },
   {
+    "slug": "daejeon",
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Daejeon",
+    "nameKo": "대전광역시",
+    "lat": 36.3504,
+    "lng": 127.3845,
+    "blurb": "Chungcheong-do's largest city and a national research-institute hub, with a fast KTX connection to Seoul.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "sejong",
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Sejong",
+    "nameKo": "세종특별자치시",
+    "lat": 36.4801,
+    "lng": 127.289,
+    "blurb": "Korea's purpose-built administrative capital, still growing, with wide streets and a young, government-worker population.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "gongju",
+    "regionSlug": "chungcheong-do",
+    "nameEn": "Gongju",
+    "nameKo": "공주시",
+    "lat": 36.4465,
+    "lng": 127.1189,
+    "blurb": "Former Baekje-dynasty capital with UNESCO heritage sites, quieter and smaller than the region's other cities.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
     "slug": "gyeongju",
     "regionSlug": "gyeongsang-do",
     "nameEn": "Gyeongju",
@@ -318,6 +370,7 @@
     "lat": 35.86,
     "lng": 129.22,
     "blurb": "Former Silla-dynasty capital — living among UNESCO heritage sites, an hour from Busan.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -340,6 +393,7 @@
     "lat": 35.1796,
     "lng": 129.0756,
     "blurb": "South Korea's second-largest city and main southern port, with beaches and a growing coworking scene.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -379,6 +433,30 @@
     ]
   },
   {
+    "slug": "daegu",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Daegu",
+    "nameKo": "대구광역시",
+    "lat": 35.8714,
+    "lng": 128.6014,
+    "blurb": "Korea's fourth-largest city, a former textile hub now building a tech and startup scene in the country's southeast.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "ulsan",
+    "regionSlug": "gyeongsang-do",
+    "nameEn": "Ulsan",
+    "nameKo": "울산광역시",
+    "lat": 35.5384,
+    "lng": 129.3114,
+    "blurb": "Korea's shipbuilding and heavy-industry capital on the southeast coast, with one of the country's highest average incomes.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
     "slug": "jeonju",
     "regionSlug": "jeolla-do",
     "nameEn": "Jeonju",
@@ -386,6 +464,7 @@
     "lat": 35.82,
     "lng": 127.15,
     "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -397,6 +476,31 @@
     "lat": 34.76,
     "lng": 127.66,
     "blurb": "Harbor city with a night-view reputation and a growing short-stay rental market.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "gwangju",
+    "regionSlug": "jeolla-do",
+    "nameEn": "Gwangju",
+    "nameKo": "광주광역시",
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "blurb": "Jeolla-do's largest city, a design- and arts-focused metro with a strong food scene and a compact, walkable downtown.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "suncheon",
+    "regionSlug": "jeolla-do",
+    "nameEn": "Suncheon",
+    "nameKo": "순천시",
+    "lat": 34.9506,
+    "lng": 127.4872,
+    "blurb": "Coastal city best known for the Suncheon Bay wetland reserve, a slower alternative to the region's bigger cities.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -408,6 +512,7 @@
     "lat": 33.5,
     "lng": 126.53,
     "blurb": "The island's main airport city, with the highest concentration of coworking spaces on Jeju.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -419,6 +524,7 @@
     "lat": 33.25,
     "lng": 126.56,
     "blurb": "South-coast Jeju city, calmer than Jeju City, popular for month-long guesthouse stays.",
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
