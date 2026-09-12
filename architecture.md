@@ -222,6 +222,11 @@ account" isn't needed for compliance (regular dev-key history counts).
   with a known code, attribute per §1's fixed format, never crop or filter `Type3` assets.
 - Some regions (e.g. Jeju, Jeollanam-do) currently have **zero upcoming festivals** in the live
   data — this needs a designed empty state, not a bug fix.
+- City-level filtering adds `lDongSignguCd` (from the `ldongCode2` operation) alongside
+  `lDongRegnCd` — live-confirmed to narrow `areaBasedList2` to one city. Stored on each `City` as
+  `ktoLDongRegnCd`/`ktoLDongSignguCds[]`; empty array = city is its whole `lDongRegnCd` (the metro
+  cities). Gwangju has no single signgu code inside merged region `"12"`, only its 5 gu's — fans
+  out like a multi-code region.
 
 ## 6. Data models
 
@@ -233,7 +238,8 @@ Region        slug, nameEn, nameKo, svgGroupId, centroid{x,y},
               // nomadScore: static editorial int for v1 — real scoring is a separate future project
 
 City          slug, regionSlug, nameEn, nameKo, lat, lng, blurb,
-              workationCenters[{ name, url, note }]
+              workationCenters[{ name, url, note }],
+              ktoLDongRegnCd, ktoLDongSignguCds[]  // §5's city-level KTO filter pair
 
 Attraction    contentId, regionSlug, lDongRegnCd, titleEn, titleKo,
               summary, address, imageUrl, imageThumbUrl, imageLicense,

@@ -30,6 +30,8 @@
     "lng": 126.978,
     "blurb": "South Korea's capital and largest city — outside this site's non-capital eligibility focus, kept here as coworking reference data since several Seoul-based chains also operate branches in eligible regions.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "11",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -120,6 +122,8 @@
     "lng": 126.7052,
     "blurb": "Port city and international-airport gateway just west of Seoul, part of the capital-tier region for visa purposes.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "28",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -144,6 +148,8 @@
     "lng": 127.1189,
     "blurb": "Gyeonggi-do tech hub adjoining Seoul, known for the Bundang district's business and IT sector.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "41",
+    "ktoLDongSignguCds": ["130"],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -168,6 +174,8 @@
     "lng": 127.0286,
     "blurb": "Gyeonggi-do's provincial capital, home to the UNESCO-listed Hwaseong Fortress and the fast-growing Gwanggyo New Town business district.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "41",
+    "ktoLDongSignguCds": ["110"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -182,6 +190,8 @@
     "summaryIcons": ["🏔️", "🏄"],
     "vibeTags": ["mountains", "surf"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 1 }],
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["210"],
     "gettingAround": [
       { "label": "Seoraksan", "value": "40 min" },
       { "label": "Yangyang Beaches", "value": "1.2h" },
@@ -213,6 +223,8 @@
     "summaryIcons": ["🏄", "⛷️"],
     "vibeTags": ["surf", "coffee", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["150"],
     "gettingAround": [
       { "label": "Yangyang Beaches", "value": "1h" },
       { "label": "Alpensia Ski", "value": "40 min", "mode": "taxi" },
@@ -255,6 +267,8 @@
     "summaryIcons": ["⛷️"],
     "vibeTags": ["lakes", "student"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["110"],
     "gettingAround": [
       { "label": "Elysian Ski Resort", "value": "50 min" },
       { "label": "Seoul", "value": "1.5h", "mode": "train", "alt": [{ "value": "2h", "mode": "subway" }] }
@@ -273,6 +287,8 @@
     "summaryIcons": ["⛷️"],
     "vibeTags": ["budget", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["130"],
     "gettingAround": [
       { "label": "Oak Valley Ski Resort", "value": "30 min", "mode": "car" },
       { "label": "Seoul", "value": "1.5h", "mode": "train" }
@@ -312,6 +328,8 @@
     "lng": 127.49,
     "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "43",
+    "ktoLDongSignguCds": ["110"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -335,6 +353,8 @@
     "lng": 127.3845,
     "blurb": "Chungcheong-do's largest city and a national research-institute hub, with a fast KTX connection to Seoul.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "30",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -347,6 +367,8 @@
     "lng": 127.289,
     "blurb": "Korea's purpose-built administrative capital, still growing, with wide streets and a young, government-worker population.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "36110",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -359,6 +381,8 @@
     "lng": 127.1189,
     "blurb": "Former Baekje-dynasty capital with UNESCO heritage sites, quieter and smaller than the region's other cities.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "44",
+    "ktoLDongSignguCds": ["150"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -371,6 +395,8 @@
     "lng": 129.22,
     "blurb": "Former Silla-dynasty capital — living among UNESCO heritage sites, an hour from Busan.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "47",
+    "ktoLDongSignguCds": ["130"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -394,6 +420,8 @@
     "lng": 129.0756,
     "blurb": "South Korea's second-largest city and main southern port, with beaches and a growing coworking scene.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "26",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -441,6 +469,8 @@
     "lng": 128.6014,
     "blurb": "Korea's fourth-largest city, a former textile hub now building a tech and startup scene in the country's southeast.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "27",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -453,6 +483,8 @@
     "lng": 129.3114,
     "blurb": "Korea's shipbuilding and heavy-industry capital on the southeast coast, with one of the country's highest average incomes.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "31",
+    "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -465,6 +497,8 @@
     "lng": 127.15,
     "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "52",
+    "ktoLDongSignguCds": ["110"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -477,6 +511,8 @@
     "lng": 127.66,
     "blurb": "Harbor city with a night-view reputation and a growing short-stay rental market.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "12",
+    "ktoLDongSignguCds": ["130"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -489,6 +525,9 @@
     "lng": 126.8526,
     "blurb": "Jeolla-do's largest city, a design- and arts-focused metro with a strong food scene and a compact, walkable downtown.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "12",
+    "ktoLDongSignguCds": ["210", "240", "270", "300", "330"],
+    "ktoLDongSignguCdsNote": "Gwangju has no single aggregate signgu code inside the merged \"12\" (Jeonnam-Gwangju) lDongRegnCd — live-verified against ldongCode2 — so its 5 gu's (Dong/Seo/Nam/Buk/Gwangsan) are listed individually and need a fan-out query, same pattern as a multi-code region.",
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -501,6 +540,8 @@
     "lng": 127.4872,
     "blurb": "Coastal city best known for the Suncheon Bay wetland reserve, a slower alternative to the region's bigger cities.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "12",
+    "ktoLDongSignguCds": ["150"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -513,6 +554,8 @@
     "lng": 126.53,
     "blurb": "The island's main airport city, with the highest concentration of coworking spaces on Jeju.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "50",
+    "ktoLDongSignguCds": ["110"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -525,6 +568,8 @@
     "lng": 126.56,
     "blurb": "South-coast Jeju city, calmer than Jeju City, popular for month-long guesthouse stays.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
+    "ktoLDongRegnCd": "50",
+    "ktoLDongSignguCds": ["130"],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
