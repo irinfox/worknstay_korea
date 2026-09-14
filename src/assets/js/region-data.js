@@ -4,6 +4,7 @@
 // No-JS story: each mount's <noscript> fallback (region.njk) is the real degraded path — an
 // honest "needs JavaScript" message with an outbound link, not fake/stale data. That's inert the
 // moment JS runs, since init() below replaces the mount's innerHTML unconditionally.
+import { applyFilters as applyAttractionFilters } from "./attraction-filters.js";
 
 function escapeHtml(str) {
   return String(str).replace(
@@ -33,15 +34,21 @@ function renderAttractions(container, attractions) {
       // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover is the project's
       // existing default for both Type1/Type3 (hero.css) — Type3's cover-vs-contain question
       // stays open (ROADMAP Phase 29), unaffected by this.
+      // KTO's firstimage/firstimage2 don't always both resolve — one can 404 on KTO's own CDN
+      // even though the license and the other URL are fine (architecture.md §5). data-fallback
+      // carries the other URL so setupImageFallback can recover instead of showing a broken
+      // image; a li that has neither renders straight to the placeholder as before.
+      const primary = a.imageThumbUrl || a.imageUrl;
+      const fallback = a.imageThumbUrl && a.imageUrl && a.imageUrl !== a.imageThumbUrl ? a.imageUrl : "";
       const media = a.imageLicense
-        ? `<img class="attraction-card__media" src="${a.imageThumbUrl || a.imageUrl}" alt="${escapeHtml(a.titleEn)}" loading="lazy">`
+        ? `<img class="attraction-card__media" src="${primary}"${fallback ? ` data-fallback="${fallback}"` : ""} alt="${escapeHtml(a.titleEn)}" loading="lazy">`
         : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
-      // Visual placeholder only — contentId isn't classified into Nature/Culture yet, so this
-      // alternates just to preview the category plate's look. The real KTO cat1/cat2/cat3 →
-      // Type mapping (and wiring it to the Type filter) is next-step data work.
-      const category = Number(a.contentId) % 2 === 0 ? "Nature" : "Culture";
+      // a.category/a.citySlug come from the whitelist lclsSystm1/2/3 match + lDongSignguCd city
+      // lookup in functions/api/region/[slug]/attractions.js (architecture.md §5) — surfaced
+      // here as data-category/data-city so attraction-filters.js can filter without a refetch.
+      const category = a.category === "nature" ? "Nature" : "Culture";
       return `
-        <li class="attraction-card">
+        <li class="attraction-card" data-category="${a.category}" data-city="${a.citySlug || ""}">
           <div class="attraction-card__figure">
             ${media}
             <span class="attraction-card__category">${category}</span>
@@ -51,6 +58,28 @@ function renderAttractions(container, attractions) {
         </li>`;
     })
     .join("");
+  setupImageFallback(container);
+  applyAttractionFilters();
+}
+
+// A dead src swaps to the other KTO URL once; if that also 404s, swaps to the same
+// .media-placeholder used for unlicensed images rather than leaving a broken-image icon.
+function setupImageFallback(container) {
+  container.querySelectorAll(".attraction-card__media[data-fallback]").forEach((img) => {
+    img.addEventListener("error", function onError() {
+      const fallback = img.dataset.fallback;
+      if (fallback) {
+        img.removeAttribute("data-fallback");
+        img.src = fallback;
+        return;
+      }
+      img.removeEventListener("error", onError);
+      const placeholder = document.createElement("div");
+      placeholder.className = "media-placeholder attraction-card__media";
+      placeholder.setAttribute("aria-hidden", "true");
+      img.replaceWith(placeholder);
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------

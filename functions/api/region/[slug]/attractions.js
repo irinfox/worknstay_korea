@@ -1,35 +1,109 @@
-// Live KTO call (architecture.md §5) — areaBasedList2, fanned out across every lDongRegnCd code
-// a region owns (Promise.allSettled: one code failing only drops that code's items, not the
-// whole region), deduped by contentId, edge-cached ~24h (near-static content). Falls back to the
-// Phase-8 mock fixture when KTO_API_KEY isn't set (local dev without a key), so the response
-// shape callers see never changes.
+// Live KTO call (architecture.md §5) — areaBasedList2, filtered by KTO's newer lclsSystm1/2/3
+// classification instead of the retired cat1/cat2/cat3 tree (the old tree under-surfaced each
+// region's genuinely popular sites, which is why this was rewritten). lclsSystm spans content
+// types on its own — live-confirmed querying by lclsSystm1/2/3 alone returns a mix of
+// contentTypeId 76 (tourist attraction) and 78 (cultural facility) records, no per-content-type
+// call needed. Each group is fanned out across every lDongRegnCd code a region owns
+// (Promise.allSettled: one code/group failing only drops that slice, not the whole region),
+// deduped by contentId, edge-cached ~24h (near-static content). Falls back to the Phase-8 mock
+// fixture when KTO_API_KEY isn't set (local dev without a key), so the response shape callers
+// see never changes.
 import mockAttractions from "../../../../src/_data/mock/attractions.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeAttraction } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
+import { citySlugFor } from "../../lib/city-map.mjs";
 
-const CONTENT_TYPE_ID_ATTRACTION = 76; // v4 renumbered content types (architecture.md §5)
+// contentTypeId is deliberately never passed to the KTO call below — see the module comment.
+// This is a defensive post-filter only, in case some other content type (restaurant, lodging,
+// shopping) ever carries one of the lclsSystm codes below.
+const ALLOWED_CONTENT_TYPE_IDS = new Set([76, 78]);
 // arrange=P: view-count order, representative image required. Undocumented in the EngService2
 // spec (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on
 // every region code. The documented "Q" is *modified-date* order, not view-count — it surfaces
 // whatever was last edited in the CMS (shop branches, recent listings) and buries stable
 // landmark records, so it was the wrong default. See notes/attraction-feed-curation.md.
 const ARRANGE = "P";
-// KTO files medical-tourism venues (plastic-surgery clinics, dental/oriental hospitals,
-// medical-tourism agencies) under contentTypeId 76. Sort order does NOT sink them — they're
-// removed here. cat3 "A02020500" is KTO's 의료관광 category and is 100% medical venues across
-// all six region feeds; the name regex is the fallback for the few records that carry no
-// category code at all (verified against live data).
-const MEDICAL_CAT3 = "A02020500";
-const MEDICAL_NAME_RE =
-  /병원|의원|한의원|성형외과|치과|피부과|안과|clinic|hospital|plastic surgery|dermatolog/i;
-const isMedicalVenue = (raw) =>
-  raw.cat3 === MEDICAL_CAT3 || MEDICAL_NAME_RE.test(raw.title || "");
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
-// A region page shows a representative sample, not an exhaustive attraction database (a 3-code
-// region fully paginated returns 100s of items — too many for the horizontal scroll-snap card
-// list, and needless KTO call volume). One page per code, deduped, is enough variety.
-const ROWS_PER_CODE = 15;
+
+// Whitelist, not blacklist, same reasoning as before: each group is one areaBasedList2 call
+// narrowed server-side by lclsSystm1/2(+3); a `whitelist` Set means the group's lclsSystm2
+// bucket still holds sub-codes not wanted, filtered client-side on lclsSystm3 (cheaper than one
+// KTO call per sub-code, and the group call already narrows most of the way).
+//
+// --- Curation reference (editorial call, not derived from KTO docs) -------------------------
+// Full sub-code review behind every group below, including sub-codes that never reach a
+// whitelist Set because their branch is taken "full" instead. Kept here so a new lclsSystm3
+// code KTO adds later under any of these lclsSystm2 buckets can be judged against these
+// preferences instead of guessed at — "taken full" below means "worth revisiting if KTO adds a
+// sub-code here," not "every sub-code was individually vetted."
+//
+// HS01 (Historical Sites, taken full): wanted — HS010100 (palaces), HS010200, HS010300,
+//   HS010400, HS010600, HS010700, HS010800. Not actively wanted, but low-volume enough to
+//   include anyway rather than complicate the call — HS010500, HS010900, HS011000, HS011100,
+//   HS011200.
+// HS03: wanted — HS030100 (temples) only. Whitelisted (not taken full) — this is the one HS
+//   branch actually narrowed to a single sub-code.
+// VE01 (taken full): wanted — VE010100, VE010200, VE010300, VE010400, VE010500, VE010800. Not
+//   particularly wanted, but low-volume enough to include anyway — VE010700 (~3 objects
+//   nationally), VE010900 (~2 objects nationally).
+// VE03 / river & lake parks (taken full, category: nature — see NATURE_GROUPS above): no
+//   sub-code exclusions raised.
+// VE04 (taken full): no sub-code exclusions raised.
+// VE07 / museums & galleries (whitelisted, not full — see VE07_WHITELIST below): wanted —
+//   VE070100, VE070500, VE070600. So-so — VE070200, VE070300. Not wanted — VE070400.
+// NA01 (taken full, category: nature): wanted — NA010100, NA010200, NA010300, NA010400. Not
+//   wanted, but low-volume enough to include anyway — NA010500 (mineral springs, ~3 objects).
+// NA02 (taken full): wanted — NA020200, NA020500, NA020700, NA020800, NA020900. Not
+//   particularly wanted, but included anyway — NA020100, NA020600 (near-empty nationally).
+// NA03 (taken full — the least settled call of the group): wanted — NA030100, NA030400 (a
+//   single standout object), NA030500 (several standout sites). Not wanted, included anyway for
+//   simplicity — NA030200, NA030300.
+// NA04 (taken full): no sub-code exclusions raised.
+// NA05 (taken full): coastal roads — no sub-code exclusions raised.
+// -----------------------------------------------------------------------------------------------
+
+// Nature — every NA01-NA05 sub-code reviewed (above); only a few low-count sub-codes would be
+// worth excluding, so the whole "NA" branch is taken as-is rather than curating it further. VE03
+// (live-confirmed: Hangang/lake/city parks — Jamsil Hangang Park, Wolmi Park, Seoseoul Lake
+// Park…) is a parks bucket, not a culture one, despite living under KTO's "VE" top code —
+// grouped with nature here.
+const NATURE_GROUPS = [
+  { category: "nature", lclsSystm1: "NA" },
+  { category: "nature", lclsSystm2: "VE03" }, // full
+];
+
+// Culture — Historical Sites (HS) + everyday/urban & cultural-facility (VE) branches. See the
+// curation reference above for the full wanted/so-so/not-wanted breakdown behind each group.
+// If a region/city's culture list ever comes back too thin, ROADMAP_TODO.md Phase 24 tracks
+// widening VE07 to its full range instead of the cut below.
+const VE07_WHITELIST = new Set(["VE070100", "VE070500", "VE070600"]);
+const CULTURE_GROUPS = [
+  { category: "culture", lclsSystm2: "HS01" }, // full: palaces, hanok villages, historic houses…
+  { category: "culture", lclsSystm2: "HS03", lclsSystm3: "HS030100" }, // temples only, not all of HS03
+  { category: "culture", lclsSystm2: "VE01" }, // full
+  { category: "culture", lclsSystm2: "VE04" }, // full
+  { category: "culture", lclsSystm2: "VE07", whitelist: VE07_WHITELIST },
+];
+
+// Display-order priority per region (not a filter — every group above is always fetched).
+// Provisional; user wants to refine after seeing live results (ROADMAP_TODO.md Phase 24).
+const CATEGORY_PRIORITY = {
+  "gyeonggi-do": "culture",
+  "gyeongsang-do": "culture",
+  "jeolla-do": "culture",
+  "chungcheong-do": "culture",
+  "gangwon-do": "nature",
+  "jeju-do": "nature",
+};
+// A region page shows a representative sample, not an exhaustive attraction database. Every
+// group above is narrowed server-side to one lclsSystm2 (+3) bucket, so one page each is enough
+// variety without needing extra headroom for a whitelist to filter down from.
+const ROWS_PER_GROUP = 30;
+
+function fetchGroups(lDongRegnCd) {
+  return [...NATURE_GROUPS, ...CULTURE_GROUPS].map((group) => ({ ...group, lDongRegnCd }));
+}
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
@@ -43,27 +117,48 @@ export async function onRequestGet({ params, env }) {
   }
 
   const codes = slugToLDongRegnCds(slug);
-  const pages = await Promise.allSettled(
-    codes.map((lDongRegnCd) =>
+  const groups = codes.flatMap(fetchGroups);
+  const settled = await Promise.allSettled(
+    groups.map((g) =>
       fetchKtoAllPages(
         "areaBasedList2",
-        { contentTypeId: CONTENT_TYPE_ID_ATTRACTION, lDongRegnCd, arrange: ARRANGE },
+        {
+          lDongRegnCd: g.lDongRegnCd,
+          lclsSystm1: g.lclsSystm1,
+          lclsSystm2: g.lclsSystm2,
+          lclsSystm3: g.lclsSystm3,
+          arrange: ARRANGE,
+        },
         env,
-        { numOfRows: ROWS_PER_CODE, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
+        { numOfRows: ROWS_PER_GROUP, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
       )
     )
   );
 
   const byContentId = new Map();
-  for (const result of pages) {
-    if (result.status !== "fulfilled" || result.value.degraded) continue;
+  settled.forEach((result, i) => {
+    if (result.status !== "fulfilled" || result.value.degraded) return;
+    const { category, whitelist } = groups[i];
     for (const raw of result.value.items) {
-      if (isMedicalVenue(raw)) continue;
+      if (!ALLOWED_CONTENT_TYPE_IDS.has(Number(raw.contenttypeid))) continue;
+      if (whitelist && !whitelist.has(raw.lclsSystm3)) continue;
       const attraction = normalizeAttraction(raw);
+      // Skip photo-less records (no license, or a licensed-but-empty firstimage) — a card with
+      // .media-placeholder reads as broken more often than a dropped attraction is missed.
+      if (!attraction.imageUrl && !attraction.imageThumbUrl) continue;
       attraction.regionSlug = slug;
+      attraction.category = category;
+      attraction.citySlug = citySlugFor(attraction.lDongRegnCd, attraction.lDongSignguCd);
       byContentId.set(attraction.contentId, attraction);
     }
+  });
+
+  const items = [...byContentId.values()];
+  const priority = CATEGORY_PRIORITY[slug];
+  if (priority) {
+    const rank = (category) => (category === priority ? 0 : 1);
+    items.sort((a, b) => rank(a.category) - rank(b.category));
   }
 
-  return Response.json([...byContentId.values()]);
+  return Response.json(items);
 }

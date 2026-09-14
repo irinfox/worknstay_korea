@@ -88,11 +88,17 @@ until Phase 19.
 ## Phase 24 — Region editorial + attraction curation
 Iterative editorial/research work, mostly hand-curation — do one region at a time.
 
-- [x] Attraction feed: `areaBasedList2` with `arrange=P` (view-count order); medical-tourism
-      venues dropped by `cat3` A02020500 + name regex.
-- [ ] Attraction curation (re-research): per-region pinned allowlist of flagship sites (palaces
-      etc. rank below the row window), content-type mix (관광지 vs 문화시설), high no-image rate,
-      per-region count, same-name branch dedupe.
+- [x] Attraction feed: `areaBasedList2` with `arrange=P` (view-count order); Nature/Culture
+      whitelist of curated `lclsSystm1`/`lclsSystm2`/`lclsSystm3` codes (replaces the earlier
+      `cat1`/`cat2`/`cat3` whitelist, which under-surfaced popular sites), one `contentTypeId`-free
+      call per group (spans 76 + 78 on its own), city tagged via `lDongSignguCd`.
+- [ ] Category display-order priority per region is provisional (attractions.js
+      `CATEGORY_PRIORITY`) — revisit once live results are reviewed.
+- [x] Wire the Area/Type filter pills (`attraction-filters.js`) to actually filter
+      `.attraction-list` using `category`/`citySlug`; "Elsewhere" behaves like "All" until that
+      gets its own plan.
+- [ ] VE07 (museums/galleries) is whitelisted to VE070100/070500/070600 only — widen to VE07's
+      full range for any region/city whose culture list comes back too thin.
 - [ ] Region description rewrite (all 6).
 - [ ] Home region cards: vibe-tags.
 - [x] Home region cards: food gallery.
@@ -110,8 +116,6 @@ Depends on 12.
 - [ ] Grep `MOCK`/`PLACEHOLDER` in remaining `_data/*.json`, replace with real values
       (cost-of-living w/ `asOf`/`source`/`sourceUrl`, real community links).
 - [ ] `communities.json` links + `/visa-info/` copy verified against current official sources.
-- [ ] Confirm `#workation #month-long-stay #2030s-youth #local-tourism` show up as real on-page
-      copy tied to actual features, not just floating text.
 - Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
 
 ## Phase 27 — Accessibility + robustness (scriptable)

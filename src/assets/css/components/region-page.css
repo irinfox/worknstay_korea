@@ -1100,6 +1100,13 @@ ul.region-seasons {
   flex-direction: column;
 }
 
+/* attraction-filters.js toggles the hidden attribute to filter cards — needed because an
+   author stylesheet's `display: flex` above always beats the browser's own `[hidden]` default,
+   regardless of source order. */
+.attraction-card[hidden] {
+  display: none;
+}
+
 .attraction-card__media,
 .dish-card__media {
   aspect-ratio: 3 / 2;

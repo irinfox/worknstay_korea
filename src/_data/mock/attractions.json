@@ -12,7 +12,9 @@
     "imageLicense": "Type1",
     "lat": 37.2857,
     "lng": 127.0094,
-    "sourceModifiedAt": "2026-06-01T00:00:00+09:00"
+    "sourceModifiedAt": "2026-06-01T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "suwon"
   },
   {
     "contentId": "126548",
@@ -27,7 +29,9 @@
     "imageLicense": "Type3",
     "lat": 37.5512,
     "lng": 126.9882,
-    "sourceModifiedAt": "2026-05-14T00:00:00+09:00"
+    "sourceModifiedAt": "2026-05-14T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "seoul"
   },
   {
     "contentId": "126984",
@@ -40,9 +44,11 @@
     "imageUrl": "/assets/img/mock/attractions/incheon-chinatown.jpg",
     "imageThumbUrl": "/assets/img/mock/attractions/incheon-chinatown-thumb.jpg",
     "imageLicense": "Type1",
-    "lat": 37.4750,
+    "lat": 37.475,
     "lng": 126.6178,
-    "sourceModifiedAt": "2026-04-22T00:00:00+09:00"
+    "sourceModifiedAt": "2026-04-22T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "incheon"
   },
   {
     "contentId": "127958",
@@ -57,7 +63,9 @@
     "imageLicense": "Type1",
     "lat": 38.1197,
     "lng": 128.4655,
-    "sourceModifiedAt": "2026-05-30T00:00:00+09:00"
+    "sourceModifiedAt": "2026-05-30T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "sokcho"
   },
   {
     "contentId": "128102",
@@ -72,7 +80,9 @@
     "imageLicense": "Type1",
     "lat": 38.1281,
     "lng": 128.6267,
-    "sourceModifiedAt": "2026-06-10T00:00:00+09:00"
+    "sourceModifiedAt": "2026-06-10T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "yangyang"
   },
   {
     "contentId": "128377",
@@ -87,7 +97,9 @@
     "imageLicense": "",
     "lat": 37.7904,
     "lng": 127.5262,
-    "sourceModifiedAt": "2026-03-18T00:00:00+09:00"
+    "sourceModifiedAt": "2026-03-18T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "chuncheon"
   },
   {
     "contentId": "129011",
@@ -102,7 +114,9 @@
     "imageLicense": "Type1",
     "lat": 36.3245,
     "lng": 126.5131,
-    "sourceModifiedAt": "2026-05-02T00:00:00+09:00"
+    "sourceModifiedAt": "2026-05-02T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "boryeong"
   },
   {
     "contentId": "129244",
@@ -116,8 +130,10 @@
     "imageThumbUrl": "/assets/img/mock/attractions/songnisan-thumb.jpg",
     "imageLicense": "Type1",
     "lat": 36.5405,
-    "lng": 127.8730,
-    "sourceModifiedAt": "2026-04-11T00:00:00+09:00"
+    "lng": 127.873,
+    "sourceModifiedAt": "2026-04-11T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": null
   },
   {
     "contentId": "129506",
@@ -132,7 +148,9 @@
     "imageLicense": "Type1",
     "lat": 36.3745,
     "lng": 127.3853,
-    "sourceModifiedAt": "2026-02-27T00:00:00+09:00"
+    "sourceModifiedAt": "2026-02-27T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "daejeon"
   },
   {
     "contentId": "130187",
@@ -147,7 +165,9 @@
     "imageLicense": "Type1",
     "lat": 35.1587,
     "lng": 129.1604,
-    "sourceModifiedAt": "2026-06-05T00:00:00+09:00"
+    "sourceModifiedAt": "2026-06-05T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "busan"
   },
   {
     "contentId": "130432",
@@ -161,8 +181,10 @@
     "imageThumbUrl": "/assets/img/mock/attractions/bulguksa-thumb.jpg",
     "imageLicense": "Type3",
     "lat": 35.7898,
-    "lng": 129.3320,
-    "sourceModifiedAt": "2026-05-19T00:00:00+09:00"
+    "lng": 129.332,
+    "sourceModifiedAt": "2026-05-19T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "gyeongju"
   },
   {
     "contentId": "130705",
@@ -177,7 +199,9 @@
     "imageLicense": "Type1",
     "lat": 35.8701,
     "lng": 128.5798,
-    "sourceModifiedAt": "2026-03-30T00:00:00+09:00"
+    "sourceModifiedAt": "2026-03-30T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "daegu"
   },
   {
     "contentId": "131018",
@@ -190,9 +214,11 @@
     "imageUrl": "/assets/img/mock/attractions/jeonju-hanok-village.jpg",
     "imageThumbUrl": "/assets/img/mock/attractions/jeonju-hanok-village-thumb.jpg",
     "imageLicense": "Type1",
-    "lat": 35.8150,
+    "lat": 35.815,
     "lng": 127.1531,
-    "sourceModifiedAt": "2026-06-08T00:00:00+09:00"
+    "sourceModifiedAt": "2026-06-08T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "jeonju"
   },
   {
     "contentId": "131259",
@@ -207,7 +233,9 @@
     "imageLicense": "Type1",
     "lat": 34.8825,
     "lng": 127.5136,
-    "sourceModifiedAt": "2026-01-25T00:00:00+09:00"
+    "sourceModifiedAt": "2026-01-25T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "suncheon"
   },
   {
     "contentId": "131502",
@@ -222,7 +250,9 @@
     "imageLicense": "Type1",
     "lat": 35.2178,
     "lng": 126.8494,
-    "sourceModifiedAt": "2026-04-30T00:00:00+09:00"
+    "sourceModifiedAt": "2026-04-30T00:00:00+09:00",
+    "category": "culture",
+    "citySlug": "gwangju"
   },
   {
     "contentId": "132014",
@@ -237,7 +267,9 @@
     "imageLicense": "Type1",
     "lat": 33.4581,
     "lng": 126.9425,
-    "sourceModifiedAt": "2026-06-12T00:00:00+09:00"
+    "sourceModifiedAt": "2026-06-12T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "seogwipo"
   },
   {
     "contentId": "132267",
@@ -252,7 +284,9 @@
     "imageLicense": "Type1",
     "lat": 33.3617,
     "lng": 126.5292,
-    "sourceModifiedAt": "2026-05-21T00:00:00+09:00"
+    "sourceModifiedAt": "2026-05-21T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": null
   },
   {
     "contentId": "132498",
@@ -267,6 +301,8 @@
     "imageLicense": "Type3",
     "lat": 33.5283,
     "lng": 126.7714,
-    "sourceModifiedAt": "2026-03-07T00:00:00+09:00"
+    "sourceModifiedAt": "2026-03-07T00:00:00+09:00",
+    "category": "nature",
+    "citySlug": "jeju-city"
   }
 ]

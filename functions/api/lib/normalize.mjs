@@ -68,6 +68,7 @@ export function normalizeAttraction(raw) {
   return {
     contentId: raw.contentid,
     lDongRegnCd: raw.lDongRegnCd,
+    lDongSignguCd: raw.lDongSignguCd || "",
     titleEn,
     titleKo,
     summary: "",
