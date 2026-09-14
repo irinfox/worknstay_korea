@@ -7,6 +7,8 @@
     "lat": 37.76,
     "lng": 126.78,
     "blurb": "Quiet border-area city with a growing arts/publishing district (Heyri) and easy access to Seoul.",
+    "ktoLDongRegnCd": "41",
+    "ktoLDongSignguCds": ["480"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -18,6 +20,8 @@
     "lat": 37.75,
     "lng": 126.49,
     "blurb": "Incheon county with a distinct rural, historic character — a population-decline-designated area inside the capital-tier region (MOIS-confirmed 2026-08-18).",
+    "ktoLDongRegnCd": "28",
+    "ktoLDongSignguCds": ["710"],
     "isPopulationDeclineArea": true,
     "workationCenters": []
   },
@@ -149,7 +153,7 @@
     "blurb": "Gyeonggi-do tech hub adjoining Seoul, known for the Bundang district's business and IT sector.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "41",
-    "ktoLDongSignguCds": ["130"],
+    "ktoLDongSignguCds": ["130", "131", "133", "135"],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -253,6 +257,8 @@
     "lat": 38.075,
     "lng": 128.619,
     "blurb": "Often called a Korean Bali, with Surfyy Beach being its most famous surf spot. A small, village-like town with limited study-café options.",
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["830"],
     "isPopulationDeclineArea": true,
     "workationCenters": []
   },
@@ -304,6 +310,8 @@
     "lat": 38.3806,
     "lng": 128.468,
     "blurb": "Rural border county on Gangwon-do's northeast coast near the DMZ and Unification Observatory; a MOIS-designated population-decline area.",
+    "ktoLDongRegnCd": "51",
+    "ktoLDongSignguCds": ["820"],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -329,7 +337,7 @@
     "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "43",
-    "ktoLDongSignguCds": ["110"],
+    "ktoLDongSignguCds": ["110", "111", "112", "113", "114"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -341,6 +349,8 @@
     "lat": 36.33,
     "lng": 126.61,
     "blurb": "Coastal city best known for the Mud Festival, with a slower off-season pace.",
+    "ktoLDongRegnCd": "44",
+    "ktoLDongSignguCds": ["180"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -408,6 +418,8 @@
     "lat": 36.57,
     "lng": 128.73,
     "blurb": "Traditional Confucian-heritage city, quieter and more rural than the region's coastal metros.",
+    "ktoLDongRegnCd": "47",
+    "ktoLDongSignguCds": ["170"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },
@@ -445,6 +457,8 @@
     "lat": 34.8544,
     "lng": 128.4331,
     "blurb": "Coastal city in Gyeongsangnam-do known for its harbor and islands; on MOIS's population 'watch' list.",
+    "ktoLDongRegnCd": "48",
+    "ktoLDongSignguCds": ["220"],
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
@@ -498,7 +512,7 @@
     "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "52",
-    "ktoLDongSignguCds": ["110"],
+    "ktoLDongSignguCds": ["110", "111", "113"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },

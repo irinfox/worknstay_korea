@@ -1170,6 +1170,7 @@ ul.region-seasons {
   color: var(--color-text-muted);
 }
 
+.attraction-card__ko,
 .dish-card__ko {
   font-family: var(--font-family-ko);
   font-weight: 400;
@@ -1184,6 +1185,7 @@ ul.region-seasons {
     padding-bottom: 14px;
   }
 
+  .attraction-card__ko,
   .dish-card__ko {
     display: block;
     margin-top: 6px;

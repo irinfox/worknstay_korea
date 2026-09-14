@@ -53,7 +53,7 @@ function renderAttractions(container, attractions) {
             ${media}
             <span class="attraction-card__category">${category}</span>
           </div>
-          <h4>${escapeHtml(a.titleEn)}</h4>
+          <h4>${escapeHtml(a.titleEn)}${a.titleKo ? ` <span class="attraction-card__ko">${escapeHtml(a.titleKo)}</span>` : ""}</h4>
           <p class="attraction-card__address">${escapeHtml(a.address)}</p>
         </li>`;
     })
