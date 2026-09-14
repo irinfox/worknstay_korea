@@ -23,9 +23,21 @@ async function fetchJson(url) {
   }
 }
 
-function renderAttractions(container, attractions) {
+function renderAttractions(container, data) {
+  // fetchJson is shared with events (still a bare array) — attractions.js returns
+  // { items, quotaExceeded }, but fetchJson's own network-failure fallback is still a bare `[]`,
+  // so handle both shapes rather than assuming the object one always arrives.
+  const attractions = Array.isArray(data) ? data : data.items || [];
+  const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
   if (!attractions.length) {
-    container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
+    // quotaExceeded means there really are attractions here — KTO's daily call quota (§5) just
+    // ran out before we could fetch them today — so this gets its own honest message instead of
+    // the generic "nothing here" one (DESIGN.md "Empty & fallback states": wording says what's
+    // actually missing).
+    const message = quotaExceeded
+      ? "We've reached our daily capacity for displaying spots. Please come back tomorrow to explore this region."
+      : "No attractions listed for this region right now.";
+    container.innerHTML = `<li class="empty-state">${message}</li>`;
     return;
   }
   container.innerHTML = attractions

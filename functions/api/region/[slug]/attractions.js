@@ -7,7 +7,10 @@
 // (Promise.allSettled: one code/group failing only drops that slice, not the whole region),
 // deduped by contentId, edge-cached ~24h (near-static content). Falls back to the Phase-8 mock
 // fixture when KTO_API_KEY isn't set (local dev without a key), so the response shape callers
-// see never changes.
+// see never changes: always `{ items: Attraction[], quotaExceeded: boolean }`. `quotaExceeded`
+// distinguishes "KTO's daily call quota is gone for the account" from a genuinely empty region,
+// so the front end can show an honest message instead of "no attractions here" when there
+// really are some, we just can't fetch them today (kto-client.mjs).
 import mockAttractions from "../../../../src/_data/mock/attractions.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeAttraction } from "../../lib/normalize.mjs";
@@ -132,8 +135,11 @@ async function fetchRegionAttractions(slug, groups, arrange, env) {
   );
 
   const byContentId = new Map();
+  let quotaExceeded = false;
   settled.forEach((result, i) => {
-    if (result.status !== "fulfilled" || result.value.degraded) return;
+    if (result.status !== "fulfilled") return;
+    if (result.value.quotaExceeded) quotaExceeded = true;
+    if (result.value.degraded) return;
     const { category, whitelist } = groups[i];
     for (const raw of result.value.items) {
       if (!ALLOWED_CONTENT_TYPE_IDS.has(Number(raw.contenttypeid))) continue;
@@ -149,7 +155,7 @@ async function fetchRegionAttractions(slug, groups, arrange, env) {
     }
   });
 
-  return [...byContentId.values()];
+  return { items: [...byContentId.values()], quotaExceeded };
 }
 
 export async function onRequestGet({ params, env }) {
@@ -160,14 +166,17 @@ export async function onRequestGet({ params, env }) {
   }
 
   if (!env?.KTO_API_KEY) {
-    return Response.json(mockAttractions.filter((a) => a.regionSlug === slug));
+    return Response.json({ items: mockAttractions.filter((a) => a.regionSlug === slug), quotaExceeded: false });
   }
 
   const codes = slugToLDongRegnCds(slug);
   const groups = codes.flatMap(fetchGroups);
-  let items = await fetchRegionAttractions(slug, groups, ARRANGE, env);
-  if (items.length === 0) {
-    items = await fetchRegionAttractions(slug, groups, FALLBACK_ARRANGE, env);
+  let { items, quotaExceeded } = await fetchRegionAttractions(slug, groups, ARRANGE, env);
+  // Retrying with a different arrange can't help when the account's whole daily quota is gone —
+  // every group would fail the same way, and the retry would just double an already-futile round
+  // of calls (see architecture.md §5 / AutoMem feedback_kto_call_budget).
+  if (items.length === 0 && !quotaExceeded) {
+    ({ items, quotaExceeded } = await fetchRegionAttractions(slug, groups, FALLBACK_ARRANGE, env));
   }
 
   const priority = CATEGORY_PRIORITY[slug];
@@ -176,5 +185,5 @@ export async function onRequestGet({ params, env }) {
     items.sort((a, b) => rank(a.category) - rank(b.category));
   }
 
-  return Response.json(items);
+  return Response.json({ items, quotaExceeded });
 }

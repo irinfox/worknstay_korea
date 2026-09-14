@@ -15,7 +15,45 @@ const TIMEOUT_MS = 8000;
 const MAX_RETRIES = 2; // bounded: up to 3 attempts total
 const RETRY_BASE_DELAY_MS = 400;
 
-const DEGRADED = { items: [], degraded: true, totalCount: 0 };
+const DEGRADED = { items: [], degraded: true, totalCount: 0, quotaExceeded: false };
+// data.go.kr's own error body on a 429, distinguishing "daily quota gone" from "per-second burst"
+// — both are HTTP 429, only the JSON body tells them apart:
+//   daily:      { returnReasonCode: "22", errMsg: "LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR" }
+//   per-second: { returnReasonCode: "23", errMsg: "...PER_SECOND_EXCEEDS_ERROR" }
+// Retrying a per-second hit is worth it (resolves within the retry window); retrying a daily hit
+// never is (only clears at midnight KST) — so it fails fast instead of burning the rest of
+// MAX_RETRIES on a call that cannot succeed, and flags `quotaExceeded` so callers can show an
+// honest "we can't display more today" message instead of a generic empty state.
+const DAILY_QUOTA_REASON_CODE = "22";
+
+// Local dev-only visibility, not a production safeguard or a real quota tracker: this
+// module-level count only survives for one long-lived `wrangler pages dev` process (resets on
+// every restart) and, in real Cloudflare deployment, isolates recycle so it wouldn't persist
+// there either — it exists purely to make the running total visible in the terminal *during*
+// local testing. Added after burning a full day's 1,000-call dev-key quota in ~4 hours of live
+// verification in one session (repeated full-region endpoint checks, each fanning out to up to
+// 35 KTO calls). Counts every attempt this process actually sends over the network — including
+// retries and, in principle, requests Cloudflare's edge cache would normally have intercepted
+// before they reached KTO — because local dev's cache emulation isn't reliable (confirmed:
+// identical back-to-back local requests weren't served from cache), so almost every attempt here
+// really does round-trip to KTO's origin during dev testing, even though far fewer would in
+// production.
+const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key is 1,000/day — warn well before hitting it
+let devSessionCallCount = 0;
+let warnedAtThreshold = false;
+
+function logDevSessionCall() {
+  devSessionCallCount += 1;
+  console.log(`[kto-client] live KTO call #${devSessionCallCount} this dev session`);
+  if (devSessionCallCount >= DAILY_QUOTA_WARNING_THRESHOLD && !warnedAtThreshold) {
+    warnedAtThreshold = true;
+    console.warn(
+      `[kto-client] WARNING: ${devSessionCallCount} live KTO calls made this dev session alone — ` +
+        `the dev key is capped at 1,000/day total. Stop live-testing and switch to the mock ` +
+        `fixture or a single targeted query before doing anything else.`
+    );
+  }
+}
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -79,7 +117,7 @@ function extractItems(body) {
  * @param {{ KTO_API_KEY?: string }} env - Cloudflare Functions env binding
  * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
  *   to bypass the edge cache (used for verify scripts and other one-off calls).
- * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number }>}
+ * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
 export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   const serviceKey = env?.KTO_API_KEY;
@@ -90,6 +128,7 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let response;
     try {
+      logDevSessionCall();
       response = await fetchWithTimeout(url, cacheTtl);
     } catch {
       // network error or timeout (AbortError)
@@ -100,7 +139,24 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
       return DEGRADED;
     }
 
-    if (response.status === 429 || response.status >= 500) {
+    if (response.status === 429) {
+      let reasonCode;
+      try {
+        reasonCode = (await response.json())?.OpenAPI_ServiceResponse?.cmmMsgHeader?.returnReasonCode;
+      } catch {
+        reasonCode = undefined;
+      }
+      if (reasonCode === DAILY_QUOTA_REASON_CODE) {
+        return { ...DEGRADED, quotaExceeded: true };
+      }
+      if (attempt < MAX_RETRIES) {
+        await sleep(RETRY_BASE_DELAY_MS * 2 ** attempt);
+        continue;
+      }
+      return DEGRADED;
+    }
+
+    if (response.status >= 500) {
       if (attempt < MAX_RETRIES) {
         await sleep(RETRY_BASE_DELAY_MS * 2 ** attempt);
         continue;
@@ -123,6 +179,7 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
       items: extractItems(body),
       degraded: false,
       totalCount: Number(body?.response?.body?.totalCount ?? 0),
+      quotaExceeded: false,
     };
   }
 
@@ -149,7 +206,7 @@ export async function fetchKtoAllPages(
 
   while (pageNo <= maxPages && items.length < totalCount) {
     const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env, { cacheTtl });
-    if (page.degraded) return { items: [], degraded: true, totalCount: 0 };
+    if (page.degraded) return { items: [], degraded: true, totalCount: 0, quotaExceeded: page.quotaExceeded };
 
     items.push(...page.items);
     totalCount = page.totalCount;
@@ -157,5 +214,5 @@ export async function fetchKtoAllPages(
     pageNo += 1;
   }
 
-  return { items, degraded: false, totalCount };
+  return { items, degraded: false, totalCount, quotaExceeded: false };
 }
