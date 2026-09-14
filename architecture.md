@@ -164,7 +164,11 @@ account" isn't needed for compliance (regular dev-key history counts).
 **Known KTO data quirks baked into `kto-client.mjs`/`normalize.mjs`:**
 - v4 renumbered content types — attraction is `76`, not the old `12`.
 - `areaBasedList2` is called with `arrange=P` (view-count order) — the documented `Q` is
-  modified-date order, surfacing stale CMS edits over real landmarks.
+  modified-date order, surfacing stale CMS edits over real landmarks. `P` is undocumented on
+  this operation too; if KTO ever drops it, it'd likely revert to another order rather than
+  error, which per-group emptiness can't catch (most sub-codes are legitimately sparse). So
+  `attractions.js` only retries when a *whole region* comes back empty — with `arrange=R`
+  (documented, image-required).
 - Attraction filtering whitelists curated `lclsSystm1/2/3` codes (not `cat1/2/3`, which
   under-surfaced popular sites) — composes with `lDongRegnCd`/`lDongSignguCd` in one call and
   spans `contentTypeId` on its own (76+78 in one query, no per-type call needed). City tagging

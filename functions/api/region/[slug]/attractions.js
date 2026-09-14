@@ -24,6 +24,14 @@ const ALLOWED_CONTENT_TYPE_IDS = new Set([76, 78]);
 // whatever was last edited in the CMS (shop branches, recent listings) and buries stable
 // landmark records, so it was the wrong default. See notes/attraction-feed-curation.md.
 const ARRANGE = "P";
+// If KTO ever silently drops support for the undocumented `P`, the realistic failure mode isn't
+// an error or empty groups (per-group emptiness is normal — most lclsSystm3 sub-codes are
+// legitimately sparse for a given region) — it's `P` reverting to some other order without
+// telling us. That can't be detected per group. What CAN be checked cheaply: a whole region
+// coming back with zero attractions across every group combined is implausible under normal
+// operation, so treat that as a signal something's wrong with `P` and retry the whole region
+// once with a documented, image-required arrange value before giving up.
+const FALLBACK_ARRANGE = "R"; // created-date order, image required — closest documented match to P
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
 
 // Whitelist, not blacklist, same reasoning as before: each group is one areaBasedList2 call
@@ -105,19 +113,7 @@ function fetchGroups(lDongRegnCd) {
   return [...NATURE_GROUPS, ...CULTURE_GROUPS].map((group) => ({ ...group, lDongRegnCd }));
 }
 
-export async function onRequestGet({ params, env }) {
-  const { slug } = params;
-
-  if (!isValidSlug(slug)) {
-    return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
-  }
-
-  if (!env?.KTO_API_KEY) {
-    return Response.json(mockAttractions.filter((a) => a.regionSlug === slug));
-  }
-
-  const codes = slugToLDongRegnCds(slug);
-  const groups = codes.flatMap(fetchGroups);
+async function fetchRegionAttractions(slug, groups, arrange, env) {
   const settled = await Promise.allSettled(
     groups.map((g) =>
       fetchKtoAllPages(
@@ -127,7 +123,7 @@ export async function onRequestGet({ params, env }) {
           lclsSystm1: g.lclsSystm1,
           lclsSystm2: g.lclsSystm2,
           lclsSystm3: g.lclsSystm3,
-          arrange: ARRANGE,
+          arrange,
         },
         env,
         { numOfRows: ROWS_PER_GROUP, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
@@ -153,7 +149,27 @@ export async function onRequestGet({ params, env }) {
     }
   });
 
-  const items = [...byContentId.values()];
+  return [...byContentId.values()];
+}
+
+export async function onRequestGet({ params, env }) {
+  const { slug } = params;
+
+  if (!isValidSlug(slug)) {
+    return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
+  }
+
+  if (!env?.KTO_API_KEY) {
+    return Response.json(mockAttractions.filter((a) => a.regionSlug === slug));
+  }
+
+  const codes = slugToLDongRegnCds(slug);
+  const groups = codes.flatMap(fetchGroups);
+  let items = await fetchRegionAttractions(slug, groups, ARRANGE, env);
+  if (items.length === 0) {
+    items = await fetchRegionAttractions(slug, groups, FALLBACK_ARRANGE, env);
+  }
+
   const priority = CATEGORY_PRIORITY[slug];
   if (priority) {
     const rank = (category) => (category === priority ? 0 : 1);
