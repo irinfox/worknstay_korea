@@ -36,9 +36,16 @@ function renderAttractions(container, attractions) {
       const media = a.imageLicense
         ? `<img class="attraction-card__media" src="${a.imageThumbUrl || a.imageUrl}" alt="${escapeHtml(a.titleEn)}" loading="lazy">`
         : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
+      // Visual placeholder only — contentId isn't classified into Nature/Culture yet, so this
+      // alternates just to preview the category plate's look. The real KTO cat1/cat2/cat3 →
+      // Type mapping (and wiring it to the Type filter) is next-step data work.
+      const category = Number(a.contentId) % 2 === 0 ? "Nature" : "Culture";
       return `
         <li class="attraction-card">
-          ${media}
+          <div class="attraction-card__figure">
+            ${media}
+            <span class="attraction-card__category">${category}</span>
+          </div>
           <h4>${escapeHtml(a.titleEn)}</h4>
           <p class="attraction-card__address">${escapeHtml(a.address)}</p>
         </li>`;

@@ -237,6 +237,31 @@ eleventyComputed:
 
 <section class="region-section region-section--attractions">
   <h2>Places to see nearby</h2>
+  {# Filter row — visual + selection state only for now. "Area" reuses the same cityList the
+     "Cities in this region" section above already resolved per region, so it only ever offers
+     the cities actually shown on this page, not every city.json record. "Elsewhere" covers
+     attractions not tied to one of those cities. Real filtering of the list below is next-step
+     data work, not wired here. #}
+  <div class="attraction-filters" data-attraction-filters>
+    <div class="attraction-filters__group" role="group" aria-label="Filter by area">
+      <span class="attraction-filters__label">Area</span>
+      <div class="attraction-filters__pills">
+        <button type="button" class="filter-pill is-selected" aria-pressed="true" data-filter-group="area" data-filter-value="all">All</button>
+        {% for city in cityList %}
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="{{ city.slug }}">{{ city.nameEn }}</button>
+        {% endfor %}
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="elsewhere">Elsewhere</button>
+      </div>
+    </div>
+    <div class="attraction-filters__group" role="group" aria-label="Filter by place type">
+      <span class="attraction-filters__label">Type</span>
+      <div class="attraction-filters__pills">
+        <button type="button" class="filter-pill is-selected" aria-pressed="true" data-filter-group="type" data-filter-value="all">All</button>
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="type" data-filter-value="nature">Nature</button>
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="type" data-filter-value="culture">Culture</button>
+      </div>
+    </div>
+  </div>
   {# Same live-fetch pattern as the events timeline above. #}
   <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}">
     <noscript>
