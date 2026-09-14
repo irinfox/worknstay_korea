@@ -1170,6 +1170,25 @@ ul.region-seasons {
   color: var(--color-text-muted);
 }
 
+.attraction-card__address {
+  margin-top: 5px;
+}
+
+/* Same glyph as the festival pin (event-timeline.css PIN_ICON) — fill: currentColor inherits
+   this muted colour automatically, never the accent green. Sits inline before the address text
+   on purpose (not flex): plain inline flow only puts the pin on line one and returns any wrapped
+   second line flush to the card's own left edge, which a flex/hang-indent layout would not. The
+   festival pin never needed `display: inline-block` here because .event-place is a flex
+   container; base.css's global `svg { display: block }` reset otherwise makes an inline SVG
+   stack as its own line instead of sitting in the text. */
+.attraction-card__pin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+
 .attraction-card__ko,
 .dish-card__ko {
   font-family: var(--font-family-ko);

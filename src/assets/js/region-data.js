@@ -66,7 +66,7 @@ function renderAttractions(container, data) {
             <span class="attraction-card__category">${category}</span>
           </div>
           <h4>${escapeHtml(a.titleEn)}${a.titleKo ? ` <span class="attraction-card__ko">${escapeHtml(a.titleKo)}</span>` : ""}</h4>
-          <p class="attraction-card__address">${escapeHtml(a.address)}</p>
+          <p class="attraction-card__address">${pinIcon("attraction-card__pin")}${escapeHtml(a.address)}</p>
         </li>`;
     })
     .join("");
@@ -101,7 +101,12 @@ function setupImageFallback(container) {
 const EVENTS_PAGE_SIZE = 5;
 
 // Small inline glyphs (project rule: inline SVG, zero icon libraries).
-const PIN_ICON = `<svg class="event-place__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+// Shared glyph, sized per context via `className` (event-place__icon for festival cards,
+// attraction-card__pin for "Places to see nearby" — region-page.css sizes each independently).
+function pinIcon(className) {
+  return `<svg class="${className}" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+}
+const PIN_ICON = pinIcon("event-place__icon");
 const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
 // Tear-off desk calendar with a blank page — the empty state ("no dates listed").
 const CAL_EMPTY_ICON = `<svg class="event-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8.5" cy="4" r="1.3"/><circle cx="15.5" cy="4" r="1.3"/><path d="M8.5 5.3v1.7M15.5 5.3v1.7"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M4 11h16" stroke-dasharray="2 2"/></svg>`;

@@ -29,19 +29,35 @@ function decodeEntities(text) {
     .trim();
 }
 
-// Titles arrive like "ARTEASPOON (아티스푼)", "1stbutton Rhinoplasty clinic (첫단추의원)", or
-// with a nested-paren Korean group like "APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))".
-// titleEn is everything before the trailing Korean-script parenthesized group; that group is
-// titleKo. Titles with no trailing Korean paren keep titleKo empty rather than guessing.
+// Titles arrive like "ARTEASPOON (아티스푼)", "1stbutton Rhinoplasty clinic (첫단추의원)",
+// with a nested-paren Korean group like "APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))",
+// or with a "[...]" tag on either side like "Geomunoreum Lava Tube [UNESCO World Natural
+// Heritage Site] (거문오름 [유네스코 세계자연유산])" — stripped below, readability call, not KTO
+// data we want to keep. titleEn is everything before the trailing Korean-script parenthesized
+// group; that group is titleKo, with any further nested "(...)" inside it dropped too (an
+// alternate/older name, not worth the clutter). Titles with no trailing Korean paren keep
+// titleKo empty rather than guessing.
+function stripBracketedTags(text) {
+  return text
+    .replace(/\[[^\]]*\]/g, "")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function splitTitle(rawTitle) {
-  const title = decodeEntities(rawTitle);
+  const title = stripBracketedTags(decodeEntities(rawTitle));
   // Preferred: trailing "(...)" with no nested parens — keeps a parenthetical English
   // sub-title (e.g. "... (Road 5.16 Forest Tunnel) (5.16도로숲터널)") inside titleEn.
   let match = title.match(/^(.*)\(([^()]*[가-힣][^()]*)\)\s*$/);
   // Fallback: the Korean group itself contains parens.
   if (!match) match = title.match(/^(.*?)\s*\((.*[가-힣].*)\)\s*$/);
   if (!match) return { titleEn: title, titleKo: "" };
-  return { titleEn: match[1].trim(), titleKo: match[2].trim() };
+  // Drop a nested "(...)" inside titleKo itself (the APAP/Hamdeok Beach case above) — titleEn
+  // keeps its own parenthetical sub-title untouched (Road 5.16 case), this only touches titleKo.
+  const titleKo = match[2].trim().replace(/\s*\([^()]*\)/g, "").trim();
+  return { titleEn: match[1].trim(), titleKo };
 }
 
 // Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use"
