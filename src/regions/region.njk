@@ -236,7 +236,12 @@ eleventyComputed:
 </div>
 
 <section class="region-section region-section--attractions">
-  <h2>Places to see nearby</h2>
+  <h2>Places to visit</h2>
+  {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+     quotaExceeded (KTO's daily call quota is gone) and falls back to the curated mock list, so
+     "today's top picks" doesn't quietly read as the full live set. Reset on every render so a
+     stale "top picks" message can't survive a state that later succeeds. #}
+  <p class="region-section__sub" data-attractions-subtitle>What to explore in the region</p>
   {# Filter row — visual + selection state only for now. "Area" reuses the same cityList the
      "Cities in this region" section above already resolved per region, so it only ever offers
      the cities actually shown on this page, not every city.json record. "Elsewhere" covers

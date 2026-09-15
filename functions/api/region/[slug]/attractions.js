@@ -179,6 +179,15 @@ export async function onRequestGet({ params, env }) {
     ({ items, quotaExceeded } = await fetchRegionAttractions(slug, groups, FALLBACK_ARRANGE, env));
   }
 
+  // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (a
+  // mix of stale edge-cache hits and quota-blocked misses), so fall back to the curated mock set
+  // rather than show a partial or empty gallery. `quotaExceeded` stays true so the front end
+  // swaps in "Top picks for today" instead of implying this is the full live list
+  // (region-data.js).
+  if (quotaExceeded) {
+    items = mockAttractions.filter((a) => a.regionSlug === slug);
+  }
+
   const priority = CATEGORY_PRIORITY[slug];
   if (priority) {
     const rank = (category) => (category === priority ? 0 : 1);

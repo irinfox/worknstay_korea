@@ -179,7 +179,20 @@
     "blurb": "Gyeonggi-do's provincial capital, home to the UNESCO-listed Hwaseong Fortress and the fast-growing Gwanggyo New Town business district.",
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "41",
-    "ktoLDongSignguCds": ["110"],
+    "ktoLDongSignguCds": ["111", "113", "115", "117"],
+    "isPopulationDeclineArea": false,
+    "workationCenters": []
+  },
+  {
+    "slug": "goyang",
+    "regionSlug": "gyeonggi-do",
+    "nameEn": "Goyang",
+    "nameKo": "고양시",
+    "lat": 37.6584,
+    "lng": 126.832,
+    "blurb": "Not yet shown in the region's city list — attraction-matching only (Ilsandong-gu code confirmed; Deogyang-gu/Ilsanseo-gu not sourced yet).",
+    "ktoLDongRegnCd": "41",
+    "ktoLDongSignguCds": ["285"],
     "isPopulationDeclineArea": false,
     "workationCenters": []
   },

@@ -23,21 +23,29 @@ async function fetchJson(url) {
   }
 }
 
+const ATTRACTIONS_SUBTITLE_DEFAULT = "What to explore in the region";
+const ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED = "Top picks for today, the full list will be back tomorrow";
+
 function renderAttractions(container, data) {
   // fetchJson is shared with events (still a bare array) — attractions.js returns
   // { items, quotaExceeded }, but fetchJson's own network-failure fallback is still a bare `[]`,
   // so handle both shapes rather than assuming the object one always arrives.
   const attractions = Array.isArray(data) ? data : data.items || [];
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
+  // back to the curated mock set rather than send an empty/partial list — so the subtitle should
+  // say "today's picks", not imply this is the full live gallery. Reset to the default on every
+  // render (not just set-once) so a page that loads mid-outage and later re-fetches doesn't keep
+  // a stale "top picks" message.
+  const subtitle = document.querySelector("[data-attractions-subtitle]");
+  if (subtitle) {
+    subtitle.textContent = quotaExceeded ? ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED : ATTRACTIONS_SUBTITLE_DEFAULT;
+  }
   if (!attractions.length) {
-    // quotaExceeded means there really are attractions here — KTO's daily call quota (§5) just
-    // ran out before we could fetch them today — so this gets its own honest message instead of
-    // the generic "nothing here" one (DESIGN.md "Empty & fallback states": wording says what's
-    // actually missing).
-    const message = quotaExceeded
-      ? "We've reached our daily capacity for displaying spots. Please come back tomorrow to explore this region."
-      : "No attractions listed for this region right now.";
-    container.innerHTML = `<li class="empty-state">${message}</li>`;
+    // A true empty result only happens now if a region genuinely has none *and* KTO's quota
+    // isn't the cause (quotaExceeded always serves the mock fallback in attractions.js, so this
+    // branch never sees quotaExceeded with zero items) — one honest message is enough.
+    container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
     return;
   }
   container.innerHTML = attractions
