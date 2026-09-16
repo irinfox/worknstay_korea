@@ -104,8 +104,8 @@ eleventyComputed:
 <section class="region-gallery" aria-labelledby="region-gallery-heading"{% if slideCount > 1 %} data-region-hero-gallery{% endif %}>
   <div class="region-gallery__head">
     <div class="region-gallery__intro">
-      <h2 id="region-gallery-heading">Around the region</h2>
-      <p class="region-gallery__sub">A few handpicked views from around {{ region.nameEn }}.</p>
+      <h2 id="region-gallery-heading">Region highlights</h2>
+      <p class="region-gallery__sub">Selected spots to get a feel for the region</p>
     </div>
     {% if slideCount > 1 %}
     <div class="region-gallery__controls">
@@ -144,7 +144,7 @@ eleventyComputed:
    not a real map projection, so treat spacing as illustrative, not survey-accurate. #}
 <section class="region-section region-section--map">
   <h2>Region map</h2>
-  <p class="region-section__sub">Approximate positions, drawn from KTO coordinates.</p>
+  <p class="region-section__sub">Approximate positions, drawn from KTO coordinates</p>
   <div class="region-detail-map">
     <div class="region-detail-map__scroll">
       {% inlineSvg "gangwon-detail-map.svg" %}
@@ -179,7 +179,8 @@ eleventyComputed:
 {% endif %}
 
 <section class="region-section region-section--cities">
-  <h2>Cities in this region</h2>
+  <h2>Cities</h2>
+  <p class="region-section__sub">Where to stay and work in the region</p>
   {% if isGangwon %}
   {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
      not somewhere to base a month-long stay, so it's map-only — see its surf-beach pin above). #}
@@ -226,7 +227,7 @@ eleventyComputed:
          case (no top-picks-style fallback, see events.js header comment), so the subtitle itself
          carries the honest message instead of a card in the timeline below. Reset on every
          render so a stale message can't survive a state that later succeeds. #}
-      <p class="region-section__sub" data-events-subtitle>Ongoing now, and what's coming up.</p>
+      <p class="region-section__sub" data-events-subtitle>Ongoing now, and what's coming up</p>
       {# Live per-request data (functions/api/region/[slug]/events.js), fetched and rendered by
          region-data.js. The <noscript> message is the real no-JS content; JS never lets a
          browser see it (region-data.js overwrites this container's innerHTML on load). #}
@@ -251,7 +252,7 @@ eleventyComputed:
      stale "top picks" message can't survive a state that later succeeds. #}
   <p class="region-section__sub" data-attractions-subtitle>What to explore in the region</p>
   {# Filter row — visual + selection state only for now. "Area" reuses the same cityList the
-     "Cities in this region" section above already resolved per region, so it only ever offers
+     "Cities" section above already resolved per region, so it only ever offers
      the cities actually shown on this page, not every city.json record. "Elsewhere" covers
      attractions not tied to one of those cities. Real filtering of the list below is next-step
      data work, not wired here.
@@ -295,9 +296,9 @@ eleventyComputed:
 <section class="region-section region-section--food">
   <h2>Regional dishes</h2>
   {% if region.slug == "jeju-do" %}
-  <p class="region-section__sub">A few handpicked representative dishes.</p>
+  <p class="region-section__sub">A few handpicked representative dishes</p>
   {% else %}
-  <p class="region-section__sub">A few handpicked representative dishes, each associated with a city known for them.</p>
+  <p class="region-section__sub">A few handpicked representative dishes, each associated with a city known for them</p>
   {% endif %}
   <ul class="dish-list">
     {% for dish in regionFood %}
