@@ -106,7 +106,7 @@ Iterative editorial/research work, mostly hand-curation — do one region at a t
 
 ## Phase 25 — Compliance: drop caching, top-picks boost, Elsewhere tab
 KTO confirmed any caching needs a separate approval form (3-5 day review, won't clear before the
-deadline) — real-time calls only in production. Full plan: `notes/gallery-quota-compliance.md`.
+deadline) — real-time calls only in production. Full report: `notes/attraction-gallery-report.md`.
 
 - [x] Drop production caching in `attractions.js`/`events.js`; dev-only cache via
       `KTO_DEV_CACHE=1` instead. architecture.md §5 updated.
@@ -117,10 +117,24 @@ deadline) — real-time calls only in production. Full plan: `notes/gallery-quot
 - [x] `src/_data/mock/events.json` re-sourced with real festivals (`eventsSnapshot.json`), used
       whenever `KTO_API_KEY` is absent — a point-in-time capture, not an ongoing boosted set
       (unlike attractions); Jeju deliberately left empty to show the real empty-state design.
-- [ ] Investigate broad-vs-narrow `areaBasedList2` query volume — real `totalCount` numbers
-      before deciding.
+- [x] Investigate broad-vs-narrow `areaBasedList2` query volume — real per-item numbers gathered
+      (not just `totalCount`), findings in `notes/attraction-gallery-report.md` §3-§5. Broadening
+      matched or beat narrow's curated-pick presence on both codes tested, for fewer calls.
+- [ ] Implement broad collapse (7→3 calls/code): client-side lclsSystm reclassification, flat
+      `numOfRows: 300` (report §4 — no quota cost to a higher value). Check current dev-key usage
+      first (report §6 — launching on dev-key quota, prod key won't be ready in time).
+- [ ] Fold the pre-flight probe into the first (VE) broad call instead of a separate call, once
+      the above ships: gate `ARRANGE`/`FALLBACK_ARRANGE` on that call's own result instead of a
+      throwaway probe — saves 1 call/load. Must gate on VE specifically, not NA/HS (both have
+      near-zero catalogs on some codes, so an empty result there doesn't reliably mean `arrange=P`
+      broke — see attractions.js's existing `pickWorkingArrange` comment for the sparsity reasoning).
+- [ ] Final checks on all attractions work (this phase + broad collapse) before merging
+      `feature/attractions` to main.
 - [decision] `locationBasedList2` as a second-tier fallback — rejected, logged in
       architecture.md §11.
+- [decision] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported
+      (KTO returns `totalCount: 0` for a comma-joined value). Dropping codes from a region's
+      fan-out — rejected, every code is load-bearing (region or its metro city).
 
 ## Phase 26 — Workation-city expansion
 Depends on 12.

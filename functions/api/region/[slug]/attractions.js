@@ -3,7 +3,7 @@
 // its own — returns a mix of contentTypeId 76/78, no per-type call needed. Fanned out across
 // every lDongRegnCd code a region owns (Promise.allSettled: one code/group failing only drops
 // that slice), deduped by contentId. Edge caching is disabled in production pending KTO's
-// caching-approval form (notes/gallery-quota-compliance.md) — every page view is a live call.
+// caching-approval form (notes/attraction-gallery-report.md) — every page view is a live call.
 // Falls back to `topAttractions.json` (real, hand-verified KTO data, also boosted into live
 // results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so
 // callers always see `{ items: Attraction[], quotaExceeded: boolean }`.
@@ -22,13 +22,13 @@ const ALLOWED_CONTENT_TYPE_IDS = new Set([76, 78]);
 // spec (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on
 // every region code. The documented "Q" is *modified-date* order, not view-count — it surfaces
 // whatever was last edited in the CMS (shop branches, recent listings) and buries stable
-// landmark records, so it was the wrong default. See notes/attraction-feed-curation.md.
+// landmark records, so it was the wrong default. See notes/attraction-gallery-report.md §2.
 const ARRANGE = "P";
 // If KTO ever silently drops support for the undocumented `P`, the realistic failure mode isn't
 // an error or empty groups (per-group emptiness is normal — most lclsSystm3 sub-codes are
 // legitimately sparse for a given region) — it's `P` reverting to some other order without
-// telling us. That can't be detected per group, and (notes/gallery-quota-compliance.md §2)
-// checking it *after* paying for the full fan-out risks a full double-pay if `P` is broken
+// telling us. That can't be detected per group, and checking it *after* paying for the full
+// fan-out risks a full double-pay if `P` is broken
 // (worst case, gyeongsang-do 70 calls). Instead, `pickWorkingArrange` below pays for one cheap
 // probe call up front, against a single region code with a broad, essentially-never-sparse
 // bucket — if that comes back empty (and it's not just the account's quota being gone), treat it
@@ -121,7 +121,7 @@ function fetchGroups(lDongRegnCd) {
 
 // One minimal probe call (numOfRows: 1) before the real fan-out, so a broken `arrange=P` is
 // caught for the cost of +1 call instead of a full double-pay after the fact (see the ARRANGE
-// comment above / notes/gallery-quota-compliance.md §2). `firstCode` is any one of the region's
+// comment above). `firstCode` is any one of the region's
 // lDongRegnCd codes — a broad bucket is either sparse or not for the whole region, one code is
 // enough to tell. A quota-exceeded probe can't distinguish a working from a broken `arrange`, but
 // it doesn't matter — the real fan-out will hit the same quota wall regardless of which arrange
@@ -153,7 +153,7 @@ async function fetchRegionAttractions(slug, groups, arrange, env) {
           numOfRows: ROWS_PER_GROUP,
           maxPages: 1 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
           approval form for any caching (3-5 day review, too slow for the deadline); uncomment
-          once approved (notes/gallery-quota-compliance.md) */,
+          once approved (notes/attraction-gallery-report.md) */,
         }
       )
     )

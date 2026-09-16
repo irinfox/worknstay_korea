@@ -1,7 +1,7 @@
 // Live KTO call (architecture.md §5) — searchFestival2, fanned out across every lDongRegnCd code
 // a region owns (one code failing only drops that code's items), deduped by contentId. Edge
 // caching is disabled in production pending KTO's caching-approval form
-// (notes/gallery-quota-compliance.md) — every page view is a live call. `eventStartDate` filters
+// (notes/attraction-gallery-report.md) — every page view is a live call. `eventStartDate` filters
 // by start date only, so the query window starts well before "today" and `isUpcomingOrOngoing`
 // drops anything that already ended. Some regions (e.g. Jeju) legitimately return zero — a
 // designed empty state, not a bug. Falls back to `eventsSnapshot.json` when KTO_API_KEY isn't
@@ -47,7 +47,7 @@ export async function onRequestGet({ params, env }) {
           numOfRows: 20,
           maxPages: 5 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
           approval form for any caching (3-5 day review, too slow for the deadline); uncomment
-          once approved (notes/gallery-quota-compliance.md) */,
+          once approved (notes/attraction-gallery-report.md) */,
         }
       )
     )
