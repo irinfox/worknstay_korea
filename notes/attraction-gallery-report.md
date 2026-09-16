@@ -106,7 +106,7 @@ quota — KTO returns `min(totalCount, numOfRows)` for the same one call regardl
 requested, and response payload at these sizes (a few hundred KB at most) is not a real cost
 either. So there's no reason to fine-tune three separate per-category constants against the
 "typical" numbers above — just pick one flat value comfortably above the largest ceiling seen
-anywhere (244, on VE) with headroom, e.g. **300**, and every category on every code is covered in
+anywhere (244, on VE) with headroom, e.g. **250**, and every category on every code is covered in
 one call. Three tuned constants would add maintenance burden for a saving that isn't actually
 being spent on anything.
 
@@ -152,7 +152,7 @@ sample.
 | 250 (full catalog) | 244 | 111 | 1 of 1 |
 
 Curated-pick presence didn't change at any row count tested — only algorithmic variety scales with
-it, reinforcing §4's recommendation (300 is safe, no quota cost either way).
+it, reinforcing §4's recommendation (250 is safe, no quota cost either way).
 
 ## 6. Visitor-cost estimate
 
@@ -171,4 +171,33 @@ supports 20** — a 2.5x increase in how many visitors the live site can actuall
 on the same key. The production key will not be ready before launch, so the site ships on this
 dev-key quota — this headroom is directly load-bearing capacity, not a dev-testing convenience.
 
+## 7. Final checks on the shipped broad collapse
+
+One live pass across all 6 regions (`scripts/investigate-final-checks.mjs`, 48 calls — the same
+"one full site exploration" §6 already budgeted as safe) exercised the shipped
+`fetchRegionAttractions` (`functions/api/lib/attraction-fetch.mjs`) end to end. `arrange=P`
+worked on every region's probe — no fallback-arrange call was needed anywhere.
+
+**Check 1 — curated top-pick presence / injection:**
+
+| region | live items | curated picks | present in live | injected by boost | soft dropped (not injected) |
+|---|---|---|---|---|---|
+| gyeonggi-do | 346 | 10 | 9 | 1 | 0 |
+| gangwon-do | 174 | 10 | 9 | 1 | 0 |
+| chungcheong-do | 177 | 6 | 6 | 0 | 0 |
+| gyeongsang-do | 336 | 12 | 11 | 1 | 0 |
+| jeolla-do | 225 | 10 | 7 | 3 | 0 |
+| jeju-do | 93 | 6 | 4 | 1 | 1 |
+
+Every region's live broad fetch already surfaces most of the curated list on its own —
+`boost-curated.mjs` only has to inject 1-3 `hard` picks per region (0 for chungcheong-do), and
+exactly one `soft` pick (jeju-do) is quietly dropped rather than injected, as designed.
+
+**Check 2 — empty filter combinations** (every named-city pill × Area/Type, per `region.njk`'s
+`cityOrder`, plus "Elsewhere"): only 2 of 6×5×2 combinations come back empty, both jeju-do's
+"Elsewhere" bucket (nature and culture). Jeju-do's single `lDongRegnCd` code is fully covered by
+its two named cities (jeju-city/seogwipo), so an empty "Elsewhere" there is structurally
+expected, not a gap. The narrow-shape empty combos flagged before this phase (Seongnam,
+Cheongju — empty on nature or culture) no longer reproduce: the broad collapse's pooled,
+unfiltered-then-reclassified fetch resolved them as a side effect, not a targeted fix.
 

@@ -66,8 +66,11 @@ function sleep(ms) {
 // manual QA of live data burn real quota on every reload. Only successful, non-degraded,
 // non-quota results are cached — a quota-exceeded response must keep reflecting real quota state
 // on every check, never a stale cached one. Module-level, no persistence: resets with the dev
-// process, same lifetime as `devSessionCallCount` above.
-const DEV_CACHE_TTL_MS = 15 * 60 * 1000;
+// process, same lifetime as `devSessionCallCount` above — matches production's old (now-disabled)
+// 24h attractions TTL, since active development means constantly reloading localhost over many
+// days and a code change already resets this (a fresh `pages:dev` module instance on file save)
+// well before 24h would ever elapse on its own.
+const DEV_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const devCache = new Map(); // request URL -> { result, expiresAt }
 
 function devCacheGet(url) {

@@ -167,16 +167,20 @@ bypasses this pipeline entirely — not KTO-sourced, no "live" requirement.
 **Known KTO data quirks baked into `kto-client.mjs`/`normalize.mjs`:**
 - v4 renumbered content types — attraction is `76`, not the old `12`.
 - `areaBasedList2` uses undocumented `arrange=P` (view-count) over documented `Q` (modified-date,
-  buries landmarks). A 1-call pre-flight probe swaps in `arrange=R` when `P` comes back empty and
-  it's not quota exhaustion (429 code 22) — `{ items, quotaExceeded }` then lets the UI say "come
-  back tomorrow" instead of a false empty state.
+  buries landmarks). The arrange probe is folded into the fan-out's first (VE) call rather than a
+  separate throwaway one: if that call comes back genuinely empty (and it's not quota exhaustion,
+  429 code 22), the rest of the fan-out — plus a refetch of that one call — switches to
+  `arrange=R`. `{ items, quotaExceeded }` lets the UI say "come back tomorrow" instead of a false
+  empty state.
 - `topAttractions.json` (hand-verified, per region) is boosted into live results
   (`boost-curated.mjs`): `hard` picks are injected if missing from the live query, `soft` picks
   only repositioned if already present. Same file is the no-key/quota-exhausted fallback.
-- Attraction filtering whitelists curated `lclsSystm1/2/3` codes (not `cat1/2/3`, which
-  under-surfaced popular sites) — composes with `lDongRegnCd`/`lDongSignguCd` in one call and
-  spans `contentTypeId` on its own (76+78 in one query, no per-type call needed). City tagging
-  matches each item's own `lDongSignguCd` against `cities.json`.
+- Attraction fetching is 3 broad `areaBasedList2` calls per `lDongRegnCd` code
+  (`lclsSystm1=NA/VE/HS`, `numOfRows: 250`, no KTO-side sub-code filter), reclassified
+  client-side into curated `lclsSystm2/3` codes (not `cat1/2/3`, which under-surfaced popular
+  sites) — cheaper than one narrowed call per sub-code and spans `contentTypeId` on its own
+  (76+78 in one query, no per-type call needed). City tagging matches each item's own
+  `lDongSignguCd` against `cities.json`.
 - `areacode` is empty on festival records — always filter by `lDongRegnCd`.
 - Raw `items` is `""` on zero results, a bare object on one result, an array only at 2+ —
   `kto-client.mjs` always normalizes to an array.

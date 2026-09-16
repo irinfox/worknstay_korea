@@ -67,6 +67,14 @@ function renderAttractions(container, data) {
       // lookup in functions/api/region/[slug]/attractions.js (architecture.md §5) — surfaced
       // here as data-category/data-city so attraction-filters.js can filter without a refetch.
       const category = a.category === "nature" ? "Nature" : "Culture";
+      // KTO's EngService2 leaves addr1/addr2 both blank on some records (e.g. Ara-dong History
+      // and Culture Trail, jeju-do) — no separate Korean address field exists on this endpoint to
+      // fall back to (normalize.mjs already passes through whatever addr1/addr2 contain, English
+      // or not), so a genuinely empty a.address means KTO has no address data at all for that
+      // record. Omitting the line entirely reads better than a pin icon next to blank text.
+      const addressLine = a.address
+        ? `<p class="attraction-card__address">${pinIcon("attraction-card__pin")}${escapeHtml(a.address)}</p>`
+        : "";
       return `
         <li class="attraction-card" data-category="${a.category}" data-city="${a.citySlug || ""}">
           <div class="attraction-card__figure">
@@ -74,7 +82,7 @@ function renderAttractions(container, data) {
             <span class="attraction-card__category">${category}</span>
           </div>
           <h4>${escapeHtml(a.titleEn)}${a.titleKo ? ` <span class="attraction-card__ko">${escapeHtml(a.titleKo)}</span>` : ""}</h4>
-          <p class="attraction-card__address">${pinIcon("attraction-card__pin")}${escapeHtml(a.address)}</p>
+          ${addressLine}
         </li>`;
     })
     .join("");

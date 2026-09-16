@@ -120,16 +120,13 @@ deadline) — real-time calls only in production. Full report: `notes/attraction
 - [x] Investigate broad-vs-narrow `areaBasedList2` query volume — real per-item numbers gathered
       (not just `totalCount`), findings in `notes/attraction-gallery-report.md` §3-§5. Broadening
       matched or beat narrow's curated-pick presence on both codes tested, for fewer calls.
-- [ ] Implement broad collapse (7→3 calls/code): client-side lclsSystm reclassification, flat
-      `numOfRows: 300` (report §4 — no quota cost to a higher value). Check current dev-key usage
-      first (report §6 — launching on dev-key quota, prod key won't be ready in time).
-- [ ] Fold the pre-flight probe into the first (VE) broad call instead of a separate call, once
-      the above ships: gate `ARRANGE`/`FALLBACK_ARRANGE` on that call's own result instead of a
-      throwaway probe — saves 1 call/load. Must gate on VE specifically, not NA/HS (both have
-      near-zero catalogs on some codes, so an empty result there doesn't reliably mean `arrange=P`
-      broke — see attractions.js's existing `pickWorkingArrange` comment for the sparsity reasoning).
-- [ ] Final checks on all attractions work (this phase + broad collapse) before merging
-      `feature/attractions` to main.
+- [x] Broad collapse (7→3 calls/code) shipped: client-side lclsSystm reclassification, flat
+      `numOfRows: 250`. Pre-flight probe folded into the first (VE) broad call instead of a
+      separate call — saves 1 call/load in the common (arrange=P working) case.
+- [x] Final checks on all attractions work (this phase + broad collapse) before merging
+      `feature/attractions` to main — curated-pick presence/injection stats and an
+      empty-filter-combination sweep, see `notes/attraction-gallery-report.md` §7. Broad collapse
+      resolved the Seongnam/Cheongju empty-combo cases as a side effect.
 - [decision] `locationBasedList2` as a second-tier fallback — rejected, logged in
       architecture.md §11.
 - [decision] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported

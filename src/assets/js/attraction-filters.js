@@ -19,8 +19,29 @@
 // re-sorts), so any server-side per-city reorder inescapably changed the "All" tab's order too.
 // Doing it here with inline flex `order` — applied only to the active city's own cards, cleared
 // on every other pill — keeps the underlying DOM order (and therefore "All"/"Elsewhere") untouched.
+// Incheon flips gyeonggi-do's region-wide culture-first default (its nature draws outrank
+// culture); Gangneung flips gangwon-do's region-wide nature-first default the other way.
 const CITY_CATEGORY_PRIORITY = {
   suncheon: "nature",
+  incheon: "nature",
+  gangneung: "culture",
+};
+
+// Same idea as CITY_CATEGORY_PRIORITY, but keyed by region slug instead of city slug: "Elsewhere"
+// is the same pill value on every region page, so it can't reuse that flat map without one
+// region's override leaking into every other region's Elsewhere tab. Needed because "Elsewhere"
+// pools whichever curated top picks don't belong to a named city, and that mix doesn't
+// necessarily match the region's own culture/nature-first default — gyeonggi-do leads with
+// culture region-wide, but every one of its curated Elsewhere picks (Ilsan Lake Park, Garden of
+// Morning Calm, Hwadam Botanic Garden) is nature, so a plain culture-first Elsewhere view buried
+// them behind uncurated culture cards. chungcheong-do has the same mismatch (its one Elsewhere
+// hard pick, Dodamsambong Peaks, is nature against a culture-first region default) — kept nature
+// here too for consistency, even though chungcheong-do's culture spots are strong in their own
+// right; gyeongsang-do/gangwon-do aren't listed because their Elsewhere picks already match their
+// region's own default category.
+const ELSEWHERE_CATEGORY_PRIORITY = {
+  "gyeonggi-do": "nature",
+  "chungcheong-do": "nature",
 };
 
 function selectedValue(pills) {
@@ -59,7 +80,8 @@ export function applyFilters(root = document) {
 
   const knownAreas = knownAreaSlugs(areaPills);
   const cards = Array.from(list.querySelectorAll(".attraction-card"));
-  const cityPriority = CITY_CATEGORY_PRIORITY[area];
+  const cityPriority =
+    area === "elsewhere" ? ELSEWHERE_CATEGORY_PRIORITY[list.dataset.regionSlug] : CITY_CATEGORY_PRIORITY[area];
   let visibleCount = 0;
   cards.forEach((card) => {
     const matchesArea =
@@ -68,10 +90,14 @@ export function applyFilters(root = document) {
     const show = matchesArea && matchesType;
     card.hidden = !show;
     if (show) visibleCount += 1;
-    // Only ever touches the active override city's own cards, and only while its pill is
-    // selected — every other card (and every other filter state) keeps the default order (unset
-    // = 0 = DOM/source order), so "All"/"Elsewhere" are never affected.
-    card.style.order = cityPriority && card.dataset.city === area && card.dataset.category !== cityPriority ? "1" : "";
+    // Only ever touches cards visible under the active area filter — every other card (and every
+    // other filter state, since cityPriority is undefined for "all") keeps the default order
+    // (unset = 0 = DOM/source order), so "All" is never affected. Reusing `matchesArea` (rather
+    // than re-deriving "is this card in the active area") is what makes this work for "Elsewhere"
+    // too — a card's data-city is never literally the string "elsewhere", so a naive
+    // `card.dataset.city === area` check (the previous version of this line) could never match
+    // and this reorder silently never fired for that pill.
+    card.style.order = cityPriority && matchesArea && card.dataset.category !== cityPriority ? "1" : "";
   });
 
   const restoreSnap = () => {
