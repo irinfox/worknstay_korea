@@ -141,7 +141,9 @@
 
 .city-card__name {
   margin: 0;
-  font-size: 19px;
+  /* DESIGN.md Type scale caps card titles at 18px — this was 19px, close enough to the "Cities"
+     section H2 above it (20px/600, region-page.css) to read as competing rather than nested. */
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.01em;
   /* Mixes an English city name with its Korean name (.city-card__ko, inherits these) — keep-all
@@ -229,7 +231,10 @@
   justify-content: space-between;
   gap: 12px;
   margin: 0;
-  font-size: 17px;
+  /* DESIGN.md's City card rule allows 16-17px here; using the low end keeps a real gap under
+     .city-card__name (18px) now that both sit at the same weight/letter-spacing — at 17px the
+     two read as competing titles rather than a nested one. */
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: -0.01em;
   /* Some venue names are Korean-only (kor-only listings) — keep-all as above (.city-card__name). */
@@ -254,6 +259,16 @@
   overflow-wrap: break-word;
 }
 
+/* Same glyph/sizing as the attraction card's pin (region-page.css .attraction-card__pin) —
+   fill: currentColor inherits the muted address colour automatically. */
+.work-venue__pin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+
 .work-venue__links {
   display: flex;
   flex-wrap: wrap;
@@ -267,6 +282,58 @@
   color: var(--color-accent);
   text-decoration: underline;
   white-space: nowrap;
+}
+
+/* Chains (DESIGN.md § "Chains") get their own subtitle below the solo venues, above study
+   cafés — 13px/600 muted, quieter than .city-work__title (15px/600 ink + tick) since it's a
+   subdivision of "Where to work", not a heading of its own weight. No hairline (unlike
+   .study-cafes below it) — a wider top margin is enough separation from the solo venues above. */
+.work-venue-chains__title {
+  margin: 24px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+/* Three-column grid shared across every chain row (name / link / kind), so the "Website ↗" link
+   lines up in one column instead of trailing each name at a different x-position ("ladder"
+   look) — name/link/kind columns auto-size to the widest cell in that column across ALL rows,
+   which per-row flex/inline-flex can't do since each row would size independently. Each chain
+   in the Nunjucks loop emits its 3 children directly into this grid (no per-row wrapper), so
+   grid auto-placement lays them out three-per-row. */
+.work-venue-chains {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  column-gap: 12px;
+  row-gap: 6px;
+  margin-bottom: 16px;
+}
+
+/* A chain's name stays plain ink, not a link — every other outbound link on the site is orange,
+   and making the name itself orange read as visually loud repeated across 3-5 chain rows in a
+   row. A small same-row "Website ↗" carries the one link instead (DESIGN.md § "Chains": no
+   separate address/domain row, since a search/locations page can't honestly point at one site).
+   Smaller/lighter than a solo venue's name (14px/500 vs 16px/600) — a chain row carries less
+   information (no address/links block), so it should read as a lighter list item, not a peer
+   title. */
+.work-venue__chain-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+}
+
+.work-venue__chain-site {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-accent);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* Kind chip stays flush to the card's right edge, same as a solo venue's row. */
+.work-venue-chains .work-venue__kind {
+  justify-self: end;
 }
 
 /* 4-cell study-café battery + count label + Naver Map search link, one non-wrapping row on a

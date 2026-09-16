@@ -40,6 +40,7 @@
     "workationCenters": [
       {
         "name": "Hoppin",
+        "kind": "coworking · coliving",
         "url": "https://www.hoppin.life/hoppinhouse/coliving",
         "instagram": "hoppin.life",
         "address": "7-10 Yeonhui-ro 2-an-gil, Seodaemun-gu, Seoul (03784)",
@@ -50,18 +51,10 @@
         "note": "Coworking + coliving. Address corrected from the article's original listing per direct verification."
       },
       {
-        "name": "Seoul Nooks",
-        "url": "https://www.seoulnooks.org/home",
-        "instagram": "seoulnooks",
-        "address": "",
-        "addressKo": "",
-        "mapUrl": "",
-        "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
-        "actualizedAt": "2026-09-01",
-        "note": "Community and coliving space, not a dedicated coworking-desk operation."
-      },
-      {
         "name": "FiveSpot",
+        "isChain": true,
+        "kind": "coworking",
+        "korOnly": true,
         "url": "https://fivespot.io/",
         "instagram": "fivespot_official",
         "address": "",
@@ -69,37 +62,69 @@
         "mapUrl": "",
         "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
         "actualizedAt": "2026-09-01",
-        "note": "Korean-only site. No specific branch address captured — check site for current Seoul locations."
+        "note": "Korean-only site. Multi-location chain, no single branch address — check site for current Seoul locations."
       },
       {
         "name": "JustCo",
-        "url": "https://www.justcoglobal.com/en/",
+        "isChain": true,
+        "kind": "coworking",
+        "url": "https://www.justcoglobal.com/en-kr/locations/seoul/",
         "instagram": "justcoglobal",
         "address": "",
         "addressKo": "",
         "mapUrl": "",
         "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
         "actualizedAt": "2026-09-01",
-        "note": "Best foreigner-friendly website/onboarding among the big Seoul coworking chains (English available). No specific branch address captured."
+        "note": "Best foreigner-friendly website/onboarding among the big Seoul coworking chains (English available). Multi-location chain, no single branch address."
       },
       {
-        "name": "Fastfive",
-        "url": "https://www.fastfive.co.kr/",
-        "instagram": "fastfive_official",
-        "address": "",
-        "addressKo": "",
-        "mapUrl": "",
-        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
-        "actualizedAt": "2026-09-01",
-        "note": "Korean-only site; one of Seoul's largest coworking chains, locations easily found via their site's map. Also has branches in Incheon and Seongnam — see those city entries."
-      },
-      {
-        "name": "Seoul Startup Hub (Gongdeok)",
-        "url": "https://hubgongdeok.startup-plus.kr/en",
+        "name": "WeWork",
+        "isChain": true,
+        "kind": "coworking",
+        "url": "https://www.wework.com/l/coworking-space/seoul",
         "instagram": "",
         "address": "",
         "addressKo": "",
         "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-09-17",
+        "note": "Multi-location chain."
+      },
+      {
+        "name": "Local Stitch",
+        "isChain": true,
+        "kind": "coworking · coliving",
+        "korOnly": true,
+        "url": "https://www.localstitch.kr",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-09-17",
+        "note": "Multi-location chain, Seoul locations (see the Tongyeong entry for the standalone Gyeongsang-do branch)."
+      },
+      {
+        "name": "Mangrove",
+        "isChain": true,
+        "kind": "coworking · coliving · community",
+        "url": "https://mangrove.city/en",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-09-17",
+        "note": "Multi-location chain, Seoul locations (see the Goseong and Jeju City entries for those standalone branches)."
+      },
+      {
+        "name": "Seoul Startup Hub",
+        "kind": "free public coworking",
+        "url": "https://hubgongdeok.startup-plus.kr/en",
+        "instagram": "",
+        "address": "1F, 370-4 Gongdeok-dong, Mapo-gu, Seoul (04147)",
+        "addressKo": "",
+        "mapUrl": "https://naver.me/5Q37QLIT",
         "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
         "actualizedAt": "2026-09-01",
         "note": "Free startup space, English page available."
@@ -129,19 +154,7 @@
     "ktoLDongRegnCd": "28",
     "ktoLDongSignguCds": [],
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      {
-        "name": "Fastfive (Songdo / Yeonsu-gu branch)",
-        "url": "https://www.fastfive.co.kr/",
-        "instagram": "fastfive_official",
-        "address": "185 Incheon Tower-daero, Yeonsu-gu, Incheon, Central Biz Hanra 5-6F (main lounge on 5F)",
-        "addressKo": "인천 연수구 인천타워대로 185 센트럴비즈한라 5-6층 (메인 라운지 5층)",
-        "mapUrl": "",
-        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
-        "actualizedAt": "2026-09-01",
-        "note": "Part of the Fastfive chain (Korean-only site)."
-      }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "seongnam",
@@ -155,19 +168,7 @@
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["130", "131", "133", "135"],
     "isPopulationDeclineArea": false,
-    "workationCenters": [
-      {
-        "name": "Fastfive (Bundang branch)",
-        "url": "https://www.fastfive.co.kr/",
-        "instagram": "fastfive_official",
-        "address": "670 Sampyeong-dong, Bundang-gu, Seongnam-si, Gyeonggi-do",
-        "addressKo": "경기 성남시 분당구 삼평동 670",
-        "mapUrl": "",
-        "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
-        "actualizedAt": "2026-09-01",
-        "note": "Part of the Fastfive chain (Korean-only site)."
-      }
-    ]
+    "workationCenters": []
   },
   {
     "slug": "suwon",
@@ -218,9 +219,11 @@
     "workationCenters": [
       {
         "name": "Dadoo Coworking",
+        "kind": "coworking",
+        "korOnly": true,
         "url": "",
         "instagram": "dadoocoworking",
-        "address": "4331 Donghae-daero, Sokcho-si, Gangwon-do, 2F",
+        "address": "2F, 4331 Donghae-daero, Sokcho-si, Gangwon-do",
         "addressKo": "강원 속초시 동해대로 4331 2층",
         "mapUrl": "https://naver.me/5NMkq2DM",
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
@@ -251,6 +254,8 @@
     "workationCenters": [
       {
         "name": "Padosalon",
+        "kind": "coworking",
+        "korOnly": true,
         "url": "https://www.thewavecompany.co.kr/padosalon",
         "instagram": "padosalon",
         "address": "2F, 2023 Gyeonggang-ro, Gangneung-si, Gangwon-do",
@@ -329,6 +334,7 @@
     "workationCenters": [
       {
         "name": "Mangrove (Goseong branch)",
+        "kind": "coliving",
         "url": "https://mangrove.city/locations/goseong",
         "instagram": "mangrove.city",
         "address": "",
@@ -451,14 +457,28 @@
     "workationCenters": [
       {
         "name": "Busaness",
+        "kind": "coworking · coliving",
         "url": "https://www.busaness.com",
         "instagram": "busaness_workation",
-        "address": "7-8, Jungang-daero 214beon-gil, Dong-gu, Busan, Asti Hotel 24th floor",
+        "address": "24F, Asti Hotel, 7-8, Jungang-daero 214beon-gil, Dong-gu, Busan",
         "addressKo": "",
         "mapUrl": "",
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
         "actualizedAt": "2026-09-01",
         "note": "Central branch listed; several other locations exist. Provides accommodation and coworking spaces; requires proof of employment. Unconfirmed whether use is free after registration."
+      },
+      {
+        "name": "WeWork",
+        "isChain": true,
+        "kind": "coworking",
+        "url": "https://www.wework.com/l/coworking-space/busan",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-09-17",
+        "note": "Multi-location chain."
       }
     ]
   },
@@ -476,6 +496,8 @@
     "workationCenters": [
       {
         "name": "Local Stitch Tongyeong",
+        "kind": "coworking · coliving",
+        "korOnly": true,
         "url": "https://www.localstitch.kr",
         "instagram": "localstitch_tongyeong",
         "address": "",
@@ -584,7 +606,20 @@
     "ktoLDongRegnCd": "50",
     "ktoLDongSignguCds": ["110"],
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Mangrove",
+        "kind": "coworking · coliving · community",
+        "url": "https://mangrove.city/en/locations/jejucity",
+        "instagram": "",
+        "address": "5, Tapdong-ro, Jeju-si, Jeju-do",
+        "addressKo": "",
+        "mapUrl": "https://naver.me/5N15pPHt",
+        "source": "",
+        "actualizedAt": "2026-09-17",
+        "note": ""
+      }
+    ]
   },
   {
     "slug": "seogwipo",
@@ -601,9 +636,11 @@
     "workationCenters": [
       {
         "name": "O-peace",
+        "kind": "coworking · coliving",
+        "korOnly": true,
         "url": "http://o-peace.com",
         "instagram": "o.peace.jeju",
-        "address": "214 Hyanggyo-ro, Andeok-myeon, Seogwipo-si, Jeju-do, 1F",
+        "address": "1F, 214 Hyanggyo-ro, Andeok-myeon, Seogwipo-si, Jeju-do",
         "addressKo": "제주 서귀포시 안덕면 향교로 214 1층",
         "mapUrl": "https://naver.me/5Q37rwlK",
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
