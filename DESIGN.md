@@ -212,7 +212,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - Honest labels with their basis: "Furnished short-term, decent and available" — the figure is what a
   decent, actually available furnished place lists for anywhere in the region, not a 1BR city-centre median.
 - Every figure dated and sourced ("Hand-checked from current listings, September 2026").
-- No marketing slogans, no "handpicked", no unsupported comparisons.
+- No marketing slogans, no unsupported comparisons.
 - Consistent names: one term per concept ("Partly eligible", "About", "worknstay korea").
   One label per destination — the same link is never worded two ways on two pages.
 - Dots, not pluses, between qualifiers: `coworking · coliving · community`.

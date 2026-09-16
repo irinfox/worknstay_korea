@@ -323,19 +323,17 @@ No library, no store. Three tiers:
 
 - Header/nav: one `<ul>` always in the DOM; `nav.js` toggles `[aria-expanded]` on the burger
   (never two navs). Burger under ~768px.
-- Region info: two modes swapped by the width-only 1120px query — see §3.
-- Region page Overview tab: cities list + event timeline are a 2-column grid ≥900px, stacked
-  below that (cities first); Attractions and Local food stack below as full-width blocks. Living
-  Info is the only other tab (cost-of-living + transport).
 - Horizontal scroll-snap lists (e.g. `.attraction-list`): CSS `scroll-snap-type: x mandatory` +
   `overflow-x: auto`, no carousel library, no JS required.
 - Map: SVG with `viewBox` + `max-width: 100%`. Jeju has an invisible `.region__hit-target`
   ellipse padding its tap area to ≥44px at 360px width (its shape alone is ~39px tall).
-- Map labels: all 17 admin-division/city names render at every width, no summary fallback.
-- iOS Safari: `100svh`/`100dvh` not `100vh`, 16px input font-size to prevent focus-zoom,
-  `-webkit-text-size-adjust: 100%`.
+- Map labels (national map): all 17 admin-division/city names render at every width, no summary
+  fallback — distinct from the region-detail map's hover/tap-revealed pictogram labels
+  (DESIGN.md's "Region map" component rule).
+- iOS Safari: `100svh`/`100dvh` not `100vh`, `-webkit-text-size-adjust: 100%` (form input sizing
+  against focus-zoom is in DESIGN.md's Type scale).
 - Test matrix (CLAUDE.md rule 7) plus a width just above/below 1120px for the
-  infographic↔carousel switch.
+  infographic↔carousel switch (breakpoint itself documented in §3).
 
 ## 10. Designated Task #4 alignment (for the eventual 기능설명서)
 
