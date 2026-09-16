@@ -14,6 +14,7 @@
     "sourceModifiedAt": "2026-04-16T15:28:35+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "seoul"
   },
   {
@@ -31,6 +32,7 @@
     "sourceModifiedAt": "2025-06-19T15:54:11+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "seoul"
   },
   {
@@ -48,6 +50,7 @@
     "sourceModifiedAt": "2026-09-14T01:30:01+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "seoul"
   },
   {
@@ -65,6 +68,7 @@
     "sourceModifiedAt": "2024-03-13T09:43:18+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "seoul"
   },
   {
@@ -82,6 +86,7 @@
     "sourceModifiedAt": "2025-10-23T14:30:00+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "incheon"
   },
   {
@@ -99,6 +104,7 @@
     "sourceModifiedAt": "2026-08-20T16:18:20+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "incheon"
   },
   {
@@ -116,6 +122,7 @@
     "sourceModifiedAt": "2026-06-19T09:32:09+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "suwon"
   },
   {
@@ -133,6 +140,7 @@
     "sourceModifiedAt": "2026-05-20T09:20:43+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "goyang"
   },
   {
@@ -150,6 +158,7 @@
     "sourceModifiedAt": "2025-10-23T14:30:00+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": null
   },
   {
@@ -167,24 +176,26 @@
     "sourceModifiedAt": "2026-09-07T11:07:24+09:00",
     "regionSlug": "gyeonggi-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": null
   },
   {
-    "contentId": "1758437",
+    "contentId": "264169",
     "lDongRegnCd": "51",
-    "titleEn": "Seoraksan National Park",
-    "titleKo": "설악산국립공원",
+    "titleEn": "Seoraksan Ulsanbawi Rock",
+    "titleKo": "설악산 울산바위",
     "summary": "",
-    "address": "801 Seorak-ro, Yangyang-gun, Gangwon-do",
-    "imageUrl": "https://tong.visitkorea.or.kr/cms/resource/46/652646_image2_1.jpg",
-    "imageThumbUrl": "https://tong.visitkorea.or.kr/cms/resource/46/652646_image3_1.jpg",
+    "address": "1091 Seoraksan-ro, Sokcho-si, Gangwon-do",
+    "imageUrl": "https://tong.visitkorea.or.kr/cms/resource/95/2711195_image2_1.jpg",
+    "imageThumbUrl": "https://tong.visitkorea.or.kr/cms/resource/95/2711195_image3_1.jpg",
     "imageLicense": "Type3",
-    "lat": 38.1809851152,
-    "lng": 128.3019017658,
-    "sourceModifiedAt": "2024-04-02T09:54:53+09:00",
+    "lat": 38.1869348183,
+    "lng": 128.466478279,
+    "sourceModifiedAt": "2024-02-28T12:13:47+09:00",
     "regionSlug": "gangwon-do",
     "category": "nature",
-    "citySlug": "yangyang"
+    "priority": "hard",
+    "citySlug": "sokcho"
   },
   {
     "contentId": "2475947",
@@ -201,6 +212,7 @@
     "sourceModifiedAt": "2026-08-19T16:20:51+09:00",
     "regionSlug": "gangwon-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "gangneung"
   },
   {
@@ -218,6 +230,7 @@
     "sourceModifiedAt": "2024-05-24T13:25:55+09:00",
     "regionSlug": "gangwon-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "gangneung"
   },
   {
@@ -235,6 +248,7 @@
     "sourceModifiedAt": "2025-10-24T16:37:46+09:00",
     "regionSlug": "gangwon-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "chuncheon"
   },
   {
@@ -252,6 +266,7 @@
     "sourceModifiedAt": "2023-05-22T10:28:18+09:00",
     "regionSlug": "gangwon-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "chuncheon"
   },
   {
@@ -269,6 +284,7 @@
     "sourceModifiedAt": "2026-02-11T08:10:09+09:00",
     "regionSlug": "gangwon-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "chuncheon"
   },
   {
@@ -286,6 +302,7 @@
     "sourceModifiedAt": "2026-06-10T08:34:39+09:00",
     "regionSlug": "gangwon-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "wonju"
   },
   {
@@ -303,6 +320,7 @@
     "sourceModifiedAt": "2025-12-16T17:23:52+09:00",
     "regionSlug": "gangwon-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "wonju"
   },
   {
@@ -320,6 +338,7 @@
     "sourceModifiedAt": "2025-03-15T11:55:11+09:00",
     "regionSlug": "gangwon-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "wonju"
   },
   {
@@ -337,6 +356,7 @@
     "sourceModifiedAt": "2025-10-23T14:30:00+09:00",
     "regionSlug": "gangwon-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "yangyang"
   },
   {
@@ -354,6 +374,7 @@
     "sourceModifiedAt": "2026-05-21T11:22:35+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "busan"
   },
   {
@@ -371,6 +392,7 @@
     "sourceModifiedAt": "2025-10-23T14:30:00+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "busan"
   },
   {
@@ -388,6 +410,7 @@
     "sourceModifiedAt": "2025-04-15T14:35:31+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "busan"
   },
   {
@@ -405,6 +428,7 @@
     "sourceModifiedAt": "2024-04-29T14:44:16+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "busan"
   },
   {
@@ -422,6 +446,7 @@
     "sourceModifiedAt": "2026-05-21T10:28:29+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "busan"
   },
   {
@@ -439,6 +464,7 @@
     "sourceModifiedAt": "2023-08-28T14:25:32+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "daegu"
   },
   {
@@ -456,6 +482,7 @@
     "sourceModifiedAt": "2026-01-29T09:23:33+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "ulsan"
   },
   {
@@ -473,6 +500,7 @@
     "sourceModifiedAt": "2025-03-24T13:45:06+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "gyeongju"
   },
   {
@@ -490,6 +518,7 @@
     "sourceModifiedAt": "2026-05-27T16:25:43+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "gyeongju"
   },
   {
@@ -507,6 +536,7 @@
     "sourceModifiedAt": "2026-05-19T18:33:59+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "gyeongju"
   },
   {
@@ -524,6 +554,7 @@
     "sourceModifiedAt": "2026-09-14T01:30:00+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "andong"
   },
   {
@@ -541,6 +572,7 @@
     "sourceModifiedAt": "2026-01-29T13:39:04+09:00",
     "regionSlug": "gyeongsang-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "tongyeong"
   },
   {
@@ -558,6 +590,7 @@
     "sourceModifiedAt": "2026-09-07T14:01:57+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "jeonju"
   },
   {
@@ -575,6 +608,7 @@
     "sourceModifiedAt": "2026-08-20T16:18:20+09:00",
     "regionSlug": "jeolla-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "gwangju"
   },
   {
@@ -592,6 +626,7 @@
     "sourceModifiedAt": "2026-08-20T16:18:20+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "gwangju"
   },
   {
@@ -609,6 +644,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "yeosu"
   },
   {
@@ -626,6 +662,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "yeosu"
   },
   {
@@ -643,6 +680,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "soft",
     "citySlug": "yeosu"
   },
   {
@@ -660,6 +698,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "suncheon"
   },
   {
@@ -677,6 +716,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "suncheon"
   },
   {
@@ -694,6 +734,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "suncheon"
   },
   {
@@ -711,6 +752,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": null
   },
   {
@@ -728,6 +770,7 @@
     "sourceModifiedAt": "2026-06-30T18:44:11+09:00",
     "regionSlug": "jeolla-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": null
   },
   {
@@ -745,6 +788,7 @@
     "sourceModifiedAt": "2025-10-31T14:39:42+09:00",
     "regionSlug": "jeju-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "seogwipo"
   },
   {
@@ -762,6 +806,7 @@
     "sourceModifiedAt": "2025-04-01T11:26:15+09:00",
     "regionSlug": "jeju-do",
     "category": "nature",
+    "priority": "soft",
     "citySlug": "jeju-city"
   },
   {
@@ -779,6 +824,7 @@
     "sourceModifiedAt": "2026-02-27T16:54:46+09:00",
     "regionSlug": "jeju-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "seogwipo"
   },
   {
@@ -796,6 +842,7 @@
     "sourceModifiedAt": "2026-05-28T09:06:13+09:00",
     "regionSlug": "jeju-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "jeju-city"
   },
   {
@@ -813,6 +860,7 @@
     "sourceModifiedAt": "2024-10-08T14:56:01+09:00",
     "regionSlug": "jeju-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "seogwipo"
   },
   {
@@ -830,6 +878,7 @@
     "sourceModifiedAt": "2024-02-22T17:15:01+09:00",
     "regionSlug": "jeju-do",
     "category": "nature",
+    "priority": "soft",
     "citySlug": "seogwipo"
   },
   {
@@ -847,6 +896,7 @@
     "sourceModifiedAt": "2025-10-23T14:30:00+09:00",
     "regionSlug": "chungcheong-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "daejeon"
   },
   {
@@ -864,6 +914,7 @@
     "sourceModifiedAt": "2026-02-03T11:03:10+09:00",
     "regionSlug": "chungcheong-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": "sejong"
   },
   {
@@ -881,6 +932,7 @@
     "sourceModifiedAt": "2026-01-27T17:48:08+09:00",
     "regionSlug": "chungcheong-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "cheongju"
   },
   {
@@ -898,6 +950,7 @@
     "sourceModifiedAt": "2026-02-02T15:35:00+09:00",
     "regionSlug": "chungcheong-do",
     "category": "culture",
+    "priority": "hard",
     "citySlug": "gongju"
   },
   {
@@ -915,6 +968,7 @@
     "sourceModifiedAt": "2024-03-15T09:41:04+09:00",
     "regionSlug": "chungcheong-do",
     "category": "nature",
+    "priority": "hard",
     "citySlug": null
   }
 ]

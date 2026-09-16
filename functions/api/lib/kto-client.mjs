@@ -59,6 +59,31 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.dev.vars` — never
+// in Cloudflare's production env; `wrangler.jsonc` has no `vars` block, so this can never leak
+// into production by any path in this repo). Exists because production caching is disabled
+// pending KTO's caching-approval form (notes/gallery-quota-compliance.md), which otherwise makes
+// manual QA of live data burn real quota on every reload. Only successful, non-degraded,
+// non-quota results are cached — a quota-exceeded response must keep reflecting real quota state
+// on every check, never a stale cached one. Module-level, no persistence: resets with the dev
+// process, same lifetime as `devSessionCallCount` above.
+const DEV_CACHE_TTL_MS = 15 * 60 * 1000;
+const devCache = new Map(); // request URL -> { result, expiresAt }
+
+function devCacheGet(url) {
+  const entry = devCache.get(url);
+  if (!entry) return undefined;
+  if (Date.now() > entry.expiresAt) {
+    devCache.delete(url);
+    return undefined;
+  }
+  return entry.result;
+}
+
+function devCacheSet(url, result) {
+  devCache.set(url, { result, expiresAt: Date.now() + DEV_CACHE_TTL_MS });
+}
+
 // data.go.kr issues serviceKeys already percent-encoded; URLSearchParams re-encodes whatever
 // it's given, so passing the raw key through unchanged would double-encode it and break auth.
 // Decoding first (a no-op on an already-plain key) guarantees exactly one encoding pass.
@@ -114,7 +139,9 @@ function extractItems(body) {
  * @param {Record<string, string|number>} params - endpoint-specific query params
  *   (contentTypeId/areaCode/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for
  *   searchFestival2), plus numOfRows/pageNo for paging.
- * @param {{ KTO_API_KEY?: string }} env - Cloudflare Functions env binding
+ * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string }} env - Cloudflare Functions env
+ *   binding; `KTO_DEV_CACHE: "1"` (dev-only, see devCache above) serves repeat identical calls
+ *   from an in-memory cache instead of hitting KTO again.
  * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
  *   to bypass the edge cache (used for verify scripts and other one-off calls).
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
@@ -124,6 +151,14 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   if (!serviceKey) return DEGRADED;
 
   const url = buildUrl(endpoint, params, serviceKey);
+  const devCacheEnabled = env?.KTO_DEV_CACHE === "1";
+  if (devCacheEnabled) {
+    const cached = devCacheGet(url);
+    if (cached) {
+      console.log("[kto-client] dev cache hit");
+      return cached;
+    }
+  }
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let response;
@@ -175,12 +210,14 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
 
     if (body?.response?.header?.resultCode !== "0000") return DEGRADED;
 
-    return {
+    const result = {
       items: extractItems(body),
       degraded: false,
       totalCount: Number(body?.response?.body?.totalCount ?? 0),
       quotaExceeded: false,
     };
+    if (devCacheEnabled) devCacheSet(url, result);
+    return result;
   }
 
   return DEGRADED;

@@ -1,21 +1,18 @@
-// Live KTO call (architecture.md §5) — areaBasedList2, filtered by KTO's newer lclsSystm1/2/3
-// classification instead of the retired cat1/cat2/cat3 tree (the old tree under-surfaced each
-// region's genuinely popular sites, which is why this was rewritten). lclsSystm spans content
-// types on its own — live-confirmed querying by lclsSystm1/2/3 alone returns a mix of
-// contentTypeId 76 (tourist attraction) and 78 (cultural facility) records, no per-content-type
-// call needed. Each group is fanned out across every lDongRegnCd code a region owns
-// (Promise.allSettled: one code/group failing only drops that slice, not the whole region),
-// deduped by contentId, edge-cached ~24h (near-static content). Falls back to the Phase-8 mock
-// fixture when KTO_API_KEY isn't set (local dev without a key), so the response shape callers
-// see never changes: always `{ items: Attraction[], quotaExceeded: boolean }`. `quotaExceeded`
-// distinguishes "KTO's daily call quota is gone for the account" from a genuinely empty region,
-// so the front end can show an honest message instead of "no attractions here" when there
-// really are some, we just can't fetch them today (kto-client.mjs).
-import mockAttractions from "../../../../src/_data/mock/attractions.json";
-import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
+// Live KTO call (architecture.md §5) — areaBasedList2, filtered by lclsSystm1/2/3 (not the
+// retired cat1/2/3 tree, which under-surfaced popular sites). lclsSystm spans content types on
+// its own — returns a mix of contentTypeId 76/78, no per-type call needed. Fanned out across
+// every lDongRegnCd code a region owns (Promise.allSettled: one code/group failing only drops
+// that slice), deduped by contentId. Edge caching is disabled in production pending KTO's
+// caching-approval form (notes/gallery-quota-compliance.md) — every page view is a live call.
+// Falls back to `topAttractions.json` (real, hand-verified KTO data, also boosted into live
+// results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so
+// callers always see `{ items: Attraction[], quotaExceeded: boolean }`.
+import topAttractions from "../../../../src/_data/topAttractions.json";
+import { fetchKto, fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeAttraction } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 import { citySlugFor } from "../../lib/city-map.mjs";
+import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
 
 // contentTypeId is deliberately never passed to the KTO call below — see the module comment.
 // This is a defensive post-filter only, in case some other content type (restaurant, lodging,
@@ -30,11 +27,17 @@ const ARRANGE = "P";
 // If KTO ever silently drops support for the undocumented `P`, the realistic failure mode isn't
 // an error or empty groups (per-group emptiness is normal — most lclsSystm3 sub-codes are
 // legitimately sparse for a given region) — it's `P` reverting to some other order without
-// telling us. That can't be detected per group. What CAN be checked cheaply: a whole region
-// coming back with zero attractions across every group combined is implausible under normal
-// operation, so treat that as a signal something's wrong with `P` and retry the whole region
-// once with a documented, image-required arrange value before giving up.
+// telling us. That can't be detected per group, and (notes/gallery-quota-compliance.md §2)
+// checking it *after* paying for the full fan-out risks a full double-pay if `P` is broken
+// (worst case, gyeongsang-do 70 calls). Instead, `pickWorkingArrange` below pays for one cheap
+// probe call up front, against a single region code with a broad, essentially-never-sparse
+// bucket — if that comes back empty (and it's not just the account's quota being gone), treat it
+// as a signal something's wrong with `P` and run the one real fan-out with a documented,
+// image-required arrange value instead.
 const FALLBACK_ARRANGE = "R"; // created-date order, image required — closest documented match to P
+// Broad enough that a real empty result never happens under normal operation — VE (Leports &
+// Facilities/Shopping/etc.) spans multiple lclsSystm2 buckets on its own, no lclsSystm3 needed.
+const PROBE_LCLS_SYSTM1 = "VE";
 const CACHE_TTL_SECONDS = 24 * 60 * 60;
 
 // Whitelist, not blacklist, same reasoning as before: each group is one areaBasedList2 call
@@ -116,6 +119,23 @@ function fetchGroups(lDongRegnCd) {
   return [...NATURE_GROUPS, ...CULTURE_GROUPS].map((group) => ({ ...group, lDongRegnCd }));
 }
 
+// One minimal probe call (numOfRows: 1) before the real fan-out, so a broken `arrange=P` is
+// caught for the cost of +1 call instead of a full double-pay after the fact (see the ARRANGE
+// comment above / notes/gallery-quota-compliance.md §2). `firstCode` is any one of the region's
+// lDongRegnCd codes — a broad bucket is either sparse or not for the whole region, one code is
+// enough to tell. A quota-exceeded probe can't distinguish a working from a broken `arrange`, but
+// it doesn't matter — the real fan-out will hit the same quota wall regardless of which arrange
+// is picked, and the caller already handles quotaExceeded by falling back to curated picks.
+async function pickWorkingArrange(firstCode, env) {
+  const probe = await fetchKto(
+    "areaBasedList2",
+    { lDongRegnCd: firstCode, lclsSystm1: PROBE_LCLS_SYSTM1, arrange: ARRANGE, numOfRows: 1, pageNo: 1 },
+    env
+  );
+  if (probe.quotaExceeded || probe.items.length > 0) return ARRANGE;
+  return FALLBACK_ARRANGE;
+}
+
 async function fetchRegionAttractions(slug, groups, arrange, env) {
   const settled = await Promise.allSettled(
     groups.map((g) =>
@@ -129,7 +149,12 @@ async function fetchRegionAttractions(slug, groups, arrange, env) {
           arrange,
         },
         env,
-        { numOfRows: ROWS_PER_GROUP, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
+        {
+          numOfRows: ROWS_PER_GROUP,
+          maxPages: 1 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
+          approval form for any caching (3-5 day review, too slow for the deadline); uncomment
+          once approved (notes/gallery-quota-compliance.md) */,
+        }
       )
     )
   );
@@ -165,27 +190,28 @@ export async function onRequestGet({ params, env }) {
     return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
   }
 
+  const regionTopPicks = topAttractions.filter((a) => a.regionSlug === slug);
+
   if (!env?.KTO_API_KEY) {
-    return Response.json({ items: mockAttractions.filter((a) => a.regionSlug === slug), quotaExceeded: false });
+    return Response.json({ items: regionTopPicks, quotaExceeded: false });
   }
 
   const codes = slugToLDongRegnCds(slug);
   const groups = codes.flatMap(fetchGroups);
-  let { items, quotaExceeded } = await fetchRegionAttractions(slug, groups, ARRANGE, env);
-  // Retrying with a different arrange can't help when the account's whole daily quota is gone —
-  // every group would fail the same way, and the retry would just double an already-futile round
-  // of calls (see architecture.md §5 / AutoMem feedback_kto_call_budget).
-  if (items.length === 0 && !quotaExceeded) {
-    ({ items, quotaExceeded } = await fetchRegionAttractions(slug, groups, FALLBACK_ARRANGE, env));
-  }
+  const arrange = codes.length ? await pickWorkingArrange(codes[0], env) : ARRANGE;
+  let { items, quotaExceeded } = await fetchRegionAttractions(slug, groups, arrange, env);
 
   // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (a
-  // mix of stale edge-cache hits and quota-blocked misses), so fall back to the curated mock set
+  // mix of stale edge-cache hits and quota-blocked misses), so fall back to the top-picks set
   // rather than show a partial or empty gallery. `quotaExceeded` stays true so the front end
   // swaps in "Top picks for today" instead of implying this is the full live list
   // (region-data.js).
   if (quotaExceeded) {
-    items = mockAttractions.filter((a) => a.regionSlug === slug);
+    items = regionTopPicks;
+  } else {
+    // Boosting against itself (the fallback branch above) would be pointless — that's already
+    // the full top-picks set.
+    items = boostCuratedPicks(items, regionTopPicks);
   }
 
   const priority = CATEGORY_PRIORITY[slug];

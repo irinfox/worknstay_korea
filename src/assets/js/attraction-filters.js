@@ -6,14 +6,18 @@
 // selection once live data replaces the loading placeholder (a pill can be clicked before the
 // fetch resolves).
 //
-// "Elsewhere" (Area) is visually selectable but not wired yet (ROADMAP_TODO.md Phase 24) — an
-// attraction only gets citySlug:null when its city has no KTO code yet or genuinely isn't in
-// cityList, and distinguishing those needs its own design pass. Picking it behaves like "All"
-// until then.
+// "Elsewhere" (Area) means a card's data-city is either empty or set to a citySlug that isn't
+// one of the Area pills actually rendered on the page (e.g. Goyang's cards on gyeonggi-do —
+// resolved to a real citySlug but deliberately has no pill). Computed live from the rendered DOM
+// (not hardcoded), so it stays correct if region.njk's cityOrder ever changes.
 
 function selectedValue(pills) {
   const selected = pills.find((p) => p.classList.contains("is-selected"));
   return selected ? selected.dataset.filterValue : "all";
+}
+
+function knownAreaSlugs(areaPills) {
+  return new Set(areaPills.map((p) => p.dataset.filterValue).filter((v) => v !== "all" && v !== "elsewhere"));
 }
 
 export function applyFilters(root = document) {
@@ -26,10 +30,12 @@ export function applyFilters(root = document) {
   const area = selectedValue(areaPills);
   const type = selectedValue(typePills);
 
+  const knownAreas = knownAreaSlugs(areaPills);
   const cards = Array.from(list.querySelectorAll(".attraction-card"));
   let visibleCount = 0;
   cards.forEach((card) => {
-    const matchesArea = area === "all" || area === "elsewhere" || card.dataset.city === area;
+    const matchesArea =
+      area === "all" || (area === "elsewhere" ? !knownAreas.has(card.dataset.city) : card.dataset.city === area);
     const matchesType = type === "all" || card.dataset.category === type;
     const show = matchesArea && matchesType;
     card.hidden = !show;

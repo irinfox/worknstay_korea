@@ -28,6 +28,17 @@ the durable, brief set of project-scope agreements.
   or commit.
 - Dev server: `npm run pages:dev` (port 8788; runs Pages Functions, reads KTO keys from
   `.dev.vars`). Kill the port first: `lsof -ti:8788 -sTCP:LISTEN | xargs -r kill`.
+- Two ways to avoid burning KTO quota — both still need `pages:dev` running (plain `npm run
+  serve` skips Pages Functions entirely, so `/api/region/.../attractions` 404s and the page
+  renders its "no attractions" empty state instead — no cards to test against):
+  1. Testing the UI/filters, don't care about real data: unset `KTO_API_KEY` in `.dev.vars`. The
+     attractions/events Functions then skip the live KTO call and serve their real fallback files
+     (`topAttractions.json`/`eventsSnapshot.json`) instead — zero live calls, real cards to filter,
+     same rendering code path as production.
+  2. Testing against real live data, want to reload without re-paying for the same request: keep
+     the key set, and also add `KTO_DEV_CACHE=1` to `.dev.vars`. Repeat identical calls are then
+     served from an in-memory cache instead of hitting KTO again. Dev-only — never set this in
+     Cloudflare's production environment.
 - `architecture.md` is a decisions record, not a scratchpad. So keep two rules:
 1. Never reference ROADMAP_TODO.md phase numbers inside architecture.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; architecture.md is supposed to be "independent of project scheduling" per its own header.
 2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.

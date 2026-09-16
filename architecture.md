@@ -102,13 +102,14 @@ worknstay_korea/
 ├── .env / .nvmrc / package.json+lock / eleventy.config.js
 ├── CLAUDE.md / architecture.md / SCAFFOLDING_TODO.md / ROADMAP_TODO.md
 ├── functions/api/
-│   ├── region/[slug]/{attractions,events}.js   # live KTO calls, edge-cached 24h / 4h
-│   └── lib/{kto-client,normalize,region-map,city-map}.mjs
+│   ├── region/[slug]/{attractions,events}.js   # live KTO calls, no production caching (§5)
+│   └── lib/{kto-client,normalize,region-map,city-map,boost-curated}.mjs
 ├── src/
 │   ├── _data/       # editorial JSON: site, regions, cities, visaRules (DATA not code, §6),
 │   │                #   costOfLiving, food, transport, communities, populationDeclineAreas[Full]
 │   │                #   (§7), eligibilityReferenceData.js (build-time island for calculator.js);
-│   │                #   mock/{attractions,events}.json = KTO-shaped dev fallback (no KTO_API_KEY);
+│   │                #   topAttractions.json = per-region picks, boosted + no-key/quota fallback
+│   │                #   (§5); eventsSnapshot.json = no-key-only, a point-in-time capture (§5);
 │   │                #   {region,county}Hero{Photos,Credits}.json = cover-photo galleries + KOGL credits
 │   ├── _includes/   # layouts/{base,page}.njk; partials/{header,footer,hero,region-card,
 │   │                #   korea-map,tabs,empty-state}.njk
@@ -121,7 +122,7 @@ worknstay_korea/
 │   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
 │   └── regions/region.njk (paginates regions.json → /regions/<slug>/);
 │       regions/gyeonggi-do/population-decline-counties.njk
-├── scripts/   # verify-{eligibility,calculator,kto-client,normalize}.mjs
+├── scripts/   # verify-{eligibility,calculator,kto-client,normalize,boost-curated,kto-dev-cache}.mjs
 └── _site/     # build output (gitignored)
 ```
 
@@ -138,35 +139,40 @@ still use it.
         │  server-side only, never in src/ or client bundle
         ▼
   functions/api/region/[slug]/{attractions,events}.js
-        │  live call to EngService2 (areaBasedList2, searchFestival2) on cache miss/expiry
+        │  live call to EngService2 (areaBasedList2, searchFestival2) on every request
         ▼
   normalize.mjs (title split, http→https, HTML-entity strip, license filter)
         ▼
-  Cloudflare edge cache (cf.cacheTtl): attractions ~24h, festivals/events ~4h
-        ▼
   Region pages fetch these endpoints client-side (`region-data.js`) into skeleton mounts — a
-  real, periodically-refreshed live call, never a git-committed snapshot.
+  real, live call on every visit, never a git-committed snapshot.
 ```
 
+Production caching (`cf.cacheTtl`) is disabled: KTO's compliance check is the API-key
+call-history log, and any caching needs a separate approval form (3-5 day review, too slow for
+the deadline) since an edge-cache hit would show as a gap in that log. `CACHE_TTL_SECONDS` stays
+defined as a one-line revert once/if approved; a dev-only in-memory cache (`kto-client.mjs`,
+`KTO_DEV_CACHE=1` in `.dev.vars`) covers manual QA instead. Every page view is now a live
+round-trip — dev key is 1,000 calls/day per endpoint (`areaBasedList2`/`searchFestival2` quotas
+are independent), worst case ~36 calls (gyeongsang-do). KTO's optional "operating account" isn't
+needed for compliance (regular dev-key history counts).
+
 Region/county **hero photos** and **dish photos** are the exception: hand-picked once (via KTO
-PhotoGalleryService1/EngService2 during the dev window, counting toward call history — Wikimedia
-Commons and the author's own photos fill the rest of the dish set), then committed as static
-files under `assets/img/hero/` and `assets/img/food/` — an editorial choice, not something an
-API should pick per request.
+PhotoGalleryService1/EngService2, counting toward call history — Wikimedia Commons and the
+author's own photos fill the rest), then committed as static files under `assets/img/hero/` and
+`assets/img/food/` — an editorial choice, not something an API should pick per request.
 
 Static/editorial `_data/*.json` (visa rules, cost of living, food, communities, transport)
 bypasses this pipeline entirely — not KTO-sourced, no "live" requirement.
 
-**Rate-limit note:** dev key is 1,000 calls/day; edge caching keeps actual KTO round-trips to
-~one per TTL window per region/content-type, not one per visitor. KTO's optional "operating
-account" isn't needed for compliance (regular dev-key history counts).
-
 **Known KTO data quirks baked into `kto-client.mjs`/`normalize.mjs`:**
 - v4 renumbered content types — attraction is `76`, not the old `12`.
 - `areaBasedList2` uses undocumented `arrange=P` (view-count) over documented `Q` (modified-date,
-  buries landmarks under recent CMS edits). Empty whole-region results retry once with `arrange=R`,
-  skipped when the cause is KTO's daily quota (429, code 22) — `{ items, quotaExceeded }` then
-  lets the UI say "come back tomorrow" instead of a false empty state.
+  buries landmarks). A 1-call pre-flight probe swaps in `arrange=R` when `P` comes back empty and
+  it's not quota exhaustion (429 code 22) — `{ items, quotaExceeded }` then lets the UI say "come
+  back tomorrow" instead of a false empty state.
+- `topAttractions.json` (hand-verified, per region) is boosted into live results
+  (`boost-curated.mjs`): `hard` picks are injected if missing from the live query, `soft` picks
+  only repositioned if already present. Same file is the no-key/quota-exhausted fallback.
 - Attraction filtering whitelists curated `lclsSystm1/2/3` codes (not `cat1/2/3`, which
   under-surfaced popular sites) — composes with `lDongRegnCd`/`lDongSignguCd` in one call and
   spans `contentTypeId` on its own (76+78 in one query, no per-type call needed). City tagging
@@ -334,3 +340,10 @@ vibe-tag vocabulary. Every major feature traces back to one:
 - Eligibility calculator + map gating → sustainable-residency framing (not one-off tourism)
 - Region living-info (cost of living, transport, workation cities) → month-long-stay support
 - Attractions/festivals/food → local-tourism content, framed as "living here," not sightseeing
+
+## 11. Feedback log (approach decisions made and why)
+
+- **`locationBasedList2` as a second-tier fallback when `areaBasedList2`'s daily quota is
+  exhausted — rejected.** No clean single-circle lat/lng+radius coverage for multi-province
+  regions; unconfirmed `lclsSystm` filter support; `topAttractions.json` already covers this
+  scenario with an honest message and zero new endpoint risk.

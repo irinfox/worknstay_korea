@@ -33,7 +33,7 @@ function renderAttractions(container, data) {
   const attractions = Array.isArray(data) ? data : data.items || [];
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
   // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
-  // back to the curated mock set rather than send an empty/partial list — so the subtitle should
+  // back to the curated set rather than send an empty/partial list — so the subtitle should
   // say "today's picks", not imply this is the full live gallery. Reset to the default on every
   // render (not just set-once) so a page that loads mid-outage and later re-fetches doesn't keep
   // a stale "top picks" message.
@@ -43,8 +43,8 @@ function renderAttractions(container, data) {
   }
   if (!attractions.length) {
     // A true empty result only happens now if a region genuinely has none *and* KTO's quota
-    // isn't the cause (quotaExceeded always serves the mock fallback in attractions.js, so this
-    // branch never sees quotaExceeded with zero items) — one honest message is enough.
+    // isn't the cause (quotaExceeded always serves the curated fallback in attractions.js, so
+    // this branch never sees quotaExceeded with zero items) — one honest message is enough.
     container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
     return;
   }
