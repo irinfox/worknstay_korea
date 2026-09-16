@@ -172,7 +172,10 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - **Study cafés**: 4-cell battery (12–15×9px, `#0F7B54` filled / `#DCE3DF` empty) + count label
   + `Naver Map search ↗` at the right of the same row, 12px orange. No description. The row never
   wraps at any width — shorten the label to `Naver Map ↗` at 360 rather than wrapping it.
-- **Chains**: the chain name is the link (`Fastfive ↗`); no separate domain column.
+- **Chains**: grouped under their own "Chains" subtitle (13px/600 muted) below the solo venues,
+  non-Korean ones first. Name is plain ink, not a link (orange got loud repeated); a small
+  `Website ↗` (`(KR)` suffix when Korean-only) sits alongside instead, in a shared grid so every
+  row's link lines up in one column.
 - **Getting around**: three nearby places + Seoul, journey times in semibold.
 - **Guides**: one strip, each link orange underlined with `↗`, domain and date underneath.
 - **Festivals**: Ongoing / Upcoming toggle, dates in `#5C6660`/500 with `tabular-nums`, name in ink,
@@ -212,7 +215,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - Honest labels with their basis: "Furnished short-term, decent and available" — the figure is what a
   decent, actually available furnished place lists for anywhere in the region, not a 1BR city-centre median.
 - Every figure dated and sourced ("Hand-checked from current listings, September 2026").
-- No marketing slogans, no "handpicked", no unsupported comparisons.
+- No marketing slogans, no unsupported comparisons.
 - Consistent names: one term per concept ("Partly eligible", "About", "worknstay korea").
   One label per destination — the same link is never worded two ways on two pages.
 - Dots, not pluses, between qualifiers: `coworking · coliving · community`.

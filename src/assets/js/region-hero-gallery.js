@@ -63,6 +63,13 @@ function setupGallery(root) {
 
   function goTo(index) {
     internalIndex = index;
+    // Mandatory scroll-snap fights a scripted smooth scroll: confirmed by testing that pressing
+    // "prev" on slide 1 (scrolling back toward the clone at index 0) left the track stuck at a
+    // non-snap-point scrollLeft partway through the animation, with prev()/next() unable to
+    // recover afterward — the browser's own snap correction and this scrollTo were fighting over
+    // the position. Disabling snap for the duration of the animation avoids that; handleSettle
+    // re-enables it once the scroll has actually stopped.
+    track.style.scrollSnapType = "none";
     track.scrollTo({ left: stepWidth() * index, behavior: "smooth" });
   }
 
@@ -74,20 +81,45 @@ function setupGallery(root) {
     goTo(internalIndex - 1);
   }
 
+  // Reposition the track instantly. Disabling snap for the instant jump keeps
+  // `scroll-snap-type: mandatory` from treating the reassigned scrollLeft as needing its own
+  // snap "correction" on top of it (same defensive pattern as attraction-filters.js).
+  function jumpTo(left) {
+    track.style.scrollSnapType = "none";
+    track.scrollLeft = left;
+    void track.offsetWidth;
+    track.style.scrollSnapType = "";
+  }
+
   // Snap-correct out of the clone zone, then sync dots — runs after both button-driven smooth
-  // scrolls and free-hand swipe/wheel scrolling settle.
+  // scrolls and free-hand swipe/wheel scrolling settle. Reads the real scroll position as truth
+  // rather than trusting internalIndex, which goTo() sets optimistically before the browser has
+  // actually finished moving.
   function handleSettle() {
     const step = stepWidth();
     const settledIndex = Math.round(track.scrollLeft / step);
-    if (settledIndex === 0) {
+    // On any viewport wide enough to show more than one slide at a time (this gallery's
+    // 600px/82%-wide cards do that above ~730px), the browser's real max scrollLeft falls short
+    // of the clone's step-math position (index count + 1) — there isn't enough trailing clone
+    // width to scroll that far, so scrollTo() silently clamps short of it. `settledIndex` then
+    // never equals `count + 1`, the clone-reset branch below never ran, and the counter froze at
+    // the last real slide with next()/prev() computing from a permanently stale internalIndex —
+    // the reported "stuck at N/N, only a reload fixes it" bug. Treating "physically can't scroll
+    // any further" as an alternate trigger for the same reset fixes it regardless of how many
+    // slides are visible at once.
+    const atScrollEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+    if (settledIndex <= 0) {
       internalIndex = count;
-      track.scrollLeft = step * internalIndex;
-    } else if (settledIndex === count + 1) {
+      jumpTo(step * internalIndex);
+    } else if (settledIndex >= count + 1 || atScrollEnd) {
       internalIndex = 1;
-      track.scrollLeft = step * internalIndex;
+      jumpTo(step * internalIndex);
     } else {
       internalIndex = settledIndex;
     }
+    // Re-enable snap now that the scroll has actually stopped (a no-op if a free-hand swipe
+    // triggered this settle rather than goTo(), since snap was never disabled in that case).
+    track.style.scrollSnapType = "";
     setActive(internalIndex - 1);
   }
 
@@ -113,7 +145,7 @@ function setupGallery(root) {
   root.addEventListener("mouseenter", stopAutoplay);
   root.addEventListener("mouseleave", startAutoplay);
 
-  track.scrollLeft = stepWidth() * internalIndex;
+  jumpTo(stepWidth() * internalIndex);
   setActive(0);
   startAutoplay();
 }

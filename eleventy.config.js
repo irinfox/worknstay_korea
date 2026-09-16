@@ -75,6 +75,17 @@ export default function (eleventyConfig) {
     };
   });
 
+  // Splits workationCenters into solo venues vs. chains (DESIGN.md § "Chains"), dropping CLOSED
+  // entries; chains sort non-Korean-first, solo venues keep cities.json's order.
+  eleventyConfig.addFilter("activeVenues", function (centers, wantChains) {
+    const active = (centers || []).filter((wc) => {
+      const closed = (wc.note || "").indexOf("CLOSED") !== -1;
+      return !closed && Boolean(wc.isChain) === Boolean(wantChains);
+    });
+    if (!wantChains) return active;
+    return active.sort((a, b) => Number(Boolean(a.korOnly)) - Number(Boolean(b.korOnly)));
+  });
+
   return {
     dir: {
       input: "src",

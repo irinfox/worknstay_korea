@@ -546,5 +546,67 @@
   .region-infographic:has([data-region-slug="jeju-do"]:hover) .region[data-slug="jeju-do"] .region__label,
   .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__label {
     transform: scale(1.2);
+    /* Without this the label kept its resting (paler) halo on card cross-hover while direct map
+       hover jumped to the brighter *-hover tone — the two hovers read as different effects. */
+    stroke: var(--color-halo-active-hover);
+  }
+
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region[data-slug="gyeonggi-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region[data-slug="gangwon-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region[data-slug="chungcheong-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region[data-slug="chungcheong-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region[data-slug="gyeongsang-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region[data-slug="gyeongsang-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region[data-slug="jeolla-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region[data-slug="jeolla-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region[data-slug="jeju-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region[data-slug="jeju-do"] .region__label--metro {
+    stroke: var(--color-halo-active-metro-hover);
+  }
+
+  /* Partial override — gyeonggi-do is the only region this class ever lands on, same as the
+     .region__city override above. */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--partial[data-slug="gyeonggi-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--partial[data-slug="gyeonggi-do"] .region__label {
+    stroke: var(--color-halo-partial-hover);
+  }
+
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--partial[data-slug="gyeonggi-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--partial[data-slug="gyeonggi-do"] .region__label--metro {
+    stroke: var(--color-halo-partial-metro-hover);
+  }
+
+  /* Ineligible override — any region can land here once salary/age dims the whole map, same
+     reasoning as the .region__city override above. */
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--ineligible[data-slug="gyeonggi-do"] .region__label,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region--ineligible[data-slug="gangwon-do"] .region__label,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region--ineligible[data-slug="chungcheong-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region--ineligible[data-slug="gyeongsang-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region--ineligible[data-slug="jeolla-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region--ineligible[data-slug="jeju-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--ineligible[data-slug="gyeonggi-do"] .region__label,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region--ineligible[data-slug="gangwon-do"] .region__label,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region--ineligible[data-slug="chungcheong-do"] .region__label,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region--ineligible[data-slug="gyeongsang-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region--ineligible[data-slug="jeolla-do"] .region__label,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region--ineligible[data-slug="jeju-do"] .region__label {
+    stroke: var(--color-halo-ineligible-hover);
+  }
+
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region--ineligible[data-slug="gyeonggi-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region--ineligible[data-slug="gangwon-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region--ineligible[data-slug="chungcheong-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:hover) .region--ineligible[data-slug="gyeongsang-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeolla-do"]:hover) .region--ineligible[data-slug="jeolla-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeju-do"]:hover) .region--ineligible[data-slug="jeju-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region--ineligible[data-slug="gyeonggi-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gangwon-do"]:focus-within) .region--ineligible[data-slug="gangwon-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="chungcheong-do"]:focus-within) .region--ineligible[data-slug="chungcheong-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="gyeongsang-do"]:focus-within) .region--ineligible[data-slug="gyeongsang-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeolla-do"]:focus-within) .region--ineligible[data-slug="jeolla-do"] .region__label--metro,
+  .region-infographic:has([data-region-slug="jeju-do"]:focus-within) .region--ineligible[data-slug="jeju-do"] .region__label--metro {
+    stroke: var(--color-halo-ineligible-metro-hover);
   }
 }
