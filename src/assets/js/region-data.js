@@ -27,9 +27,9 @@ const ATTRACTIONS_SUBTITLE_DEFAULT = "What to explore in the region";
 const ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED = "Top picks for today, the full list will be back tomorrow";
 
 function renderAttractions(container, data) {
-  // fetchJson is shared with events (still a bare array) — attractions.js returns
-  // { items, quotaExceeded }, but fetchJson's own network-failure fallback is still a bare `[]`,
-  // so handle both shapes rather than assuming the object one always arrives.
+  // attractions.js and events.js both return { items, quotaExceeded }, but fetchJson's own
+  // network-failure fallback is still a bare `[]`, so handle both shapes rather than assuming
+  // the object one always arrives.
   const attractions = Array.isArray(data) ? data : data.items || [];
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
   // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
@@ -304,8 +304,34 @@ function applyPreview(events) {
   return events;
 }
 
-function renderEventsTimeline(container, events) {
-  events = applyPreview(events);
+const EVENTS_SUBTITLE_DEFAULT = "Ongoing now, and what's coming up.";
+const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
+
+function renderEventsTimeline(container, data) {
+  // fetchJson's own network-failure fallback is still a bare `[]` (see renderAttractions above),
+  // so handle both shapes rather than assuming the { items, quotaExceeded } one always arrives.
+  const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // The subtitle is a small-caption "sub" line meant to sit under a live section — misleading
+  // here ("Ongoing now...") and visually wrong (region-page.css tightens the H2 gap for it).
+  // Hide it outright and put the real message in the body instead, same .empty-state treatment
+  // the costs column's own "no data" text uses, so both fallback states read identically.
+  const subtitle = document.querySelector("[data-events-subtitle]");
+  if (subtitle) {
+    subtitle.hidden = quotaExceeded;
+    subtitle.textContent = EVENTS_SUBTITLE_DEFAULT;
+  }
+  // Attributing an empty result to KTO is only honest when KTO was actually reached — a real
+  // zero-events region (e.g. Jeju) got a real answer and keeps the credit; a quota-exceeded
+  // response never reached KTO at all this time, so hide it rather than cite a source for data
+  // that isn't there.
+  const provenance = document.querySelector("[data-events-provenance]");
+  if (provenance) provenance.hidden = quotaExceeded;
+  if (quotaExceeded) {
+    container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
+    return;
+  }
+
+  const events = applyPreview(Array.isArray(data) ? data : data.items || []);
   const today = todayIso();
   const currentMonth = monthKeyOf(today);
 
@@ -323,7 +349,7 @@ function renderEventsTimeline(container, events) {
     container.innerHTML = `
       <div class="event-empty">
         <span class="event-empty__chip" aria-hidden="true">${CAL_EMPTY_ICON}</span>
-        <p class="event-empty__text">No festivals or events listed for this region right now.</p>
+        <p class="event-empty__text">This region has no events listed yet.</p>
       </div>`;
     return;
   }

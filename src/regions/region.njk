@@ -221,7 +221,12 @@ eleventyComputed:
 
     <div class="region-band__col region-band__col--events">
       <h2>Festivals &amp; events</h2>
-      <p class="region-section__sub">Ongoing now, and what's coming up.</p>
+      {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+         quotaExceeded (KTO's daily call quota is gone) — events.js drops items entirely in that
+         case (no top-picks-style fallback, see events.js header comment), so the subtitle itself
+         carries the honest message instead of a card in the timeline below. Reset on every
+         render so a stale message can't survive a state that later succeeds. #}
+      <p class="region-section__sub" data-events-subtitle>Ongoing now, and what's coming up.</p>
       {# Live per-request data (functions/api/region/[slug]/events.js), fetched and rendered by
          region-data.js. The <noscript> message is the real no-JS content; JS never lets a
          browser see it (region-data.js overwrites this container's innerHTML on load). #}
@@ -230,7 +235,10 @@ eleventyComputed:
           <p class="empty-state">Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></p>
         </noscript>
       </div>
-      <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+      {# Hidden by region-data.js when the live fetch comes back quotaExceeded — attributing an
+         empty result to KTO is only honest when KTO was actually reached (a real zero-events
+         region, e.g. Jeju, still gets a real answer and keeps the credit). #}
+      <p class="data-provenance" data-events-provenance>Source: © Korea Tourism Organization (한국관광공사).</p>
     </div>
   </div>
 </div>

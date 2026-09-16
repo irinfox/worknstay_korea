@@ -499,9 +499,11 @@ ul.region-seasons {
   letter-spacing: -0.015em;
 }
 
-/* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present. */
-.region-page .region-section > h2:has(+ .region-section__sub),
-.region-band__col > h2:has(+ .region-section__sub) {
+/* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present —
+   `:not([hidden])` so a JS-hidden subtitle (e.g. events.js's quotaExceeded state, region-data.js)
+   falls back to the normal H2 margin instead of leaving the tight gap with nothing to fill it. */
+.region-page .region-section > h2:has(+ .region-section__sub:not([hidden])),
+.region-band__col > h2:has(+ .region-section__sub:not([hidden])) {
   margin-bottom: 4px;
 }
 

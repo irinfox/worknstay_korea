@@ -214,6 +214,12 @@ export async function onRequestGet({ params, env }) {
     items = boostCuratedPicks(items, regionTopPicks);
   }
 
+  // This is the one order the "All" tab and every city/Elsewhere filter all read from (the front
+  // end only toggles card visibility, it never re-sorts) — so it must stay a single, region-wide
+  // rule with no per-city exception. A per-city category preference (e.g. Suncheon wanting nature
+  // before culture) belongs client-side instead, applied only while that city's own pill is
+  // active (attraction-filters.js's CITY_CATEGORY_PRIORITY) — an earlier server-side attempt at
+  // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
   const priority = CATEGORY_PRIORITY[slug];
   if (priority) {
     const rank = (category) => (category === priority ? 0 : 1);

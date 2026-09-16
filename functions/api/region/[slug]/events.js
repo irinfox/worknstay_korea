@@ -6,7 +6,11 @@
 // drops anything that already ended. Some regions (e.g. Jeju) legitimately return zero — a
 // designed empty state, not a bug. Falls back to `eventsSnapshot.json` when KTO_API_KEY isn't
 // set — real festivals captured live on 2026-09-16, a point-in-time example set (unlike
-// topAttractions.json, no ongoing boost/priority logic or quotaExceeded fallback here).
+// topAttractions.json, no ongoing boost/priority logic here). On a real quota-exceeded response,
+// items are dropped entirely rather than falling back to eventsSnapshot — that snapshot is a
+// point-in-time capture, not a maintained curated set, so serving it here risks presenting an
+// already-ended festival as live; `quotaExceeded` lets the front end show an honest "check back
+// tomorrow" message instead.
 import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent, isUpcomingOrOngoing } from "../../lib/normalize.mjs";
@@ -28,7 +32,7 @@ export async function onRequestGet({ params, env }) {
   }
 
   if (!env?.KTO_API_KEY) {
-    return Response.json(eventsSnapshot.filter((e) => e.regionSlug === slug));
+    return Response.json({ items: eventsSnapshot.filter((e) => e.regionSlug === slug), quotaExceeded: false });
   }
 
   const codes = slugToLDongRegnCds(slug);
@@ -50,9 +54,12 @@ export async function onRequestGet({ params, env }) {
   );
 
   const byContentId = new Map();
+  let quotaExceeded = false;
   const now = new Date();
   for (const result of pages) {
-    if (result.status !== "fulfilled" || result.value.degraded) continue;
+    if (result.status !== "fulfilled") continue;
+    if (result.value.quotaExceeded) quotaExceeded = true;
+    if (result.value.degraded) continue;
     for (const raw of result.value.items) {
       if (!isUpcomingOrOngoing(raw, now)) continue;
       const event = normalizeEvent(raw);
@@ -61,5 +68,6 @@ export async function onRequestGet({ params, env }) {
     }
   }
 
-  return Response.json([...byContentId.values()]);
+  const items = quotaExceeded ? [] : [...byContentId.values()];
+  return Response.json({ items, quotaExceeded });
 }

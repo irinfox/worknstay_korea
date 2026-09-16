@@ -139,9 +139,11 @@ function extractItems(body) {
  * @param {Record<string, string|number>} params - endpoint-specific query params
  *   (contentTypeId/areaCode/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for
  *   searchFestival2), plus numOfRows/pageNo for paging.
- * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string }} env - Cloudflare Functions env
- *   binding; `KTO_DEV_CACHE: "1"` (dev-only, see devCache above) serves repeat identical calls
- *   from an in-memory cache instead of hitting KTO again.
+ * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string, KTO_DEV_FORCE_QUOTA?: string }} env -
+ *   Cloudflare Functions env binding; `KTO_DEV_CACHE: "1"` (dev-only, see devCache above) serves
+ *   repeat identical calls from an in-memory cache instead of hitting KTO again.
+ *   `KTO_DEV_FORCE_QUOTA: "1"` (dev-only) short-circuits to a quota-exceeded result with no
+ *   network call, to QA the fallback UI on demand.
  * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
  *   to bypass the edge cache (used for verify scripts and other one-off calls).
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
@@ -149,6 +151,12 @@ function extractItems(body) {
 export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   const serviceKey = env?.KTO_API_KEY;
   if (!serviceKey) return DEGRADED;
+
+  // Dev-only QA hook (`.dev.vars` only — never set in Cloudflare's production env): simulates
+  // the real daily-quota-exceeded response without any network call, so the honest fallback UI
+  // (attractions.js's topAttractions swap, region-data.js's "Top picks for today" subtitle) can
+  // be checked on demand instead of waiting for the real 1,000-call/day dev key to run out.
+  if (env?.KTO_DEV_FORCE_QUOTA === "1") return { ...DEGRADED, quotaExceeded: true };
 
   const url = buildUrl(endpoint, params, serviceKey);
   const devCacheEnabled = env?.KTO_DEV_CACHE === "1";
