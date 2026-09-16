@@ -92,13 +92,12 @@ Iterative editorial/research work, mostly hand-curation — do one region at a t
       whitelist of curated `lclsSystm1`/`lclsSystm2`/`lclsSystm3` codes (replaces the earlier
       `cat1`/`cat2`/`cat3` whitelist, which under-surfaced popular sites), one `contentTypeId`-free
       call per group (spans 76 + 78 on its own), city tagged via `lDongSignguCd`.
-- [ ] Category display-order priority per region is provisional (attractions.js
-      `CATEGORY_PRIORITY`) — revisit once live results are reviewed.
-- [x] Wire the Area/Type filter pills (`attraction-filters.js`) to actually filter
-      `.attraction-list` using `category`/`citySlug`; "Elsewhere" behaves like "All" until that
-      gets its own plan.
-- [ ] VE07 (museums/galleries) is whitelisted to VE070100/070500/070600 only — widen to VE07's
-      full range for any region/city whose culture list comes back too thin.
+- [x] Category display-order priority reviewed against live results — region defaults held up;
+      city/Elsewhere mismatches got their own override instead (`attraction-filters.js`).
+- [x] Area/Type filter pills filter `.attraction-list` by `category`/`citySlug`; "Elsewhere" now
+      has real behavior (own category order, reorder-bug fix, dropped on jeju-do).
+- [x] VE07 stays whitelisted to VE070100/070500/070600 — live checks found no thin culture list
+      anywhere, so no widening needed.
 - [ ] Region description rewrite (all 6).
 - [ ] Home region cards: vibe-tags.
 - [x] Home region cards: food gallery.
