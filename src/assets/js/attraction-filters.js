@@ -32,6 +32,10 @@ function knownAreaSlugs(areaPills) {
   return new Set(areaPills.map((p) => p.dataset.filterValue).filter((v) => v !== "all" && v !== "elsewhere"));
 }
 
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
 export function applyFilters(root = document) {
   const filtersEl = root.querySelector("[data-attraction-filters]");
   const list = root.querySelector("[data-region-attractions]");
@@ -41,6 +45,17 @@ export function applyFilters(root = document) {
   const typePills = Array.from(filtersEl.querySelectorAll('[data-filter-group="type"]'));
   const area = selectedValue(areaPills);
   const type = selectedValue(typePills);
+
+  // A new filter selection is a new list, not a continuation of wherever the old one was
+  // scrolled to — leaving scrollLeft alone let switching pills land mid-list (or, worse, past
+  // the end of a shorter one), so every filter change scrolls back to the start (see below).
+  // Naively setting scrollLeft = 0 before the hidden/order mutations below isn't enough: with
+  // scroll-snap-type active, Chrome resolves "nearest snap point" against a stale intermediate
+  // layout while those mutations land, silently overriding the reset and leaving the list
+  // scrolled to wherever the previous filter happened to be (confirmed live — disabling
+  // scroll-snap-type made the bug disappear). Suspending snap across the mutation and the reset
+  // below, restored only once that's actually settled, avoids the race.
+  list.style.scrollSnapType = "none";
 
   const knownAreas = knownAreaSlugs(areaPills);
   const cards = Array.from(list.querySelectorAll(".attraction-card"));
@@ -58,6 +73,27 @@ export function applyFilters(root = document) {
     // = 0 = DOM/source order), so "All"/"Elsewhere" are never affected.
     card.style.order = cityPriority && card.dataset.city === area && card.dataset.category !== cityPriority ? "1" : "";
   });
+
+  const restoreSnap = () => {
+    list.style.scrollSnapType = "";
+  };
+  if (prefersReducedMotion() || list.scrollLeft === 0) {
+    // Already at the start (e.g. the previous filter had nothing to scroll) — scrollTo(0, smooth)
+    // would be a no-op here, and a no-op scroll never fires "scrollend", which would leave snap
+    // suspended forever. Skip the animation path entirely rather than rely on it to clean itself up.
+    list.scrollLeft = 0;
+    requestAnimationFrame(restoreSnap);
+  } else {
+    // An instant teleport back to the start is jarring on every single pill click — ease into
+    // it instead. Snap stays suspended for the ride so it can't re-fight the animation the same
+    // way it fought the instant jump above. "scrollend" reports when the easing actually
+    // finishes; the timeout is a safety net (older Safari has no "scrollend" at all, and even
+    // where it's supported a scroll can in principle get interrupted without ever firing it) —
+    // restoreSnap is idempotent, so both are safe to fire.
+    list.scrollTo({ left: 0, behavior: "smooth" });
+    list.addEventListener("scrollend", restoreSnap, { once: true });
+    setTimeout(restoreSnap, 400);
+  }
 
   // Distinct from region-data.js's "no attractions for this region at all" empty state — this
   // one only appears when data exists but the current filter combination matches none of it.
