@@ -442,11 +442,16 @@ ul.region-seasons {
 .region-hero__caption-title {
   font-size: clamp(1rem, 0.95rem + 0.3vw, 1.1875rem);
   font-weight: 600;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .region-hero__caption-sub {
   font-size: var(--font-size-sm);
   color: rgba(255, 255, 255, 0.78);
+  /* cityEn · titleKo mixes Latin and Korean — same keep-all fix as the title above. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .region-hero__credit {
@@ -1155,13 +1160,22 @@ ul.region-seasons {
 }
 
 /* region-data.js renders the attraction title as an <h4> — bring it down to the design's
-   card-title size (15px / 500), not base.css's page-scale h4. */
+   card-title size (15px / 500), not base.css's page-scale h4. Titles mix an English name with a
+   Korean name in .attraction-card__ko/.dish-card__ko (inherits word-break/overflow-wrap from
+   here): keep-all stops a Korean word splitting mid-character (e.g. "미술관" hanging a lone "관"
+   on the next line). (text-wrap: pretty was tried here too, for the English name's own
+   hyphen-free wrapping, e.g. "Seogwipo-si" — but on these two-line titles it moved a whole
+   trailing word to line two to "balance" the lines even when it fit on line one, e.g.
+   "Gongjicheon Recreation" / "Area 공지천유원지" with visible slack left after "Recreation" — so
+   it's not used.) */
 .attraction-card h4,
 .dish-card__name {
   margin: 0;
   font-size: 15px;
   font-weight: 500;
   line-height: 1.3;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .attraction-card__address,
@@ -1170,6 +1184,8 @@ ul.region-seasons {
   font-size: 13px;
   line-height: 1.5;
   color: var(--color-text-muted);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .attraction-card__address {

@@ -144,6 +144,13 @@
   font-size: 19px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  /* Mixes an English city name with its Korean name (.city-card__ko, inherits these) — keep-all
+     stops a Korean word splitting mid-character. (text-wrap: pretty was tried here for the
+     English name's own hyphen-free wrapping, e.g. "Seogwipo-si", but it moved whole trailing
+     words to the next line even when they fit — e.g. "Gongjicheon Recreation" / "Area" with
+     visible slack left on line one — so it's not used.) */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .city-card__ko {
@@ -225,6 +232,9 @@
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  /* Some venue names are Korean-only (kor-only listings) — keep-all as above (.city-card__name). */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .work-venue__kind {
@@ -240,6 +250,8 @@
   font-size: 13px;
   line-height: 1.5;
   color: var(--color-text-muted);
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .work-venue__links {
