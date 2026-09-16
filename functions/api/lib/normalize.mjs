@@ -29,19 +29,37 @@ function decodeEntities(text) {
     .trim();
 }
 
-// Titles arrive like "ARTEASPOON (아티스푼)", "1stbutton Rhinoplasty clinic (첫단추의원)", or
-// with a nested-paren Korean group like "APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))".
-// titleEn is everything before the trailing Korean-script parenthesized group; that group is
-// titleKo. Titles with no trailing Korean paren keep titleKo empty rather than guessing.
+// Titles arrive like "ARTEASPOON (아티스푼)", "1stbutton Rhinoplasty clinic (첫단추의원)",
+// with a nested-paren Korean group like "APAP Artwork Tour (APAP 작품투어 (안양공공예술프로젝트))",
+// with a "[...]" tag on either side like "Geomunoreum Lava Tube [UNESCO World Natural Heritage
+// Site] (거문오름 [유네스코 세계자연유산])", or with an extra English parenthetical sub-title ahead of
+// the Korean group like "Seoraksan National Park (Southern Section) (설악산국립공원 (남설악))" or
+// "Mudeungsan National Park (Gwangju) (무등산국립공원(광주))" — all stripped below, readability call,
+// not KTO data we want to keep. titleEn is everything before the FIRST "(" once a trailing
+// Korean-script group is found — deliberately dropping an English sub-title too (not just the
+// Korean group's own nested parens), since titleKo never carries one either and keeping it in
+// titleEn only reads as redundant ("Southern Section", "(Gwangju)" duplicating the city).
+// Titles with no trailing Korean paren are left untouched and keep titleKo empty rather than
+// guessing.
+function stripBracketedTags(text) {
+  return text
+    .replace(/\[[^\]]*\]/g, "")
+    .replace(/\(\s+/g, "(")
+    .replace(/\s+\)/g, ")")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function splitTitle(rawTitle) {
-  const title = decodeEntities(rawTitle);
-  // Preferred: trailing "(...)" with no nested parens — keeps a parenthetical English
-  // sub-title (e.g. "... (Road 5.16 Forest Tunnel) (5.16도로숲터널)") inside titleEn.
-  let match = title.match(/^(.*)\(([^()]*[가-힣][^()]*)\)\s*$/);
-  // Fallback: the Korean group itself contains parens.
-  if (!match) match = title.match(/^(.*?)\s*\((.*[가-힣].*)\)\s*$/);
-  if (!match) return { titleEn: title, titleKo: "" };
-  return { titleEn: match[1].trim(), titleKo: match[2].trim() };
+  const title = stripBracketedTags(decodeEntities(rawTitle));
+  // Trailing "(...)" group, allowing one level of nesting inside it (the Korean group can carry
+  // its own alt/older name in a further "(...)", e.g. the APAP/남설악/명상관 cases above).
+  const koreanTail = title.match(/\((?:[^()]|\([^()]*\))*\)\s*$/);
+  if (!koreanTail || !/[가-힣]/.test(koreanTail[0])) return { titleEn: title, titleKo: "" };
+  const titleEn = title.slice(0, title.indexOf("(")).trim();
+  // Drop a nested "(...)" inside titleKo itself too (the APAP/Hamdeok Beach case above).
+  const titleKo = koreanTail[0].slice(1, -1).trim().replace(/\s*\([^()]*\)/g, "").trim();
+  return { titleEn, titleKo };
 }
 
 // Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use"
@@ -68,10 +86,13 @@ export function normalizeAttraction(raw) {
   return {
     contentId: raw.contentid,
     lDongRegnCd: raw.lDongRegnCd,
+    lDongSignguCd: raw.lDongSignguCd || "",
     titleEn,
     titleKo,
     summary: "",
-    address: [raw.addr1, raw.addr2].filter(Boolean).join(" ").trim(),
+    // KTO occasionally sends addr2 as the literal string "0" instead of leaving it empty
+    // (confirmed live on contentId 264550, N Seoul Tower) — filtered out alongside blanks.
+    address: [raw.addr1, raw.addr2].filter((part) => part && part !== "0").join(" ").trim(),
     imageUrl: imageLicense ? toHttps(raw.firstimage) : "",
     imageThumbUrl: imageLicense ? toHttps(raw.firstimage2) : "",
     imageLicense,
@@ -91,7 +112,9 @@ export function normalizeEvent(raw) {
     titleKo,
     startDate: formatKtoDate(raw.eventstartdate),
     endDate: formatKtoDate(raw.eventenddate),
-    address: [raw.addr1, raw.addr2].filter(Boolean).join(" ").trim(),
+    // KTO occasionally sends addr2 as the literal string "0" instead of leaving it empty
+    // (confirmed live on contentId 264550, N Seoul Tower) — filtered out alongside blanks.
+    address: [raw.addr1, raw.addr2].filter((part) => part && part !== "0").join(" ").trim(),
     imageUrl: imageLicense ? toHttps(raw.firstimage) : "",
     imageLicense,
     tel: raw.tel || "",

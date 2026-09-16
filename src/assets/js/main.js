@@ -5,6 +5,7 @@ import { init as initRegionCard } from "./region-card.js";
 import { init as initRegionData } from "./region-data.js";
 import { init as initRegionHeroGallery } from "./region-hero-gallery.js";
 import { init as initRegionDetailMap } from "./region-detail-map.js";
+import { init as initAttractionFilters } from "./attraction-filters.js";
 
 initNav();
 initKoreaMap();
@@ -15,3 +16,4 @@ initRegionCard();
 initRegionData();
 initRegionHeroGallery();
 initRegionDetailMap();
+initAttractionFilters();

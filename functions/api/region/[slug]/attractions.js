@@ -1,35 +1,33 @@
-// Live KTO call (architecture.md §5) — areaBasedList2, fanned out across every lDongRegnCd code
-// a region owns (Promise.allSettled: one code failing only drops that code's items, not the
-// whole region), deduped by contentId, edge-cached ~24h (near-static content). Falls back to the
-// Phase-8 mock fixture when KTO_API_KEY isn't set (local dev without a key), so the response
-// shape callers see never changes.
-import mockAttractions from "../../../../src/_data/mock/attractions.json";
-import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
-import { normalizeAttraction } from "../../lib/normalize.mjs";
+// Live KTO call (architecture.md §5) — areaBasedList2, one broad call per lDongRegnCd code per
+// lclsSystm1 top bucket (NA/VE/HS), reclassified client-side into today's curated lclsSystm2/3
+// whitelist (not the retired cat1/2/3 tree, which under-surfaced popular sites). Fanned out
+// across every lDongRegnCd code a region owns (Promise.allSettled: one code/bucket failing only
+// drops that slice), deduped by contentId. Edge caching is disabled in production pending KTO's
+// caching-approval form (notes/attraction-gallery-report.md) — every page view is a live call.
+// Falls back to `topAttractions.json` (real, hand-verified KTO data, also boosted into live
+// results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so
+// callers always see `{ items: Attraction[], quotaExceeded: boolean }`.
+//
+// The fetch/classify/dedupe orchestration itself lives in lib/attraction-fetch.mjs (no JSON
+// imports there, unlike this file) so it's importable from a plain Node investigation script too
+// — see that module's header comment and notes/attraction-gallery-report.md §7.
+import topAttractions from "../../../../src/_data/topAttractions.json";
+import { fetchRegionAttractions } from "../../lib/attraction-fetch.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
+import { citySlugFor } from "../../lib/city-map.mjs";
+import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
 
-const CONTENT_TYPE_ID_ATTRACTION = 76; // v4 renumbered content types (architecture.md §5)
-// arrange=P: view-count order, representative image required. Undocumented in the EngService2
-// spec (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on
-// every region code. The documented "Q" is *modified-date* order, not view-count — it surfaces
-// whatever was last edited in the CMS (shop branches, recent listings) and buries stable
-// landmark records, so it was the wrong default. See notes/attraction-feed-curation.md.
-const ARRANGE = "P";
-// KTO files medical-tourism venues (plastic-surgery clinics, dental/oriental hospitals,
-// medical-tourism agencies) under contentTypeId 76. Sort order does NOT sink them — they're
-// removed here. cat3 "A02020500" is KTO's 의료관광 category and is 100% medical venues across
-// all six region feeds; the name regex is the fallback for the few records that carry no
-// category code at all (verified against live data).
-const MEDICAL_CAT3 = "A02020500";
-const MEDICAL_NAME_RE =
-  /병원|의원|한의원|성형외과|치과|피부과|안과|clinic|hospital|plastic surgery|dermatolog/i;
-const isMedicalVenue = (raw) =>
-  raw.cat3 === MEDICAL_CAT3 || MEDICAL_NAME_RE.test(raw.title || "");
-const CACHE_TTL_SECONDS = 24 * 60 * 60;
-// A region page shows a representative sample, not an exhaustive attraction database (a 3-code
-// region fully paginated returns 100s of items — too many for the horizontal scroll-snap card
-// list, and needless KTO call volume). One page per code, deduped, is enough variety.
-const ROWS_PER_CODE = 15;
+// Display-order priority per region (not a filter — every bucket fetched by fetchRegionAttractions
+// is always fetched). Provisional; user wants to refine after seeing live results
+// (ROADMAP_TODO.md Phase 24).
+const CATEGORY_PRIORITY = {
+  "gyeonggi-do": "culture",
+  "gyeongsang-do": "culture",
+  "jeolla-do": "culture",
+  "chungcheong-do": "culture",
+  "gangwon-do": "nature",
+  "jeju-do": "nature",
+};
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
@@ -38,32 +36,43 @@ export async function onRequestGet({ params, env }) {
     return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
   }
 
+  const regionTopPicks = topAttractions.filter((a) => a.regionSlug === slug);
+
   if (!env?.KTO_API_KEY) {
-    return Response.json(mockAttractions.filter((a) => a.regionSlug === slug));
+    return Response.json({ items: regionTopPicks, quotaExceeded: false });
   }
 
   const codes = slugToLDongRegnCds(slug);
-  const pages = await Promise.allSettled(
-    codes.map((lDongRegnCd) =>
-      fetchKtoAllPages(
-        "areaBasedList2",
-        { contentTypeId: CONTENT_TYPE_ID_ATTRACTION, lDongRegnCd, arrange: ARRANGE },
-        env,
-        { numOfRows: ROWS_PER_CODE, maxPages: 1, cacheTtl: CACHE_TTL_SECONDS }
-      )
-    )
-  );
+  let items = regionTopPicks;
+  let quotaExceeded = false;
+  if (codes.length) {
+    ({ items, quotaExceeded } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
 
-  const byContentId = new Map();
-  for (const result of pages) {
-    if (result.status !== "fulfilled" || result.value.degraded) continue;
-    for (const raw of result.value.items) {
-      if (isMedicalVenue(raw)) continue;
-      const attraction = normalizeAttraction(raw);
-      attraction.regionSlug = slug;
-      byContentId.set(attraction.contentId, attraction);
+    // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (a
+    // mix of stale edge-cache hits and quota-blocked misses), so fall back to the top-picks set
+    // rather than show a partial or empty gallery. `quotaExceeded` stays true so the front end
+    // swaps in "Top picks for today" instead of implying this is the full live list
+    // (region-data.js).
+    if (quotaExceeded) {
+      items = regionTopPicks;
+    } else {
+      // Boosting against itself (the fallback branch above) would be pointless — that's already
+      // the full top-picks set.
+      items = boostCuratedPicks(items, regionTopPicks);
     }
   }
 
-  return Response.json([...byContentId.values()]);
+  // This is the one order the "All" tab and every city/Elsewhere filter all read from (the front
+  // end only toggles card visibility, it never re-sorts) — so it must stay a single, region-wide
+  // rule with no per-city exception. A per-city category preference (e.g. Suncheon wanting nature
+  // before culture) belongs client-side instead, applied only while that city's own pill is
+  // active (attraction-filters.js's CITY_CATEGORY_PRIORITY) — an earlier server-side attempt at
+  // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
+  const priority = CATEGORY_PRIORITY[slug];
+  if (priority) {
+    const rank = (category) => (category === priority ? 0 : 1);
+    items.sort((a, b) => rank(a.category) - rank(b.category));
+  }
+
+  return Response.json({ items, quotaExceeded });
 }

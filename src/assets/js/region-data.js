@@ -4,6 +4,7 @@
 // No-JS story: each mount's <noscript> fallback (region.njk) is the real degraded path — an
 // honest "needs JavaScript" message with an outbound link, not fake/stale data. That's inert the
 // moment JS runs, since init() below replaces the mount's innerHTML unconditionally.
+import { applyFilters as applyAttractionFilters } from "./attraction-filters.js";
 
 function escapeHtml(str) {
   return String(str).replace(
@@ -22,8 +23,28 @@ async function fetchJson(url) {
   }
 }
 
-function renderAttractions(container, attractions) {
+const ATTRACTIONS_SUBTITLE_DEFAULT = "What to explore in the region";
+const ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED = "Top picks for today, the full list will be back tomorrow";
+
+function renderAttractions(container, data) {
+  // attractions.js and events.js both return { items, quotaExceeded }, but fetchJson's own
+  // network-failure fallback is still a bare `[]`, so handle both shapes rather than assuming
+  // the object one always arrives.
+  const attractions = Array.isArray(data) ? data : data.items || [];
+  const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
+  // back to the curated set rather than send an empty/partial list — so the subtitle should
+  // say "today's picks", not imply this is the full live gallery. Reset to the default on every
+  // render (not just set-once) so a page that loads mid-outage and later re-fetches doesn't keep
+  // a stale "top picks" message.
+  const subtitle = document.querySelector("[data-attractions-subtitle]");
+  if (subtitle) {
+    subtitle.textContent = quotaExceeded ? ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED : ATTRACTIONS_SUBTITLE_DEFAULT;
+  }
   if (!attractions.length) {
+    // A true empty result only happens now if a region genuinely has none *and* KTO's quota
+    // isn't the cause (quotaExceeded always serves the curated fallback in attractions.js, so
+    // this branch never sees quotaExceeded with zero items) — one honest message is enough.
     container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
     return;
   }
@@ -33,17 +54,60 @@ function renderAttractions(container, attractions) {
       // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover is the project's
       // existing default for both Type1/Type3 (hero.css) — Type3's cover-vs-contain question
       // stays open (ROADMAP Phase 29), unaffected by this.
+      // KTO's firstimage/firstimage2 don't always both resolve — one can 404 on KTO's own CDN
+      // even though the license and the other URL are fine (architecture.md §5). data-fallback
+      // carries the other URL so setupImageFallback can recover instead of showing a broken
+      // image; a li that has neither renders straight to the placeholder as before.
+      const primary = a.imageThumbUrl || a.imageUrl;
+      const fallback = a.imageThumbUrl && a.imageUrl && a.imageUrl !== a.imageThumbUrl ? a.imageUrl : "";
       const media = a.imageLicense
-        ? `<img class="attraction-card__media" src="${a.imageThumbUrl || a.imageUrl}" alt="${escapeHtml(a.titleEn)}" loading="lazy">`
+        ? `<img class="attraction-card__media" src="${primary}"${fallback ? ` data-fallback="${fallback}"` : ""} alt="${escapeHtml(a.titleEn)}" loading="lazy">`
         : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
+      // a.category/a.citySlug come from the whitelist lclsSystm1/2/3 match + lDongSignguCd city
+      // lookup in functions/api/region/[slug]/attractions.js (architecture.md §5) — surfaced
+      // here as data-category/data-city so attraction-filters.js can filter without a refetch.
+      const category = a.category === "nature" ? "Nature" : "Culture";
+      // KTO's EngService2 leaves addr1/addr2 both blank on some records (e.g. Ara-dong History
+      // and Culture Trail, jeju-do) — no separate Korean address field exists on this endpoint to
+      // fall back to (normalize.mjs already passes through whatever addr1/addr2 contain, English
+      // or not), so a genuinely empty a.address means KTO has no address data at all for that
+      // record. Omitting the line entirely reads better than a pin icon next to blank text.
+      const addressLine = a.address
+        ? `<p class="attraction-card__address">${pinIcon("attraction-card__pin")}${escapeHtml(a.address)}</p>`
+        : "";
       return `
-        <li class="attraction-card">
-          ${media}
-          <h4>${escapeHtml(a.titleEn)}</h4>
-          <p class="attraction-card__address">${escapeHtml(a.address)}</p>
+        <li class="attraction-card" data-category="${a.category}" data-city="${a.citySlug || ""}">
+          <div class="attraction-card__figure">
+            ${media}
+            <span class="attraction-card__category">${category}</span>
+          </div>
+          <h4>${escapeHtml(a.titleEn)}${a.titleKo ? ` <span class="attraction-card__ko">${escapeHtml(a.titleKo)}</span>` : ""}</h4>
+          ${addressLine}
         </li>`;
     })
     .join("");
+  setupImageFallback(container);
+  applyAttractionFilters();
+}
+
+// A dead src swaps to the other KTO URL once; if that also 404s, swaps to the same
+// .media-placeholder used for unlicensed images rather than leaving a broken-image icon.
+function setupImageFallback(container) {
+  container.querySelectorAll(".attraction-card__media[data-fallback]").forEach((img) => {
+    img.addEventListener("error", function onError() {
+      const fallback = img.dataset.fallback;
+      if (fallback) {
+        img.removeAttribute("data-fallback");
+        img.src = fallback;
+        return;
+      }
+      img.removeEventListener("error", onError);
+      const placeholder = document.createElement("div");
+      placeholder.className = "media-placeholder attraction-card__media";
+      placeholder.setAttribute("aria-hidden", "true");
+      img.replaceWith(placeholder);
+    });
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -53,7 +117,12 @@ function renderAttractions(container, attractions) {
 const EVENTS_PAGE_SIZE = 5;
 
 // Small inline glyphs (project rule: inline SVG, zero icon libraries).
-const PIN_ICON = `<svg class="event-place__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+// Shared glyph, sized per context via `className` (event-place__icon for festival cards,
+// attraction-card__pin for "Places to see nearby" — region-page.css sizes each independently).
+function pinIcon(className) {
+  return `<svg class="${className}" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>`;
+}
+const PIN_ICON = pinIcon("event-place__icon");
 const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
 // Tear-off desk calendar with a blank page — the empty state ("no dates listed").
 const CAL_EMPTY_ICON = `<svg class="event-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8.5" cy="4" r="1.3"/><circle cx="15.5" cy="4" r="1.3"/><path d="M8.5 5.3v1.7M15.5 5.3v1.7"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M4 11h16" stroke-dasharray="2 2"/></svg>`;
@@ -243,8 +312,34 @@ function applyPreview(events) {
   return events;
 }
 
-function renderEventsTimeline(container, events) {
-  events = applyPreview(events);
+const EVENTS_SUBTITLE_DEFAULT = "Ongoing now, and what's coming up.";
+const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
+
+function renderEventsTimeline(container, data) {
+  // fetchJson's own network-failure fallback is still a bare `[]` (see renderAttractions above),
+  // so handle both shapes rather than assuming the { items, quotaExceeded } one always arrives.
+  const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // The subtitle is a small-caption "sub" line meant to sit under a live section — misleading
+  // here ("Ongoing now...") and visually wrong (region-page.css tightens the H2 gap for it).
+  // Hide it outright and put the real message in the body instead, same .empty-state treatment
+  // the costs column's own "no data" text uses, so both fallback states read identically.
+  const subtitle = document.querySelector("[data-events-subtitle]");
+  if (subtitle) {
+    subtitle.hidden = quotaExceeded;
+    subtitle.textContent = EVENTS_SUBTITLE_DEFAULT;
+  }
+  // Attributing an empty result to KTO is only honest when KTO was actually reached — a real
+  // zero-events region (e.g. Jeju) got a real answer and keeps the credit; a quota-exceeded
+  // response never reached KTO at all this time, so hide it rather than cite a source for data
+  // that isn't there.
+  const provenance = document.querySelector("[data-events-provenance]");
+  if (provenance) provenance.hidden = quotaExceeded;
+  if (quotaExceeded) {
+    container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
+    return;
+  }
+
+  const events = applyPreview(Array.isArray(data) ? data : data.items || []);
   const today = todayIso();
   const currentMonth = monthKeyOf(today);
 
@@ -262,7 +357,7 @@ function renderEventsTimeline(container, events) {
     container.innerHTML = `
       <div class="event-empty">
         <span class="event-empty__chip" aria-hidden="true">${CAL_EMPTY_ICON}</span>
-        <p class="event-empty__text">No festivals or events listed for this region right now.</p>
+        <p class="event-empty__text">This region has no events listed yet.</p>
       </div>`;
     return;
   }

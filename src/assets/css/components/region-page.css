@@ -499,9 +499,11 @@ ul.region-seasons {
   letter-spacing: -0.015em;
 }
 
-/* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present. */
-.region-page .region-section > h2:has(+ .region-section__sub),
-.region-band__col > h2:has(+ .region-section__sub) {
+/* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present —
+   `:not([hidden])` so a JS-hidden subtitle (e.g. events.js's quotaExceeded state, region-data.js)
+   falls back to the normal H2 margin instead of leaving the tight gap with nothing to fill it. */
+.region-page .region-section > h2:has(+ .region-section__sub:not([hidden])),
+.region-band__col > h2:has(+ .region-section__sub:not([hidden])) {
   margin-bottom: 4px;
 }
 
@@ -942,6 +944,138 @@ ul.region-seasons {
   }
 }
 
+/* "Places to see nearby" filter row — two independent single-select pill groups, Area (city,
+   plus "Elsewhere" for attractions not tied to one) and Type (category). Selection is handled
+   by attraction-filters.js; it only toggles pill state for now, it does not filter
+   .attraction-list yet. */
+.attraction-filters {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.attraction-filters__group {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.attraction-filters__label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-right: 2px;
+}
+
+.attraction-filters__pills {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-pill {
+  position: relative; /* anchors the ::after tap-target hit-slop added for phone below */
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  /* Body text's line-height (1.65) inherits into buttons in most browsers — reset it, or the
+     pill's box grows well past what the 7px 13px padding alone implies. Matches the vibe-tag
+     pill's line-height (region-header__tags--vibe li). */
+  line-height: 1.2;
+  padding: 7px 13px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: #fff;
+  color: var(--color-text);
+  /* Neutral pill border — no matching token elsewhere in tokens.css. */
+  border: 1px solid #cfd6d2;
+}
+
+.filter-pill.is-selected {
+  background: var(--color-primary);
+  color: #fff;
+  border-color: var(--color-primary);
+}
+
+@media (hover: hover) {
+  .filter-pill:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+
+  .filter-pill.is-selected:hover {
+    color: #fff;
+  }
+}
+
+/* Phone: two stacked rows (one per group) instead of one wrapping row; pills scroll rather than
+   wrap, label pinned to a fixed width so "Area" and "Type" line up. */
+@media (max-width: 899.98px) {
+  .attraction-filters {
+    flex-direction: column;
+    /* Also keeps clear of the invisible 44px tap-target ::after below (each pill's own row
+       overflows ~6px above/below its visible 30px height) so the Area and Type rows' hit
+       areas don't overlap. */
+    gap: 9px;
+  }
+
+  .attraction-filters__group {
+    /* .attraction-filters is a column flex container below 900px, so this group is itself a
+       flex item — align-items' default "stretch" doesn't reliably cap a wrapping flex item's
+       cross size to the line's cross size in every engine, so state the width explicitly
+       instead of relying on it. Without a definite width here, the group (and the page) grows
+       to its content's full min-content size (all pills laid out flat) instead of leaving the
+       overflow inside the pills track below. */
+    width: 100%;
+    min-width: 0;
+    flex-wrap: nowrap;
+  }
+
+  .attraction-filters__label {
+    flex: 0 0 38px;
+    margin-right: 0;
+  }
+
+  .attraction-filters__pills {
+    /* Without this the track's flex-basis defaults to its unwrapped content width (every pill
+       laid out flat), which pushes .attraction-filters__group — and the page — wider than the
+       viewport instead of scrolling internally. */
+    min-width: 0;
+    /* Matches the pills' own ::after tap-target height below so it fits with zero vertical
+       overflow. Without this the track is only as tall as the ~30px visible pill, the ::after
+       overhangs top and bottom, and browsers silently promote this element's overflow-y from
+       "visible" to "auto" (they refuse to leave one axis visible when the other, overflow-x, is
+       not) — surfacing an unwanted vertical scrollbar on what's meant to be a one-line row. */
+    min-height: 44px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .attraction-filters__pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-pill {
+    white-space: nowrap;
+  }
+
+  /* Reach the 44px tap-target minimum (DESIGN.md § Accessibility) via an invisible hit-slop
+     instead of padding, so the pill looks identical to desktop (13px / 7px 13px / 20px radius,
+     ~30px tall) on phone too. */
+  .filter-pill::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 44px;
+  }
+}
+
 /* Attractions + dishes: horizontal scroll-snap strips (no carousel library, no JS). The
    scrollbar track is hidden (design reference 5b/5d) — the peek of the next card is the
    scroll affordance. */
@@ -968,6 +1102,13 @@ ul.region-seasons {
   flex-direction: column;
 }
 
+/* attraction-filters.js toggles the hidden attribute to filter cards — needed because an
+   author stylesheet's `display: flex` above always beats the browser's own `[hidden]` default,
+   regardless of source order. */
+.attraction-card[hidden] {
+  display: none;
+}
+
 .attraction-card__media,
 .dish-card__media {
   aspect-ratio: 3 / 2;
@@ -975,6 +1116,42 @@ ul.region-seasons {
   object-fit: cover;
   border-radius: 10px;
   margin-bottom: 9px;
+}
+
+/* Wraps the media so the category plate (below) can sit over the photo's top-left corner —
+   same pattern as .dish-card__figure. */
+.attraction-card__figure {
+  position: relative;
+  margin-bottom: 9px;
+}
+
+.attraction-card__figure .attraction-card__media {
+  margin-bottom: 0;
+}
+
+/* Category plate — the same value the Type filter above uses, so a filtered result confirms
+   itself. Neutral white/no border, unlike the dish plates: it's a filter value, not a semantic
+   tag. */
+.attraction-card__category {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  font-size: 11px;
+  font-weight: 400;
+  /* Same inherited-line-height fix as .filter-pill above. */
+  line-height: 1.2;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: #fff;
+  color: var(--color-text);
+}
+
+/* Phone: slightly narrower card so more of the next one peeks past the viewport edge;
+   aspect-ratio 3/2 on the media derives the ~140px image height. */
+@media (max-width: 899.98px) {
+  .attraction-card {
+    flex: 0 0 210px;
+  }
 }
 
 /* region-data.js renders the attraction title as an <h4> — bring it down to the design's
@@ -995,6 +1172,26 @@ ul.region-seasons {
   color: var(--color-text-muted);
 }
 
+.attraction-card__address {
+  margin-top: 5px;
+}
+
+/* Same glyph as the festival pin (event-timeline.css PIN_ICON) — fill: currentColor inherits
+   this muted colour automatically, never the accent green. Sits inline before the address text
+   on purpose (not flex): plain inline flow only puts the pin on line one and returns any wrapped
+   second line flush to the card's own left edge, which a flex/hang-indent layout would not. The
+   festival pin never needed `display: inline-block` here because .event-place is a flex
+   container; base.css's global `svg { display: block }` reset otherwise makes an inline SVG
+   stack as its own line instead of sitting in the text. */
+.attraction-card__pin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: -1px;
+  margin-right: 4px;
+}
+
+.attraction-card__ko,
 .dish-card__ko {
   font-family: var(--font-family-ko);
   font-weight: 400;
@@ -1009,6 +1206,7 @@ ul.region-seasons {
     padding-bottom: 14px;
   }
 
+  .attraction-card__ko,
   .dish-card__ko {
     display: block;
     margin-top: 6px;

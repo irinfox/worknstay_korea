@@ -90,11 +90,13 @@ const rawFestival = {
   );
 }
 
-// "(English) (Korean)" — the parenthetical English must stay in titleEn.
+// "(English) (Korean)" — the English parenthetical sub-title is dropped from titleEn too, same
+// as the Korean group's own nested parens — titleKo never carries one, so keeping it only in
+// titleEn read as redundant (e.g. "Mudeungsan National Park (Gwangju)" duplicating the city).
 check(
-  "two-group title keeps the English parenthetical in titleEn",
+  "two-group title drops the English parenthetical sub-title from titleEn",
   normalizeEvent({ title: "5.16 Tree Tunnel (Road 5.16 Forest Tunnel) (5.16도로숲터널)" }).titleEn ===
-    "5.16 Tree Tunnel (Road 5.16 Forest Tunnel)"
+    "5.16 Tree Tunnel"
 );
 
 // Edge case: event that started before "today" but hasn't ended — the eventStartDate query
