@@ -132,6 +132,15 @@
     padding-top: 12px;
     padding-bottom: 11px;
   }
+
+  /* Without this, the carousel card's own 14px padding-bottom stacks underneath the link's
+     padding-bottom above, so "Open <region> →" sits 25px above the card's bottom edge but only
+     12px below the hairline — visibly lopsided. Trim the card's share to just the difference
+     (14 - 11) so the two paddings combine back to 14px, matching the card's top padding instead
+     of doubling up on the link's. */
+  .region-card--carousel {
+    padding-bottom: 3px;
+  }
 }
 
 /* Gated the same way as the map shape (korea-map.js) — href removed, so this is already inert;
@@ -200,6 +209,12 @@
    principle as the infographic variant's tag row. */
 .region-card--carousel .region-card__tags {
   flex-wrap: wrap;
+  /* Floor for the gap above the hairline: .region-card__link's margin-top is `auto` in this
+     variant (pushes the link to the stretched card's bottom edge), which resolves to 0 — not
+     the usual 11px — when the card's own content already fills the row's stretched height, e.g.
+     Gyeonggi-do's three-line intro. This reserves the 11px as fixed space so the auto margin can
+     only add MORE on top of it, never less. */
+  margin-bottom: 11px;
 }
 
 /*
