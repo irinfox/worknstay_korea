@@ -335,7 +335,7 @@
     "otherWorkspaces": [{ "name": "Study cafés", "level": 0 }],
     "ktoLDongRegnCd": "51",
     "ktoLDongSignguCds": ["820"],
-    "isPopulationDeclineArea": false,
+    "isPopulationDeclineArea": true,
     "workationCenters": [
       {
         "name": "Mangrove (Goseong branch)",
@@ -376,7 +376,7 @@
     "otherWorkspaces": [{ "name": "Study cafés", "level": 1 }],
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["180"],
-    "isPopulationDeclineArea": false,
+    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -418,7 +418,7 @@
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["150"],
-    "isPopulationDeclineArea": false,
+    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -446,7 +446,7 @@
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "47",
     "ktoLDongSignguCds": ["170"],
-    "isPopulationDeclineArea": false,
+    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
