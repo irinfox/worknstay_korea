@@ -236,6 +236,13 @@
   color: var(--color-text-muted);
 }
 
+/* Wide-viewport copy runs a few characters past 54ch, orphaning "region." onto its own line
+   even though the row has room; give it a wider cap so the sentence fits on one line.
+   (Selector matches .home-regions__intro p's specificity so it actually overrides it.) */
+.home-regions__intro p.home-regions__lead--wide {
+  max-width: 60ch;
+}
+
 /* The map interaction copy differs by input: hover wording only where the infographic (and its
    cross-hover) is live, tap wording everywhere below it — hover can't be assumed at 900 and no
    infographic is drawn there. */

@@ -25,9 +25,9 @@
     "ktoLDongRegnCds": ["51"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; previous code \"42\" returned 0 records.",
     "ktoAreaCodes": [32],
-    "vibeTags": ["surf", "mountains", "coffee", "snow"],
+    "vibeTags": ["surf", "mountains", "snow", "coffee"],
     "nomadScore": 74,
-    "shortIntro": "Mountains, beaches, and a growing workation-cabin scene along the east coast.",
+    "shortIntro": "A good match for outdoor activity lovers, with snowy mountains and beaches for surfing.",
     "longIntro": [
       "Gangwon-do is the Korean region with both the highest density of mountains and plenty of beaches. That makes it especially suitable for those who prefer outdoor activities — hiking, surfing and winter sports — over big city vibes. Gangneung is also known for its strong coffee culture and sea-view cafes.",
       "Reachable within a few hours from the capital region, it's a popular leisure destination for Koreans, so expect it to get more crowded on weekends and public holidays. Developed coworking spaces are rare, but every city has plenty of study cafés that offer quite similar facilities."
