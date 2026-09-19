@@ -344,8 +344,9 @@ function renderEventsTimeline(container, data) {
   const currentMonth = monthKeyOf(today);
 
   const dated = events.filter((e) => e.startDate).sort((a, b) => a.startDate.localeCompare(b.startDate));
-  // isUpcomingOrOngoing (normalize.mjs) already dropped anything fully ended, so endDate >= today
-  // for everything here — the split is purely on whether it has started yet.
+  // events.js queries KTO with eventStartDate=today, which already excludes ended festivals
+  // (live-verified), so endDate >= today for everything here — the split below is purely on
+  // whether it has started yet.
   const ongoing = dated.filter((e) => e.startDate <= today || monthKeyOf(e.startDate) === currentMonth);
   const later = dated.filter((e) => e.startDate > today && monthKeyOf(e.startDate) !== currentMonth);
 
