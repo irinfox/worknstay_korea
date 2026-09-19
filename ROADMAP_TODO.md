@@ -198,6 +198,8 @@ Phase 29's deploy freeze, since it can change calculator output for real regions
 - [ ] Log other eligibility-rule ambiguities surfaced in Phase 15/16 here instead of guessing.
 - [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
       Type1; revisit if a Type3 photo is ever swapped in.
+- [x] attraction cards: `.attraction-card__media` keeps `cover` for Type3 too (35 live entries in
+      `topAttractions.json`) — decided acceptable, not worth the layout cost of `contain`.
 - Verify: each item has either a confirmed answer + a data update, or an explicit "still open,
   shipping with the default interpretation" note before Phase 29's deploy freeze.
 

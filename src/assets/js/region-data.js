@@ -51,9 +51,8 @@ function renderAttractions(container, data) {
   container.innerHTML = attractions
     .map((a) => {
       // imageLicense is null for an unlicensed/missing image (normalize.mjs) — never render
-      // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover is the project's
-      // existing default for both Type1/Type3 (hero.css) — Type3's cover-vs-contain question
-      // stays open (ROADMAP Phase 29), unaffected by this.
+      // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover applies to Type1/Type3
+      // alike, a deliberate call (ROADMAP Phase 31), not an oversight.
       // KTO's firstimage/firstimage2 don't always both resolve — one can 404 on KTO's own CDN
       // even though the license and the other URL are fine (architecture.md §5). data-fallback
       // carries the other URL so setupImageFallback can recover instead of showing a broken
