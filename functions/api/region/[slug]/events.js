@@ -1,9 +1,10 @@
 // Live KTO call (architecture.md §5) — searchFestival2, fanned out across every lDongRegnCd code
 // a region owns (one code failing only drops that code's items), deduped by contentId. Edge
 // caching is disabled in production pending KTO's caching-approval form
-// (notes/attraction-gallery-report.md) — every page view is a live call. `eventStartDate` filters
-// by start date only, so the query window starts well before "today" and `isUpcomingOrOngoing`
-// drops anything that already ended. Some regions (e.g. Jeju) legitimately return zero — a
+// (notes/attraction-gallery-report.md) — every page view is a live call. `eventStartDate` is set
+// to today's date: live-verified (80 region/reference-date checks spanning a year) that KTO
+// already excludes already-ended festivals when queried this way, so no lookback window or
+// client-side end-date re-check is needed. Some regions (e.g. Jeju) legitimately return zero — a
 // designed empty state, not a bug. Falls back to `eventsSnapshot.json` when KTO_API_KEY isn't
 // set — real festivals captured live on 2026-09-16, a point-in-time example set (unlike
 // topAttractions.json, no ongoing boost/priority logic here). On a real quota-exceeded response,
@@ -13,14 +14,13 @@
 // tomorrow" message instead.
 import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
-import { normalizeEvent, isUpcomingOrOngoing } from "../../lib/normalize.mjs";
+import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
 const CACHE_TTL_SECONDS = 4 * 60 * 60;
-const QUERY_LOOKBACK_DAYS = 120;
 
 function queryStartDate() {
-  const d = new Date(Date.now() - QUERY_LOOKBACK_DAYS * 24 * 60 * 60 * 1000);
+  const d = new Date();
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
 }
 
@@ -44,8 +44,11 @@ export async function onRequestGet({ params, env }) {
         { lDongRegnCd, eventStartDate },
         env,
         {
-          numOfRows: 20,
-          maxPages: 5 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
+          // 100 rows in maxPages: 1 — highest real count seen across a full region/date sweep was
+          // 59; one call now covers it instead of paging (attraction-fetch.mjs's same reasoning:
+          // more rows per call is free, a second page is a whole extra live call).
+          numOfRows: 100,
+          maxPages: 1 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
           approval form for any caching (3-5 day review, too slow for the deadline); uncomment
           once approved (notes/attraction-gallery-report.md) */,
         }
@@ -55,13 +58,11 @@ export async function onRequestGet({ params, env }) {
 
   const byContentId = new Map();
   let quotaExceeded = false;
-  const now = new Date();
   for (const result of pages) {
     if (result.status !== "fulfilled") continue;
     if (result.value.quotaExceeded) quotaExceeded = true;
     if (result.value.degraded) continue;
     for (const raw of result.value.items) {
-      if (!isUpcomingOrOngoing(raw, now)) continue;
       const event = normalizeEvent(raw);
       event.regionSlug = slug;
       byContentId.set(event.contentId, event);

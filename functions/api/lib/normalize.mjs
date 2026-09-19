@@ -1,8 +1,7 @@
 // Raw KTO EngService2 item -> our Attraction/Event models (architecture.md §6). Encodes the
 // "known quirks" list in architecture.md §5, confirmed against live-captured samples: bilingual
 // title split, HTML-entity strip, http->https, license gating (never render an image with a
-// missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset), and the
-// eventStartDate/eventenddate "still running" filter.
+// missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset).
 //
 // `regionSlug` is deliberately NOT set here — these functions normalize one raw item in
 // isolation, but which region it belongs to is a fan-out concern (which lDongRegnCd code the
@@ -120,15 +119,4 @@ export function normalizeEvent(raw) {
     tel: raw.tel || "",
     homepageUrl: "",
   };
-}
-
-// searchFestival2's `eventStartDate` param only filters by *start* — a festival that started
-// before the query's start-date bound but hasn't ended yet would vanish unless the caller
-// queries from further back and filters by end date itself (architecture.md §5). This is that
-// filter: apply it to results from a deliberately-early query.
-export function isUpcomingOrOngoing(raw, referenceDate = new Date()) {
-  const end = raw.eventenddate;
-  if (!end || end.length !== 8) return true;
-  const endOfDay = new Date(`${end.slice(0, 4)}-${end.slice(4, 6)}-${end.slice(6, 8)}T23:59:59+09:00`);
-  return endOfDay >= referenceDate;
 }

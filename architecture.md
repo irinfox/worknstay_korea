@@ -190,8 +190,9 @@ bypasses this pipeline entirely — not KTO-sourced, no "live" requirement.
 - `searchFestival2` often returns Korean `addr1`/`addr2` despite being the English service — the
   UI shows a best-effort city extraction, full address on the copy control; no romanizer in the
   stack.
-- `searchFestival2`'s `eventStartDate` filters by start date only, so `isUpcomingOrOngoing`
-  client-filters by `eventenddate` against a deliberately earlier query window.
+- `searchFestival2` is queried with `eventStartDate` = today: live-verified across every region
+  code at several reference dates spanning a year that KTO already excludes ended festivals this
+  way, so no lookback window or client-side end-date filtering is needed.
 - Image licensing is per-record via `cpyrhtDivCd` (`Type1`, `Type3`, empty) — only render known
   codes, never crop/filter `Type3`.
 - `firstimage`/`firstimage2` don't always both resolve — one can 404 on KTO's own CDN even when

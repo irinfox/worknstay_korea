@@ -4,7 +4,6 @@
 import {
   normalizeAttraction,
   normalizeEvent,
-  isUpcomingOrOngoing,
 } from "../functions/api/lib/normalize.mjs";
 
 let failures = 0;
@@ -97,21 +96,6 @@ check(
   "two-group title drops the English parenthetical sub-title from titleEn",
   normalizeEvent({ title: "5.16 Tree Tunnel (Road 5.16 Forest Tunnel) (5.16도로숲터널)" }).titleEn ===
     "5.16 Tree Tunnel"
-);
-
-// Edge case: event that started before "today" but hasn't ended — the eventStartDate query
-// quirk this function exists to guard against.
-check(
-  "isUpcomingOrOngoing keeps a festival that started in the past but ends in the future",
-  isUpcomingOrOngoing({ eventenddate: "20261231" }, new Date("2026-08-25")) === true
-);
-check(
-  "isUpcomingOrOngoing drops a festival that already ended",
-  isUpcomingOrOngoing({ eventenddate: "20260101" }, new Date("2026-08-25")) === false
-);
-check(
-  "isUpcomingOrOngoing keeps records with no end date (unknown, don't drop)",
-  isUpcomingOrOngoing({}, new Date("2026-08-25")) === true
 );
 
 console.log(failures === 0 ? "\nAll checks passed." : `\n${failures} check(s) failed.`);
