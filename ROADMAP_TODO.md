@@ -126,9 +126,9 @@ deadline) — real-time calls only in production. Full report: `notes/attraction
       `feature/attractions` to main — curated-pick presence/injection stats and an
       empty-filter-combination sweep, see `notes/attraction-gallery-report.md` §7. Broad collapse
       resolved the Seongnam/Cheongju empty-combo cases as a side effect.
-- [decision] `locationBasedList2` as a second-tier fallback — rejected, logged in
+- [x] `locationBasedList2` as a second-tier fallback — rejected, logged in
       architecture.md §11.
-- [decision] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported
+- [x] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported
       (KTO returns `totalCount: 0` for a comma-joined value). Dropping codes from a region's
       fan-out — rejected, every code is load-bearing (region or its metro city).
 
@@ -165,13 +165,13 @@ Depends on 12.
 ## Phase 30 — Contest deliverables (Sept 8–21)
 Milestone bucket, not a day/branch phase.
 
-- [ ] 기능설명서 write-up mapped to Task #4 hashtags.
+- [x] 기능설명서 write-up mapped to Task #4 hashtags.
 - [ ] Final KTO call-history screenshot (Phase 22 already did an early check).
 - [ ] User testing, final link audit, deploy freeze before the deadline.
-- [decision] Get a separate/custom domain for the site before the deploy freeze.
+- [x] Get a separate/custom domain for the site before the deploy freeze.
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
       right before submission.
-- [ ] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
+- [x] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
 - [ ] refactor pass: code + docs (architecture.md / ROADMAP / SCAFFOLDING) — drop anything stale
       or excessive
 - [decide] Real interactive event calendar (month-to-month navigation, hover detail on event
