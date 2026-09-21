@@ -48,6 +48,13 @@ export default function (eleventyConfig) {
     return (arr || []).filter((item) => item.regionSlug === slug);
   });
 
+  // Looks up a record by `name` or `type` within a small array — settling-in.njk's Gangwon-do
+  // price table uses this to pull a named platform out of a city's `platforms` array, and a typed
+  // unit (Officetel/One-room) out of a platform's `units` array, without a Jinja2-only selectattr.
+  eleventyConfig.addFilter("byName", function (arr, name) {
+    return (arr || []).find((item) => item.name === name || item.type === name);
+  });
+
   // Picks records by an explicit ordered list of slugs (Gangwon-do's city section names four
   // specific cities in a hand-chosen order — byRegion would return all six in data order).
   eleventyConfig.addFilter("bySlugs", function (arr, slugs) {

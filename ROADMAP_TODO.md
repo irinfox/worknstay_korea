@@ -142,8 +142,10 @@ Depends on 12.
 - [x] Food gallery: real dishes, descriptions, photos, and credits for all 6 regions —
       `food.json` clean of MOCK/PLACEHOLDER.
 - [ ] Grep `MOCK`/`PLACEHOLDER` in remaining `_data/*.json`, replace with real values
-      (cost-of-living w/ `asOf`/`source`/`sourceUrl`, real community links).
-- [ ] `communities.json` links + `/visa-info/` copy verified against current official sources.
+      (cost-of-living w/ `asOf`/`source`/`sourceUrl`).
+- [x] `communities.json` MOCK entries replaced — real, sourced links now in `settlingIn.json`
+      (settling-in page redesign).
+- [ ] `/visa-info/` copy verified against current official sources.
 - Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
 
 ## Phase 28 — Accessibility + robustness (scriptable)
