@@ -53,8 +53,13 @@
   text-decoration: none;
 }
 
+/* Explicit colour here, not just the global html a:hover: this link also styles :visited
+   (immediately above), which is two pseudo-classes/classes deep and would otherwise tie with
+   and beat the global rule once a visitor has actually followed the link, silently killing the
+   hover darken only for them. */
 .site-footer__link:hover,
 .site-footer__link:focus-visible {
+  color: var(--color-primary-dark);
   text-decoration: underline;
 }
 

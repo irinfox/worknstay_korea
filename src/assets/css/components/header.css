@@ -118,6 +118,13 @@
   font-weight: 500;
 }
 
+/* Same "more emphasis on hover" rule as the rest of the site (base.css), just inverted: this is
+   white-on-dark, so hover brightens (75% white → full white, the same shade the active/current
+   page already uses) instead of darkening. */
+.site-nav__item a:hover {
+  color: var(--color-nav-link-active);
+}
+
 @media (min-width: 768px) {
   .site-nav__list {
     flex-direction: row;

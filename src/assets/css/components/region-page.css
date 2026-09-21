@@ -42,8 +42,10 @@
   text-decoration: none;
 }
 
+/* Grey family, not green: this link starts muted (not the usual green), so it darkens the same
+   way the Clear button does (Muted → Ink soft) instead of jumping to a different hue on hover. */
 .region-breadcrumb a:hover {
-  color: var(--color-primary);
+  color: var(--color-text-soft);
 }
 
 .region-breadcrumb__here {
@@ -297,7 +299,8 @@ ul.region-seasons {
 }
 
 /* Both note-plate links point to in-site pages with a → arrow, so both are green
-   (DESIGN.md palette: green = in-site) — only the plate's tint differs by "easier"/"stricter". */
+   (DESIGN.md palette: green = in-site) — only the plate's tint differs by "easier"/"stricter".
+   Hover colour comes from base.css's global a:hover; only the underline is added here. */
 .note-plate__link {
   flex-shrink: 0;
   font-size: 13px;
@@ -520,30 +523,42 @@ ul.region-seasons {
 }
 
 /* ── Guides strip (Gangwon-do only; design reference 5b) ──────────────────────────────────────
-   A panel with the orange tick + "Guides:" label on its own line, then the guide links sitting
-   together on the line below (each an orange underlined outbound link with its source + date
-   underneath). */
+   Same inline-label row as settling-in's Reviews/Guides panels (static-pages.css
+   .settling-reviews/.settling-inline-label): the orange tick + "Guides:" label sit on the same
+   row as the link(s) whenever there's room, dropping to its own line only below 600px. */
 .region-guides {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 28px;
   padding: 15px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 10px;
 }
 
+/* Not flex, same reason as .settling-inline-label (static-pages.css): a flex container's
+   exported baseline is its first flex item's baseline, and the decorative tick (no text) would
+   export its own bottom edge instead of "Guides:"'s actual text baseline, misaligning the whole
+   row. Tick as inline-block + plain inline text reports the text's own baseline instead. */
 .region-guides__head {
-  display: flex;
-  align-items: center;
-  gap: 9px;
+  white-space: nowrap;
 }
 
 .region-guides__items {
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   gap: 12px 28px;
+}
+
+/* Below 600px (same breakpoint as settling-in's inline labels): force the label onto its own
+   line so the links wrap cleanly underneath instead of competing for space beside it. */
+@media (max-width: 599px) {
+  .region-guides__head {
+    flex-basis: 100%;
+  }
 }
 
 /* Phone: tighten the panel and the gap between the two links so both fit on one line. */
@@ -562,23 +577,28 @@ ul.region-seasons {
 }
 
 .region-guides__tick {
-  flex-shrink: 0;
+  display: inline-block;
   width: 3px;
   height: 15px;
   border-radius: 2px;
+  margin-right: 9px;
+  vertical-align: -2px;
   background: var(--color-accent-rule);
 }
 
 .region-guides__label {
   font-size: 13px;
   color: var(--color-text-muted);
-  white-space: nowrap;
 }
 
+/* min-width: 0 overrides the flex-item default (min-width: auto, i.e. "never shrink below my
+   content's natural width") — without it, a long link/meta line (e.g. the decline-counties
+   Source citation) can't wrap and just overflows the panel on narrow phones instead. */
 .region-guides__item {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  min-width: 0;
 }
 
 .region-guides__link {
@@ -586,13 +606,11 @@ ul.region-seasons {
   font-weight: 500;
   color: var(--color-accent);
   text-decoration: underline;
-  white-space: nowrap;
 }
 
 .region-guides__meta {
   font-size: 12px;
   color: var(--color-text-muted);
-  white-space: nowrap;
 }
 
 /* ── Costs + festivals band (DESIGN.md § region page order) ───────────────────────────────────
@@ -774,46 +792,49 @@ ul.region-seasons {
   text-decoration: underline;
 }
 
-/* Source note — panel with an orange tick, "Source:" on its own line, body below (design ref 6c). */
+/* Source note — panel with an orange tick, "Source:" and the link sitting on the same row
+   whenever there's room (design ref 6c; same inline-label pattern as .region-guides and
+   settling-in's Reviews/Guides rows — static-pages.css .settling-reviews). */
 .source-note {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 24px;
   padding: 15px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 10px;
 }
 
+/* Not flex, same reason as .region-guides__head/.settling-inline-label — keeps "Source:"'s own
+   text baseline instead of a nested flex container's exported baseline. */
 .source-note__head {
-  display: flex;
-  align-items: center;
-  gap: 9px;
   font-size: 13px;
   color: var(--color-text-muted);
   white-space: nowrap;
 }
 
 .source-note__tick {
-  flex-shrink: 0;
+  display: inline-block;
   width: 3px;
   height: 15px;
   border-radius: 2px;
+  margin-right: 9px;
+  vertical-align: -2px;
   background: var(--color-accent-rule);
 }
 
-.source-note__text {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.55;
-  color: var(--color-text-soft);
+/* Below 600px (same breakpoint as settling-in's inline labels): force the label onto its own
+   line so the link wraps cleanly underneath instead of competing for space beside it. */
+@media (max-width: 599px) {
+  .source-note__head {
+    flex-basis: 100%;
+  }
 }
 
-.source-note__text a {
-  color: var(--color-accent);
-  font-weight: 500;
-  text-decoration: underline;
-}
+/* Body reuses .region-guides__item/__link/__meta (link + source/date caption stack) — same
+   citation-link pattern as the Gangwon-do Guides strip and settling-in's Reviews/Guides links. */
 
 /* "The seven, by tier" — one chip-labelled row + a horizontal scroll-snap strip per tier
    (same no-JS pattern as .attraction-list / .region-hero-gallery__track). */
