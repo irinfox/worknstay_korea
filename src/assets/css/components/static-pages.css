@@ -1,22 +1,23 @@
-/* visa-info.njk + settling-in.njk — shared table/list styling for the two remaining static
-   pages (Phase 7). Reuses .region-header / .region-section / .cost-summary / .mock-note /
-   .data-provenance / .empty-state from region-page.css rather than duplicating them. */
+/* visa-info.njk — table/list styling for the one remaining narrow-column static page. Reuses
+   .region-header / .region-section / .cost-summary / .mock-note / .data-provenance / .empty-state
+   from region-page.css rather than duplicating them. settling-in.njk moved to its own wide
+   layout below (design reference 7a/7b) — :not(.settling-page) keeps these rules off it. */
 
 /* Container width now matches every other page (base.css's .content-page is --content-max-width,
-   DESIGN.md "One container width site-wide") — these two pages no longer run in their own
-   narrower column. Cap each top-level block at ~70ch instead so body text and the table/list
-   below it don't stretch edge-to-edge, the same "text never fills the container" rule the region
-   page applies via its own header/intro caps. Left-aligned (no margin auto), matching that
-   convention rather than centering a text column on the page. */
-.content-page:not(.region-page) > * {
+   DESIGN.md "One container width site-wide") — this page no longer runs in its own narrower
+   column. Cap each top-level block at ~70ch instead so body text and the table/list below it
+   don't stretch edge-to-edge, the same "text never fills the container" rule the region page
+   applies via its own header/intro caps. Left-aligned (no margin auto), matching that convention
+   rather than centering a text column on the page. */
+.content-page:not(.region-page):not(.settling-page) > * {
   max-width: 70ch;
 }
 
 /* Headline block (DESIGN.md § Recurring parts): orange 56×3 rule → H1 → intro. Same rule bar as
    the region page (region-page.css's .region-page .region-header__rule) but without that page's
-   two-column split / Korean name / vibe tags — these two pages keep the plain single-column
+   two-column split / Korean name / vibe tags — this page keeps the plain single-column
    .region-header. Scoped by :not(.region-page) so this never doubles up with that rule. */
-.content-page:not(.region-page) .region-header__rule {
+.content-page:not(.region-page):not(.settling-page) .region-header__rule {
   display: block;
   width: 56px;
   height: 3px;
@@ -25,32 +26,26 @@
   margin-bottom: 24px;
 }
 
-.content-page:not(.region-page) .region-header h1 {
+.content-page:not(.region-page):not(.settling-page) .region-header h1 {
   letter-spacing: -0.028em;
 }
 
 /* Body copy (DESIGN.md palette — "Ink soft: secondary paragraphs"), matching how the region page
-   colours its own header intro and section prose (region-page.css) — these two pages were
-   inheriting plain Ink (body.css's default), heavier than every other paragraph on the site.
+   colours its own header intro and section prose (region-page.css) — this page was inheriting
+   plain Ink (body.css's default), heavier than every other paragraph on the site.
    :not(.data-provenance):not(.empty-state) so this doesn't outrank those elements' own, more
-   specific Muted colour (source lines / the disclaimer) — both are direct-child <p>s here too.
-   :not(.community-list) on the <ul> rule for the same reason color would otherwise cascade onto
-   the community-card h2 (a card title, should stay full Ink) — settling-in.njk's community
-   description <p> is targeted directly below instead, next to its own community-card__platform
-   exclusion (that one's Muted, set further down). */
-.content-page:not(.region-page) .region-header__intro,
-.content-page:not(.region-page) .region-section > p:not(.data-provenance):not(.empty-state),
-.content-page:not(.region-page) .region-section > ul:not(.community-list),
-.content-page:not(.region-page) .community-card > p:not(.community-card__platform) {
+   specific Muted colour (source lines / the disclaimer) — both are direct-child <p>s here too. */
+.content-page:not(.region-page):not(.settling-page) .region-header__intro,
+.content-page:not(.region-page):not(.settling-page) .region-section > p:not(.data-provenance):not(.empty-state),
+.content-page:not(.region-page):not(.settling-page) .region-section > ul {
   color: var(--color-text-soft);
 }
 
 /* Section H2 (DESIGN.md § Type — 20–22px/600/-0.015em), matching the region page's section
    headings (region-page.css). The generic h2 rule (base.css) is sized for one-off page titles,
    not repeated section headers, and rendered far too large here. Scoped to a direct child of
-   .region-section so it doesn't touch settling-in's community-card h2 (a card title, styled
-   below at the DESIGN.md card-title size instead). */
-.content-page:not(.region-page) .region-section > h2 {
+   .region-section. */
+.content-page:not(.region-page):not(.settling-page) .region-section > h2 {
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -76,42 +71,6 @@
 .visa-threshold-table th {
   color: var(--color-text-muted);
   font-size: var(--font-size-sm);
-}
-
-.community-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-.community-card {
-  padding: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-}
-
-/* Card title (DESIGN.md § Type — 16–18px/600), not the Section H2 size above — a community name
-   is a card heading, not a page section. */
-.community-card h2 {
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.community-card__platform {
-  margin-top: var(--space-1);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-}
-
-/* Outbound (DESIGN.md palette: orange = external, and per the "Never: orange text that is not a
-   link" rule, this has to be a real one — settling-in.njk always resolves to *something*: the
-   sourced c.url once a real group is found, or platformUrl (the platform's own homepage) as the
-   honest not-yet-sourced state today. Not primary-dark green — green reads as in-site/interactive,
-   which an outbound link isn't. */
-.community-card__platform a {
-  color: var(--color-accent);
-  text-decoration: underline;
 }
 
 /* ── About page (about.njk; design reference 6a/6b) ───────────────────────────────────────────
@@ -287,4 +246,927 @@ ul.about-hero__chips {
   .about-why__grid {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+/* ── Settling in (settling-in.njk; design reference 7a/7b) ────────────────────────────────────
+   Full redesign, wide site-shell column like the About page above (not the .content-page 70ch
+   reading width) — Renting / Places to work / Communities / Useful links, plus a collapsible
+   Gangwon-do price-snapshot table (data: rentalMarketScan.js). Colours below map 1:1 onto
+   existing tokens — this design was built against this project's own token set. #4A544E
+   (secondary card copy) has no existing token and stays literal, per the design's own literal
+   values. Outbound/in-site link hover (DESIGN.md palette: Orange ink / Green deep) below. */
+
+.settling-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* DESIGN.md Geometry: "Section gaps 26–36px" — top of that range. */
+  gap: 36px;
+}
+
+.settling-page a[data-out] {
+  /* --color-accent, same "Orange text" token every other page's outbound links use
+     (region-page.css .region-guides__link/.dish-card__restaurant, city-card.css
+     .work-venue__links a) — this page was using --color-accent-ink ("Orange ink"), the
+     deeper, tinted-plate-specific shade, as a blanket rule even for links on plain white. */
+  color: var(--color-accent);
+}
+
+.settling-page a[data-out]:hover {
+  color: var(--color-accent-ink);
+}
+
+.settling-page a:not([data-out]):hover {
+  color: var(--color-primary-dark);
+}
+
+.settling-ko {
+  font-family: var(--font-family-ko);
+}
+
+.settling-ko--medium {
+  font-weight: 500;
+}
+
+.settling-nowrap {
+  white-space: nowrap;
+}
+
+.settling-muted {
+  color: var(--color-text-muted);
+}
+
+/* Hero — orange 56×3 rule → H1 → Korean subtitle → intro → last-updated caption. */
+.settling-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settling-hero__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--color-accent-rule);
+}
+
+.settling-hero h1 {
+  font-size: clamp(1.875rem, 1.52rem + 1.75vw, 2.625rem);
+  letter-spacing: -0.028em;
+  line-height: 1.12;
+  margin: 8px 0 0;
+  max-width: 20ch;
+}
+
+.settling-hero__ko {
+  font-family: var(--font-family-ko);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.settling-hero__intro {
+  font-size: 16px;
+  line-height: 1.7;
+  margin: 14px 0 0;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.settling-hero__updated {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 10px;
+}
+
+/* Jump-nav strip. 44px tap targets kept at every viewport, not just phone, so this doesn't need
+   a second breakpoint on top of the price table's — a taller click target costs nothing on a
+   mouse-driven desktop either. */
+.settling-jumpnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 4px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.settling-jumpnav a {
+  color: var(--color-primary);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Below ~600px, zero horizontal padding + space-evenly (not space-between) so every gap —
+   border-to-first-link, between each link, last-link-to-border — comes from the same evenly
+   distributed space instead of a fixed padding sitting next to a differently-sized justify gap.
+   font-size stays 14px everywhere (same as 768px/900px/desktop); still wraps to two rows on the
+   narrowest phones (~360-374px), which reads better than shrinking the type just for those
+   widths. Pill stays full page-width like every other breakpoint. */
+@media (max-width: 599px) {
+  .settling-jumpnav {
+    justify-content: space-evenly;
+    gap: 4px 0;
+    padding-block: 4px;
+    padding-inline: 0;
+    /* .settling-page's 36px flex gap is right for desktop's wider measure but too airy on
+       phone; margins here pull it down to ~18px above / ~30px below without touching the
+       36px gap itself (desktop keeps it as-is). */
+    margin-top: -18px;
+    margin-bottom: -6px;
+  }
+}
+
+/* Section shell — 3×15 orange tick → H2, body copy, subsections. */
+.settling-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.settling-section__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.settling-section__tick {
+  width: 3px;
+  height: 15px;
+  background: var(--color-accent-rule);
+}
+
+.settling-section h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.settling-body {
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  color: var(--color-text-soft);
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+
+.settling-body--sm {
+  font-size: 14px;
+  color: #4a544e;
+}
+
+.settling-body--muted {
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.settling-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.settling-subhead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.settling-subhead__tick {
+  width: 3px;
+  height: 14px;
+  background: var(--color-accent-rule);
+  flex-shrink: 0;
+}
+
+/* Small inline label rows ("Reviews:" / "Guides:"). */
+/* Not flex: when this sits inside an outer align-items:baseline row (.settling-reviews), a
+   flex container's exported baseline is its first flex item's baseline — and a plain decorative
+   tick with no text has no real baseline, so it was exporting its own bottom edge as the whole
+   label's baseline instead of "Guides:"/"Reviews:" text's actual baseline, dropping the label
+   noticeably above the link it's meant to sit level with. Plain inline content (tick as
+   inline-block, text inline) reports the text line's own baseline instead — this is the pattern
+   to copy for any future tick+label pair that sits in a baseline row. */
+.settling-inline-label {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.settling-inline-tick {
+  display: inline-block;
+  width: 2px;
+  height: 13px;
+  margin-right: 9px;
+  vertical-align: -1px;
+  background: var(--color-accent-rule);
+}
+
+/* Mobile only: force the "Guides:"/"Reviews:" label onto its own line instead of letting it
+   share a row with whichever item happens to fit next to it — Reviews has several items
+   (label, subreddit links, article source-block) that would otherwise wrap unpredictably
+   mid-group. Above 600px everything already fits on one row (label inline), so this is scoped
+   out there rather than fought with flex-basis: auto. */
+@media (max-width: 599px) {
+  .settling-inline-label {
+    flex-basis: 100%;
+  }
+}
+
+.settling-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+}
+
+.settling-label--pad {
+  padding-top: 8px;
+}
+
+/* Tinted callout boxes. */
+.settling-callout {
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settling-callout--tip {
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 24px;
+}
+
+.settling-callout__text {
+  font-size: 15px;
+  line-height: 1.6;
+  flex: 1 1 380px;
+  min-width: 0;
+  text-wrap: pretty;
+}
+
+.settling-callout__link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 0 auto;
+}
+
+.settling-callout__link a {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settling-callout--accent {
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent-rule);
+}
+
+.settling-callout__title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settling-callout__linkrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.settling-callout__linkrow a {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settling-source {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Neutral grey panels (reviews, guides, goshiwon note, useful links). */
+.settling-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.settling-reviews {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 22px;
+}
+
+/* font-weight 500 to match region-page.css .region-guides__link — same outbound-link style,
+   Gangwon-do's Guides panel and this page's Reviews/Guides links should read identically.
+   min-height/inline-flex/center — same 44px tap-target treatment as .settling-jumpnav a: at
+   14px/1.65 these were rendering ~23px tall, stacked close together, well under DESIGN.md's
+   44px control minimum and easy to mis-tap on phone. */
+.settling-reviews__plain {
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.settling-reviews__source-block {
+  display: flex;
+  flex-direction: column;
+  /* Matches region-page.css .region-guides__item — same link+caption stack, same gap. */
+  gap: 2px;
+  min-width: 0;
+}
+
+/* 44px tap target via an invisible ::before hit-area instead of min-height: this link sits in a
+   column stack directly above its non-tappable source/date caption (gap: 2px) — growing the
+   link's own box would shove that caption away from it, breaking the "one element" look. The
+   pseudo-element extends the tappable area without taking up layout space, so the visible text
+   stays exactly where it was. */
+.settling-reviews__source-block a {
+  position: relative;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.settling-reviews__source-block a::before {
+  content: "";
+  position: absolute;
+  inset: -11px 0;
+}
+
+.settling-note {
+  padding: 16px 20px;
+  gap: 8px;
+}
+
+/* .settling-body's 66ch reading-width cap (DESIGN.md prose rule) is meant for running body copy,
+   not these note-style plates — the plates themselves are already full content-width (unlike a
+   prose paragraph), so the text inside should fill them too rather than wrap narrower than its
+   own box. */
+.settling-callout .settling-body,
+.settling-note .settling-body {
+  max-width: none;
+}
+
+.settling-note__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+
+/* Platform cards (Enkostay / 33m2). */
+.settling-platform-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.settling-platform-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.settling-platform-card__name {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.settling-platform-card__desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #4a544e;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.settling-platform-card__stats {
+  display: flex;
+  flex-direction: column;
+}
+
+.settling-platform-card__stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 10px 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.settling-platform-card__stat-label {
+  font-size: 14px;
+  color: var(--color-text-soft);
+}
+
+.settling-platform-card__stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.settling-platform-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 26px;
+  padding: 11px 0 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.settling-tag__label {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.settling-tag__value {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.settling-platform-card__linkrow {
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.settling-platform-card__linkrow a {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Coliving list. Every row but the first gets a top hairline — simpler and correct at any
+   auto-fit column count, unlike the source design's fixed "first two rows" rule (hand-tuned for
+   its one hard-coded 2-column snapshot). */
+.settling-coliving-list {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(280px, 48%), 1fr));
+}
+
+.settling-coliving-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 13px 20px;
+  min-width: 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.settling-coliving-row:first-child {
+  border-top: none;
+}
+
+.settling-coliving-row__name {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.settling-coliving-row__loc {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: right;
+  min-width: 0;
+}
+
+/* Same glyph/sizing as the attraction/festival/coworking pins (region-page.css
+   .attraction-card__pin) — inline-block is required here because base.css's global
+   `svg { display: block }` reset otherwise drops the icon to its own line instead of sitting
+   inline before the location text. */
+.settling-coliving-row__pin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  vertical-align: -1px;
+  margin-right: 5px;
+}
+
+/* Work cards. */
+.settling-work-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+.settling-work-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.settling-work-card__title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.settling-work-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.settling-work-card__title-row .settling-ko {
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+/* Keyword / other-result rows. */
+.settling-keyword-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 16px 28px;
+  align-items: start;
+}
+
+.settling-keyword {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.settling-keyword__icon {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.settling-keyword__text {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.settling-otherresult {
+  display: flex;
+  gap: 11px;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.settling-otherresult__icon {
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.settling-otherresult__body {
+  min-width: 0;
+}
+
+.settling-otherresult__desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4a544e;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.settling-otherresult__link {
+  font-size: 13px;
+}
+
+/* Communities. */
+.settling-communities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 26px 40px;
+  align-items: start;
+}
+
+.settling-community-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.settling-community-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.settling-community-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.settling-community-item a {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settling-community-item__desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.settling-community-item__note {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4a544e;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Useful links. */
+.settling-links-panel {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  padding: 16px 20px;
+}
+
+.settling-link-block {
+  display: flex;
+  flex-direction: column;
+  /* Matches region-page.css .region-guides__item / .settling-reviews__source-block — same
+     link+caption stack, same gap, everywhere on the site. */
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 280px;
+}
+
+.settling-link-block a {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Price-snapshot <details> fold. */
+.settling-price-table {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.settling-price-table summary {
+  list-style: none;
+}
+
+.settling-price-table summary::-webkit-details-marker,
+.settling-price-table summary::marker {
+  display: none;
+}
+
+.settling-price-table__summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  padding: 16px 20px;
+}
+
+.settling-price-table__label {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.settling-price-table__title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.settling-price-table__sub {
+  display: block;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.settling-chevron {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid var(--color-primary);
+  border-bottom: 1.5px solid var(--color-primary);
+  transform: rotate(45deg);
+  transform-origin: 60% 60%;
+  transition: transform 140ms ease;
+}
+
+.settling-price-table[open] .settling-chevron {
+  transform: rotate(225deg);
+}
+
+.settling-price-table__body {
+  padding: 0 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settling-price-table__scroll {
+  overflow-x: auto;
+  display: none;
+}
+
+.settling-price-table__el {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px;
+  font-size: 13px;
+}
+
+.settling-price-table__el tbody {
+  font-variant-numeric: tabular-nums;
+}
+
+.settling-price-table__el td {
+  text-align: left;
+  padding: 9px 14px 9px 0;
+  border-bottom: 1px solid var(--color-border-soft);
+  white-space: nowrap;
+}
+
+.settling-price-table__el tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.settling-price-table__city-head {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  padding: 0 14px 7px 0;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.settling-price-table__group-head {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text);
+  padding: 0 14px 7px 0;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.settling-price-table__group-head--last {
+  padding-right: 0;
+}
+
+.settling-price-table__sub-head {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  padding: 6px 14px 6px 0;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.settling-price-table__sub-head--last {
+  padding-right: 0;
+}
+
+.settling-price-table__city {
+  font-weight: 600;
+}
+
+.settling-price-table__muted {
+  color: var(--color-text-muted);
+}
+
+.settling-price-table__note {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.settling-price-table__mobile {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settling-price-city {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+}
+
+.settling-price-city:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.settling-price-city__name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.settling-price-city__rows {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.settling-price-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 7px 0;
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.settling-price-row__label {
+  color: var(--color-text-muted);
+}
+
+.settling-price-row__value {
+  text-align: right;
+}
+
+.settling-price-row__meta {
+  color: var(--color-text-muted);
+}
+
+.settling-price-table__footnote {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 92ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Structural swap: real table ≥1024px (matches --bp-desktop, the same "wide vs narrow structure"
+   threshold as the homepage region-info infographic/carousel swap) — the one exception to this
+   page's no-media-query grids, because the phone view isn't a reflowed table, it's a different
+   set of elements entirely. Both markups always render (rule 6: no JS either way); CSS alone
+   picks which one is visible. */
+@media (min-width: 1024px) {
+  .settling-price-table__scroll {
+    display: block;
+  }
+
+  .settling-price-table__mobile {
+    display: none;
+  }
+}
+
+/* Full-bleed band reusing the same calc()-based technique as region-page.css's .region-band —
+   ::before bleeds past .settling-page's own edge by exactly <main class="page">'s own padding
+   (--space-4), same math, no viewport units (the 100vw/negative-margin trick overflows the
+   document by the scrollbar's width — visible as a few px of horizontal scroll — so it's not
+   used here). */
+.settling-disclaimer {
+  position: relative;
+}
+
+.settling-disclaimer::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  background: var(--color-bg);
+}
+
+.settling-disclaimer__text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
 }

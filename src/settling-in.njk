@@ -1,36 +1,369 @@
 ---
 layout: layouts/page.njk
 title: "Settling in"
-description: "Online communities for digital nomads and expats in Korea."
+description: "A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in."
 ---
-<div class="content-page">
-<header class="region-header">
-  <span class="region-header__rule" aria-hidden="true"></span>
+<div class="content-page settling-page">
+
+<header class="settling-hero">
+  <span class="settling-hero__rule" aria-hidden="true"></span>
   <h1>Settling in</h1>
-  <p class="region-header__intro">
-    Online groups where digital nomads and foreign residents in Korea share advice, meet up, and
-    swap regional tips. Verify a group is still active before joining — links here are a starting
-    point, not an endorsement.
-  </p>
+  <div class="settling-hero__ko">정착하기</div>
+  <p class="settling-hero__intro">A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in.</p>
+  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated }}</div>
 </header>
 
-<section class="region-section">
-  {% if communities.length %}
-  <ul class="community-list">
-    {% for c in communities %}
-    <li class="community-card">
-      <h2>{{ c.name }}</h2>
-      {# Platform badge always links out — to the specific group once c.url is sourced, to the
-         platform's own homepage (platformUrl) as the honest "not yet sourced" state until then.
-         The card name itself stays plain text; the platform is the one outbound link per card. #}
-      <p class="community-card__platform"><a href="{{ c.url or c.platformUrl }}">{{ c.platform }} ↗</a></p>
-      <p>{{ c.description }}</p>
-    </li>
+<nav class="settling-jumpnav" aria-label="Page sections">
+  <a href="#renting">Renting</a>
+  <a href="#work">Places to work</a>
+  <a href="#communities">Communities</a>
+  <a href="#links">Useful links</a>
+</nav>
+
+<section id="renting" class="settling-section">
+  <div class="settling-section__head">
+    <span class="settling-section__tick" aria-hidden="true"></span>
+    <h2>Renting</h2>
+  </div>
+  <p class="settling-body">Korean long-term renting typically involves a large upfront deposit of ₩5–20M (~$4–15K), a&#160;<span class="settling-nowrap">13–24-month</span> lease, and a visit to a local realty agency (<span class="settling-ko">부동산</span>).</p>
+
+  <div class="settling-callout settling-callout--tip">
+    <div class="settling-callout__text">Typical rental logic is — the higher the deposit, the lower the rent.</div>
+    <div class="settling-callout__link">
+      <a data-out href="{{ settlingIn.housingRentalGuideUrl }}">Types of long-term renting explained ↗</a>
+      <span class="settling-source">koreansnextdoor.com · July 2026</span>
+    </div>
+  </div>
+
+  <div class="settling-subsection">
+    <div class="settling-subhead">
+      <span class="settling-subhead__tick" aria-hidden="true"></span>
+      <span>Short-term rental options for foreigners</span>
+    </div>
+    <p class="settling-body">Alongside Airbnb, Booking and Agoda, there are several local options worth knowing.</p>
+
+    <div class="settling-platform-grid">
+      {% for platform in settlingIn.shortTermPlatforms %}
+      <div class="settling-platform-card">
+        <div class="settling-platform-card__name">{{ platform.name }}</div>
+        <p class="settling-platform-card__desc">{{ platform.description }}</p>
+        <div class="settling-platform-card__stats">
+          {% for stat in platform.stats %}
+          <div class="settling-platform-card__stat">
+            <div class="settling-platform-card__stat-label">{{ stat.label }}</div>
+            <div class="settling-platform-card__stat-value">{{ stat.value }}</div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="settling-platform-card__tags">
+          {% for tag in platform.tags %}
+          <div class="settling-tag"><div class="settling-tag__label">{{ tag.label }}</div><div class="settling-tag__value">{{ tag.value }}</div></div>
+          {% endfor %}
+        </div>
+        <div class="settling-platform-card__linkrow">
+          <a data-out href="{{ platform.url }}">{{ platform.urlLabel }} ↗</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="settling-panel settling-reviews">
+    <div class="settling-inline-label">
+      <span class="settling-inline-tick" aria-hidden="true"></span>
+      <span>Reviews:</span>
+    </div>
+    {% for r in settlingIn.rentalReviews.subreddits %}
+    <a data-out class="settling-reviews__plain" href="{{ r.url }}">{{ r.label }} ↗</a>
     {% endfor %}
-  </ul>
-  {% else %}
-  {% set message = "No communities listed yet." %}
-  {% include "partials/empty-state.njk" %}
-  {% endif %}
+    <div class="settling-reviews__source-block">
+      <a data-out href="{{ settlingIn.rentalReviews.article.url }}">{{ settlingIn.rentalReviews.article.label }} ↗</a>
+      <span class="settling-source">{{ settlingIn.rentalReviews.article.source }}</span>
+    </div>
+  </div>
+
+  <div class="settling-subsection">
+    <div class="settling-subhead">
+      <span class="settling-subhead__tick" aria-hidden="true"></span>
+      <span>Nomad-specific stays — colivings</span>
+    </div>
+    <div class="settling-coliving-list">
+      {% for c in settlingIn.colivings %}
+      <div class="settling-coliving-row">
+        <a data-out class="settling-coliving-row__name" href="{{ c.url }}">{{ c.name }} ↗</a>
+        <div class="settling-coliving-row__loc">
+          {# Same pin glyph as the festival/attraction/coworking pins (region-data.js pinIcon /
+             city-card.njk .work-venue__pin) — fill: currentColor inherits this row's muted colour. #}
+          <svg class="settling-coliving-row__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
+          {{ c.location }}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="settling-callout settling-callout--accent">
+    <div class="settling-callout__title">Local Korean options</div>
+    <p class="settling-body settling-body--sm">If you want to test your Korean, use <span class="settling-ko settling-ko--medium">단기</span> to filter for short-term. Most contracts assume you already have an ARC, Korean phone number and bank account.</p>
+    <div class="settling-callout__linkrow">
+      {% for p in settlingIn.localKoreanPlatforms %}
+      <a data-out href="{{ p.url }}">{{ p.label }} ↗</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="settling-panel settling-note">
+    <div class="settling-note__title">Goshiwon and goshitel</div>
+    <p class="settling-body settling-body--muted">There are also very cheap stays — around ₩400K/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
+  </div>
+
+  <details class="settling-price-table">
+    <summary class="settling-price-table__summary">
+      <span class="settling-price-table__label">
+        <span class="settling-price-table__title">Price snapshot in Gangwon-do, by city and platform</span>
+        <span class="settling-price-table__sub">A rough sense of local prices. All rents are per month.</span>
+      </span>
+      <span class="settling-chevron" aria-hidden="true"></span>
+    </summary>
+    <div class="settling-price-table__body">
+
+      <div class="settling-price-table__scroll">
+        <table class="settling-price-table__el">
+          <thead>
+            <tr>
+              <th class="settling-price-table__city-head">City</th>
+              <th colspan="3" class="settling-price-table__group-head">Zigbang · officetel</th>
+              <th colspan="3" class="settling-price-table__group-head">Zigbang · one-room</th>
+              <th colspan="2" class="settling-price-table__group-head">Enkostay</th>
+              <th colspan="2" class="settling-price-table__group-head">33m2</th>
+              <th class="settling-price-table__group-head settling-price-table__group-head--last">Airbnb</th>
+            </tr>
+            <tr>
+              <th class="settling-price-table__sub-head"></th>
+              <th class="settling-price-table__sub-head">Size</th>
+              <th class="settling-price-table__sub-head">Deposit</th>
+              <th class="settling-price-table__sub-head">Rent</th>
+              <th class="settling-price-table__sub-head">Size</th>
+              <th class="settling-price-table__sub-head">Deposit</th>
+              <th class="settling-price-table__sub-head">Rent</th>
+              <th class="settling-price-table__sub-head">Size</th>
+              <th class="settling-price-table__sub-head">Rent</th>
+              <th class="settling-price-table__sub-head">Size</th>
+              <th class="settling-price-table__sub-head">Rent</th>
+              <th class="settling-price-table__sub-head settling-price-table__sub-head--last">Rent</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for city in rentalMarketScan.scans | byRegion("gangwon-do") %}
+            {% set cityInfo = cities | findBySlug(city.citySlug) %}
+            {% set officetel = (city.platforms | byName("Zigbang")).units | byName("Officetel") %}
+            {% set oneRoom = (city.platforms | byName("Zigbang")).units | byName("One-room") %}
+            {% set enkostay = (city.platforms | byName("Enkostay")).units[0] %}
+            {% set m2 = (city.platforms | byName("33m2")).units[0] %}
+            {% set airbnb = (city.platforms | byName("Airbnb")).units[0] %}
+            <tr>
+              <td class="settling-price-table__city">{{ cityInfo.nameEn }}</td>
+              <td{% if officetel.label.size == '—' %} class="settling-price-table__muted"{% endif %}>{{ officetel.label.size }}</td>
+              <td>{{ officetel.label.deposit }}</td>
+              <td>{{ officetel.label.rent }}</td>
+              <td{% if oneRoom.label.size == '—' %} class="settling-price-table__muted"{% endif %}>{{ oneRoom.label.size }}</td>
+              <td>{{ oneRoom.label.deposit }}</td>
+              <td>{{ oneRoom.label.rent }}</td>
+              <td{% if enkostay.label.size == '—' %} class="settling-price-table__muted"{% endif %}>{{ enkostay.label.size }}</td>
+              <td>{{ enkostay.label.rent }}{% if enkostay.label.noteShort %} <span class="settling-price-table__note">{{ enkostay.label.noteShort }}</span>{% endif %}</td>
+              <td{% if m2.label.size == '—' %} class="settling-price-table__muted"{% endif %}>{{ m2.label.size }}</td>
+              <td>{{ m2.label.rent }}{% if m2.label.noteShort %} <span class="settling-price-table__note">{{ m2.label.noteShort }}</span>{% endif %}</td>
+              <td>{{ airbnb.label.rent }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="settling-price-table__mobile">
+        {% for city in rentalMarketScan.scans | byRegion("gangwon-do") %}
+        {% set cityInfo = cities | findBySlug(city.citySlug) %}
+        {% set officetel = (city.platforms | byName("Zigbang")).units | byName("Officetel") %}
+        {% set oneRoom = (city.platforms | byName("Zigbang")).units | byName("One-room") %}
+        {% set enkostay = (city.platforms | byName("Enkostay")).units[0] %}
+        {% set m2 = (city.platforms | byName("33m2")).units[0] %}
+        {% set airbnb = (city.platforms | byName("Airbnb")).units[0] %}
+        <div class="settling-price-city">
+          <div class="settling-price-city__name">{{ cityInfo.nameEn }}</div>
+          <div class="settling-price-city__rows">
+            <div class="settling-price-row"><span class="settling-price-row__label">Zigbang · officetel</span><span class="settling-price-row__value">{{ officetel.label.rent }} <span class="settling-price-row__meta">· dep {{ officetel.label.deposit }}{% if officetel.label.size != '—' %} · {{ officetel.label.size }}{% endif %}</span></span></div>
+            <div class="settling-price-row"><span class="settling-price-row__label">Zigbang · one-room</span><span class="settling-price-row__value">{{ oneRoom.label.rent }} <span class="settling-price-row__meta">· dep {{ oneRoom.label.deposit }}{% if oneRoom.label.size != '—' %} · {{ oneRoom.label.size }}{% endif %}</span></span></div>
+            <div class="settling-price-row"><span class="settling-price-row__label">Enkostay</span><span class="settling-price-row__value">{{ enkostay.label.rent }}{% if enkostay.label.size != '—' or enkostay.label.noteShort %} <span class="settling-price-row__meta">{% if enkostay.label.size != '—' %}· {{ enkostay.label.size }} {% endif %}{% if enkostay.label.noteShort %}· {{ enkostay.label.noteShort }}{% endif %}</span>{% endif %}</span></div>
+            <div class="settling-price-row"><span class="settling-price-row__label">33m2</span><span class="settling-price-row__value">{{ m2.label.rent }}{% if m2.label.size != '—' or m2.label.noteShort %} <span class="settling-price-row__meta">{% if m2.label.size != '—' %}· {{ m2.label.size }} {% endif %}{% if m2.label.noteShort %}· {{ m2.label.noteShort }}{% endif %}</span>{% endif %}</span></div>
+            <div class="settling-price-row"><span class="settling-price-row__label">Airbnb</span><span class="settling-price-row__value">{{ airbnb.label.rent }}</span></div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early September 2026 for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
+    </div>
+  </details>
+
 </section>
+
+<section id="work" class="settling-section">
+  <div class="settling-section__head">
+    <span class="settling-section__tick" aria-hidden="true"></span>
+    <h2>Places to work</h2>
+  </div>
+  <p class="settling-body">If you like to work outside your home, you might be used to coworking spaces. They are quite rare outside Seoul, but there are two common alternatives.</p>
+
+  <div class="settling-work-grid">
+    <div class="settling-work-card">
+      <div class="settling-work-card__title-row">
+        <div class="settling-work-card__title">Study cafés</div>
+        <div class="settling-ko">스터디카페</div>
+      </div>
+      <p class="settling-body settling-body--sm">In Korea there is a huge culture of study cafés. They offer pretty much the same setup as a coworking space — sockets, high-speed internet, printers, snacks and meeting rooms — plus a variety of passes.</p>
+    </div>
+    <div class="settling-work-card">
+      <div class="settling-work-card__title">Big café chains</div>
+      <p class="settling-body settling-body--sm">If you don't want to bother yourself with study café passes, big coffee chains like Twosome Place or Starbucks are full of sockets and people studying.</p>
+    </div>
+  </div>
+
+  <div class="settling-panel settling-reviews">
+    <div class="settling-inline-label">
+      <span class="settling-inline-tick" aria-hidden="true"></span>
+      <span>Guides:</span>
+    </div>
+    <div class="settling-reviews__source-block">
+      <a data-out href="{{ settlingIn.workGuide.url }}">{{ settlingIn.workGuide.label }} ↗</a>
+      <span class="settling-source">{{ settlingIn.workGuide.source }}</span>
+    </div>
+  </div>
+
+  <div class="settling-subsection">
+    <div class="settling-subhead">
+      <span class="settling-subhead__tick" aria-hidden="true"></span>
+      <span>Search notes</span>
+    </div>
+    <p class="settling-body">Korea widely uses its own map apps — <a data-out href="{{ settlingIn.naverMapUrl }}">Naver Map ↗</a> and <a data-out href="{{ settlingIn.kakaoMapUrl }}">Kakao Map ↗</a>. They offer better precision and navigation than Google Maps, but even when set to English, it can be useful to search in Korean.</p>
+
+    <div class="settling-label">Keywords to search with</div>
+    <div class="settling-keyword-grid">
+      <div class="settling-keyword">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="settling-keyword__icon"><path d="M7 2.4a4.6 4.6 0 100 9.2 4.6 4.6 0 000-9.2zM10.4 10.4L13.6 13.6" stroke="#0F7B54" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        <div class="settling-keyword__text"><span class="settling-ko">스터디카페</span> <span class="settling-muted">study café</span></div>
+      </div>
+      <div class="settling-keyword">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="settling-keyword__icon"><path d="M7 2.4a4.6 4.6 0 100 9.2 4.6 4.6 0 000-9.2zM10.4 10.4L13.6 13.6" stroke="#0F7B54" stroke-width="1.6" stroke-linecap="round"></path></svg>
+        <div class="settling-keyword__text"><span class="settling-ko">코워킹</span> <span class="settling-muted">coworking</span></div>
+      </div>
+    </div>
+
+    <div class="settling-label settling-label--pad">Other results you may come across</div>
+    <div class="settling-keyword-grid">
+      <div class="settling-otherresult">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="settling-otherresult__icon"><path d="M8 3.2v9.6M3.2 8h9.6" stroke="#5C6660" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <div class="settling-otherresult__body">
+          <div class="settling-ko">장소대여</div>
+          <p class="settling-otherresult__desc">Can be useful. Hourly rental of spaces such as meeting rooms, usually requiring advance booking through the map app or SpaceCloud.</p>
+          <a data-out class="settling-otherresult__link" href="{{ settlingIn.spaceCloudUrl }}">spacecloud.kr (KR) ↗</a>
+        </div>
+      </div>
+      <div class="settling-otherresult">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="settling-otherresult__icon"><path d="M3.4 8h9.2" stroke="#5C6660" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <div class="settling-otherresult__body">
+          <div class="settling-ko">공유오피스 · 독서실</div>
+          <p class="settling-otherresult__desc">Most probably not useful. Shared offices target business rental and address registration; reading rooms are for exam students and often don't allow laptops.</p>
+        </div>
+      </div>
+      <div class="settling-otherresult">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true" class="settling-otherresult__icon"><path d="M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6" stroke="#5C6660" stroke-width="1.8" stroke-linecap="round"></path></svg>
+        <div class="settling-otherresult__body">
+          <div class="settling-ko">임대 · 대여</div>
+          <p class="settling-otherresult__desc">Not useful. Property and equipment rental.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="settling-panel settling-note">
+    <div class="settling-note__title">{{ settlingIn.workationCenterNote.title }}</div>
+    <p class="settling-body settling-body--muted">{{ settlingIn.workationCenterNote.body }}</p>
+  </div>
+</section>
+
+<section id="communities" class="settling-section">
+  <div class="settling-section__head">
+    <span class="settling-section__tick" aria-hidden="true"></span>
+    <h2>Communities</h2>
+  </div>
+  <p class="settling-body">Working as a nomad can get lonely. Here are some communities and apps you might find useful.</p>
+
+  <div class="settling-communities-grid">
+    <div class="settling-community-col">
+      <div class="settling-subhead">
+        <span class="settling-subhead__tick" aria-hidden="true"></span>
+        <span>Nomad-specific</span>
+      </div>
+      <div class="settling-community-list">
+        {% for item in settlingIn.communities.nomadSpecific %}
+        <div class="settling-community-item">
+          <a data-out href="{{ item.url }}">{{ item.name }} ↗</a>
+          <div class="settling-community-item__desc">{{ item.description }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="settling-community-col">
+      <div class="settling-subhead">
+        <span class="settling-subhead__tick" aria-hidden="true"></span>
+        <span>English-speaking</span>
+      </div>
+      <div class="settling-community-list">
+        {% for item in settlingIn.communities.englishSpeaking %}
+        <div class="settling-community-item">
+          <a data-out href="{{ item.url }}">{{ item.name }} ↗</a>
+          <div class="settling-community-item__desc">{{ item.description }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="settling-community-col">
+      <div class="settling-subhead">
+        <span class="settling-subhead__tick" aria-hidden="true"></span>
+        <span>Apps for hobby meetups</span>
+      </div>
+      <div class="settling-community-list">
+        {% for item in settlingIn.communities.hobbyApps %}
+        <div class="settling-community-item">
+          <a data-out href="{{ item.url }}">{{ item.name }} ↗</a>
+          <div class="settling-community-item__desc">{{ item.description }}</div>
+        </div>
+        {% endfor %}
+        <p class="settling-community-item__note">Koreans also use thematic <a data-out href="{{ settlingIn.communities.kakaoTalkUrl }}">KakaoTalk ↗</a> open chat groups.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="links" class="settling-section">
+  <div class="settling-section__head">
+    <span class="settling-section__tick" aria-hidden="true"></span>
+    <h2>Useful links</h2>
+  </div>
+  <div class="settling-panel settling-links-panel">
+    {% for link in settlingIn.usefulLinks %}
+    <div class="settling-link-block">
+      <a data-out href="{{ link.url }}">{{ link.label }} ↗</a>
+      <span class="settling-source">{{ link.source }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="settling-disclaimer">
+  <p class="settling-disclaimer__text">{{ settlingIn.disclaimer }}</p>
+</div>
+
 </div>

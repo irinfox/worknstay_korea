@@ -811,6 +811,7 @@ ul.region-seasons {
 
 .source-note__text a {
   color: var(--color-accent);
+  font-weight: 500;
   text-decoration: underline;
 }
 

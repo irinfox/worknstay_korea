@@ -1,0 +1,96 @@
+{
+  "lastUpdated": "September 2026",
+  "shortTermPlatforms": [
+    {
+      "name": "Enkostay",
+      "description": "Foreigner-oriented. University collaborations add a useful trust signal.",
+      "stats": [
+        { "label": "Immigration documents", "value": "Provided" },
+        { "label": "Deposit", "value": "None" },
+        { "label": "Length of stay", "value": "7 days – no maximum" }
+      ],
+      "tags": [
+        { "label": "Choice", "value": "Limited, growing" },
+        { "label": "Price", "value": "Higher" },
+        { "label": "Support", "value": "English" }
+      ],
+      "url": "https://stay.enko.kr/",
+      "urlLabel": "stay.enko.kr"
+    },
+    {
+      "name": "33m2",
+      "description": "Locals-oriented with an English interface. Not all listings are furnished.",
+      "stats": [
+        { "label": "Immigration documents", "value": "Not provided" },
+        { "label": "Deposit", "value": "₩330,000 fixed" },
+        { "label": "Length of stay", "value": "7-day steps – up to 12 weeks" }
+      ],
+      "tags": [
+        { "label": "Choice", "value": "Wide" },
+        { "label": "Price", "value": "Lower" },
+        { "label": "Support", "value": "Korean" }
+      ],
+      "url": "https://web.33m2.co.kr/en/guest/main",
+      "urlLabel": "web.33m2.co.kr"
+    }
+  ],
+  "rentalReviews": {
+    "subreddits": [
+      { "label": "r/koreatravel", "url": "https://www.reddit.com/r/koreatravel/" },
+      { "label": "r/Living_in_Korea", "url": "https://www.reddit.com/r/Living_in_Korea/" }
+    ],
+    "article": {
+      "label": "Finding short-term housing that isn't Airbnb",
+      "url": "https://kcampus.kr/real-life-reviews/finding-short-term-housing-in-korea-(that-isn-t-airbnb)-8894",
+      "source": "kcampus.kr · Feb 2026"
+    }
+  },
+  "colivings": [
+    { "name": "mangrove", "url": "https://mangrove.city/en", "location": "Seoul · Jeju · Goseong" },
+    { "name": "hoppin", "url": "https://www.hoppin.life", "location": "Seoul" },
+    { "name": "busaness", "url": "https://www.busaness.com", "location": "Busan · business support application required" },
+    { "name": "o-peace (KR)", "url": "https://o-peace.com", "location": "Jeju" },
+    { "name": "Local Stitch (KR)", "url": "https://www.localstitch.kr", "location": "Seoul · Tongyeong" }
+  ],
+  "localKoreanPlatforms": [
+    { "label": "Zigbang (KR)", "url": "https://www.zigbang.com/" },
+    { "label": "Dabang (KR)", "url": "https://www.dabangapp.com/" }
+  ],
+  "workGuide": {
+    "label": "Korean Study Cafes Guide",
+    "url": "https://koreaplug.com/korean-cafe-culture-space-rental/",
+    "source": "koreaplug.com · June 2026"
+  },
+  "communities": {
+    "nomadSpecific": [
+      { "name": "Digital Nomads Korea", "url": "https://www.digitalnomadskorea.com/", "description": "English-language nomad community" },
+      { "name": "hoppin", "url": "https://www.hoppin.life", "description": "Coliving-based community, Seoul" },
+      { "name": "Seoul Nooks", "url": "https://www.seoulnooks.org/home", "description": "Coliving-based community, Seoul" },
+      { "name": "HiNomad", "url": "https://www.hinomad.world/en", "description": "Mostly Korean nomads, now expanding internationally" }
+    ],
+    "englishSpeaking": [
+      { "name": "LST", "url": "https://event.lst.life/", "description": "Let's Seoul Together — Seoul" },
+      { "name": "SMCC", "url": "https://instagram.com/seoulmorningcoffeeclub", "description": "Seoul Morning Coffee Club — Seoul and beyond" },
+      { "name": "KND", "url": "https://koreansnextdoor.com/", "description": "Koreans Next Door — Seoul" }
+    ],
+    "hobbyApps": [
+      { "name": "Meetup", "url": "https://www.meetup.com/", "description": "iOS + Android" },
+      { "name": "Luma", "url": "https://luma.com/", "description": "iOS + Android" },
+      { "name": "Somoim (KR)", "url": "https://www.somoim.co.kr/", "description": "iOS + Android" }
+    ],
+    "kakaoTalkUrl": "https://www.kakaocorp.com/page/service/service/KakaoTalk?lang=ENG"
+  },
+  "usefulLinks": [
+    { "label": "Settling-in guides", "url": "https://koreansnextdoor.com/guide/settle", "source": "koreansnextdoor.com · 2026" },
+    { "label": "Residence card, step by step", "url": "https://stay.enko.kr/blog/en/how-to-get-your-residence-card-in-korea-2025-guide/", "source": "stay.enko.kr · June 2026 · apply within 90 days of arriving, unless you entered on a tourist visa" }
+  ],
+  "housingRentalGuideUrl": "https://koreansnextdoor.com/guide/housing",
+  "spaceCloudUrl": "https://www.spacecloud.kr/",
+  "naverMapUrl": "https://map.naver.com/",
+  "kakaoMapUrl": "https://map.kakao.com/",
+  "workationCenterNote": {
+    "title": "Workation centers",
+    "body": "You might come across workation centers in search results. Most target Korean company programs rather than individual foreign nomads. While coworking may be open to individual visitors, accommodation may require company documents. Double-check the workation center's official site."
+  },
+  "disclaimer": "Services listed here are not affiliated with us, and their terms may change. Please check current conditions on their respective websites."
+}
