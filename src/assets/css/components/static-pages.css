@@ -559,8 +559,11 @@ ul.about-hero__chips {
   gap: 8px 22px;
 }
 
+/* font-weight 500 to match region-page.css .region-guides__link — same outbound-link style,
+   Gangwon-do's Guides panel and this page's Reviews/Guides links should read identically. */
 .settling-reviews__plain {
   font-size: 14px;
+  font-weight: 500;
 }
 
 .settling-reviews__source-block {
@@ -572,6 +575,7 @@ ul.about-hero__chips {
 
 .settling-reviews__source-block a {
   font-size: 14px;
+  font-weight: 500;
 }
 
 .settling-note {
