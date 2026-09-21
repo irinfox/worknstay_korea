@@ -24,11 +24,9 @@ eleventyComputed:
   "jeju-do": ["jeju-city", "seogwipo"],
   "chungcheong-do": ["daejeon", "sejong", "cheongju", "gongju"]
 } %}
-{# Furnished short-term monthly rent for the headline recap card. Gangwon-do is the only region
-   with a market scan behind it (src/_data/rentalMarketScan.js); the figure matches the existing
-   "Cost of living" copy below. Inline microcopy — no _data home yet (same pattern as the task-04
-   homepage strings). #}
-{% set gangwonRent = "₩1–1.4M" %}
+{# Furnished short-term monthly rent for the headline recap card and the cost table below.
+   Gangwon-do is the only region with a market scan behind it (src/_data/rentalMarketScan.js). #}
+{% set gangwonRent = (rentalMarketScan.regionSummary | findBySlug("gangwon-do")).furnishedShortTermMonthly %}
 <div class="content-page region-page">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
@@ -208,7 +206,7 @@ eleventyComputed:
       {# Rows and note are a restructuring of the existing verified Gangwon cost copy into the
          design's table form; figures unchanged. #}
       <dl class="cost-table">
-        <div><dt>Short-term stay, per month</dt><dd>₩1–1.4M</dd></div>
+        <div><dt>Short-term stay, per month</dt><dd>{{ gangwonRent }}</dd></div>
         <div><dt>Typical size</dt><dd>23–30 m² and up</dd></div>
         <div><dt>Same money in Seoul</dt><dd>13–16 m²</dd></div>
         <div><dt>Upfront deposit</dt><dd>none or ₩330K</dd></div>

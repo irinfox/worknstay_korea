@@ -1,15 +1,15 @@
 {# Single template for both region-info render modes (architecture.md §3, DESIGN.md § "Region
    card"): the wide-viewport infographic loops this into fixed slots around the map, the
    narrow-viewport carousel loops it into a scroll-snap row.
-   Params: region (Region, required), cost (CostOfLiving | null), modifier ("infographic" | "carousel") #}
+   Params: region (Region, required), rentSummary (rentalMarketScan.regionSummary entry | null), modifier ("infographic" | "carousel") #}
 <div class="region-card region-card--{{ modifier | default("carousel") }}" data-region-slug="{{ region.slug }}">
   <div class="region-card__header">
     <h3 class="region-card__name">{{ region.nameEn }}</h3>
     {# Rent figure only where a real hand-checked range exists (Gangwon-do — see
-       costOfLiving.json furnishedShortTermMonthly). Other regions have no verified figure yet,
+       rentalMarketScan.js regionSummary). Other regions have no verified figure yet,
        so the row is omitted rather than filled with a city-centre estimate. #}
-    {% if cost and cost.furnishedShortTermMonthly %}
-    <span class="region-card__rent">{{ cost.furnishedShortTermMonthly }}/mo</span>
+    {% if rentSummary and rentSummary.furnishedShortTermMonthly %}
+    <span class="region-card__rent">{{ rentSummary.furnishedShortTermMonthly }}/mo</span>
     {% endif %}
   </div>
   <p class="region-card__name-ko">{{ region.nameKo }}</p>

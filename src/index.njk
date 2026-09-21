@@ -60,7 +60,7 @@ layout: layouts/page.njk
     <div class="region-infographic__col region-infographic__col--left">
       {% for slug in ["gyeonggi-do", "chungcheong-do", "jeolla-do", "jeju-do"] %}
       {% set region = regions | findBySlug(slug) %}
-      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set rentSummary = rentalMarketScan.regionSummary | findBySlug(slug) %}
       {% set modifier = "infographic" %}
       {% include "partials/region-card.njk" %}
       {% endfor %}
@@ -71,7 +71,7 @@ layout: layouts/page.njk
     <div class="region-infographic__col region-infographic__col--right">
       {% for slug in ["gangwon-do", "gyeongsang-do"] %}
       {% set region = regions | findBySlug(slug) %}
-      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set rentSummary = rentalMarketScan.regionSummary | findBySlug(slug) %}
       {% set modifier = "infographic" %}
       {% include "partials/region-card.njk" %}
       {% endfor %}
@@ -104,7 +104,7 @@ layout: layouts/page.njk
     <ul class="region-carousel__track">
       {% for slug in ["gyeonggi-do", "gangwon-do", "chungcheong-do", "gyeongsang-do", "jeolla-do", "jeju-do"] %}
       {% set region = regions | findBySlug(slug) %}
-      {% set cost = costOfLiving | findBySlug(slug) %}
+      {% set rentSummary = rentalMarketScan.regionSummary | findBySlug(slug) %}
       {% set modifier = "carousel" %}
       <li class="region-carousel__item">{% include "partials/region-card.njk" %}</li>
       {% endfor %}

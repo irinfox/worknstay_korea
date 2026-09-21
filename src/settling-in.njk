@@ -152,7 +152,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
             </tr>
           </thead>
           <tbody>
-            {% for city in rentalMarketScan | byRegion("gangwon-do") %}
+            {% for city in rentalMarketScan.scans | byRegion("gangwon-do") %}
             {% set cityInfo = cities | findBySlug(city.citySlug) %}
             {% set officetel = (city.platforms | byName("Zigbang")).units | byName("Officetel") %}
             {% set oneRoom = (city.platforms | byName("Zigbang")).units | byName("One-room") %}
@@ -179,7 +179,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       </div>
 
       <div class="settling-price-table__mobile">
-        {% for city in rentalMarketScan | byRegion("gangwon-do") %}
+        {% for city in rentalMarketScan.scans | byRegion("gangwon-do") %}
         {% set cityInfo = cities | findBySlug(city.citySlug) %}
         {% set officetel = (city.platforms | byName("Zigbang")).units | byName("Officetel") %}
         {% set oneRoom = (city.platforms | byName("Zigbang")).units | byName("One-room") %}
