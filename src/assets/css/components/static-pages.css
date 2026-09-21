@@ -356,6 +356,19 @@ ul.about-hero__chips {
   align-items: center;
 }
 
+/* Below ~600px, tighter gap/padding (font-size stays 14px everywhere, same as 768px/900px/
+   desktop) buys back some of the room the four labels need at full size; still wraps to two
+   rows on the narrowest phones (~360-374px), which reads better than shrinking the type just
+   for those widths. Pill stays full page-width like every other breakpoint; space-between
+   spreads the links across it rather than bunching them left with an empty strip on the right. */
+@media (max-width: 599px) {
+  .settling-jumpnav {
+    justify-content: space-between;
+    gap: 4px 4px;
+    padding: 4px 6px;
+  }
+}
+
 /* Section shell — 3×15 orange tick → H2, body copy, subsections. */
 .settling-section {
   display: flex;
