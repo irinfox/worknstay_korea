@@ -452,19 +452,36 @@ ul.about-hero__chips {
 }
 
 /* Small inline label rows ("Reviews:" / "Guides:"). */
+/* Not flex: when this sits inside an outer align-items:baseline row (.settling-reviews), a
+   flex container's exported baseline is its first flex item's baseline — and a plain decorative
+   tick with no text has no real baseline, so it was exporting its own bottom edge as the whole
+   label's baseline instead of "Guides:"/"Reviews:" text's actual baseline, dropping the label
+   noticeably above the link it's meant to sit level with. Plain inline content (tick as
+   inline-block, text inline) reports the text line's own baseline instead — this is the pattern
+   to copy for any future tick+label pair that sits in a baseline row. */
 .settling-inline-label {
-  display: flex;
-  align-items: center;
-  gap: 9px;
   font-size: 13px;
   color: var(--color-text-soft);
 }
 
 .settling-inline-tick {
+  display: inline-block;
   width: 2px;
   height: 13px;
+  margin-right: 9px;
+  vertical-align: -1px;
   background: var(--color-accent-rule);
-  flex-shrink: 0;
+}
+
+/* Mobile only: force the "Guides:"/"Reviews:" label onto its own line instead of letting it
+   share a row with whichever item happens to fit next to it — Reviews has several items
+   (label, subreddit links, article source-block) that would otherwise wrap unpredictably
+   mid-group. Above 600px everything already fits on one row (label inline), so this is scoped
+   out there rather than fought with flex-basis: auto. */
+@media (max-width: 599px) {
+  .settling-inline-label {
+    flex-basis: 100%;
+  }
 }
 
 .settling-label {
@@ -560,22 +577,41 @@ ul.about-hero__chips {
 }
 
 /* font-weight 500 to match region-page.css .region-guides__link — same outbound-link style,
-   Gangwon-do's Guides panel and this page's Reviews/Guides links should read identically. */
+   Gangwon-do's Guides panel and this page's Reviews/Guides links should read identically.
+   min-height/inline-flex/center — same 44px tap-target treatment as .settling-jumpnav a: at
+   14px/1.65 these were rendering ~23px tall, stacked close together, well under DESIGN.md's
+   44px control minimum and easy to mis-tap on phone. */
 .settling-reviews__plain {
   font-size: 14px;
   font-weight: 500;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .settling-reviews__source-block {
   display: flex;
   flex-direction: column;
+  /* Matches region-page.css .region-guides__item — same link+caption stack, same gap. */
   gap: 2px;
   min-width: 0;
 }
 
+/* 44px tap target via an invisible ::before hit-area instead of min-height: this link sits in a
+   column stack directly above its non-tappable source/date caption (gap: 2px) — growing the
+   link's own box would shove that caption away from it, breaking the "one element" look. The
+   pseudo-element extends the tappable area without taking up layout space, so the visible text
+   stays exactly where it was. */
 .settling-reviews__source-block a {
+  position: relative;
   font-size: 14px;
   font-weight: 500;
+}
+
+.settling-reviews__source-block a::before {
+  content: "";
+  position: absolute;
+  inset: -11px 0;
 }
 
 .settling-note {
@@ -882,7 +918,9 @@ ul.about-hero__chips {
 .settling-link-block {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  /* Matches region-page.css .region-guides__item / .settling-reviews__source-block — same
+     link+caption stack, same gap, everywhere on the site. */
+  gap: 2px;
   min-width: 0;
   flex: 1 1 280px;
 }
