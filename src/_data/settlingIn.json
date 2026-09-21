@@ -88,5 +88,9 @@
   "spaceCloudUrl": "https://www.spacecloud.kr/",
   "naverMapUrl": "https://map.naver.com/",
   "kakaoMapUrl": "https://map.kakao.com/",
-  "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Services listed here are not affiliated with us and their terms change — check current conditions on their own sites before you pay."
+  "workationCenterNote": {
+    "title": "Workation centers",
+    "body": "You might come across workation centers in search results. Most target Korean company programs rather than individual foreign nomads. While coworking may be open to individual visitors, accommodation may require company documents. Double-check the workation center's official site."
+  },
+  "disclaimer": "Services listed here are not affiliated with us, and their terms may change. Please check current conditions on their respective websites."
 }

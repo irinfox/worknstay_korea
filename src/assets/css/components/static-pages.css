@@ -554,6 +554,15 @@ ul.about-hero__chips {
   gap: 8px;
 }
 
+/* .settling-body's 66ch reading-width cap (DESIGN.md prose rule) is meant for running body copy,
+   not these note-style plates — the plates themselves are already full content-width (unlike a
+   prose paragraph), so the text inside should fill them too rather than wrap narrower than its
+   own box. */
+.settling-callout .settling-body,
+.settling-note .settling-body {
+  max-width: none;
+}
+
 .settling-note__title {
   font-size: 15px;
   font-weight: 600;
@@ -684,7 +693,14 @@ ul.about-hero__chips {
   min-width: 0;
 }
 
-.settling-coliving-row__loc svg {
+/* Same glyph/sizing as the attraction/festival/coworking pins (region-page.css
+   .attraction-card__pin) — inline-block is required here because base.css's global
+   `svg { display: block }` reset otherwise drops the icon to its own line instead of sitting
+   inline before the location text. */
+.settling-coliving-row__pin {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
   vertical-align: -1px;
   margin-right: 5px;
 }
@@ -1063,10 +1079,27 @@ ul.about-hero__chips {
   }
 }
 
+/* Full-bleed band reusing the same calc()-based technique as region-page.css's .region-band —
+   ::before bleeds past .settling-page's own edge by exactly <main class="page">'s own padding
+   (--space-4), same math, no viewport units (the 100vw/negative-margin trick overflows the
+   document by the scrollbar's width — visible as a few px of horizontal scroll — so it's not
+   used here). */
 .settling-disclaimer {
-  font-size: 14px;
+  position: relative;
+}
+
+.settling-disclaimer::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  background: var(--color-bg);
+}
+
+.settling-disclaimer__text {
+  font-size: 13px;
   line-height: 1.6;
   color: var(--color-text-muted);
-  max-width: 70ch;
   text-wrap: pretty;
 }

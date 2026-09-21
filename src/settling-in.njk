@@ -92,7 +92,9 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <div class="settling-coliving-row">
         <a data-out class="settling-coliving-row__name" href="{{ c.url }}">{{ c.name }} ↗</a>
         <div class="settling-coliving-row__loc">
-          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 14.5s5-4.6 5-8.3A5 5 0 0 0 3 6.2c0 3.7 5 8.3 5 8.3Z" stroke="#4A544E" stroke-width="1.6" stroke-linejoin="round"></path><circle cx="8" cy="6.2" r="1.7" stroke="#4A544E" stroke-width="1.6"></circle></svg>
+          {# Same pin glyph as the festival/attraction/coworking pins (region-data.js pinIcon /
+             city-card.njk .work-venue__pin) — fill: currentColor inherits this row's muted colour. #}
+          <svg class="settling-coliving-row__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
           {{ c.location }}
         </div>
       </div>
@@ -226,6 +228,17 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     </div>
   </div>
 
+  <div class="settling-panel settling-reviews">
+    <div class="settling-inline-label">
+      <span class="settling-inline-tick" aria-hidden="true"></span>
+      <span>Guides:</span>
+    </div>
+    <div class="settling-reviews__source-block">
+      <a data-out href="{{ settlingIn.workGuide.url }}">{{ settlingIn.workGuide.label }} ↗</a>
+      <span class="settling-source">{{ settlingIn.workGuide.source }}</span>
+    </div>
+  </div>
+
   <div class="settling-subsection">
     <div class="settling-subhead">
       <span class="settling-subhead__tick" aria-hidden="true"></span>
@@ -272,15 +285,9 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     </div>
   </div>
 
-  <div class="settling-panel">
-    <div class="settling-inline-label">
-      <span class="settling-inline-tick" aria-hidden="true"></span>
-      <span>Guides:</span>
-    </div>
-    <div class="settling-reviews__source-block">
-      <a data-out href="{{ settlingIn.workGuide.url }}">{{ settlingIn.workGuide.label }} ↗</a>
-      <span class="settling-source">{{ settlingIn.workGuide.source }}</span>
-    </div>
+  <div class="settling-panel settling-note">
+    <div class="settling-note__title">{{ settlingIn.workationCenterNote.title }}</div>
+    <p class="settling-body settling-body--muted">{{ settlingIn.workationCenterNote.body }}</p>
   </div>
 </section>
 
@@ -355,6 +362,8 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   </div>
 </section>
 
-<p class="settling-disclaimer">{{ settlingIn.disclaimer }}</p>
+<div class="settling-disclaimer">
+  <p class="settling-disclaimer__text">{{ settlingIn.disclaimer }}</p>
+</div>
 
 </div>
