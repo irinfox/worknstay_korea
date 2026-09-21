@@ -265,21 +265,10 @@ ul.about-hero__chips {
   gap: 36px;
 }
 
-.settling-page a[data-out] {
-  /* --color-accent, same "Orange text" token every other page's outbound links use
-     (region-page.css .region-guides__link/.dish-card__restaurant, city-card.css
-     .work-venue__links a) — this page was using --color-accent-ink ("Orange ink"), the
-     deeper, tinted-plate-specific shade, as a blanket rule even for links on plain white. */
-  color: var(--color-accent);
-}
-
-.settling-page a[data-out]:hover {
-  color: var(--color-accent-ink);
-}
-
-.settling-page a:not([data-out]):hover {
-  color: var(--color-primary-dark);
-}
+/* Outbound-link colour + hover (Orange text / Orange ink) is now the global base.css
+   a[target="_blank"] rule — every link on this page that leaves the site carries
+   target="_blank" rel="noopener" (link-hover unification), so no page-scoped override is
+   needed here any more. */
 
 .settling-ko {
   font-family: var(--font-family-ko);

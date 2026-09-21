@@ -203,8 +203,11 @@
       0 2px 8px rgba(0, 0, 0, 0.7);
   }
 
+  /* Explicit white here: base.css's global a:hover would otherwise turn this dark green,
+     unreadable over the photo it sits on. */
   .hero__scroll-cue:hover,
   .hero__scroll-cue:focus-visible {
+    color: #fff;
     text-decoration: underline;
   }
 }

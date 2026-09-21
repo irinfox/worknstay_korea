@@ -159,9 +159,12 @@
   cursor: pointer;
 }
 
+/* Grey, not green: this clears the form rather than going anywhere, so it doesn't get the
+   in-site link's green (DESIGN.md palette: green = in-site navigation). Darkens the same way,
+   just one step up the neutral scale (Muted → Ink soft) instead of the green/orange scales. */
 .calculator-form__reset:hover,
 .calculator-form__reset:focus-visible {
-  color: var(--color-primary-dark);
+  color: var(--color-text-soft);
 }
 
 /* Phone: pad the hit area out to >=44px without moving the visible label (negative margin

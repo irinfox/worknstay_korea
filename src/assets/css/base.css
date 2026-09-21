@@ -109,6 +109,30 @@ a {
   color: var(--color-link);
 }
 
+/* DESIGN.md palette, one site-wide rule each instead of repeating the colour per component:
+   in-site links darken to Green deep on hover, outbound (target="_blank") links are Orange
+   text, Orange ink on hover. `html a:hover` (not bare `a:hover`) is deliberate: most components
+   set their rest colour via a descendant selector like `.eligibility-result a`, which is the
+   same specificity as a bare `a:hover` (one class + one element) — a tie that source order
+   would resolve in the *component's* favour, since every component stylesheet loads after this
+   one, silently blocking the hover colour. The extra `html` keeps this rule a plain element
+   selector (no class) while adding a specificity point nothing else has, so it wins
+   unconditionally over any single-class `.foo a`/`.foo a:hover`, regardless of load order.
+   A component that genuinely needs different hover behaviour (hero.css .hero__scroll-cue's
+   white photo-overlay text, region-page.css .region-breadcrumb's muted→soft-grey) uses two
+   classes/pseudo-classes of its own to still outrank this — see those files for the exceptions. */
+html a:hover {
+  color: var(--color-primary-dark);
+}
+
+a[target="_blank"] {
+  color: var(--color-accent);
+}
+
+a[target="_blank"]:hover {
+  color: var(--color-accent-ink);
+}
+
 /* No global :visited dimming — nearly every link on this site is navigation or a CTA (nav,
    region cards, "Open <region>", map, breadcrumbs), and slate-blue "visited" links there read
    as broken. Prose links can opt back in via a scoped rule if that's ever wanted. */
