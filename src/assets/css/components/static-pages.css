@@ -253,8 +253,8 @@ ul.about-hero__chips {
    reading width) — Renting / Places to work / Communities / Useful links, plus a collapsible
    Gangwon-do price-snapshot table (data: rentalMarketScan.js). Colours below map 1:1 onto
    existing tokens — this design was built against this project's own token set. #4A544E
-   (secondary card copy) and #8C3708 (outbound-link hover) have no existing token and stay
-   literal, per the design's own literal values. */
+   (secondary card copy) has no existing token and stays literal, per the design's own literal
+   values. Outbound/in-site link hover (DESIGN.md palette: Orange ink / Green deep) below. */
 
 .settling-page {
   max-width: var(--content-max-width);
@@ -274,7 +274,7 @@ ul.about-hero__chips {
 }
 
 .settling-page a[data-out]:hover {
-  color: #8c3708;
+  color: var(--color-accent-ink);
 }
 
 .settling-page a:not([data-out]):hover {

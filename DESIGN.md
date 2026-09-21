@@ -15,7 +15,7 @@ in the repo and is not maintained.
 | Panel | `#F7F9F8` | Info cards, guides strip, un-evaluated calculator state |
 | Green | `#0F7B54` | Primary accent, in-site links, eligible state |
 | Green tint | `#EAF4EF` / `#DCEFE5`, border `#A9D8C2` / `#C9E3D6` | Tinted bands, vibe tags, note plates |
-| Green deep | `#0B5C3F` | Vibe-tag text |
+| Green deep | `#0B5C3F` | Vibe-tag text, in-site link hover |
 | Green light | `#A8D8C2` | "Partly eligible" map fill and calculator state |
 | Map grey | `#B7B2A7` | "Not eligible" map fill — data colour, never chrome |
 | Focus ring | `#2F6FED` | Keyboard focus only. Deliberately outside the palette: a focus
@@ -23,8 +23,8 @@ in the repo and is not maintained.
 | Amber | `#F7EAD9` | "Stricter" note plates, not-eligible calculator state |
 | Orange rule | `#E08A2E` | 56×3px rule above every page headline, 3×15px section ticks |
 | Orange text | `#C2531A` | Outbound links, spicy tag |
-| Orange ink | `#A8450F` | Small orange text on tinted plates (dish labels). Deeper than
-  Orange text so 12px passes 4.5:1 on amber and panel grounds. |
+| Orange ink | `#A8450F` | Small orange text on tinted plates (dish labels), outbound link hover.
+  Deeper than Orange text so 12px passes 4.5:1 on amber and panel grounds. |
 
 Two accent colours only. Green = ours / easier / in-site. Orange = external / stricter / seasonal.
 Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour
