@@ -356,16 +356,23 @@ ul.about-hero__chips {
   align-items: center;
 }
 
-/* Below ~600px, tighter gap/padding (font-size stays 14px everywhere, same as 768px/900px/
-   desktop) buys back some of the room the four labels need at full size; still wraps to two
-   rows on the narrowest phones (~360-374px), which reads better than shrinking the type just
-   for those widths. Pill stays full page-width like every other breakpoint; space-between
-   spreads the links across it rather than bunching them left with an empty strip on the right. */
+/* Below ~600px, zero horizontal padding + space-evenly (not space-between) so every gap —
+   border-to-first-link, between each link, last-link-to-border — comes from the same evenly
+   distributed space instead of a fixed padding sitting next to a differently-sized justify gap.
+   font-size stays 14px everywhere (same as 768px/900px/desktop); still wraps to two rows on the
+   narrowest phones (~360-374px), which reads better than shrinking the type just for those
+   widths. Pill stays full page-width like every other breakpoint. */
 @media (max-width: 599px) {
   .settling-jumpnav {
-    justify-content: space-between;
-    gap: 4px 4px;
-    padding: 4px 6px;
+    justify-content: space-evenly;
+    gap: 4px 0;
+    padding-block: 4px;
+    padding-inline: 0;
+    /* .settling-page's 38px flex gap is right for desktop's wider measure but too airy on
+       phone; margins here pull it down to ~18px above / ~30px below without touching the
+       38px gap itself (desktop keeps it as-is). */
+    margin-top: -20px;
+    margin-bottom: -8px;
   }
 }
 
