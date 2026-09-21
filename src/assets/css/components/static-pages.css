@@ -266,7 +266,11 @@ ul.about-hero__chips {
 }
 
 .settling-page a[data-out] {
-  color: var(--color-accent-ink);
+  /* --color-accent, same "Orange text" token every other page's outbound links use
+     (region-page.css .region-guides__link/.dish-card__restaurant, city-card.css
+     .work-venue__links a) — this page was using --color-accent-ink ("Orange ink"), the
+     deeper, tinted-plate-specific shade, as a blanket rule even for links on plain white. */
+  color: var(--color-accent);
 }
 
 .settling-page a[data-out]:hover {

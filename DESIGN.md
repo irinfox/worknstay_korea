@@ -135,7 +135,10 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   homepage region cards. Same colours everywhere — they mean the same thing; only the size
   follows the heading it annotates. The About page's credential chips are the same pill at the
   13px card size — same colours, no variant.
-- **Note plate**: tinted bg, matching border, radius 10px, one line of text + a `→` link.
+- **Note plate**: tinted bg, matching border, radius 10px, one line of text + a `→` link, or up
+  to ~3 lines of full-width text for a longer aside — either way its text runs the plate's own
+  width, exempt from the ~70ch body cap (a capped line in a full-width plate reads as a layout
+  bug). Past ~3 lines it's body copy: pull it out of the plate or cap it at the measure.
   Green tint + green border for "easier"; amber `#F7EAD9` + `#E08A2E` border for "stricter".
 - **Source line**: 12–13px `#5C6660`, always dated, at the foot of the block it describes.
 - **Section tick**: 3×15px orange bar before a small heading (Guides, Where to work).
