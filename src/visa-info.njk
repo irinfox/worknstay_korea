@@ -1,86 +1,305 @@
 ---
 layout: layouts/page.njk
 title: "Visa info"
-description: "F-1-D Digital Nomad Visa income thresholds, family multipliers, and other requirements."
+description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents, and requirements."
 ---
-<div class="content-page">
-<header class="region-header">
-  <span class="region-header__rule" aria-hidden="true"></span>
-  <h1>F-1-D visa — income requirements</h1>
-  <p class="region-header__intro">
-    General guidance on the income thresholds and other requirements for Korea's Digital Nomad
-    (Workation) visa. This page is informational only — see the disclaimer at the bottom before
-    relying on it.
-  </p>
-</header>
+<div class="visa-page" id="top">
 
-<section class="region-section">
-  <h2>Minimum annual income by age and region</h2>
-  <p>
-    Thresholds are set as a multiple of Korea's Gross National Income (GNI) per capita
-    ({{ visaRules.gniReferenceYear }} reference year: ₩{{ visaRules.gniPerCapitaKrw | krw }}).
-    Non-capital areas — including population-decrease-designated counties that sit inside
-    capital-tier provinces — get a lower multiplier than the capital area.
-  </p>
-  <div class="table-scroll">
-    <table class="visa-threshold-table">
-      <thead>
-        <tr>
-          <th scope="col">Age</th>
-          <th scope="col">Capital area</th>
-          <th scope="col">Non-capital area</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for band in visaRules.ageBands %}
-        <tr>
-          <td>
-            {% if band.maxAge %}{{ band.minAge }}–{{ band.maxAge }}{% else %}{{ band.minAge }}+{% endif %}
-          </td>
-          <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}
-            <span class="mock-note">(×{{ band.multiplierCapitalArea }})</span></td>
-          <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}
-            <span class="mock-note">(×{{ band.multiplierNonCapitalArea }})</span></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="visa-hero">
+    <div class="visa-hero__main">
+      <span class="visa-hero__rule" aria-hidden="true"></span>
+      <h1>Digital Nomad visa</h1>
+      <div class="visa-hero__ko">{{ visaRules.nameKo }}</div>
+      <p class="visa-hero__intro">For people employed by a company outside Korea in a role they can do remotely, and their spouse and minor children.</p>
+      <p class="visa-hero__note">Piloted from January 2024, permanent since 30 June 2026. The permanent rules lowered the income threshold for applicants under 35 and for those living outside the capital region, and raised the maximum stay from two years to three.</p>
+      <div class="visa-hero__updated">Last updated: {{ visaRules.lastUpdated }}</div>
+    </div>
+
+    <div class="visa-facts">
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Status code</div>
+        <div class="visa-facts__value visa-facts__value--tabular">{{ visaRules.statusCode }}</div>
+      </div>
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Period of stay</div>
+        <div class="visa-facts__value visa-facts__value--tabular">
+          <div class="visa-facts__value-main">{{ visaRules.additionalFacts.initialStayYears }} year, up to {{ visaRules.additionalFacts.maxStayYears }} years</div>
+          <div class="visa-facts__value-note">+{{ visaRules.additionalFacts.extensionIncrementYears }} year per extension</div>
+        </div>
+      </div>
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Who may come with you</div>
+        <div class="visa-facts__value">{{ visaRules.additionalFacts.accompanyingFamily }}</div>
+      </div>
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Work inside Korea</div>
+        <div class="visa-facts__value">{{ visaRules.additionalFacts.workInsideKoreaShort }}</div>
+      </div>
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Change of status in Korea</div>
+        <div class="visa-facts__value visa-facts__value--tabular">Permitted from {{ visaRules.additionalFacts.convertibleFromVisas | join(", ") }}</div>
+      </div>
+    </div>
   </div>
-  <p class="data-provenance">
-    Source: Ministry of Justice (법무부) F-1-D announcement, {{ visaRules.version }}
-    (effective {{ visaRules.effectiveFrom }}).
-  </p>
-</section>
 
-<section class="region-section">
-  <h2>Bringing family</h2>
-  <p>
-    Accompanying spouse and minor children raise the required income to a flat family
-    multiplier, regardless of the applicant's age:
-  </p>
-  <ul>
-    <li>Capital area — GNI × {{ visaRules.familyMultiplier.multiplierCapitalArea }} =
-      ₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}</li>
-    <li>Non-capital area — GNI × {{ visaRules.familyMultiplier.multiplierNonCapitalArea }} =
-      ₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}</li>
-  </ul>
-</section>
+  <div class="visa-contents">
+    <div class="visa-contents__links" data-noscroll>
+      <a href="#who"><span class="visa-contents__full">Eligibility</span><span class="visa-contents__short">Eligibility</span></a>
+      <a href="#documents"><span class="visa-contents__full">Documents</span><span class="visa-contents__short">Docs</span></a>
+      <a href="#notes"><span class="visa-contents__full">Important notes</span><span class="visa-contents__short">Notes</span></a>
+      <a href="#questions"><span class="visa-contents__full">Questions</span><span class="visa-contents__short">FAQ</span></a>
+      <a href="#links"><span class="visa-contents__full">Useful links</span><span class="visa-contents__short">Links</span></a>
+    </div>
+    <a href="#top" class="visa-contents__top"><span class="visa-contents__top-icon" aria-hidden="true"></span>Top</a>
+  </div>
 
-<section class="region-section">
-  <h2>Other requirements</h2>
-  <dl class="cost-summary">
-    <div><dt>Minimum applicant age</dt><dd>{{ visaRules.additionalFacts.minApplicantAge }}
-      <span class="mock-note">({{ visaRules.additionalFacts.minApplicantAgeExemption }})</span></dd></div>
-    <div><dt>Health insurance</dt><dd>≥ ₩{{ visaRules.additionalFacts.healthInsuranceMinCoverageKrw | krw }} coverage</dd></div>
-    <div><dt>Initial stay</dt><dd>{{ visaRules.additionalFacts.initialStayYears }} year</dd></div>
-    <div><dt>Max stay</dt><dd>{{ visaRules.additionalFacts.maxStayYears }} years (with renewals, +{{ visaRules.additionalFacts.extensionIncrementYears }}/yr)</dd></div>
-    <div><dt>Work restriction</dt><dd>{{ visaRules.additionalFacts.workRestriction }}</dd></div>
-    <div><dt>Convertible from</dt><dd>{{ visaRules.additionalFacts.convertibleFromVisas | join(", ") }}</dd></div>
-  </dl>
-  <p>{{ visaRules.additionalFacts.eligibleApplicantSummary }}</p>
-</section>
+  <section id="who" class="visa-section">
+    <div class="visa-section__head">
+      <span class="visa-section__tick" aria-hidden="true"></span>
+      <h2>Eligibility</h2>
+    </div>
+    <p class="visa-body">All of the following are required, as published by the Ministry of Justice.</p>
 
-<section class="region-section">
-  <p class="empty-state">{{ visaRules.disclaimer }}</p>
-</section>
+    <div class="visa-checklist">
+      <div class="visa-checklist__item">
+        <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Age 18 or over</span></div>
+      </div>
+      <div class="visa-checklist__item">
+        <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Employed by a company outside Korea, in a role you can do remotely</span></div>
+      </div>
+      <div class="visa-checklist__item">
+        <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">One year or more in the same industry</span></div>
+      </div>
+      <div class="visa-checklist__item">
+        <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Private medical insurance</span><span class="visa-checklist__detail"> — at least ₩100M of cover for hospital treatment and repatriation, valid for the whole stay.</span></div>
+      </div>
+      <div class="visa-checklist__item">
+        <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Income above the threshold</span><span class="visa-checklist__detail"> — depends on your age and region, see below.</span></div>
+      </div>
+    </div>
+
+    <div id="income" class="visa-subhead">
+      <span class="visa-subhead__tick" aria-hidden="true"></span>
+      <h3>Income by age and region</h3>
+    </div>
+    <p class="visa-body">A multiple of Korea’s per-capita gross national income for the year before you apply. Figures below use the {{ visaRules.gniReferenceYear }} GNI of ₩{{ visaRules.gniPerCapitaKrw | krw }}.</p>
+
+    <div class="visa-income-note">Capital region means Seoul, Incheon and Gyeonggi-do, excluding population-declined areas.</div>
+
+    <div class="visa-income-table-wrap">
+      <table class="visa-income-table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Capital region<div class="visa-income-table__subhead">Seoul, Incheon, Gyeonggi-do — excluding population-declined areas</div></th>
+            <th scope="col">Everywhere else<div class="visa-income-table__subhead">All other regions, plus population-declined areas</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for band in visaRules.ageBands %}
+          <tr>
+            <td>{% if band.maxAge %}Age {{ band.minAge }}–{{ band.maxAge }}{% else %}Age {{ band.minAge }} and over{% endif %}</td>
+            <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierCapitalArea }} × GNI</div></td>
+            <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierNonCapitalArea }} × GNI</div></td>
+          </tr>
+          {% endfor %}
+          <tr class="visa-income-table__family">
+            <td>Bringing family<div class="visa-income-table__submeta">Spouse or minor children, any age</div></td>
+            <td>₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI</div></td>
+            <td>₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI</div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="visa-income-cards">
+      {% for band in visaRules.ageBands %}
+      <div class="visa-income-card">
+        <div class="visa-income-card__head">{% if band.maxAge %}Age {{ band.minAge }}–{{ band.maxAge }}{% else %}Age {{ band.minAge }} and over{% endif %}</div>
+        <div class="visa-income-card__row">
+          <div class="visa-income-card__region">Capital region</div>
+          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierCapitalArea }} × GNI</div></div>
+        </div>
+        <div class="visa-income-card__row">
+          <div class="visa-income-card__region">Everywhere else</div>
+          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierNonCapitalArea }} × GNI</div></div>
+        </div>
+      </div>
+      {% endfor %}
+      <div class="visa-income-card">
+        <div class="visa-income-card__head">Bringing family<div class="visa-income-card__head-note">Spouse or minor children, any age</div></div>
+        <div class="visa-income-card__row">
+          <div class="visa-income-card__region">Capital region</div>
+          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI</div></div>
+        </div>
+        <div class="visa-income-card__row">
+          <div class="visa-income-card__region">Everywhere else</div>
+          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="visa-income-footnotes">
+      <div>Check the multiple, not the won amount — the Bank of Korea publishes a new GNI figure each year.</div>
+      <div>Bringing family applies the family row whatever your age.</div>
+    </div>
+    <a href="/#calculator" class="visa-inline-link">Eligibility calculator →</a>
+  </section>
+
+  <section id="documents" class="visa-section">
+    <div class="visa-section__head">
+      <span class="visa-section__tick" aria-hidden="true"></span>
+      <h2>Documents</h2>
+    </div>
+    <p class="visa-body">The published list. An embassy or consulate may add to it, or drop parts of it, to check the purpose of your stay — ask the one that covers you before you start gathering.</p>
+
+    <div class="visa-doc-grid">
+      <div class="visa-doc-card">
+        <div class="visa-doc-card__title">General</div>
+        <div class="visa-doc-card__list">
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Application form (Form 17)</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Passport</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>One standard-format photograph</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Application fee</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Criminal record certificate</span></div>
+        </div>
+      </div>
+      <div class="visa-doc-card">
+        <div class="visa-doc-card__title">For this visa</div>
+        <div class="visa-doc-card__list">
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Certificate of employment, stating a year or more in the same industry</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof of income — payslips, a bank balance certificate or similar</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Certificate of medical insurance</span></div>
+        </div>
+      </div>
+      <div class="visa-doc-card">
+        <div class="visa-doc-card__title">Only if it applies to you</div>
+        <div class="visa-doc-card__list">
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Family relationship documents, if a spouse or children come with you</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof that you will stay outside the capital region or in a population-declined area — a lease of one month or longer, or a booking confirmation from a workation facility or accommodation</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="notes" class="visa-section">
+    <div class="visa-section__head">
+      <span class="visa-section__tick" aria-hidden="true"></span>
+      <h2>Important notes</h2>
+    </div>
+    <p class="visa-body">Five points the published rules leave open. Two sit with the Ministry of Justice; the rest need a question to your embassy or a tax adviser.</p>
+
+    <div class="visa-notes-grid">
+      <div class="visa-note-card">
+        <div class="visa-note-card__meta">
+          <span class="visa-note-card__tag">Income</span>
+          <span class="visa-note-card__status">Awaiting the ministry</span>
+        </div>
+        <div class="visa-note-card__title">Gross or net?</div>
+        <div class="visa-note-card__body">The rule names a won figure without saying whether it is before or after tax.</div>
+      </div>
+      <div class="visa-note-card">
+        <div class="visa-note-card__meta">
+          <span class="visa-note-card__tag">Regions</span>
+          <span class="visa-note-card__status">Awaiting the ministry</span>
+        </div>
+        <div class="visa-note-card__title">Which areas count as declined?</div>
+        <div class="visa-note-card__body">Declined and watch-list areas are both named, without saying whether they are treated alike.</div>
+      </div>
+      <div class="visa-note-card">
+        <div class="visa-note-card__meta">
+          <span class="visa-note-card__tag">Residence</span>
+          <span class="visa-note-card__status">Ask the embassy</span>
+        </div>
+        <div class="visa-note-card__title">What proof of stay is enough?</div>
+        <div class="visa-note-card__body">A one-month lease or a booking are the examples given, but the visa runs a year.</div>
+      </div>
+      <div class="visa-note-card">
+        <div class="visa-note-card__meta">
+          <span class="visa-note-card__tag">Insurance</span>
+          <span class="visa-note-card__status">Ask the embassy</span>
+        </div>
+        <div class="visa-note-card__title">Will you pay twice?</div>
+        <div class="visa-note-card__body">Six months of residence means joining national health insurance, while private cover stays required.</div>
+      </div>
+      <div class="visa-note-card">
+        <div class="visa-note-card__meta">
+          <span class="visa-note-card__tag">Tax</span>
+          <span class="visa-note-card__status">Ask a tax adviser</span>
+        </div>
+        <div class="visa-note-card__title">Will you owe Korean tax?</div>
+        <div class="visa-note-card__body">Over 183 days generally means declaring income, but separate provisions can exempt foreign residents. Ask a tax adviser or the <a href="{{ visaRules.natlTaxServiceUrl }}" target="_blank" rel="noopener">National Tax Service ↗</a>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions" class="visa-section">
+    <div class="visa-section__head">
+      <span class="visa-section__tick" aria-hidden="true"></span>
+      <h2>Questions</h2>
+    </div>
+
+    <div class="visa-faq">
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Should I get a residence card?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">It isn’t optional — anyone staying over 90 days must register and receive one. It is also what makes a bank account, a lease and a phone contract possible. Register after you arrive.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Can I work for a Korean company?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">No. Employment and profit-making activity in Korea are restricted on this visa, including local clients and running a business. A Korean employer needs a different status.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Am I eligible as a freelancer?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">The published rule asks for a year of employment at an overseas company, evidenced by an employment certificate and payslips. It doesn’t address freelancers or the self-employed, so ask the embassy handling your application.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Does this time count toward permanent residence?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">Unknown. The published rules are silent, and the secondhand claims we’ve seen aren’t verified. Ask the embassy handling your application.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Can I switch from a tourist visa?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">Yes. On B-1, B-2 or C-3, if you meet the requirements, you can change status inside Korea. Otherwise apply at an embassy or consulate abroad.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Can my family come with me?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">A spouse and minor children can. It raises your income requirement to 2 × GNI in the capital region and 1.5 × elsewhere, whatever your age.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Do I need this visa just to visit Korea?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">Not for a short trip. Visa-free entry, K-ETA and short-term visas are separate categories and depend on your nationality. This visa is for living here long-term.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Which nationalities can apply?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">There is no country list — this isn’t a bilateral scheme. But some embassies accept applications only from citizens or residents of the country they serve. Check which one covers you.</div>
+      </details>
+    </div>
+  </section>
+
+  <section id="links" class="visa-section">
+    <div class="visa-section__head">
+      <span class="visa-section__tick" aria-hidden="true"></span>
+      <h2>Useful links</h2>
+    </div>
+    <div class="visa-links-intro">Most of these are sources for this page.</div>
+
+    <div class="visa-links-panel">
+      {% for group in visaRules.usefulLinks %}
+      <div class="visa-links-group">
+        <div class="visa-links-group__title">{{ group.title }}</div>
+        {% for link in group.links %}
+        <div class="visa-link-block">
+          <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
+          <span class="visa-source">{{ link.source }}</span>
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
 </div>
