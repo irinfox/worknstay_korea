@@ -294,7 +294,7 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
         {% for link in group.links %}
         <div class="visa-link-block">
           <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
-          <span class="visa-source">{{ link.source }}</span>
+          <span class="visa-source">{{ link.source }}{% if link.date %} · {{ link.date }}{% endif %}</span>
         </div>
         {% endfor %}
       </div>

@@ -236,7 +236,7 @@ ul.about-hero__chips {
 .settling-hero__ko {
   font-family: var(--font-family-ko);
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--color-text-muted);
 }
 
@@ -1153,7 +1153,7 @@ ul.about-hero__chips {
 .visa-hero__ko {
   font-family: var(--font-family-ko);
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
   color: var(--color-text-muted);
   text-wrap: pretty;
 }
@@ -1291,7 +1291,7 @@ ul.about-hero__chips {
   border: 1px solid var(--color-border);
   border-radius: 10px;
   font-size: 13.5px;
-  box-shadow: 0 1px 3px rgba(22, 32, 28, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .visa-contents__links {
@@ -1320,6 +1320,10 @@ ul.about-hero__chips {
   flex: 0 0 auto;
 }
 
+.visa-contents__links a:hover {
+  text-decoration: underline;
+}
+
 .visa-contents__top {
   flex: 0 0 auto;
   display: inline-flex;
@@ -1332,6 +1336,11 @@ ul.about-hero__chips {
   text-decoration: none;
   background: var(--color-surface);
   border-radius: 0 10px 10px 0;
+}
+
+.visa-contents__top:hover {
+  color: var(--color-text-soft);
+  text-decoration: underline;
 }
 
 .visa-contents__top-icon {
@@ -1409,7 +1418,7 @@ ul.about-hero__chips {
 
 .visa-section__tick {
   width: 3px;
-  height: 14px;
+  height: 15px;
   background: var(--color-accent-rule);
 }
 
@@ -1432,10 +1441,6 @@ ul.about-hero__chips {
 @media (min-width: 1024px) {
   .visa-section {
     gap: 20px;
-  }
-
-  .visa-section__tick {
-    height: 15px;
   }
 }
 
@@ -1681,6 +1686,11 @@ ul.about-hero__chips {
   font-size: 14.5px;
   font-weight: 500;
   color: var(--color-primary);
+  text-decoration: none;
+}
+
+.visa-inline-link:hover {
+  text-decoration: underline;
 }
 
 @media (min-width: 768px) {

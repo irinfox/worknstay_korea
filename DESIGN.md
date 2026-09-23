@@ -29,8 +29,20 @@ in the repo and is not maintained.
 Two accent colours only. Green = ours / easier / in-site. Orange = external / stricter / seasonal.
 Filled badge pills are exempt: they read as labels, not links, so they keep their semantic colour
 (green long-term / orange current).
-Arrows follow colour: `→` for in-site, `↗` for outbound. `‹ ›` are reserved for stepper
-navigation (galleries, pagers) — never for links, so the two read as distinct affordances.
+**Links.** Outbound (`target="_blank"`) is always underlined + `↗`, hover-darkening to `#A8450F`
+— one rule in any context, position doesn't change it. In-site links have no built-in "leaves the
+page" signal, so treatment depends on where they sit:
+- Inline (mid-sentence): underlined, no arrow.
+- Standalone (own line — `Visa info →`, `Open Gangwon-do →`): no underline, `→`.
+- Navigation row (dark nav, jump strips, footer, prev/next): no underline, no arrow — except
+  prev/next, which uses `← →` for direction.
+
+Hover: in-site links darken to `#0B5C3F`; standalone/navigation-row links also gain an underline
+(inline already has one) — except the dark nav (see below). `‹ ›` stay reserved for stepper
+navigation (galleries, pagers), never for links.
+
+Grey utility controls (`Clear`, `Top`) aren't content links, so they skip the green/orange system
+entirely: muted at rest, hover always darkens toward ink `#33443C`, never green.
 One tint band per page at most. Panel `#F7F9F8` is a component fill (cards, strips, map ground)
 and does not count as a page tone.
 
@@ -76,9 +88,10 @@ One Google Fonts request, exactly this:
 - Form label: 13px / 500 / `#33443C`, 7px above its input
 - Form input: ≥16px (below that iOS Safari zooms on focus)
 - Caption, source, address: 12–13px, `#5C6660`
-- Festival status chip: 11px / 600 / uppercase with letter-spacing — the one place type goes
-  below 12px, because all-caps at 11px reads larger than its nominal size.
-- Sentence case everywhere. All-caps only in the festival status chips. Lowercase is fine in
+- Status chip: 11px / 600 / uppercase with letter-spacing — the one place type goes below 12px
+  (all-caps at 11px reads larger than its size). Used for festival THIS MONTH/LONG-TERM and
+  note-card category tags (visa-info Important notes).
+- Sentence case everywhere. All-caps only in the 11px status chip above. Lowercase is fine in
   tags and pills (`spicy`, `surf`) — they are labels, not sentences.
 
 ## Geometry
@@ -125,9 +138,10 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
 
 ## Recurring parts
 
-- **Dark nav** `#16201C`, wordmark "worknstay korea" with site icon, links at 75% white,
-  active item white with a 2px `#E08A2E` underline. Items: Regions · Visa info · Settling in · About.
-  "Regions" links to `/#map`, not `/`. The wordmark is the home link and stays clickable on the homepage.
+- **Dark nav** `#16201C`, wordmark "worknstay korea" with site icon, links at 75% white, active
+  item white with a 2px `#E08A2E` underline. Nav-item hover: brightens to white, no underline (its
+  border already marks "current"). Wordmark is the home link, clickable on the homepage; no hover
+  state — unchanged from rest, not treated as a link.
 - **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" → `/#map`.
 - **Headline block**: orange 56×3 rule → H1 → Korean name → vibe tags → intro paragraphs.
 - **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, radius 22px. 14–15px/500
@@ -140,10 +154,15 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   width, exempt from the ~70ch body cap (a capped line in a full-width plate reads as a layout
   bug). Past ~3 lines it's body copy: pull it out of the plate or cap it at the measure.
   Green tint + green border for "easier"; amber `#F7EAD9` + `#E08A2E` border for "stricter".
-- **Source line**: 12–13px `#5C6660`, always dated, at the foot of the block it describes.
+  In a card grid (visa-info Important notes), the plate is border-only instead, no tint — its
+  card already carries a tinted status chip (above); a lone aside stays tinted.
+- **Source line**: 12–13px `#5C6660`, at the foot of the block it describes. Dated for a guide,
+  article, or notice/press release; domain-only (no date) for an evergreen service or portal
+  with no publish date to report.
 - **Section tick**: 3×15px orange bar before a small heading (Guides, Where to work).
-- **Korean name**: inline beside the title where there is room (page H1, city-card heading,
-  baseline-aligned); on its own line in narrow cards. Placement follows width, not page.
+- **Korean name / term**: 400 weight outside festival cards. *Name* (region, city, place, dish)
+  — inline beside the title, baseline-aligned, wrapping only under width pressure. *Term* (a
+  guide page's title — Visa info, Settling in) — own line under the H1, muted ink, every width.
 - **Region prev/next**: the six region pages only — never on the homepage, static pages, or the
   decline-designated counties page (not a region, not in the cycle). Own band at the end of the
   page content, prev at the left container edge, next at the right, 32px clear of the footer text.
@@ -235,7 +254,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   at just under half the distance to its nearest neighbour instead — don't enlarge past that to
   "fix" it. Reference example: the region map's ski/surf pins, region-detail-map.css.
 - Reserve height for anything that changes length (paginated lists, carousels) — no reflow jumps.
-- Nothing below 12px, except the 11px uppercase festival status chip.
+- Nothing below 12px, except the 11px uppercase status chip.
 
 ## Never
 

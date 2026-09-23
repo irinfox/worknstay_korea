@@ -54,7 +54,7 @@
     {
       "title": "The rules",
       "links": [
-        { "label": "Digital nomad (workation) visa notice", "url": "https://www.immigration.go.kr/immigration/1502/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW1taWdyYXRpb24lMkYyMTQlMkY2MDgyOTQlMkZhcnRjbFZpZXcuZG8lM0Y%3D", "source": "immigration.go.kr" },
+        { "label": "Digital nomad (workation) visa notice", "url": "https://www.immigration.go.kr/immigration/1502/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW1taWdyYXRpb24lMkYyMTQlMkY2MDgyOTQlMkZhcnRjbFZpZXcuZG8lM0Y%3D", "source": "immigration.go.kr", "date": "July 2026" },
         { "label": "Full visa and status list (KR)", "url": "https://www.hikorea.go.kr/board/BoardNtcDetailR.pt?BBS_SEQ=1&BBS_GB_CD=BS10&NTCCTT_SEQ=1062&page=1", "source": "hikorea.go.kr" },
         { "label": "Population-declined areas (KR)", "url": "https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do", "source": "mois.go.kr" }
       ]
