@@ -38,6 +38,7 @@
     "minApplicantAge": 18,
     "minApplicantAgeExemption": "Accompanying minor children are exempt from the age-18 minimum",
     "healthInsuranceMinCoverageKrw": 100000000,
+    "entryType": "Multiple entry",
     "initialStayYears": 1,
     "extensionIncrementYears": 1,
     "maxStayYears": 3,
@@ -49,26 +50,29 @@
     "nonCapitalDefinitionNote": "\"Non-capital area\" for visa purposes includes areas officially designated as population-decrease (인구감소관심지역), even when they sit administratively inside a capital-tier province — see populationDeclineAreas.json (list not yet sourced)."
   },
   "natlTaxServiceUrl": "https://www.nts.go.kr/english/main.do",
+  "nhisUrl": "https://www.nhis.or.kr/english/wbheaa02900m01.do",
+  "foreignIncomeTaxRuleUrl": "https://taxsummaries.pwc.com/republic-of-korea/individual/taxes-on-personal-income",
+  "immigrationContactCenterPhone": "1345",
   "usefulLinks": [
     {
-      "title": "The rules",
+      "title": "Rules",
       "links": [
-        { "label": "Digital nomad (workation) visa notice", "url": "https://www.immigration.go.kr/immigration/1502/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW1taWdyYXRpb24lMkYyMTQlMkY2MDgyOTQlMkZhcnRjbFZpZXcuZG8lM0Y%3D", "source": "immigration.go.kr", "date": "July 2026" },
+        { "label": "Digital nomad (workation) visa notice (KR)", "url": "https://www.immigration.go.kr/immigration/1502/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW1taWdyYXRpb24lMkYyMTQlMkY2MDgyOTQlMkZhcnRjbFZpZXcuZG8lM0Y%3D", "source": "immigration.go.kr", "date": "July 2026" },
         { "label": "Full visa and status list (KR)", "url": "https://www.hikorea.go.kr/board/BoardNtcDetailR.pt?BBS_SEQ=1&BBS_GB_CD=BS10&NTCCTT_SEQ=1062&page=1", "source": "hikorea.go.kr" },
-        { "label": "Population-declined areas (KR)", "url": "https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do", "source": "mois.go.kr" }
+        { "label": "Population-decline area designation (KR)", "url": "https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do", "source": "mois.go.kr" }
       ]
     },
     {
-      "title": "Forms and paperwork",
+      "title": "Forms and tools",
       "links": [
-        { "label": "Official application forms", "url": "https://www.hikorea.go.kr/board/BoardApplicationListR.pt", "source": "hikorea.go.kr" },
-        { "label": "Hancom Docs", "url": "https://www.hancomdocs.com/", "source": "hancomdocs.com · Hancom makes the .hwp format Korean government files use — this opens .hwp and .hwpx" }
+        { "label": "Official application forms", "url": "https://www.hikorea.go.kr/board/BoardApplicationListR.pt?page=1", "source": "hikorea.go.kr" },
+        { "label": "Official office for Korean HWP/HWPX files", "url": "https://www.hancomdocs.com/", "source": "hancomdocs.com" }
       ]
     },
     {
-      "title": "Once you are here",
+      "title": "Korean services",
       "links": [
-        { "label": "National Tax Service", "url": "https://www.nts.go.kr/english/main.do", "source": "nts.go.kr" },
+        { "label": "Korean Tax Service", "url": "https://www.nts.go.kr/english/main.do", "source": "nts.go.kr" },
         { "label": "National Health Insurance Service", "url": "https://www.nhis.or.kr/english/wbheaa02900m01.do", "source": "nhis.or.kr" }
       ]
     }

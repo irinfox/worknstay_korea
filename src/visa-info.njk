@@ -10,8 +10,8 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <span class="visa-hero__rule" aria-hidden="true"></span>
       <h1>Digital Nomad visa</h1>
       <div class="visa-hero__ko">{{ visaRules.nameKo }}</div>
-      <p class="visa-hero__intro">For people employed by a company outside Korea in a role they can do remotely, and their spouse and minor children.</p>
-      <p class="visa-hero__note">Piloted from January 2024, permanent since 30 June 2026. The permanent rules lowered the income threshold for applicants under 35 and for those living outside the capital region, and raised the maximum stay from two years to three.</p>
+      <p class="visa-hero__intro">A visa designed for employees of overseas companies who can work remotely.</p>
+      <p class="visa-hero__note">Introduced as a pilot in January 2024, the visa became permanent on 30 June 2026. The permanent visa rules lowered the income threshold for applicants under 35 or those staying outside the capital region, and extended the maximum stay from two years to three.</p>
       <div class="visa-hero__updated">Last updated: {{ visaRules.lastUpdated }}</div>
     </div>
 
@@ -19,6 +19,10 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <div class="visa-facts__row">
         <div class="visa-facts__label">Status code</div>
         <div class="visa-facts__value visa-facts__value--tabular">{{ visaRules.statusCode }}</div>
+      </div>
+      <div class="visa-facts__row">
+        <div class="visa-facts__label">Entry type</div>
+        <div class="visa-facts__value">{{ visaRules.additionalFacts.entryType }}</div>
       </div>
       <div class="visa-facts__row">
         <div class="visa-facts__label">Period of stay</div>
@@ -58,7 +62,7 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <span class="visa-section__tick" aria-hidden="true"></span>
       <h2>Eligibility</h2>
     </div>
-    <p class="visa-body">All of the following are required, as published by the Ministry of Justice.</p>
+    <p class="visa-body">The visa is available to applicants who meet all of the following requirements.</p>
 
     <div class="visa-checklist">
       <div class="visa-checklist__item">
@@ -67,19 +71,19 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       </div>
       <div class="visa-checklist__item">
         <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <div class="visa-checklist__text"><span class="visa-checklist__title">Employed by a company outside Korea, in a role you can do remotely</span></div>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Employed by a company outside Korea and able to work remotely</span></div>
       </div>
       <div class="visa-checklist__item">
         <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <div class="visa-checklist__text"><span class="visa-checklist__title">One year or more in the same industry</span></div>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">At least one year in the same industry</span></div>
       </div>
       <div class="visa-checklist__item">
         <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <div class="visa-checklist__text"><span class="visa-checklist__title">Private medical insurance</span><span class="visa-checklist__detail"> — at least ₩100M of cover for hospital treatment and repatriation, valid for the whole stay.</span></div>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Private medical insurance</span><span class="visa-checklist__detail"> — at least ₩100M of cover valid for the whole stay.</span></div>
       </div>
       <div class="visa-checklist__item">
         <svg class="visa-checklist__icon" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true"><path d="M2.5 8.2l3.2 3.1L12.5 4" stroke="#0F7B54" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-        <div class="visa-checklist__text"><span class="visa-checklist__title">Income above the threshold</span><span class="visa-checklist__detail"> — depends on your age and region, see below.</span></div>
+        <div class="visa-checklist__text"><span class="visa-checklist__title">Income requirement</span><span class="visa-checklist__detail"> — the threshold depends on your age and region of stay; see below.</span></div>
       </div>
     </div>
 
@@ -87,31 +91,31 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <span class="visa-subhead__tick" aria-hidden="true"></span>
       <h3>Income by age and region</h3>
     </div>
-    <p class="visa-body">A multiple of Korea’s per-capita gross national income for the year before you apply. Figures below use the {{ visaRules.gniReferenceYear }} GNI of ₩{{ visaRules.gniPerCapitaKrw | krw }}.</p>
+    <p class="visa-body">Income thresholds are set as a multiple of Korea’s per-capita GNI for the year before application. For {{ visaRules.gniReferenceYear }}, the GNI reference figure is ₩{{ visaRules.gniPerCapitaKrw | krw }}.</p>
 
-    <div class="visa-income-note">Capital region means Seoul, Incheon and Gyeonggi-do, excluding population-declined areas.</div>
+    <div class="visa-income-note">Capital area means Seoul, Incheon and Gyeonggi-do, excluding decline-designated counties.</div>
 
     <div class="visa-income-table-wrap">
       <table class="visa-income-table">
         <thead>
           <tr>
             <th scope="col"></th>
-            <th scope="col">Capital region<div class="visa-income-table__subhead">Seoul, Incheon, Gyeonggi-do — excluding population-declined areas</div></th>
-            <th scope="col">Everywhere else<div class="visa-income-table__subhead">All other regions, plus population-declined areas</div></th>
+            <th scope="col">Capital area<div class="visa-income-table__subhead">Seoul, Incheon, Gyeonggi-do — excluding decline-designated counties</div></th>
+            <th scope="col">Elsewhere<div class="visa-income-table__subhead">Other regions, plus Gyeonggi-do decline-designated counties</div></th>
           </tr>
         </thead>
         <tbody>
           {% for band in visaRules.ageBands %}
           <tr>
             <td>{% if band.maxAge %}Age {{ band.minAge }}–{{ band.maxAge }}{% else %}Age {{ band.minAge }} and over{% endif %}</td>
-            <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierCapitalArea }} × GNI</div></td>
-            <td>₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierNonCapitalArea }} × GNI</div></td>
+            <td>{{ band.multiplierCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}</div></td>
+            <td>{{ band.multiplierNonCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}</div></td>
           </tr>
           {% endfor %}
           <tr class="visa-income-table__family">
-            <td>Bringing family<div class="visa-income-table__submeta">Spouse or minor children, any age</div></td>
-            <td>₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI</div></td>
-            <td>₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI</div></td>
+            <td>Bringing family<div class="visa-income-table__submeta">Spouse or minor children</div></td>
+            <td>{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}</div></td>
+            <td>{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}</div></td>
           </tr>
         </tbody>
       </table>
@@ -122,31 +126,31 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <div class="visa-income-card">
         <div class="visa-income-card__head">{% if band.maxAge %}Age {{ band.minAge }}–{{ band.maxAge }}{% else %}Age {{ band.minAge }} and over{% endif %}</div>
         <div class="visa-income-card__row">
-          <div class="visa-income-card__region">Capital region</div>
-          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierCapitalArea }} × GNI</div></div>
+          <div class="visa-income-card__region">Capital area</div>
+          <div class="visa-income-card__amount">{{ band.multiplierCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[band.multiplierCapitalArea] | krw }}</div></div>
         </div>
         <div class="visa-income-card__row">
-          <div class="visa-income-card__region">Everywhere else</div>
-          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ band.multiplierNonCapitalArea }} × GNI</div></div>
+          <div class="visa-income-card__region">Elsewhere</div>
+          <div class="visa-income-card__amount">{{ band.multiplierNonCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[band.multiplierNonCapitalArea] | krw }}</div></div>
         </div>
       </div>
       {% endfor %}
       <div class="visa-income-card">
-        <div class="visa-income-card__head">Bringing family<div class="visa-income-card__head-note">Spouse or minor children, any age</div></div>
+        <div class="visa-income-card__head">Bringing family<div class="visa-income-card__head-note">Spouse or minor children</div></div>
         <div class="visa-income-card__row">
-          <div class="visa-income-card__region">Capital region</div>
-          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI</div></div>
+          <div class="visa-income-card__region">Capital area</div>
+          <div class="visa-income-card__amount">{{ visaRules.familyMultiplier.multiplierCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierCapitalArea] | krw }}</div></div>
         </div>
         <div class="visa-income-card__row">
-          <div class="visa-income-card__region">Everywhere else</div>
-          <div class="visa-income-card__amount">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}<div class="visa-income-table__mult">{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI</div></div>
+          <div class="visa-income-card__region">Elsewhere</div>
+          <div class="visa-income-card__amount">{{ visaRules.familyMultiplier.multiplierNonCapitalArea }} × GNI<div class="visa-income-table__mult">₩{{ visaRules.thresholdsByMultiplier[visaRules.familyMultiplier.multiplierNonCapitalArea] | krw }}</div></div>
         </div>
       </div>
     </div>
 
     <div class="visa-income-footnotes">
-      <div>Check the multiple, not the won amount — the Bank of Korea publishes a new GNI figure each year.</div>
-      <div>Bringing family applies the family row whatever your age.</div>
+      <div>The multiplier is set by the visa rules; the GNI figure is updated annually by the Bank of Korea.</div>
+      <div>The family multiplier applies regardless of your age.</div>
     </div>
     <a href="/#calculator" class="visa-inline-link">Eligibility calculator →</a>
   </section>
@@ -156,7 +160,7 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <span class="visa-section__tick" aria-hidden="true"></span>
       <h2>Documents</h2>
     </div>
-    <p class="visa-body">The published list. An embassy or consulate may add to it, or drop parts of it, to check the purpose of your stay — ask the one that covers you before you start gathering.</p>
+    <p class="visa-body">An embassy or consulate may ask for additional documents or waive some requirements. Rules on document age, translation and legalization may also vary. Double-check with the office you apply through.</p>
 
     <div class="visa-doc-grid">
       <div class="visa-doc-card">
@@ -166,22 +170,23 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
           <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Passport</span></div>
           <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>One standard-format photograph</span></div>
           <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Application fee</span></div>
-          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Criminal record certificate</span></div>
         </div>
       </div>
       <div class="visa-doc-card">
         <div class="visa-doc-card__title">For this visa</div>
         <div class="visa-doc-card__list">
-          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Certificate of employment, stating a year or more in the same industry</span></div>
-          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof of income — payslips, a bank balance certificate or similar</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof of overseas employment or overseas business ownership</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof of at least one year of relevant work experience</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Income proof — payslips, bank statements or similar</span></div>
           <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Certificate of medical insurance</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Criminal record certificate</span></div>
         </div>
       </div>
       <div class="visa-doc-card">
         <div class="visa-doc-card__title">Only if it applies to you</div>
         <div class="visa-doc-card__list">
-          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Family relationship documents, if a spouse or children come with you</span></div>
-          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof that you will stay outside the capital region or in a population-declined area — a lease of one month or longer, or a booking confirmation from a workation facility or accommodation</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Family relationship documents, if accompanied by family</span></div>
+          <div class="visa-doc-card__item"><span class="visa-doc-card__dot">·</span><span>Proof of regional stay, when applying for a lower regional multiplier</span></div>
         </div>
       </div>
     </div>
@@ -192,7 +197,7 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
       <span class="visa-section__tick" aria-hidden="true"></span>
       <h2>Important notes</h2>
     </div>
-    <p class="visa-body">Five points the published rules leave open. Two sit with the Ministry of Justice; the rest need a question to your embassy or a tax adviser.</p>
+    <p class="visa-body">A few points are still unclear in the published rules. Some need clarification from the Ministry of Justice; others require checking with other institutions.</p>
 
     <div class="visa-notes-grid">
       <div class="visa-note-card">
@@ -201,7 +206,7 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
           <span class="visa-note-card__status">Awaiting the ministry</span>
         </div>
         <div class="visa-note-card__title">Gross or net?</div>
-        <div class="visa-note-card__body">The rule names a won figure without saying whether it is before or after tax.</div>
+        <div class="visa-note-card__body">The visa notice gives a won figure but does not say whether it means gross or net income. Gross is most probable, so we used it for eligibility calculator note.</div>
       </div>
       <div class="visa-note-card">
         <div class="visa-note-card__meta">
@@ -209,31 +214,31 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
           <span class="visa-note-card__status">Awaiting the ministry</span>
         </div>
         <div class="visa-note-card__title">Which areas count as declined?</div>
-        <div class="visa-note-card__body">Declined and watch-list areas are both named, without saying whether they are treated alike.</div>
+        <div class="visa-note-card__body">The rules do not clearly say whether both decline-designated and watch-list counties in Gyeonggi-do qualify for the lower regional threshold or only counties outside Gyeonggi-do meant. The site uses the more likely interpretation.</div>
       </div>
       <div class="visa-note-card">
         <div class="visa-note-card__meta">
-          <span class="visa-note-card__tag">Residence</span>
+          <span class="visa-note-card__tag">Regional stay</span>
           <span class="visa-note-card__status">Ask the embassy</span>
         </div>
         <div class="visa-note-card__title">What proof of stay is enough?</div>
-        <div class="visa-note-card__body">A one-month lease or a booking are the examples given, but the visa runs a year.</div>
+        <div class="visa-note-card__body">The visa rules list either a lease agreement or an accommodation reservation confirmation for at least one month.</div>
       </div>
       <div class="visa-note-card">
         <div class="visa-note-card__meta">
           <span class="visa-note-card__tag">Insurance</span>
-          <span class="visa-note-card__status">Ask the embassy</span>
+          <span class="visa-note-card__status">Ask NHIS</span>
         </div>
-        <div class="visa-note-card__title">Will you pay twice?</div>
-        <div class="visa-note-card__body">Six months of residence means joining national health insurance, while private cover stays required.</div>
+        <div class="visa-note-card__title">Both private and NHI are required?</div>
+        <div class="visa-note-card__body">Six months of residence generally means <a href="{{ visaRules.nhisUrl }}" target="_blank" rel="noopener">joining National Health Insurance ↗</a>, while full-stay private insurance is required for application.</div>
       </div>
       <div class="visa-note-card">
         <div class="visa-note-card__meta">
           <span class="visa-note-card__tag">Tax</span>
           <span class="visa-note-card__status">Ask a tax adviser</span>
         </div>
-        <div class="visa-note-card__title">Will you owe Korean tax?</div>
-        <div class="visa-note-card__body">Over 183 days generally means declaring income, but separate provisions can exempt foreign residents. Ask a tax adviser or the <a href="{{ visaRules.natlTaxServiceUrl }}" target="_blank" rel="noopener">National Tax Service ↗</a>.</div>
+        <div class="visa-note-card__title">Will I owe Korean tax?</div>
+        <div class="visa-note-card__body">More than 183 days in Korea makes you a Korean tax resident. Foreign residents who have stayed in Korea less than 5 years over the past 10 years are subject to a <a href="{{ visaRules.foreignIncomeTaxRuleUrl }}" target="_blank" rel="noopener">special rule ↗</a> for foreign-source income. Ask a tax adviser or the <a href="{{ visaRules.natlTaxServiceUrl }}" target="_blank" rel="noopener">National Tax Service ↗</a>.</div>
       </div>
     </div>
   </section>
@@ -247,35 +252,43 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
     <div class="visa-faq">
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Should I get a residence card?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">It isn’t optional — anyone staying over 90 days must register and receive one. It is also what makes a bank account, a lease and a phone contract possible. Register after you arrive.</div>
+        <div class="visa-faq__a">Yes. Anyone staying in Korea for more than 91 days must register as a resident and receive a residence card within 90 days of arrival. It is commonly called an ARC and is useful for opening a bank account, getting a phone contract and signing a long-term lease.</div>
       </details>
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Can I work for a Korean company?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">No. Employment and profit-making activity in Korea are restricted on this visa, including local clients and running a business. A Korean employer needs a different status.</div>
+        <div class="visa-faq__a">No. Employment and any profit-making activities in Korea are restricted on this visa. Employment by a Korean company requires a different status. Once in Korea, for questions about profit-making activities, consult {{ visaRules.immigrationContactCenterPhone }} on your individual case.</div>
       </details>
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Am I eligible as a freelancer?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">The published rule asks for a year of employment at an overseas company, evidenced by an employment certificate and payslips. It doesn’t address freelancers or the self-employed, so ask the embassy handling your application.</div>
+        <div class="visa-faq__a">The published rule covers overseas business owners and people employed by overseas companies. It doesn’t address freelancers specifically. A freelancer with a registered overseas business might be eligible, check with the embassy handling your application.</div>
       </details>
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Does this time count toward permanent residence?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">Unknown. The published rules are silent, and the secondhand claims we’ve seen aren’t verified. Ask the embassy handling your application.</div>
+        <div class="visa-faq__a">The published F‑1‑D visa rules do not address this. Ask the Immigration Contact Center ({{ visaRules.immigrationContactCenterPhone }}) or the embassy handling your case.</div>
       </details>
       <details class="visa-faq__item">
-        <summary class="visa-faq__summary"><span class="visa-faq__q">Can I switch from a tourist visa?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">Yes. On B‑1, B‑2 or C‑3, if you meet the requirements, you can change status inside Korea. Otherwise apply at an embassy or consulate abroad.</div>
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Can I switch from another visa while in Korea?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">Yes. If you meet the requirements, the published rules explicitly allow a change of status from B‑1, B‑2 or C‑3, and may allow changes from other statuses as well. Check your case with the Immigration Contact Center ({{ visaRules.immigrationContactCenterPhone }}) and use form 34 to apply.</div>
       </details>
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Can my family come with me?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">A spouse and minor children can. It raises your income requirement to 2 × GNI in the capital region and 1.5 × elsewhere, whatever your age.</div>
+        <div class="visa-faq__a">Yes. A spouse and minor children can accompany you. This raises the required GNI multiplier to 2 × in the capital area and 1.5 × elsewhere, regardless of your age.</div>
       </details>
       <details class="visa-faq__item">
-        <summary class="visa-faq__summary"><span class="visa-faq__q">Do I need this visa just to visit Korea?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">Not for a short trip. Visa-free entry, K-ETA and short-term visas are separate categories and depend on your nationality. This visa is for living here long-term.</div>
+        <summary class="visa-faq__summary"><span class="visa-faq__q">Do I need this visa to visit Korea?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">No. Depending on your nationality, you may be able to visit with K-ETA or a short-term visa. The F‑1‑D visa allows eligible remote workers to stay longer, for up to three years. If you plan to work remotely while on a short-stay status, consult the Immigration Contact Center ({{ visaRules.immigrationContactCenterPhone }}).</div>
       </details>
       <details class="visa-faq__item">
         <summary class="visa-faq__summary"><span class="visa-faq__q">Which nationalities can apply?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
-        <div class="visa-faq__a">There is no country list — this isn’t a bilateral scheme. But some embassies accept applications only from citizens or residents of the country they serve. Check which one covers you.</div>
+        <div class="visa-faq__a">There is no separate country list for the F‑1‑D, unlike the Working Holiday (H-1) visa, which is based on agreements with participating countries.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">What insurance should I get?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">It should be private medical insurance covering at least ₩100M for hospital treatment and repatriation to the home country during your full stay.</div>
+      </details>
+      <details class="visa-faq__item">
+        <summary class="visa-faq__summary"><span class="visa-faq__q">How do I prepare a criminal record certificate?</span><span class="visa-faq__chevron" aria-hidden="true"></span></summary>
+        <div class="visa-faq__a">Generally, it should be legalized (apostilled or consular legalization), accompanied by a notarized translation, and issued within the previous 6 months. Rules may vary depending on your application embassy and the countries where you have lived.</div>
       </details>
     </div>
   </section>
