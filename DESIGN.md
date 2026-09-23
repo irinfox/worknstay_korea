@@ -167,6 +167,14 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   decline-designated counties page (not a region, not in the cycle). Own band at the end of the
   page content, prev at the left container edge, next at the right, 32px clear of the footer text.
   One rule at most — separate it from the footer with space, not a second hairline.
+- **Page contents strip**: sticky sub-nav (`top: 12px`) — section links plus a `Top` link. Section
+  targets get `scroll-margin-top` sized to the strip, so a jump (click, keyboard, or a direct
+  `#hash` load) clears it instead of landing underneath. Nothing underlined and `Top` hidden until
+  the strip sticks to the viewport top; from then, the link for whichever section has crossed 40%
+  of viewport height underlines, the last link wins within ~4px of the true page bottom (covers a
+  short final section like Useful links), and a click pins its own link (or nothing, for `Top`)
+  until the visitor scrolls again under their own power. `Top` scrolls to the true page top (y:0),
+  not just the content start.
 
 ## Page order (region page — both viewports identical)
 
