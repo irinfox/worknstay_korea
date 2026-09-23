@@ -1090,8 +1090,11 @@ ul.about-hero__chips {
    .content-page reading width visa-info.njk used to share with the region-header/-section
    classes — that legacy block was removed above). Headline + tinted facts panel → sticky
    contents strip → Eligibility (+ income table/cards) → Documents → Important notes →
-   Questions (FAQ) → Useful links. Single breakpoint at 900px: base rules below are the phone
-   frame (design reference's ≤900 spec), overridden for desktop at min-width:900px. */
+   Questions (FAQ) → Useful links. Single breakpoint at 1024px (--bp-desktop): base rules below
+   are the phone frame, overridden for desktop at min-width:1024px. The design reference used
+   900px throughout; moved to 1024 to match DESIGN.md's documented structural threshold ("multi-
+   column layouts hold to 1024, then collapse") — the reference value collapsed the notes grid's
+   fixed 3-column layout before 1024, which DESIGN.md doesn't allow. */
 
 .visa-page {
   max-width: var(--content-max-width);
@@ -1101,20 +1104,28 @@ ul.about-hero__chips {
   gap: 26px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-page {
-    gap: 38px;
+    gap: 36px;
   }
 }
 
-/* Headline + facts panel — auto-fit grid stacks the two below ~720px combined width, wraps to
-   two columns above it, independent of the 900px breakpoint used for the row-layout switch
-   inside .visa-facts itself. */
+/* Headline + facts panel — same split as region pages' .region-header--split (region-page.css):
+   single column below 900px, 1.35fr:1fr above it, 40px gap. Copied exactly rather than
+   approximated, so .visa-facts renders at the same width as .threshold-card/.rent-summary at any
+   given viewport. */
 .visa-hero {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-  gap: 26px 40px;
+  grid-template-columns: 1fr;
+  gap: 24px;
   align-items: start;
+}
+
+@media (min-width: 900px) {
+  .visa-hero {
+    grid-template-columns: 1.35fr 1fr;
+    gap: 40px;
+  }
 }
 
 .visa-hero__main {
@@ -1168,7 +1179,7 @@ ul.about-hero__chips {
   margin-top: 8px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-hero__main {
     gap: 8px;
   }
@@ -1208,9 +1219,11 @@ ul.about-hero__chips {
   }
 }
 
-/* Tinted facts panel — DESIGN.md palette Green tint (#EAF4EF bg / #C9E3D6 border). Phone: label
-   over value, stacked. Desktop: label left, value right, baseline-aligned — same "row layout
-   flips at 900px" swap called out in the design reference for this component specifically. */
+/* Tinted facts panel — DESIGN.md palette Green tint (#EAF4EF bg / #C9E3D6 border). Label left,
+   value right, baseline-aligned, at every width — no stacked/mobile mode. Matches the sitewide
+   precedent for this exact shape: .threshold-card__table (population-decline-counties.njk) and
+   the rent-summary card (region.njk) are both unconditional flex rows, label wrapping to a second
+   line at the very narrowest widths rather than switching to a stacked layout. */
 .visa-facts {
   display: flex;
   flex-direction: column;
@@ -1223,8 +1236,10 @@ ul.about-hero__chips {
 
 .visa-facts__row {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
   padding: 11px 0;
   border-top: 1px solid var(--color-primary-tint-border-soft);
 }
@@ -1247,6 +1262,7 @@ ul.about-hero__chips {
 .visa-facts__value-main {
   font-size: 15px;
   font-weight: 600;
+  text-align: right;
 }
 
 .visa-facts__value-note {
@@ -1258,41 +1274,13 @@ ul.about-hero__chips {
   font-variant-numeric: tabular-nums;
 }
 
-@media (min-width: 900px) {
-  .visa-facts {
-    padding: 17px 22px;
-  }
-
-  .visa-facts__row {
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 18px;
-  }
-
-  .visa-facts__label {
-    font-size: 14px;
-  }
-
-  .visa-facts__value,
-  .visa-facts__value-main {
-    font-size: 14px;
-    text-align: right;
-  }
-
-  .visa-facts__value-note {
-    font-size: 13px;
-    margin-top: 1px;
-  }
-}
-
 /* Sticky contents strip. Phone: a single scrolling row of abbreviated labels with a fixed "Top"
    button divided off at the right (its own non-scrolling flex sibling, not part of the scroll
    area). Desktop: the same two elements, but .visa-contents__links becomes `display:contents` so
    its link children rejoin .visa-contents' own flex-wrap row and Top is pushed right by
    margin-left:auto — same DOM, no markup duplication between breakpoints. Section headings stay
    spelled out (DESIGN.md/reference instruction) — only this strip abbreviates, via paired
-   full/short spans toggled by the same 900px breakpoint. */
+   full/short spans toggled by the same 1024px breakpoint. */
 .visa-contents {
   position: sticky;
   top: 12px;
@@ -1365,7 +1353,12 @@ ul.about-hero__chips {
   display: none;
 }
 
-@media (min-width: 900px) {
+/* This one component gets its own (lower) breakpoint rather than the page's 1024px: the desktop
+   row (full labels + Top, one line) fits comfortably well under tablet width — holding it to
+   1024 left the phone-style scrolling/space-between strip stretched thin across a mostly-empty
+   tablet-width row. --bp-tablet (768px) is the nearest already-documented threshold that clears
+   the content's actual fit point, so it's reused here instead of a new magic number. */
+@media (min-width: 768px) {
   .visa-contents {
     flex-wrap: wrap;
     align-items: center;
@@ -1421,37 +1414,28 @@ ul.about-hero__chips {
 }
 
 .visa-section h2 {
-  font-size: 19px;
+  font-size: 21px;
   font-weight: 600;
   letter-spacing: -0.015em;
   margin: 0;
 }
 
 .visa-body {
-  font-size: 14.5px;
-  line-height: 1.65;
+  font-size: 15px;
+  line-height: 1.7;
   margin: 0;
   color: var(--color-text-soft);
+  max-width: 66ch;
   text-wrap: pretty;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-section {
     gap: 20px;
   }
 
   .visa-section__tick {
     height: 15px;
-  }
-
-  .visa-section h2 {
-    font-size: 21px;
-  }
-
-  .visa-body {
-    font-size: 15px;
-    line-height: 1.7;
-    max-width: 66ch;
   }
 }
 
@@ -1479,7 +1463,7 @@ ul.about-hero__chips {
   margin: 0;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-subhead {
     margin-top: 12px;
     padding-bottom: 10px;
@@ -1532,7 +1516,7 @@ ul.about-hero__chips {
   color: var(--color-text-soft);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-checklist__item {
     gap: 12px;
     padding: 14px 20px;
@@ -1551,10 +1535,12 @@ ul.about-hero__chips {
   }
 }
 
-/* Income table — structural swap at 900px (matches the design reference's own phone/desktop
-   split for this component): a muted one-line region definition + three stacked cards on phone,
-   a real table with a two-line column header on desktop. Both markups always render; CSS alone
-   picks which is visible, same technique as settling-in.njk's price-snapshot table. */
+/* Income table — structural swap, own breakpoint like .visa-contents above (768px, --bp-tablet):
+   a muted one-line region definition + three stacked cards on phone, a real table with a two-line
+   column header on desktop. Both markups always render; CSS alone picks which is visible, same
+   technique as settling-in.njk's price-snapshot table — but that one holds to 1024 because its
+   table needs min-width:900px; this table only needs 660px (660+32px page padding ≈ 692px), so
+   pinning it to 1024 was borrowing settling-in's fit point rather than checking its own. */
 .visa-income-note {
   font-size: 12.5px;
   line-height: 1.55;
@@ -1640,7 +1626,7 @@ ul.about-hero__chips {
   background: var(--color-surface);
   padding: 11px 16px;
   border-bottom: 1px solid var(--color-border);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -1697,7 +1683,7 @@ ul.about-hero__chips {
   color: var(--color-primary);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 768px) {
   .visa-income-note {
     display: none;
   }
@@ -1742,7 +1728,7 @@ ul.about-hero__chips {
 }
 
 .visa-doc-card__title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -1765,14 +1751,10 @@ ul.about-hero__chips {
   color: var(--color-primary);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-doc-card {
     padding: 20px 22px;
     gap: 12px;
-  }
-
-  .visa-doc-card__title {
-    font-size: 16px;
   }
 
   .visa-doc-card__list {
@@ -1795,6 +1777,12 @@ ul.about-hero__chips {
   align-items: stretch;
 }
 
+/* Left un-tinted (border only) rather than the note-plate's usual accent-tint fill: this card
+   nests a --color-accent-tint status chip (below), and filling the whole card the same amber
+   would wash the chip out against its own background. Panel fill was also considered and
+   rejected — five simultaneous amber cards read as one loud "warning" band rather than five
+   distinct open questions, heavier than the note-plate's usual single-instance use. The rule
+   border still carries the "stricter/unresolved" signal; the chip carries the amber accent. */
 .visa-note-card {
   border: 1px solid var(--color-accent-rule);
   border-radius: 12px;
@@ -1812,15 +1800,19 @@ ul.about-hero__chips {
   flex-wrap: wrap;
 }
 
+/* Same chip as the festival "THIS MONTH" badge (event-timeline.css .event-card__badge--month) —
+   same size/weight/tracking/case/padding/radius, same accent-tint/accent colour pair. */
 .visa-note-card__tag {
   display: inline-flex;
   align-items: center;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   background: var(--color-accent-tint);
   color: var(--color-accent);
   border-radius: 20px;
-  padding: 3px 10px;
+  padding: 3px 9px;
 }
 
 .visa-note-card__status {
@@ -1829,7 +1821,7 @@ ul.about-hero__chips {
 }
 
 .visa-note-card__title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 600;
   line-height: 1.3;
 }
@@ -1843,7 +1835,7 @@ ul.about-hero__chips {
   text-wrap: pretty;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   /* Fixed 3 columns (not auto-fit) so 5 cards read as 3+2 — auto-fit's 280px min let a 1200px
      container fit 4-up, splitting the last row to a lone orphan card instead. */
   .visa-notes-grid {
@@ -1853,10 +1845,6 @@ ul.about-hero__chips {
   .visa-note-card {
     padding: 18px 20px;
     gap: 11px;
-  }
-
-  .visa-note-card__title {
-    font-size: 16px;
   }
 
   .visa-note-card__body {
@@ -1926,7 +1914,7 @@ ul.about-hero__chips {
   text-wrap: pretty;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-faq__summary {
     gap: 14px;
     padding: 17px 2px;
@@ -1950,20 +1938,27 @@ ul.about-hero__chips {
 
 /* Useful links — grouped panel, same link+source stack as settling-in.njk's
    .settling-link-block, visa-prefixed. */
+/* One-line intro under the H2 (same idea as region-page.css .region-section__sub) — but
+   .visa-section is a flex column with its own 16/20px gap, which a small negative margin can't
+   pull back to subtitle-tight, so it lands at nearly the same distance as a full .visa-body
+   paragraph instead. Pull it in to ~4px, matching .region-section__sub's actual gap. */
 .visa-links-intro {
   font-size: 13.5px;
   color: var(--color-text-muted);
-  margin-top: -4px;
+  margin-top: -12px;
 }
 
+/* Auto-fit grid, same technique as .visa-notes-grid/.visa-doc-grid: 1-up on phone, 2-up (or more,
+   container permitting) as soon as two 260px columns + gap fit — fractional columns "need no
+   checking" (DESIGN.md Geometry), so this doesn't need its own breakpoint at all. */
 .visa-links-panel {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 10px;
   padding: 16px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px 40px;
 }
 
 .visa-links-group {
@@ -1998,22 +1993,18 @@ ul.about-hero__chips {
   text-wrap: pretty;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
   .visa-links-intro {
     font-size: 14px;
-    margin-top: -6px;
+    margin-top: -16px;
   }
 
   .visa-links-panel {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 20px 40px;
     padding: 18px 20px;
   }
 
   .visa-links-group {
     gap: 12px;
-    flex: 1 1 260px;
   }
 
   .visa-link-block a {

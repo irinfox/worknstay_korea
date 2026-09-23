@@ -76,7 +76,7 @@ One Google Fonts request, exactly this:
 - Form label: 13px / 500 / `#33443C`, 7px above its input
 - Form input: ≥16px (below that iOS Safari zooms on focus)
 - Caption, source, address: 12–13px, `#5C6660`
-- Festival status chip: 11px / 500 / uppercase with letter-spacing — the one place type goes
+- Festival status chip: 11px / 600 / uppercase with letter-spacing — the one place type goes
   below 12px, because all-caps at 11px reads larger than its nominal size.
 - Sentence case everywhere. All-caps only in the festival status chips. Lowercase is fine in
   tags and pills (`spicy`, `surf`) — they are labels, not sentences.
