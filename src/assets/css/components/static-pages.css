@@ -1137,17 +1137,20 @@ ul.about-hero__chips {
 
 .visa-hero__rule {
   display: block;
-  width: 48px;
+  width: 56px;
   height: 3px;
   background: var(--color-accent-rule);
 }
 
+/* Fluid clamp (30–42px), same formula as settling-hero h1 — matches its DESIGN.md target range
+   exactly, so this page scales continuously instead of jumping at the 1024px breakpoint. */
 .visa-hero__main h1 {
-  font-size: 30px;
+  font-size: clamp(1.875rem, 1.52rem + 1.75vw, 2.625rem);
   font-weight: 600;
-  letter-spacing: -0.026em;
-  line-height: 1.14;
+  letter-spacing: -0.028em;
+  line-height: 1.12;
   margin: 7px 0 0;
+  max-width: 22ch;
 }
 
 .visa-hero__ko {
@@ -1182,18 +1185,6 @@ ul.about-hero__chips {
 @media (min-width: 1024px) {
   .visa-hero__main {
     gap: 8px;
-  }
-
-  .visa-hero__rule {
-    width: 56px;
-  }
-
-  .visa-hero__main h1 {
-    font-size: 42px;
-    letter-spacing: -0.028em;
-    line-height: 1.12;
-    margin: 8px 0 0;
-    max-width: 22ch;
   }
 
   .visa-hero__ko {
@@ -1795,7 +1786,7 @@ ul.about-hero__chips {
    border still carries the "stricter/unresolved" signal; the chip carries the amber accent. */
 .visa-note-card {
   border: 1px solid var(--color-accent-rule);
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 16px 18px;
   display: flex;
   flex-direction: column;
