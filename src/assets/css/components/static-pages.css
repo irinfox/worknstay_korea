@@ -1712,6 +1712,7 @@ ul.about-hero__chips {
 }
 
 .visa-inline-link {
+  align-self: flex-start;
   font-size: 14.5px;
   font-weight: 500;
   color: var(--color-primary);
