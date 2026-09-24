@@ -1,0 +1,13 @@
+{
+  "source": "Ministry of Data and Statistics",
+  "sourceNote": "The table's own metadata (101_DT_1IN1502...txt) and KOSIS's own citation popup both name the creating org 'Ministry of Data and Statistics' (국가데이터처) — KOSIS's 2022 Q&A example citation still says 'Statistics Korea' (통계청), the pre-reorg name; the live current name from KOSIS's own tool wins.",
+  "surveyName": "Population Census",
+  "tableId": "DT_1IN1502",
+  "tableName": "Population, Households and Housing Units",
+  "unit": "persons",
+  "period": "2025",
+  "retrievedAt": "2026-09-24",
+  "url": "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1IN1502&conn_path=I2&language=en",
+  "linkTitle": "2025, 2026.09.24, Population, Households and Housing Units",
+  "roundingNote": "Values rounded to two significant figures."
+}

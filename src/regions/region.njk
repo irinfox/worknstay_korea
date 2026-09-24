@@ -228,6 +228,9 @@ eleventyComputed:
   {% set message = "No cities listed for this region yet." %}
   {% include "partials/empty-state.njk" %}
   {% endif %}
+  {% if cityList.length %}
+  <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
+  {% endif %}
 </section>
 
 {# Costs + festivals: one primary-tinted band that does the section-divider job (DESIGN.md

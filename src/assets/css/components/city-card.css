@@ -155,6 +155,15 @@
   overflow-wrap: break-word;
 }
 
+/* Population line: fixed 13px (not the fluid --font-size-sm) so it reads as the section subline
+   pattern one step smaller, sitting right under the name at every width. */
+.city-card__population {
+  margin: 3px 0 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
 .city-card__ko {
   font-family: var(--font-family-ko);
   font-weight: 400;

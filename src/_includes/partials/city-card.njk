@@ -1,5 +1,5 @@
 {# Gangwon-do "Cities in this region" card (design reference 5b/5d). White bordered card:
-   name + Korean name + vibe tags, blurb, a grey "Where to work" panel — solo venues (Website /
+   name + Korean name + population line + vibe tags, blurb, a grey "Where to work" panel — solo venues (Website /
    Instagram / Naver Map text links) first, then any multi-location chains grouped under their
    own hairline-topped subtitle (DESIGN.md § "Chains" — plain name, a small same-row Website ↗
    link, no address/domain row since one link can't honestly point at a single site), then the
@@ -7,7 +7,10 @@
    (City, required). #}
 <article class="city-card">
   <div class="city-card__head">
-    <h3 class="city-card__name">{{ city.nameEn }} <span class="city-card__ko">{{ city.nameKo }}</span></h3>
+    <div class="city-card__title">
+      <h3 class="city-card__name">{{ city.nameEn }} <span class="city-card__ko">{{ city.nameKo }}</span></h3>
+      {% if city.population %}<p class="city-card__population">~{{ city.population.total | popRound }} people</p>{% endif %}
+    </div>
     {% if city.vibeTags.length %}
     <ul class="city-card__tags">
       {% for tag in city.vibeTags %}<li>{{ tag }}</li>{% endfor %}
