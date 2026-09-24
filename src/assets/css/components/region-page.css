@@ -2,18 +2,6 @@
    .region-header keeps its own narrower 65ch cap for the intro text specifically, nested inside
    the wider .content-page container for grids/galleries. */
 
-/* The region page's .page-contents strip carries one more link than visa-info's (Map, Gangwon-do
-   only) — static-pages.css already notes visa-info's own 5 labels + Top are the most that fit
-   without scrolling at ~360px, so a 6th here would just miss. .page-contents__links still
-   scrolls horizontally as a fallback (inherited from the shared component), but dropping the
-   least-essential link on the narrowest phones keeps the common case a one-row, non-scrolling
-   strip like every other page's, per the brief's own "might leave out the map" allowance. */
-@media (max-width: 379.98px) {
-  .page-contents__map-link {
-    display: none;
-  }
-}
-
 /* Shared placeholder box for attraction cards whose KTO record has no licensed image
    (`imageLicense` null) — never render an unlicensed image; show this instead. A plain #F7F9F8
    fill holding the slot's shape (DESIGN.md § Empty & fallback states), no wireframe border. */

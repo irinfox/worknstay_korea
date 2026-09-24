@@ -1262,6 +1262,11 @@ ul.about-hero__chips {
   min-width: 0;
   display: flex;
   align-items: center;
+  /* Left-aligned at rest — space-evenly only takes over below 400px (see that breakpoint), where
+     the row is tight enough that even spacing actually earns its keep. Above that (Pixel-9-width
+     phones and up, still below the 768px display:contents switch), left-aligned with real gaps
+     reads as the normal, un-stretched row; space-evenly there just pads the row out oddly with
+     room it doesn't need. */
   justify-content: flex-start;
   /* All 5 labels + Top fit without scrolling from ~360px up (the narrowest target width) only at
      this tighter gap — 14px between items pushed "Useful links" past the strip's right edge. */
@@ -1366,6 +1371,25 @@ ul.about-hero__chips {
   .page-contents__top {
     width: 44px;
     justify-content: center;
+    padding: 0;
+  }
+
+  /* Region page's strip is the tightest case (6 items, vs visa-info's 5 / settling-in's 4) —
+     measured live at 360px, the base 8px gap / 14px padding above overflows by ~17px even with
+     the narrower Top button just above. Switched to space-evenly with gap/padding both zeroed so
+     it owns 100% of the spacing: any non-zero gap or padding just adds a fixed amount on top of
+     what space-evenly computes rather than participating in its split, which is what produced
+     uneven edge-vs-inter-label gaps when they were tried (measured live, both directions — a gap
+     floor made edges wider, padding on top of a zero gap made them wider still). With both at 0,
+     every gap — including the two edges — comes out equal, on every page, with room to spare even
+     on region's own tightest row. Scoped to this one breakpoint (same as the Top icon above) —
+     above it, the row has enough real width that evenly stretching it out looks padded and
+     unmoored rather than proportional; left-aligned (base rule) reads better there. Tightened for
+     every page (not just region), so the strip stays genuinely one component with one behaviour
+     at every width; overflow-x:auto stays as a safety net rather than the primary mechanism. */
+  .page-contents__links {
+    justify-content: space-evenly;
+    gap: 0;
     padding: 0;
   }
 }
