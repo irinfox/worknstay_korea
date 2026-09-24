@@ -1354,6 +1354,22 @@ ul.about-hero__chips {
   top: 1px;
 }
 
+/* Below 400px the word doesn't earn its keep next to 6 short section labels — icon only, with
+   aria-label carrying the accessible name (the template sets it on the <a> unconditionally, so
+   it's already there when this rule hides the visible label from the a11y tree too). Fixed 44px
+   width keeps the tap target square regardless of how narrow the icon itself is. */
+@media (max-width: 399.98px) {
+  .page-contents__top-label {
+    display: none;
+  }
+
+  .page-contents__top {
+    width: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+}
+
 .page-contents__short {
   display: inline;
 }
