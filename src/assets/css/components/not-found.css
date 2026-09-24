@@ -46,10 +46,16 @@
   margin-top: 32px;
 }
 
+/* Navigation row (DESIGN.md link rules) — no underline at rest, no arrow, underline gained on
+   hover along with the global in-site darken. */
 .not-found__links a {
   font-size: 15px;
   font-weight: 500;
   color: var(--color-primary);
+  text-decoration: none;
+}
+
+.not-found__links a:hover {
   text-decoration: underline;
 }
 

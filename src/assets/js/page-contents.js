@@ -1,15 +1,18 @@
-// visa-info's sticky contents strip (.visa-contents): highlights whichever section is current,
-// and reveals the "Top" link — both gated on the strip having actually stuck to the top of the
-// viewport (not just "scrolled some"). Without this module the strip is still fully usable — real
-// <a href> section links, and "Top" jumps to #top via native anchor behaviour (progressive
-// enhancement, CLAUDE.md rule 6). Behaviour is documented in DESIGN.md ("Page contents strip")
-// so it can be reused as-is on other pages (region-page Places tabs, Food) later.
+// Shared sticky page-contents strip (.page-contents), used on visa-info, settling-in and every
+// region page: highlights whichever section is current, and reveals the "Top" link — both gated
+// on the strip having actually stuck to the top of the viewport (not just "scrolled some").
+// Without this module the strip is still fully usable — real <a href> section links, and "Top"
+// jumps to #top via native anchor behaviour (progressive enhancement, CLAUDE.md rule 6).
+// Behaviour is documented in DESIGN.md ("Page contents strip"). Sections that sit at the same
+// vertical position (the region page's Rent/Events band, side by side on desktop) light up
+// together — detected by actual layout, not markup, so it also self-corrects on phone once the
+// same band stacks and the tie no longer holds.
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Matches .visa-contents' own `top: 12px` (static-pages.css) — the offset position:sticky pins
+// Matches .page-contents' own `top: 12px` (static-pages.css) — the offset position:sticky pins
 // it to once stuck. Custom properties aren't readable from JS, so this is a hardcoded mirror of
 // that value, same tradeoff as region-card.js's NARROW_QUERY.
 const STICKY_TOP = 12;
@@ -29,16 +32,16 @@ const BOTTOM_EPSILON = 4;
 const SCROLL_MARGIN_GAP = 16;
 
 export function init() {
-  const nav = document.querySelector(".visa-contents");
+  const nav = document.querySelector(".page-contents");
   if (!nav) return;
 
-  const links = [...nav.querySelectorAll(".visa-contents__links a[href^='#']")];
+  const links = [...nav.querySelectorAll(".page-contents__links a[href^='#']")];
   const sections = links
     .map((link) => ({ link, section: document.getElementById(link.getAttribute("href").slice(1)) }))
     .filter((entry) => entry.section);
   if (!sections.length) return;
 
-  const topLink = nav.querySelector(".visa-contents__top");
+  const topLink = nav.querySelector(".page-contents__top");
 
   // A plain anchor jump (clicking a section link, including via keyboard, or loading the page
   // straight onto a #hash) lands the target's top flush with the viewport top — right under the
@@ -52,14 +55,39 @@ export function init() {
     });
   };
   syncScrollMargin();
-  window.addEventListener("resize", syncScrollMargin, { passive: true });
 
-  let active = null;
-  const setActive = (link) => {
-    if (link === active) return;
-    if (active) active.classList.remove("is-active");
-    active = link;
-    if (active) active.classList.add("is-active");
+  // Groups of links whose target sections share the same document-relative top (a tie, within
+  // rounding) — recomputed on resize since a tie only holds at the viewport widths where its
+  // sections actually sit side by side; below that breakpoint they stack and stop tying. Plain
+  // pages never tie (every section starts below the last), so this is a no-op single-link group
+  // for them.
+  let tieGroups = [];
+  const syncTieGroups = () => {
+    const buckets = [];
+    sections.forEach(({ link, section }) => {
+      const top = Math.round(section.getBoundingClientRect().top + window.scrollY);
+      const bucket = buckets.find((b) => Math.abs(b.top - top) <= 1);
+      if (bucket) bucket.links.push(link);
+      else buckets.push({ top, links: [link] });
+    });
+    tieGroups = buckets.map((b) => b.links);
+  };
+  syncTieGroups();
+  const groupOf = (link) => tieGroups.find((group) => group.includes(link)) || [link];
+
+  window.addEventListener("resize", () => {
+    syncScrollMargin();
+    syncTieGroups();
+  }, { passive: true });
+
+  let activeLinks = [];
+  const sameLinks = (a, b) => a.length === b.length && a.every((link, i) => link === b[i]);
+  const setActive = (targets) => {
+    const next = targets || [];
+    if (sameLinks(next, activeLinks)) return;
+    activeLinks.forEach((link) => link.classList.remove("is-active"));
+    activeLinks = next;
+    activeLinks.forEach((link) => link.classList.add("is-active"));
   };
 
   // A clicked link wins immediately, whatever the scroll-driven computation below would say —
@@ -77,7 +105,7 @@ export function init() {
   links.forEach((link) => {
     link.addEventListener("click", () => {
       pinned = true;
-      setActive(link);
+      setActive(groupOf(link));
     });
   });
 
@@ -91,14 +119,14 @@ export function init() {
     if (pinned) return;
 
     if (!stuck) {
-      setActive(null);
+      setActive([]);
       return;
     }
 
     const doc = document.documentElement;
     const atBottom = window.scrollY + window.innerHeight >= doc.scrollHeight - BOTTOM_EPSILON;
     if (atBottom) {
-      setActive(links[links.length - 1]);
+      setActive(groupOf(links[links.length - 1]));
       return;
     }
 
@@ -107,7 +135,7 @@ export function init() {
     sections.forEach(({ link, section }) => {
       if (section.getBoundingClientRect().top <= triggerY) current = link;
     });
-    setActive(current);
+    setActive(current ? groupOf(current) : []);
   };
 
   window.addEventListener("scroll", update, { passive: true });
@@ -116,15 +144,16 @@ export function init() {
 
   if (!topLink) return;
 
-  // Overrides the native #top jump (which only reaches the top of .visa-page, right below the
-  // dark nav bar) with a scroll to the true document top, so the nav bar comes back into view.
-  // Same "click wins" pin as the section links: without it, the scroll-driven recompute keeps
-  // running for the whole smooth-scroll-to-top animation, so the active link flickers through
-  // every section it passes on the way up instead of just clearing once, immediately.
+  // Overrides the native #top jump (which only reaches the top of the page's own wrapper, right
+  // below the dark nav bar) with a scroll to the true document top, so the nav bar comes back
+  // into view. Same "click wins" pin as the section links: without it, the scroll-driven
+  // recompute keeps running for the whole smooth-scroll-to-top animation, so the active link
+  // flickers through every section it passes on the way up instead of just clearing once,
+  // immediately.
   topLink.addEventListener("click", (event) => {
     event.preventDefault();
     pinned = true;
-    setActive(null);
+    setActive([]);
     window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? "auto" : "smooth" });
   });
 }

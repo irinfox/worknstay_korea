@@ -27,7 +27,7 @@ eleventyComputed:
 {# Furnished short-term monthly rent for the headline recap card and the cost table below.
    Gangwon-do is the only region with a market scan behind it (src/_data/rentalMarketScan.js). #}
 {% set gangwonRent = (rentalMarketScan.regionSummary | findBySlug("gangwon-do")).furnishedShortTermMonthly %}
-<div class="content-page region-page">
+<div class="content-page region-page" id="top">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
   <a href="/#map">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
@@ -93,6 +93,31 @@ eleventyComputed:
   </aside>
 </header>
 
+{# Sticky page-contents strip (DESIGN.md § "Page contents strip") — same shared component as
+   visa-info/settling-in, reused as-is. Labels stay short generic nouns, not "Regional dishes" /
+   "Region map" — the section's own H2 already carries the full wording. Map only exists on
+   Gangwon-do (the only region with a detail map), Dishes only where regionFood has entries — both
+   real <a href>, so a page without one just doesn't render that link rather than pointing at a
+   missing section. Rent and Events sit in the same tinted band and start at the same height on
+   desktop, so page-contents.js detects the tie by position and highlights both together while
+   the band is in view — no markup needed here for that, and on phone (where the band stacks)
+   the same geometry check naturally activates just one at a time. #}
+<div class="page-contents">
+  <div class="page-contents__links">
+    {% if isGangwon %}
+    <a href="#region-map" class="page-contents__map-link"><span class="page-contents__full">Map</span><span class="page-contents__short">Map</span></a>
+    {% endif %}
+    <a href="#cities"><span class="page-contents__full">Cities</span><span class="page-contents__short">Cities</span></a>
+    <a href="#rent"><span class="page-contents__full">Rent</span><span class="page-contents__short">Rent</span></a>
+    <a href="#events"><span class="page-contents__full">Events</span><span class="page-contents__short">Events</span></a>
+    <a href="#places"><span class="page-contents__full">Places</span><span class="page-contents__short">Places</span></a>
+    {% if regionFood.length %}
+    <a href="#dishes"><span class="page-contents__full">Dishes</span><span class="page-contents__short">Dishes</span></a>
+    {% endif %}
+  </div>
+  <a href="#top" class="page-contents__top"><span class="page-contents__top-icon" aria-hidden="true"></span>Top</a>
+</div>
+
 {# "Around the region" cover gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
    finalized, credited, license-checked picks per slug. The track is a plain CSS scroll-snap
    strip, swipeable/scrollable with zero JS (same no-JS pattern as .attraction-list) — the
@@ -102,7 +127,10 @@ eleventyComputed:
 <section class="region-gallery" aria-labelledby="region-gallery-heading"{% if slideCount > 1 %} data-region-hero-gallery{% endif %}>
   <div class="region-gallery__head">
     <div class="region-gallery__intro">
-      <h2 id="region-gallery-heading">Region highlights</h2>
+      <div class="region-section__head">
+        <span class="region-section__tick" aria-hidden="true"></span>
+        <h2 id="region-gallery-heading">Region highlights</h2>
+      </div>
       <p class="region-gallery__sub">Selected spots to get a feel for the region</p>
     </div>
     {% if slideCount > 1 %}
@@ -140,8 +168,11 @@ eleventyComputed:
    Pin coordinates are looked up via the KTO OpenAPI (searchKeyword2) where a place is in its
    catalog, then run through one lat/lng-to-local-xy linear fit calibrated on the 5 city pins —
    not a real map projection, so treat spacing as illustrative, not survey-accurate. #}
-<section class="region-section region-section--map">
-  <h2>Region map</h2>
+<section class="region-section region-section--map" id="region-map">
+  <div class="region-section__head">
+    <span class="region-section__tick" aria-hidden="true"></span>
+    <h2>Region map</h2>
+  </div>
   <p class="region-section__sub">Approximate positions, drawn from KTO coordinates</p>
   <div class="region-detail-map">
     <div class="region-detail-map__scroll">
@@ -176,8 +207,11 @@ eleventyComputed:
 {% endif %}
 {% endif %}
 
-<section class="region-section region-section--cities">
-  <h2>Cities</h2>
+<section class="region-section region-section--cities" id="cities">
+  <div class="region-section__head">
+    <span class="region-section__tick" aria-hidden="true"></span>
+    <h2>Cities</h2>
+  </div>
   <p class="region-section__sub">Where to stay and work in the region</p>
   {% if isGangwon %}
   {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
@@ -200,8 +234,11 @@ eleventyComputed:
    § region page order). Costs left, festivals right on desktop; stacked on phone. #}
 <div class="region-band">
   <div class="region-band__inner">
-    <div class="region-band__col region-band__col--costs">
-      <h2>Rental prices</h2>
+    <div class="region-band__col region-band__col--costs" id="rent">
+      <div class="region-section__head">
+        <span class="region-section__tick" aria-hidden="true"></span>
+        <h2>Rental prices</h2>
+      </div>
       {% if isGangwon %}
       {# Rows and note are a restructuring of the existing verified Gangwon cost copy into the
          design's table form; figures unchanged. #}
@@ -218,8 +255,11 @@ eleventyComputed:
       {% endif %}
     </div>
 
-    <div class="region-band__col region-band__col--events">
-      <h2>Festivals &amp; events</h2>
+    <div class="region-band__col region-band__col--events" id="events">
+      <div class="region-section__head">
+        <span class="region-section__tick" aria-hidden="true"></span>
+        <h2>Festivals &amp; events</h2>
+      </div>
       {# Default subtitle; region-data.js swaps this text when the live fetch comes back
          quotaExceeded (KTO's daily call quota is gone) — events.js drops items entirely in that
          case (no top-picks-style fallback, see events.js header comment), so the subtitle itself
@@ -242,8 +282,11 @@ eleventyComputed:
   </div>
 </div>
 
-<section class="region-section region-section--attractions">
-  <h2>Places to visit</h2>
+<section class="region-section region-section--attractions" id="places">
+  <div class="region-section__head">
+    <span class="region-section__tick" aria-hidden="true"></span>
+    <h2>Places to visit</h2>
+  </div>
   {# Default subtitle; region-data.js swaps this text when the live fetch comes back
      quotaExceeded (KTO's daily call quota is gone) and falls back to the top-picks list, so
      "today's top picks" doesn't quietly read as the full live set. Reset on every render so a
@@ -291,8 +334,11 @@ eleventyComputed:
 </section>
 
 {% if regionFood.length %}
-<section class="region-section region-section--food">
-  <h2>Regional dishes</h2>
+<section class="region-section region-section--food" id="dishes">
+  <div class="region-section__head">
+    <span class="region-section__tick" aria-hidden="true"></span>
+    <h2>Regional dishes</h2>
+  </div>
   {% if region.slug == "jeju-do" %}
   <p class="region-section__sub">A few handpicked representative dishes</p>
   {% else %}
