@@ -463,8 +463,12 @@
 .map-note__text a {
   color: var(--color-primary);
   font-weight: 500;
-  text-decoration: underline;
+  text-decoration: none;
   white-space: nowrap;
+}
+
+.map-note__text a:hover {
+  text-decoration: underline;
 }
 
 /* 1024px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic

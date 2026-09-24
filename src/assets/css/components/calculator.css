@@ -202,10 +202,15 @@
   line-height: 1.5;
 }
 
-/* In-site link to the visa rules — green with a → (DESIGN.md palette). */
+/* In-site link to the visa rules — green with a →, standalone treatment: no underline at rest,
+   underline gained on hover (DESIGN.md palette/link rules). */
 .eligibility-result a {
   color: var(--color-primary);
   font-weight: 500;
+  text-decoration: none;
+}
+
+.eligibility-result a:hover {
   text-decoration: underline;
 }
 

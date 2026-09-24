@@ -70,6 +70,32 @@
   margin-bottom: var(--space-6);
 }
 
+/* Shared .page-contents strip (static-pages.css, page-contents.js) — same sticky sub-nav as
+   visa-info/settling-in, and the same 26px/36px gap around it visa-info gets for free from its
+   own flex-column `gap`. .content-page is a plain block, not flex, so both edges are stated here
+   explicitly instead — scoped with :has() to when a strip actually follows, so
+   decline-counties.njk (shares .region-header, has no strip) keeps the plain --space-6 gap.
+   Needs the .region-page ancestor in the selector, not just :has() alone — .region-page
+   .region-header further down (the split-layout rule) sets its own margin-bottom at equal
+   (class+class) specificity, and being later in the file would otherwise win the tie. */
+.region-page .region-header:has(+ .page-contents) {
+  margin-bottom: 26px;
+}
+
+.region-page > .page-contents {
+  margin-bottom: 26px;
+}
+
+@media (min-width: 1024px) {
+  .region-page .region-header:has(+ .page-contents) {
+    margin-bottom: 36px;
+  }
+
+  .region-page > .page-contents {
+    margin-bottom: 36px;
+  }
+}
+
 .region-header h1 {
   max-width: 65ch;
 }
@@ -331,8 +357,17 @@ ul.region-seasons {
    scrolls/swipes with zero JS (same pattern as .attraction-list); region-hero-gallery.js layers
    the counter, arrows and autoplay loop on top. Region-page-exclusive markup — safe to own these
    selectors outright (static-pages.css reuses .region-header/.region-section, not .region-hero). */
+/* Top margin matches .page-contents' own margin-bottom above (26px/36px) — block-flow margin
+   collapsing takes the larger of two adjoining margins, so both sides need to actually agree on
+   the target value rather than leaving this at the page's general --space-6 rhythm. */
 .region-gallery {
-  margin: var(--space-6) 0 var(--space-8);
+  margin: 26px 0 var(--space-8);
+}
+
+@media (min-width: 1024px) {
+  .region-gallery {
+    margin-top: 36px;
+  }
 }
 
 .region-gallery__head {
@@ -344,11 +379,8 @@ ul.region-seasons {
   margin-bottom: 14px;
 }
 
-.region-gallery__head h2 {
-  margin: 0 0 4px;
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.015em;
+.region-gallery__head .region-section__head {
+  margin-bottom: 4px;
 }
 
 .region-gallery__sub {
@@ -491,17 +523,39 @@ ul.region-seasons {
 
 /* base.css zeroes all heading margins, so every block title on this page sat flush against its
    content until this rule — restore the gap only within region-page contexts rather than
-   globally, since other pages rely on the zeroed default. */
-.region-section > h2,
-.region-section > h3,
-.region-band__col > h2 {
+   globally, since other pages rely on the zeroed default. Section heading + orange tick
+   (DESIGN.md "Section tick"), same recurring part as visa-info/settling-in's own section heads —
+   the wrapper carries the gap that used to sit directly on the (now nested) h2. */
+.region-section > h3 {
+  margin-bottom: var(--space-3);
+}
+
+/* Base row layout (tick + h2) everywhere this wrapper is used — the gallery head (further up)
+   and decline-counties' single section both nest it in markup that isn't .region-section/
+   .region-band__col, so this stays unscoped; only the margin-bottom below varies by context. */
+.region-section__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.region-section__tick {
+  width: 3px;
+  height: 15px;
+  flex: 0 0 auto;
+  background: var(--color-accent-rule);
+}
+
+.region-section > .region-section__head,
+.region-band__col > .region-section__head {
   margin-bottom: var(--space-3);
 }
 
 /* Section headings on the flat region page are the DESIGN.md § Type "Section H2" size — the
-   design reference sets every region-page section heading at 20px / 600 / -0.015em. */
-.region-page .region-section > h2,
-.region-band__col > h2 {
+   design reference sets every region-page section heading at 20px / 600 / -0.015em. Scoped to
+   .region-page broadly (not just .region-section) so it also reaches the gallery and band-col
+   heads, which sit in sibling markup rather than a .region-section itself. */
+.region-page .region-section__head > h2 {
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.015em;
@@ -510,8 +564,8 @@ ul.region-seasons {
 /* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present —
    `:not([hidden])` so a JS-hidden subtitle (e.g. events.js's quotaExceeded state, region-data.js)
    falls back to the normal H2 margin instead of leaving the tight gap with nothing to fill it. */
-.region-page .region-section > h2:has(+ .region-section__sub:not([hidden])),
-.region-band__col > h2:has(+ .region-section__sub:not([hidden])) {
+.region-page .region-section > .region-section__head:has(+ .region-section__sub:not([hidden])),
+.region-band__col > .region-section__head:has(+ .region-section__sub:not([hidden])) {
   margin-bottom: 4px;
 }
 
@@ -705,6 +759,10 @@ ul.region-seasons {
 
 .cost-link a {
   color: var(--color-primary);
+  text-decoration: none;
+}
+
+.cost-link a:hover {
   text-decoration: underline;
 }
 

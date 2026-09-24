@@ -3,7 +3,7 @@ layout: layouts/page.njk
 title: "Settling in"
 description: "A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in."
 ---
-<div class="content-page settling-page">
+<div class="content-page settling-page" id="top">
 
 <header class="settling-hero">
   <span class="settling-hero__rule" aria-hidden="true"></span>
@@ -13,12 +13,15 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated }}</div>
 </header>
 
-<nav class="settling-jumpnav" aria-label="Page sections">
-  <a href="#renting">Renting</a>
-  <a href="#work">Places to work</a>
-  <a href="#communities">Communities</a>
-  <a href="#links">Useful links</a>
-</nav>
+<div class="page-contents">
+  <div class="page-contents__links">
+    <a href="#renting"><span class="page-contents__full">Renting</span><span class="page-contents__short">Renting</span></a>
+    <a href="#work"><span class="page-contents__full">Places to work</span><span class="page-contents__short">Work</span></a>
+    <a href="#communities"><span class="page-contents__full">Communities</span><span class="page-contents__short">Community</span></a>
+    <a href="#links"><span class="page-contents__full">Useful links</span><span class="page-contents__short">Links</span></a>
+  </div>
+  <a href="#top" class="page-contents__top" aria-label="Back to top"><span class="page-contents__top-icon" aria-hidden="true"></span><span class="page-contents__top-label">Top</span></a>
+</div>
 
 <section id="renting" class="settling-section">
   <div class="settling-section__head">
