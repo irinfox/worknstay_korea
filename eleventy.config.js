@@ -36,6 +36,18 @@ export default function (eleventyConfig) {
     return new Intl.NumberFormat("en-US").format(value);
   });
 
+  // City-card population line: cities.json stores the raw KOSIS total, rounded here to 2
+  // significant figures (K below a million, M above), e.g. 211628 -> "210K", 1221616 -> "1.2M".
+  eleventyConfig.addFilter("popRound", function (value) {
+    if (!value) return "";
+    const exp = Math.floor(Math.log10(Math.abs(value)));
+    const factor = 10 ** (exp - 1);
+    const rounded = Math.round(value / factor) * factor;
+    if (rounded >= 1000000) return (rounded / 1000000).toFixed(1) + "M";
+    const k = rounded / 1000;
+    return (Number.isInteger(k) ? k : k.toFixed(1)) + "K";
+  });
+
   // Looks up a record by `slug` or `regionSlug` — regions.json uses the former,
   // costOfLiving.json (and other per-region data files) use the latter.
   eleventyConfig.addFilter("findBySlug", function (arr, slug) {
