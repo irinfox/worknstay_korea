@@ -54,16 +54,10 @@ until Phase 19.
 - [x] **21 — `normalize.mjs`.** `isUpcomingOrOngoing` (guards `eventStartDate` start-only
       filtering), unknown-`cpyrhtDivCd` images dropped, title En/Ko split, entity strip,
       http→https. KTO quirks list is architecture.md §5. Verify: `scripts/verify-normalize.mjs`.
-  - [ ] `Attraction.summary` / `Event.homepageUrl` have no source field on the 2 in-scope
-        endpoints (would need `detailCommon2`/`detailIntro2`, one call per `contentId`) — weigh
-        call-volume cost before Phase 29.
 - [x] **22 — Endpoint wiring + fan-out + caching.** Both endpoints live; mock JSON is the
       `KTO_API_KEY`-absent dev fallback. Multi-code regions fan out via `Promise.allSettled`,
       dedupe by `contentid`, one code failing drops only its items. Cache via `cf.cacheTtl` —
       attractions 24h, festivals 4h.
-  - [ ] data.go.kr's individual-account mypage shows only approval status, no call-count
-        dashboard found. Live calls confirmed working regardless; recheck for a real log view
-        before Phase 29.
 
 ## Phase 23 — done (front end renders live data)
 
@@ -145,7 +139,7 @@ Depends on 12.
       (cost-of-living w/ `asOf`/`source`/`sourceUrl`).
 - [x] `communities.json` MOCK entries replaced — real, sourced links now in `settlingIn.json`
       (settling-in page redesign).
-- [ ] `/visa-info/` copy verified against current official sources.
+- [x] `/visa-info/` copy verified against current official sources.
 - Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
 
 ## Phase 28 — Accessibility + robustness (scriptable)
@@ -168,7 +162,7 @@ Depends on 12.
 Milestone bucket, not a day/branch phase.
 
 - [x] 기능설명서 write-up mapped to Task #4 hashtags.
-- [ ] Final KTO call-history screenshot (Phase 22 already did an early check).
+- [ ] Final KTO call-history screenshot.
 - [ ] User testing, final link audit, deploy freeze before the deadline.
 - [x] Get a separate/custom domain for the site before the deploy freeze.
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
