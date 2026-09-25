@@ -18,7 +18,7 @@
     {% endif %}
   </div>
 
-  {% if city.blurb %}<p class="city-card__blurb">{{ city.blurb }}</p>{% endif %}
+  {% if city.blurb %}<p class="city-card__blurb">{{ city.blurb | safe }}</p>{% endif %}
 
   {% set soloVenues = city.workationCenters | activeVenues(false) %}
   {% set chainVenues = city.workationCenters | activeVenues(true) %}
@@ -74,7 +74,7 @@
     {% for g in city.gettingAround -%}
       {#- `alt` holds any second way to the same place (e.g. Chuncheon: train + subway); each
          time stays bold, each mode grey -#}
-      <span class="city-card__leg">{{ g.label }} <strong>{{ g.value }}</strong> <span class="city-card__mode">{{ g.mode or "bus" }}</span>
+      <span class="city-card__leg">{{ g.label }} <strong>{{ g.value }}</strong> {% if g.mode != "" %}<span class="city-card__mode">{{ g.mode or "bus" }}</span>{% endif %}
         {%- for a in g.alt %} <span class="city-card__mode" aria-hidden="true">·</span> <strong>{{ a.value }}</strong> <span class="city-card__mode">{{ a.mode }}</span>{% endfor -%}
       </span>
     {%- endfor %}

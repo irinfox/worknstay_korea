@@ -36,7 +36,8 @@
     "nameKo": "서울특별시",
     "lat": 37.5665,
     "lng": 126.978,
-    "blurb": "South Korea's capital and largest city — outside this site's non-capital eligibility focus, kept here as coworking reference data since several Seoul-based chains also operate branches in eligible regions.",
+    "blurb": "The capital of Korea with extensive public transportation, fast internet, diverse neighborhoods and mountains right in the city. It combines nature with traditional architecture and modern buildings.",
+    "vibeTags": ["urban", "trendy", "crowded"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "11",
     "ktoLDongSignguCds": [],
@@ -154,10 +155,14 @@
     "nameKo": "인천광역시",
     "lat": 37.4563,
     "lng": 126.7052,
-    "blurb": "Port city and international-airport gateway just west of Seoul, part of the capital-tier region for visa purposes.",
+    "blurb": "Port city and international-airport gateway. Its Songdo district is known as a well-developed international business and residential area.",
+    "vibeTags": ["urban", "airport"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "28",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Seoul", "value": "1–1.5h", "mode": "subway / express bus" }
+    ],
     "population": { "total": 3093590, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -169,10 +174,14 @@
     "nameKo": "성남시",
     "lat": 37.3826,
     "lng": 127.1189,
-    "blurb": "Gyeonggi-do tech hub adjoining Seoul, known for the Bundang district's business and IT sector.",
+    "blurb": "Satellite city of Seoul, with the Bundang district and Pangyo Techno Valley, a major hub for Korea's tech sector. Companies such as Naver, Kakao and KT have offices here.",
+    "vibeTags": ["satellite", "big-tech"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["130", "131", "133", "135"],
+    "gettingAround": [
+      { "label": "Seoul", "value": "20–40 min", "mode": "subway" }
+    ],
     "population": { "total": 893970, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -184,10 +193,14 @@
     "nameKo": "수원시",
     "lat": 37.2636,
     "lng": 127.0286,
-    "blurb": "Gyeonggi-do's provincial capital, home to the UNESCO-listed Hwaseong Fortress and the fast-growing Gwanggyo New Town business district.",
+    "blurb": "The capital of Gyeonggi-do Province, home to the UNESCO-listed Hwaseong Fortress and Samsung Electronics' HQ.",
+    "vibeTags": ["history", "tech"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["111", "113", "115", "117"],
+    "gettingAround": [
+      { "label": "Seoul", "value": "1h", "mode": "subway", "alt": [{ "value": "40 min", "mode": "train" }] }
+    ],
     "population": { "total": 1221616, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -250,7 +263,7 @@
     "nameKo": "강릉시",
     "lat": 37.75,
     "lng": 128.9,
-    "blurb": "Known as Korea's coffee capital, with an annual coffee festival and plenty of sea-view cafes. The biggest coastal city in Gangwon-do (~200K population). Also known as a filming location for \"Goblin.\"",
+    "blurb": "Known as Korea's coffee capital, with an annual coffee festival and plenty of sea-view cafes. The biggest coastal city in Gangwon-do. Also known as a filming location for \"Goblin.\"",
     "summaryIcons": ["🏄", "⛷️"],
     "vibeTags": ["surf", "coffee", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
@@ -301,7 +314,7 @@
     "nameKo": "춘천시",
     "lat": 37.88,
     "lng": 127.73,
-    "blurb": "The capital of Gangwon-do and a popular student city surrounded by beautiful lakes.",
+    "blurb": "The capital of Gangwon-do and a popular student city surrounded by lakes.",
     "summaryIcons": ["⛷️"],
     "vibeTags": ["lakes", "student"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
@@ -322,7 +335,7 @@
     "nameKo": "원주시",
     "lat": 37.3422,
     "lng": 127.92,
-    "blurb": "The largest city and one of the industrial hubs in Gangwon-do, with Chiaksan National Park nearby and the scenic Sogeumsan Grand Valley. Relatively far from other attractions in the region.",
+    "blurb": "The largest city and one of the industrial hubs in Gangwon-do, with Chiaksan National Park and Sogeumsan Grand Valley nearby.",
     "summaryIcons": ["⛷️"],
     "vibeTags": ["budget", "snow"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
@@ -330,6 +343,8 @@
     "ktoLDongSignguCds": ["130"],
     "gettingAround": [
       { "label": "Oak Valley Ski Resort", "value": "30 min", "mode": "car" },
+      { "label": "Chiaksan National Park", "value": "40 min", "mode": "bus" },
+      { "label": "Sogeumsan Grand Valley", "value": "40 min", "mode": "bus" },
       { "label": "Seoul", "value": "1.5h", "mode": "train" }
     ],
     "population": { "total": 367326, "year": 2025 },
@@ -371,10 +386,16 @@
     "nameKo": "청주시",
     "lat": 36.64,
     "lng": 127.49,
-    "blurb": "Mid-size regional hub with its own airport and a low cost of living relative to size.",
+    "blurb": "Chungcheongbuk-do capital and home to the region's international airport, with flights to destinations across Asia. Two large corporations, SK and LG, have major operations here, helping the city retain young workers.",
+    "vibeTags": ["transport-hub", "corporate"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "43",
     "ktoLDongSignguCds": ["110", "111", "112", "113", "114"],
+    "gettingAround": [
+      { "label": "Dodamsambong Peaks", "value": "1.5–2h", "mode": "car" },
+      { "label": "Maltijae Observatory", "value": "50 min", "mode": "car" },
+      { "label": "Seoul", "value": "1.5h", "mode": "train+bus" }
+    ],
     "population": { "total": 879244, "year": 2025, "note": "KOSIS's English-language export mislabels this row \"Chungju-si\"; its sub-district breakdown (Sangdang-gu/Seowon-gu/Heungdeok-gu/Cheongwon-gu) matches Cheongju-si, not Chungju-si (which has no gu subdivisions and is listed separately at 217,413)." },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -401,10 +422,16 @@
     "nameKo": "대전광역시",
     "lat": 36.3504,
     "lng": 127.3845,
-    "blurb": "Chungcheong-do's largest city and a national research-institute hub, with a fast KTX connection to Seoul.",
+    "blurb": "Chungcheong-do's largest city and a national research hub, home to KAIST and Daedeok Innopolis. It is also known for its noodles and bakeries. Well connected to Seoul and major cities in the south.",
+    "vibeTags": ["science", "bread"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "30",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Seoul", "value": "1h", "mode": "train" },
+      { "label": "Gwangju", "value": "1.5h", "mode": "train" },
+      { "label": "Busan", "value": "1.5h", "mode": "train" }
+    ],
     "population": { "total": 1469299, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -416,10 +443,16 @@
     "nameKo": "세종특별자치시",
     "lat": 36.4801,
     "lng": 127.289,
-    "blurb": "Korea's purpose-built administrative capital, still growing, with wide streets and a young, government-worker population.",
+    "blurb": "A newly planned administrative smart city with parks, cycling infrastructure and streets largely free of overhead utility wires. It can feel short on attractions, but offers a quiet, organized urban environment and modern apartments.",
+    "vibeTags": ["smart-city", "cycling"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "36110",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Daejeon", "value": "50 min", "mode": "bus" },
+      { "label": "Seoul", "value": "1.5h", "mode": "train+bus" },
+      { "label": "Gwangju", "value": "2h", "mode": "express bus" }
+    ],
     "population": { "total": 392471, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -431,10 +464,16 @@
     "nameKo": "공주시",
     "lat": 36.4465,
     "lng": 127.1189,
-    "blurb": "Former Baekje-dynasty capital with UNESCO heritage sites, quieter and smaller than the region's other cities.",
+    "blurb": "Historic city and former capital (475–538 CE) of the Baekje Kingdom. It is home to UNESCO World Heritage sites such as Gongsanseong Fortress and the Tomb of King Muryeong, with Magoksa Temple nearby.",
+    "vibeTags": ["historic"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["150"],
+    "gettingAround": [
+      { "label": "Gongsanseong Fortress & Royal Tombs", "value": "in the city", "mode": "" },
+      { "label": "Magoksa Temple", "value": "50 min", "mode": "bus + 30 min walk" },
+      { "label": "Daejeon", "value": "30–60 min", "mode": "bus" }
+    ],
     "population": { "total": 104504, "year": 2025 },
     "isPopulationDeclineArea": true,
     "workationCenters": []
@@ -446,10 +485,17 @@
     "nameKo": "경주시",
     "lat": 35.86,
     "lng": 129.22,
-    "blurb": "Former Silla-dynasty capital — living among UNESCO heritage sites, an hour from Busan.",
+    "blurb": "Former capital of the Silla kingdom, often described as a \"museum without walls\". The royal tombs are right in the city center, and ancient Bulguksa Temple nearby. It attracts visitors from Korea and abroad and gets especially crowded during the autumn foliage season.",
+    "vibeTags": ["historic"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "47",
     "ktoLDongSignguCds": ["130"],
+    "gettingAround": [
+      { "label": "Andong Hahoe Village", "value": "1.5h", "mode": "train+bus" },
+      { "label": "Bulguksa Temple", "value": "40–60 min", "mode": "bus" },
+      { "label": "Busan", "value": "30 min", "mode": "train" },
+      { "label": "Seoul", "value": "2h", "mode": "train" }
+    ],
     "population": { "total": 260108, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -476,10 +522,14 @@
     "nameKo": "부산광역시",
     "lat": 35.1796,
     "lng": 129.0756,
-    "blurb": "South Korea's second-largest city and main southern port, with beaches and a growing coworking scene.",
+    "blurb": "South Korea's second-largest city, with beaches and plenty of coastal walks right in the city. Every fall it hosts the 10-day <a href=\"https://www.biff.kr/eng/\" target=\"_blank\" rel=\"noopener\">Busan International Film Festival ↗</a>.",
+    "vibeTags": ["urban", "coastal"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "26",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Seoul", "value": "2.5–3h", "mode": "train" }
+    ],
     "population": { "total": 3235362, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": [
@@ -546,10 +596,16 @@
     "nameKo": "대구광역시",
     "lat": 35.8714,
     "lng": 128.6014,
-    "blurb": "Korea's fourth-largest city, a former textile hub now building a tech and startup scene in the country's southeast.",
+    "blurb": "One of Korea's five largest cities, with developed urban infrastructure and a well-known coffee culture. With fewer tourists, it offers a more local urban experience. Mind that the city is surrounded by mountains and is known as one of Korea's hottest cities in summer, earning it the nickname \"Daefrica.\"",
+    "vibeTags": ["urban"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "27",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Donghwa Temple", "value": "1h", "mode": "bus" },
+      { "label": "Biseulsan Recreational Forest", "value": "1h", "mode": "car" },
+      { "label": "Busan", "value": "50 min", "mode": "train" }
+    ],
     "population": { "total": 2363643, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -561,10 +617,16 @@
     "nameKo": "울산광역시",
     "lat": 35.5384,
     "lng": 129.3114,
-    "blurb": "Korea's shipbuilding and heavy-industry capital on the southeast coast, with one of the country's highest average incomes.",
+    "blurb": "Best known as a shipbuilding and heavy-industry city, with Hyundai factories based here. It is also a less touristy coastal city than Busan, with several nature escapes nearby.",
+    "vibeTags": ["industrial", "coastal"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "31",
     "ktoLDongSignguCds": [],
+    "gettingAround": [
+      { "label": "Daewangam Park", "value": "1h", "mode": "bus" },
+      { "label": "Yeongnam Alps", "value": "40 min", "mode": "car" },
+      { "label": "Busan", "value": "20 min", "mode": "train" }
+    ],
     "population": { "total": 1103509, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -576,10 +638,14 @@
     "nameKo": "전주시",
     "lat": 35.82,
     "lng": 127.15,
-    "blurb": "Korea's culinary capital, with a well-preserved hanok village and a compact, walkable core.",
+    "blurb": "The origin of the Joseon dynasty and home to Korea's largest hanok village. A designated <a href=\"https://www.unesco.org/en/creative-cities/jeonju\" target=\"_blank\" rel=\"noopener\">UNESCO City of Gastronomy ↗</a> and one of Korea's most popular tourist destinations, so don't expect it to be quiet.",
+    "vibeTags": ["history"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "52",
     "ktoLDongSignguCds": ["110", "111", "113"],
+    "gettingAround": [
+      { "label": "Seoul", "value": "2h", "mode": "train" }
+    ],
     "population": { "total": 641632, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -591,10 +657,16 @@
     "nameKo": "여수시",
     "lat": 34.76,
     "lng": 127.66,
-    "blurb": "Harbor city with a night-view reputation and a growing short-stay rental market.",
+    "blurb": "An aging coastal city surrounded by islands, known for its night sea views and seafood. Yeosu hosted the 2012 World Expo and has a long history as an important naval city. With its romantic cart bars it is a popular weekend destination for couples from bigger cities.",
+    "vibeTags": ["night-sea"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "12",
     "ktoLDongSignguCds": ["130"],
+    "gettingAround": [
+      { "label": "Gwangju", "value": "2h", "mode": "bus" },
+      { "label": "Busan", "value": "2.5h", "mode": "express bus" },
+      { "label": "Seoul", "value": "3h", "mode": "train" }
+    ],
     "population": { "total": 262133, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -606,11 +678,16 @@
     "nameKo": "광주광역시",
     "lat": 35.1595,
     "lng": 126.8526,
-    "blurb": "Jeolla-do's largest city, a design- and arts-focused metro with a strong food scene and a compact, walkable downtown.",
+    "blurb": "Jeolla-do's largest city, an important site in Korea's modern democratic history and home to the <a href=\"https://www.gwangjubiennale.org/en/index.do\" target=\"_blank\" rel=\"noopener\">Gwangju Biennale ↗</a>, a major contemporary art event. A convenient base for hiking in the surrounding mountains.",
+    "vibeTags": ["urban", "hiking"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
     "ktoLDongRegnCd": "12",
     "ktoLDongSignguCds": ["210", "240", "270", "300", "330"],
     "ktoLDongSignguCdsNote": "Gwangju has no single aggregate signgu code inside the merged \"12\" (Jeonnam-Gwangju) lDongRegnCd — live-verified against ldongCode2 — so its 5 gu's (Dong/Seo/Nam/Buk/Gwangsan) are listed individually and need a fan-out query, same pattern as a multi-code region.",
+    "gettingAround": [
+      { "label": "Mudeungsan", "value": "50 min", "mode": "bus" },
+      { "label": "Jirisan", "value": "1.5h", "mode": "car" }
+    ],
     "population": { "total": 1431903, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -622,10 +699,16 @@
     "nameKo": "순천시",
     "lat": 34.9506,
     "lng": 127.4872,
-    "blurb": "Coastal city best known for the Suncheon Bay wetland reserve, a slower alternative to the region's bigger cities.",
+    "blurb": "A good base for exploring the region's natural attractions such as Suncheonman Bay and Boseong tea plantations. Also close to Naganeupseong Walled Town, a preserved Joseon-era village showing how ordinary people lived, with residents still living there today.",
+    "vibeTags": ["slow", "eco"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "12",
     "ktoLDongSignguCds": ["150"],
+    "gettingAround": [
+      { "label": "Suncheonman Bay", "value": "40 min", "mode": "bus" },
+      { "label": "Boseong Tea Plantations", "value": "40 min", "mode": "car" },
+      { "label": "Naganeupseong Walled Town", "value": "40 min", "mode": "bus" }
+    ],
     "population": { "total": 271415, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": []
@@ -637,10 +720,16 @@
     "nameKo": "제주시",
     "lat": 33.5,
     "lng": 126.53,
-    "blurb": "The island's main airport city, with the highest concentration of coworking spaces on Jeju.",
+    "blurb": "Jeju-do's capital and main transport hub, with flights and ferries connecting it to the mainland. A convenient base for exploring Hallasan.",
+    "vibeTags": ["urban"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "50",
     "ktoLDongSignguCds": ["110"],
+    "gettingAround": [
+      { "label": "Woljeongri Beach", "value": "40 min", "mode": "car" },
+      { "label": "Hallasan", "value": "40 min", "mode": "bus" },
+      { "label": "Seoul", "value": "1h", "mode": "plane" }
+    ],
     "population": { "total": 491186, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": [
@@ -665,10 +754,15 @@
     "nameKo": "서귀포시",
     "lat": 33.25,
     "lng": 126.56,
-    "blurb": "South-coast Jeju city, calmer than Jeju City, popular for month-long guesthouse stays.",
+    "blurb": "A main base for exploring coastal cliffs and waterfalls. Has a bit more of a coastal resort charm and is closer to the first Olle trail route.",
+    "vibeTags": ["scenic"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "50",
     "ktoLDongSignguCds": ["130"],
+    "gettingAround": [
+      { "label": "Jeongbang Falls", "value": "in the city", "mode": "" },
+      { "label": "Jungmun Saekdal Beach", "value": "50 min", "mode": "bus" }
+    ],
     "population": { "total": 178168, "year": 2025 },
     "isPopulationDeclineArea": false,
     "workationCenters": [

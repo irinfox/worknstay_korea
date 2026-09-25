@@ -1184,7 +1184,7 @@ ul.about-hero__chips {
 
 /* Tinted facts panel — DESIGN.md palette Green tint (#EAF4EF bg / #C9E3D6 border). Label left,
    value right, baseline-aligned, at every width — no stacked/mobile mode. Matches the sitewide
-   precedent for this exact shape: .threshold-card__table (population-decline-counties.njk) and
+   precedent for this exact shape: .threshold-card__table (population-decline-areas.njk) and
    the rent-summary card (region.njk) are both unconditional flex rows, label wrapping to a second
    line at the very narrowest widths rather than switching to a stacked layout. */
 .visa-facts {

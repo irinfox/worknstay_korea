@@ -48,14 +48,14 @@ eleventyComputed:
     {% endif %}
     {% if region.longIntro | isArray %}
     {% for para in region.longIntro %}
-    <p class="region-header__intro">{{ para }}</p>
+    <p class="region-header__intro">{{ para | safe }}</p>
     {% endfor %}
     {% else %}
-    <p class="region-header__intro">{{ region.longIntro }}</p>
+    <p class="region-header__intro">{{ region.longIntro | safe }}</p>
     {% endif %}
     {# Season line (design reference 5b): orange dot → bold season name → its window. The name is
        mapped from the seasonTags emoji key (the data carries emoji + window, no name field). #}
-    {% set seasonNames = { "🏄": "Surf season", "⛷️": "Ski season", "🏂": "Snowboard season", "🏔️": "Hiking", "🥾": "Hiking" } %}
+    {% set seasonNames = { "🏄": "Surf season", "⛷️": "Ski season", "🏂": "Snowboard season", "🏔️": "Hiking", "🥾": "Hiking", "🌸": "Flowers" } %}
     {% if region.seasonTags.length %}
     <ul class="region-seasons">
       {% for tag in region.seasonTags %}
@@ -83,12 +83,12 @@ eleventyComputed:
     {% endif %}
     {% if region.isCapitalArea %}
     <div class="note-plate note-plate--stricter">
-      <span class="note-plate__text">Capital-area region — the higher visa income floor applies, except in the <a href="/regions/gyeonggi-do/population-decline-counties/">decline-designated counties</a>.</span>
+      <span class="note-plate__text">Capital-area region — the higher income threshold applies, except in its <a href="/regions/gyeonggi-do/population-decline-areas/">population-decline areas</a>.</span>
       <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
     </div>
     {% else %}
     <div class="note-plate note-plate--easier">
-      <span class="note-plate__text">Outside the capital area — the lower visa income floor applies.</span>
+      <span class="note-plate__text">Outside the capital area — the lower income threshold applies.</span>
       <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
     </div>
     {% endif %}
@@ -202,7 +202,6 @@ eleventyComputed:
 </section>
 {% endif %}
 
-{% if isGangwon %}
 {% if region.usefulLinks.length %}
 <section class="region-section region-section--guides">
   <div class="region-guides">
@@ -220,7 +219,6 @@ eleventyComputed:
     </span>
   </div>
 </section>
-{% endif %}
 {% endif %}
 
 <section class="region-section region-section--cities" id="cities">

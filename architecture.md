@@ -67,7 +67,7 @@ navigable would misrepresent the visa gating that's the site's core value prop. 
 link-only (href stripped from the map shape and the card's "Learn more →"); card content doesn't
 change. The *why* lives in the calculator's result caption and the map legend, not the card.
 Gyeonggi-do also has a **"partial"** state (hatched, tooltip, still clickable) for its
-population-decline counties (§7), linked at `/regions/gyeonggi-do/population-decline-counties/`.
+population-decline areas (§7), linked at `/regions/gyeonggi-do/population-decline-areas/`.
 
 **Seoul/Incheon:** absorbed into the Gyeonggi region page (one page, not three), kept as distinct
 labeled sub-shapes on the map since they're locally significant landmarks.
@@ -121,7 +121,7 @@ worknstay_korea/
 │   │   └── svg/   korea-regions.svg (+ source/korea-provinces-blank.svg — Wikimedia, public domain)
 │   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
 │   └── regions/region.njk (paginates regions.json → /regions/<slug>/);
-│       regions/gyeonggi-do/population-decline-counties.njk
+│       regions/gyeonggi-do/population-decline-areas.njk
 ├── scripts/   # verify-{eligibility,calculator,kto-client,normalize,boost-curated,kto-dev-cache}.mjs
 └── _site/     # build output (gitignored)
 ```
@@ -274,7 +274,7 @@ EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all'
 
 From the Ministry of Justice's F-1-D announcement (2025 GNI reference = 52,410,000 KRW):
 
-| Age | Capital area (excl. population-decline-designated counties) | Non-capital area + population-decline-designated counties |
+| Age | Capital area (excl. population-decline-designated areas) | Non-capital area + population-decline-designated areas |
 |---|---|---|
 | 18–34 | GNI × 1.5 = 78,620,000 KRW | GNI × 1.0 = 52,410,000 KRW |
 | 35+ | GNI × 2.0 = 104,830,000 KRW | GNI × 1.5 = 78,620,000 KRW |

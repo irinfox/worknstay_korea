@@ -290,7 +290,7 @@ ul.region-seasons {
 
 /* Note plate (DESIGN.md § Recurring parts): a line of text + a trailing "Visa info →" link.
    Green tint = "easier" (non-capital, lower income floor), orange tint = "stricter" (capital
-   area). Capital-area regions also link "population-decline counties" inline. Copy is inline
+   area). Capital-area regions also link "population-decline areas" inline. Copy is inline
    microcopy — no _data home yet (task-04 pattern). */
 .note-plate {
   display: flex;
@@ -317,7 +317,7 @@ ul.region-seasons {
   color: var(--color-text-soft);
 }
 
-/* Inline "population-decline counties" link — in-site, so green (DESIGN.md palette). */
+/* Inline "population-decline areas" link — in-site, so green (DESIGN.md palette). */
 .note-plate__text a {
   color: var(--color-primary);
   font-weight: 500;
@@ -766,7 +766,7 @@ ul.region-seasons {
   text-decoration: underline;
 }
 
-/* ── Gyeonggi-do population-decline counties (population-decline-counties.njk) ─────────────────
+/* ── Gyeonggi-do population-decline areas (population-decline-areas.njk) ─────────────────
    Redesign style: reuses the wide .region-page shell + two-column .region-header--split headline
    (rule → H1 → Korean name → intro; aside holds the threshold card instead of the rent recap).
    Below: a source note, a "by tier" section with two chip-labelled scroll strips of dark photo

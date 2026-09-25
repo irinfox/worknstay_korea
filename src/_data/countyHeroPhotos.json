@@ -1,5 +1,5 @@
 {
-  "note": "Gyeonggi-do population-decline county cover photo — one per county box on population-decline-counties.njk. All 7 sourced from KTO PhotoGalleryService1 (gallerySearchList1, uniformly KOGL Type1); files live in src/assets/img/hero/gyeonggi-do-population-decline/, credits/captions in countyHeroCredits.json.",
+  "note": "Gyeonggi-do population-decline county cover photo — one per county box on population-decline-areas.njk. All 7 sourced from KTO PhotoGalleryService1 (gallerySearchList1, uniformly KOGL Type1); files live in src/assets/img/hero/gyeonggi-do-population-decline/, credits/captions in countyHeroCredits.json.",
   "Ganghwa-gun": "seokmodo-glasswort-colony.jpg",
   "Ongjin-gun": "dumujin-brothers-rock.jpg",
   "Gapyeong-gun": "cheongpyeong-lakeside.jpg",
