@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-20 1045 400 190" class="region-detail-map__svg" role="img" aria-label="Map of Jeju-do showing Jeju-si and Seogwipo-si; Hallasan; Jeongbang Falls; and Jungmun Saekdal Beach and Woljeongri Beach">
+  <!-- Province outline: src/assets/svg/korea-regions.svg#region-jeju, copied verbatim (same
+       coordinate frame, no re-basing) and cropped to a generously padded viewBox — see below for
+       why. Pins are hand-placed against this shape, not a lat/lng projection (CLAUDE.md map
+       feedback log). Before moving a pin, re-run the point-in-polygon + margin check against
+       these points AND a label/glyph bounding-box collision check (both scripted against a live
+       render — see project memory) rather than eyeballing it; a pure point-in-polygon pass on
+       these six pins still let two label pairs visibly overlap on screen the first time round.
+       An island, so no neighbour-region orientation labels (unlike gangwon-detail-map.svg) —
+       there's nothing adjacent to point at. -->
+  <polygon class="region-detail-map__shape" points="157.6,1110.9 163.4,1109.7 170.6,1104.9 176.8,1105.3 186.5,1103.6 189.2,1101.3 195.5,1101.5 197.5,1097.4 201.3,1100.1 203.4,1098.2 210.3,1097.8 213.0,1095.9 214.9,1097.3 217.6,1097.1 218.9,1095.3 222.2,1095.3 224.7,1097.4 230.0,1096.7 231.2,1100.7 235.8,1104.0 237.3,1103.0 243.6,1104.0 244.4,1105.5 243.1,1107.0 245.6,1107.8 245.4,1111.2 246.3,1112.4 244.0,1112.2 243.5,1113.5 245.6,1115.3 248.1,1115.1 248.1,1116.0 249.6,1115.1 251.7,1118.7 248.6,1118.3 247.1,1121.6 249.6,1124.7 248.2,1126.0 247.1,1123.5 246.1,1123.9 243.8,1130.0 244.2,1132.7 240.2,1134.2 237.3,1138.5 237.7,1140.4 233.7,1144.6 232.5,1148.8 229.7,1150.9 219.7,1152.1 219.1,1154.0 215.3,1156.7 213.4,1156.1 203.4,1159.0 199.0,1158.4 193.8,1162.0 192.5,1164.5 189.4,1165.5 185.4,1163.7 183.9,1165.5 182.5,1163.9 182.3,1165.5 175.4,1164.5 173.5,1166.6 170.1,1166.6 167.4,1168.5 163.0,1164.5 159.3,1166.2 154.3,1163.9 148.6,1166.8 146.7,1165.7 141.9,1165.7 140.9,1164.3 136.0,1167.8 134.6,1171.0 135.2,1173.1 129.6,1173.7 129.1,1170.6 128.1,1171.2 126.8,1170.1 122.3,1164.3 120.0,1163.9 115.3,1160.5 112.4,1155.1 111.0,1154.5 112.0,1151.7 111.0,1143.2 112.4,1141.5 113.9,1141.5 115.6,1138.1 118.5,1137.3 122.3,1132.1 125.6,1131.2 127.7,1127.0 128.9,1127.0 128.5,1127.7 129.4,1126.4 128.9,1125.6 128.7,1126.8 128.5,1125.4 129.2,1122.5 136.5,1119.9 138.3,1115.8 142.7,1116.0 151.5,1111.4 153.8,1112.6 157.4,1111.2" />
+
+  <!-- KTO searchKeyword2 coordinates (mapX,mapY = longitude,latitude), live-verified. Jeju's
+       polygon (140.7 x 78.4 in this coordinate frame) is much smaller than Gangwon's, but the
+       .map-pin__label CSS rule (font-size: 10px) is shared across every region's detail map — a
+       tight crop here would render that same 10px far too large relative to the island's own
+       small footprint (and would leave no room for "Jungmun Saekdal Beach", the longest label).
+       So this viewBox is deliberately padded well beyond the polygon's own bounding box, closer
+       to Gangwon's px-per-unit ratio than to Gangwon's fill percentage — same reasoning the home
+       page's Jeju infographic already uses for real geographic scale (CLAUDE.md feedback log:
+       "Jeju keeps its true geographic distance... deliberate, don't fix the gap"), not a bug to
+       tighten later.
+       Cities (one representative in-town landmark each, not city hall, matching Gangwon's
+       pattern): Jeju-si via "Yongduam Rock" 126.5119710049,33.5158033889 · Seogwipo-si via
+       "Seogwipo Maeil Olle Market" 126.563223568437,33.2501482431274.
+       Mountain: Hallasan (KTO's "Hallasan Mountain" listing) 126.5813980571,33.2813248581 — this
+       resolves to a south-side trailhead (San 15-1 Topyeong-dong, Seogwipo-si), not the central
+       crater, and sits close enough to both cities' own pins that no amount of nudging along that
+       same north-south line left room for its label — the island is only ~78 units tall here vs.
+       Gangwon's ~337. Pulled instead to the island's western interior, clear of the Jeju-si/
+       Seogwipo-si/Jungmun cluster, with a side-mounted label (text beside the glyph, not below
+       it) so it needs no vertical clearance from anyone — a hand-fit legibility placement, not a
+       claim about Hallasan's true position (same liberty Gangwon's pin placements take).
+       Waterfall: Jeongbang Falls ("Jeongbangpokpo Falls") 126.5715923529,33.2450100844 — genuinely
+       ~1km from the Seogwipo-si pin above (both are literally that close in real life); given
+       clearance room instead of plotted exactly on top of it, and label anchored to extend away
+       from Seogwipo-si (text-anchor="start") rather than centred.
+       Beaches: Jungmun Saekdal Beach 126.4108385503,33.2498839643 (label anchored
+       text-anchor="end", extending away from the Seogwipo-si cluster to its east) · Woljeongri
+       Beach 126.7983896767,33.5546536829 (label above the pin, not below — the default below
+       placement collided with Jeju-si/Hallasan's territory south of it). -->
+
+  <g class="map-pin map-pin--city" transform="translate(173,1108)">
+    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Jeju-si</text>
+  </g>
+  <g class="map-pin map-pin--city" transform="translate(170,1162)">
+    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Seogwipo-si</text>
+  </g>
+
+  <g class="map-pin" transform="translate(140,1140)">
+    <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 12.5 6 4.5l2.6 4.6M6.6 12.5 10.5 5.5l4 7H1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label" x="10" y="4" text-anchor="start">Hallasan</text>
+  </g>
+  <g class="map-pin" transform="translate(210,1145)">
+    <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 2.5h12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 2.5v7.5M8 2.5v8.5M11 2.5v7.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.2 13.2c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label" x="0" y="18" text-anchor="start">Jeongbang Falls</text>
+  </g>
+
+  <g class="map-pin" transform="translate(119,1161)">
+    <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label" x="0" y="18" text-anchor="end">Jungmun Saekdal Beach</text>
+  </g>
+  <g class="map-pin" transform="translate(225,1101)">
+    <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label" x="0" y="-20" text-anchor="middle">Woljeongri Beach</text>
+  </g>
+</svg>
