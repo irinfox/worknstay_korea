@@ -1,82 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 1030 372 210" style="--region-map-zoom: calc(372 / 432)" class="region-detail-map__svg" role="img" aria-label="Map of Jeju-do showing Jeju-si and Seogwipo-si on the coast; Hallasan at the island's center; and Jungmun Saekdal Beach and Woljeongri Beach on the coast (beach names reveal on hover or tap)">
-  <!-- Province outline: src/assets/svg/korea-regions.svg#region-jeju, same coordinate frame as
-       that source, then scaled 2x about its own area centroid (script pattern in project
-       memory) so the island has enough room for the pins — the original 1x crop packed
-       everything into a ~140x78 footprint and left no room to place them by real coordinate
-       without the labels colliding, which is why they read as "not where they're supposed to
-       be." Re-scaling the shape itself, not just padding the viewBox around a small shape, is
-       the fix; the viewBox below is cropped to the new (still generously padded) bounding box.
-       Pins are re-derived below from real KTO coordinates (see the coastal-fit method below),
-       then verified point-in-polygon with a margin, same validation pattern as Gangwon's pins
-       (project memory: script-checked, not eyeballed). An island, so no neighbour-region
-       orientation labels (unlike gangwon-detail-map.svg) — there's nothing adjacent to point
-       at. -->
+  <!-- Province outline: src/assets/svg/korea-regions.svg#region-jeju, same coordinate frame,
+       scaled 2x about its own centroid for pin room. Island — no neighbour-region labels. -->
   <polygon class="region-detail-map__shape" points="133.9,1087.8 145.5,1085.4 159.9,1075.8 172.3,1076.6 191.7,1073.2 197.1,1068.6 209.7,1069 213.7,1060.8 221.3,1066.2 225.5,1062.4 239.3,1061.6 244.7,1057.8 248.5,1060.6 253.9,1060.2 256.5,1056.6 263.1,1056.6 268.1,1060.8 278.7,1059.4 281.1,1067.4 290.3,1074 293.3,1072 305.9,1074 307.5,1077 304.9,1080 309.9,1081.6 309.5,1088.4 311.3,1090.8 306.7,1090.4 305.7,1093 309.9,1096.6 314.9,1096.2 314.9,1098 317.9,1096.2 322.1,1103.4 315.9,1102.6 312.9,1109.2 317.9,1115.4 315.1,1118 312.9,1113 310.9,1113.8 306.3,1126 307.1,1131.4 299.1,1134.4 293.3,1143 294.1,1146.8 286.1,1155.2 283.7,1163.6 278.1,1167.8 258.1,1170.2 256.9,1174 249.3,1179.4 245.5,1178.2 225.5,1184 216.7,1182.8 206.3,1190 203.7,1195 197.5,1197 189.5,1193.4 186.5,1197 183.7,1193.8 183.3,1197 169.5,1195 165.7,1199.2 158.9,1199.2 153.5,1203 144.7,1195 137.3,1198.4 127.3,1193.8 115.9,1199.6 112.1,1197.4 102.5,1197.4 100.5,1194.6 90.7,1201.6 87.9,1208 89.1,1212.2 77.9,1213.4 76.9,1207.2 74.9,1208.4 72.3,1206.2 63.3,1194.6 58.7,1193.8 49.3,1187 43.5,1176.2 40.7,1175 42.7,1169.4 40.7,1152.4 43.5,1149 46.5,1149 49.9,1142.2 55.7,1140.6 63.3,1130.2 69.9,1128.4 74.1,1120 76.5,1120 75.7,1121.4 77.5,1118.8 76.5,1117.2 76.1,1119.6 75.7,1116.8 77.1,1111 91.7,1105.8 95.3,1097.6 104.1,1098 121.7,1088.8 126.3,1091.2 133.5,1088.4" />
 
-  <!-- KTO searchKeyword2 coordinates (mapX,mapY = longitude,latitude), live-verified. Every pin
-       below except Hallasan is a genuinely coastal place in real life — placed with a coastal
-       fit: cast a bearing outward from the island's own area centroid as a ray, find where it
-       crosses the polygon's coastline, then place the pin a fixed inset back in from that
-       crossing, so it hugs the coastline rather than sitting a fixed fraction of the way there.
-       Per-pin inset varies (documented below) so each glyph's own footprint clears the coastline
-       stroke instead of using one inset for every glyph size. Verified point-in-polygon with
-       margin per pin (script pattern in project memory) before drawing, not eyeballed.
-       Cities (one representative in-town landmark each, not city hall, matching Gangwon's
-       pattern): Jeju-si via "Yongduam Rock" 126.5119710049,33.5158033889 (north coast) ·
-       Seogwipo-si via "Seogwipo Maeil Olle Market" 126.563223568437,33.2501482431274 (south
-       coast). Both cast on a bearing chosen to read as north/south of Hallasan rather than their
-       literal real bearing from the centroid (Yongduam Rock's true bearing is more north-west) —
-       on the real map the city label itself sits roughly above/below the mountain even though the
-       one representative landmark used for the pin is off to the side; matches how the reference
-       map reads, an explicit user call, same kind of liberty Hallasan's own placement already
-       takes below. Jeju-si sits on a deeper inset (17 vs. the ~11 everything else on this map
-       uses) than a bare margin check alone would suggest necessary — at the shallower inset the
-       15x15 city glyph's own square footprint still crossed the coastline stroke on this stretch
-       of coast, even though its anchor point technically cleared the point-in-polygon margin
-       check.
-       Mountain: Hallasan (KTO's "Hallasan Mountain" listing) 126.5813980571,33.2813248581 —
-       resolves to a south-side trailhead, not the central crater, but placed at the polygon's own
-       area centroid rather than that coordinate: the mountain pin sits dead-center on the island
-       (it reads as the island's defining landmark, and it's genuinely the one landmark here that
-       isn't coastal), overriding the coastal fit used for every other pin.
-       Jeongbang Falls ("Jeongbangpokpo Falls", 126.5715923529,33.2450100844) is deliberately not
-       pinned here — it's ~1km from the Seogwipo-si pin above, too close on this map's scale for
-       its own glyph to read as a separate place next to Seogwipo-si's rather than clutter, and
-       every pin glyph on this map is the same fixed size (shared across every region's detail
-       map — CLAUDE.md tech-stack note on not introducing one-off exceptions), so it can't be
-       shrunk to fit instead.
-       Beaches: Jungmun Saekdal Beach 126.4108385503,33.2498839643 (southwestern coast) ·
-       Woljeongri Beach 126.7983896767,33.5546536829 (northeastern coast). Both names are long
-       relative to the island's own footprint, so — unlike Gangwon's single "Yangyang beaches"
-       pin — each beach's own label hides until hover/focus/tap, same mechanism as Gangwon's
-       ski-resort pins (.map-pin--beach, region-detail-map.css / region-detail-map.js). Reveals
-       below the pin, matching Gangwon's ski-label convention (not the above-pin placement this
-       map used at first) — one consistent reveal direction across both region maps, not just the
-       same fade. Jungmun's y is 22, not Woljeongri's 12: at 12 its centered label ran straight
-       into Seogwipo-si's own always-on label just east of it (permanent, not hover-gated like
-       Jungmun's own), so it drops further below the pin instead — measured live against
-       Seogwipo-si's actual rendered label box until the overlap cleared, not estimated. An
-       anchor="end" reveal was tried first to dodge sideways instead, but that reads as the
-       label floating away from its own pin rather than belonging to it; dropping it further
-       below keeps it looking attached.
-       Coastline clearance for these two is checked from the glyph's TOP (the surfboard path,
-       ~14 units above the anchor — the anchor sits at the glyph's bottom tip, by the wave path)
-       rather than from the anchor itself: the anchor is always the point furthest from the coast,
-       so checking only it understates how close the glyph's upper half actually reads against the
-       coastline — and it's the glyph's NEAR side that should read as equally close to the coast
-       for both beaches, not the anchor specifically: for Woljeongri that's the top (surfboard),
-       for Jungmun it's the bottom (wave, right at the anchor), because the two pins sit on
-       differently-angled stretches of coast. Both are tuned to a ~4.3-4.5 unit near-side margin.
-       Jungmun sits just east of the notch in the coastline near polygon vertex (127.3,1193.8),
-       close to Seogwipo-si's side of the coast rather than the flat inlet further west — anchor/
-       wave margin 4.3. Woljeongri sits on the small point on its stretch of coast, west of the
-       tight, serrated dip right at the NE tip (a cluster of close-together vertices, likely a
-       simplified small headland/islet, where the anchor and the near side couldn't both clear the
-       coast by a similar margin) — anchor margin 18.2, top margin 4.3. Both pin x-positions were
-       cross-checked against the rendered screenshot (decoded pixel-for-pixel against the
-       polygon's own known bounding box for an exact scale, not eyeballed) after two rounds of
-       misjudging left/right from the image alone. Both verified point-in-polygon on the near side
-       AND the anchor before drawing. -->
+  <!-- KTO searchKeyword2 coordinates (lng,lat). Coastal fit: ray from the polygon's centroid
+       along each place's real bearing, pin set an inset back from where it crosses the
+       coastline (verified point-in-polygon + margin, not eyeballed). Hallasan is the one
+       exception, centered rather than coastal-fit.
+       Cities (representative landmark, not city hall): Jeju-si via Yongduam Rock
+       126.5119710049,33.5158033889 · Seogwipo-si via Seogwipo Maeil Olle Market
+       126.563223568437,33.2501482431274 — cast north/south of Hallasan rather than their
+       literal bearing, to match the real map's look. Jeju-si's inset is deeper (17 vs ~11) so
+       its glyph clears the coastline.
+       Mountain: Hallasan 126.5813980571,33.2813248581, centered on the island rather than its
+       real (south-trailhead) coordinate.
+       Jeongbang Falls (126.5715923529,33.2450100844) has no pin — too close to Seogwipo-si at
+       this scale.
+       Beaches: Jungmun Saekdal Beach 126.4108385503,33.2498839643 · Woljeongri Beach
+       126.7983896767,33.5546536829. Long names, so labels hide until hover/tap
+       (.map-pin--beach) and reveal below the pin. Jungmun's label sits lower (y=22 vs. the
+       usual 12) to clear Seogwipo-si's always-on label. Coastal clearance is checked from each
+       glyph's near side to the coastline, not its anchor (top/surfboard for Woljeongri,
+       bottom/wave for Jungmun) — ~4.3 unit margin each. -->
 
   <g class="map-pin map-pin--city" transform="translate(191.6,1086.8)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>

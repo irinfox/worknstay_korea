@@ -30,18 +30,10 @@
   max-width: 640px;
   height: auto;
   margin: 0 auto;
-  /* Every map is rendered at the same CSS pixel width (up to the 640px cap above), but each
-     map's own viewBox is a different width in SVG user units — Gangwon's is a straight crop of
-     korea-regions.svg (432 units wide), Jeju's was deliberately scaled 2x for pin room (372
-     units wide, after cropping). Since font-size lives in that same user-unit space, the exact
-     same declared value renders at a different CSS pixel size on each map — Jeju's labels came
-     out ~16% bigger than Gangwon's despite identical markup, because its viewBox packs fewer
-     units into the same rendered width. --region-map-zoom exists to cancel that out: it's
-     (this map's own viewBox width) / (Gangwon's 432, the reference — the first map built, and
-     unchanged since), set inline on each map's <svg> root next to its viewBox (Gangwon needs no
-     override, since 1 is exactly correct for it). Every font-size below multiplies by it, so the
-     zoom used to fit a map's shape/pins is purely a legibility/layout choice and never leaks into
-     how big the text reads. Add this to every future region map's <svg> tag the same way. */
+  /* font-size lives in SVG user-unit space, so it scales with each map's own viewBox width —
+     same declared px renders bigger on a narrower viewBox. Cancel that out: set
+     --region-map-zoom inline on a map's <svg> root as (its viewBox width / 432, Gangwon's
+     reference width). Gangwon needs no override (1 is already correct). */
   --region-map-zoom: 1;
 }
 
