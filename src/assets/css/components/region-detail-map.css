@@ -37,6 +37,15 @@
   --region-map-zoom: 1;
 }
 
+/* Chungcheong-do's 5 cities (Daejeon/Sejong/Cheongju/Gongju/Taean) sit closer together in real
+   distance than any other region's city set, so the shared 640px cap reads more cramped here than
+   elsewhere even at the same zoom formula — raising the cap (~10%, same aspect, height follows
+   via height:auto) gives every pin/label more absolute pixel room without re-deriving their
+   positions. Chungcheong-do only; not a general pattern for the other five maps. */
+#chungcheong-detail-map {
+  max-width: 704px;
+}
+
 .region-detail-map__shape {
   fill: var(--color-primary-tint);
   stroke: var(--color-primary);
