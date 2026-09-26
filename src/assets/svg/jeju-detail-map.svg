@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 1030 372 210" class="region-detail-map__svg" role="img" aria-label="Map of Jeju-do showing Jeju-si and Seogwipo-si on the coast; Hallasan at the island's center; and Jungmun Saekdal Beach and Woljeongri Beach on the coast (beach names reveal on hover or tap)">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-32 1030 372 210" style="--region-map-zoom: calc(372 / 432)" class="region-detail-map__svg" role="img" aria-label="Map of Jeju-do showing Jeju-si and Seogwipo-si on the coast; Hallasan at the island's center; and Jungmun Saekdal Beach and Woljeongri Beach on the coast (beach names reveal on hover or tap)">
   <!-- Province outline: src/assets/svg/korea-regions.svg#region-jeju, same coordinate frame as
        that source, then scaled 2x about its own area centroid (script pattern in project
        memory) so the island has enough room for the pins — the original 1x crop packed
@@ -49,9 +49,16 @@
        Woljeongri Beach 126.7983896767,33.5546536829 (northeastern coast). Both names are long
        relative to the island's own footprint, so — unlike Gangwon's single "Yangyang beaches"
        pin — each beach's own label hides until hover/focus/tap, same mechanism as Gangwon's
-       ski-resort pins (.map-pin--beach, region-detail-map.css / region-detail-map.js), and both
-       reveal directly above their pin (same placement, not just the same fade) for one
-       consistent beach-pin pattern.
+       ski-resort pins (.map-pin--beach, region-detail-map.css / region-detail-map.js). Reveals
+       below the pin, matching Gangwon's ski-label convention (not the above-pin placement this
+       map used at first) — one consistent reveal direction across both region maps, not just the
+       same fade. Jungmun's y is 22, not Woljeongri's 12: at 12 its centered label ran straight
+       into Seogwipo-si's own always-on label just east of it (permanent, not hover-gated like
+       Jungmun's own), so it drops further below the pin instead — measured live against
+       Seogwipo-si's actual rendered label box until the overlap cleared, not estimated. An
+       anchor="end" reveal was tried first to dodge sideways instead, but that reads as the
+       label floating away from its own pin rather than belonging to it; dropping it further
+       below keeps it looking attached.
        Coastline clearance for these two is checked from the glyph's TOP (the surfboard path,
        ~14 units above the anchor — the anchor sits at the glyph's bottom tip, by the wave path)
        rather than from the anchor itself: the anchor is always the point furthest from the coast,
@@ -88,11 +95,11 @@
   <g class="map-pin map-pin--beach" tabindex="0" transform="translate(127,1189.5)">
     <circle class="map-pin__hit-target" r="18" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="-16" text-anchor="middle">Jungmun Saekdal Beach</text>
+    <text class="map-pin__label" x="0" y="22" text-anchor="middle">Jungmun Saekdal Beach</text>
   </g>
   <g class="map-pin map-pin--beach" tabindex="0" transform="translate(267,1079)">
     <circle class="map-pin__hit-target" r="18" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="-16" text-anchor="middle">Woljeongri Beach</text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Woljeongri Beach</text>
   </g>
 </svg>

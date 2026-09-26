@@ -30,6 +30,19 @@
   max-width: 640px;
   height: auto;
   margin: 0 auto;
+  /* Every map is rendered at the same CSS pixel width (up to the 640px cap above), but each
+     map's own viewBox is a different width in SVG user units — Gangwon's is a straight crop of
+     korea-regions.svg (432 units wide), Jeju's was deliberately scaled 2x for pin room (372
+     units wide, after cropping). Since font-size lives in that same user-unit space, the exact
+     same declared value renders at a different CSS pixel size on each map — Jeju's labels came
+     out ~16% bigger than Gangwon's despite identical markup, because its viewBox packs fewer
+     units into the same rendered width. --region-map-zoom exists to cancel that out: it's
+     (this map's own viewBox width) / (Gangwon's 432, the reference — the first map built, and
+     unchanged since), set inline on each map's <svg> root next to its viewBox (Gangwon needs no
+     override, since 1 is exactly correct for it). Every font-size below multiplies by it, so the
+     zoom used to fit a map's shape/pins is purely a legibility/layout choice and never leaks into
+     how big the text reads. Add this to every future region map's <svg> tag the same way. */
+  --region-map-zoom: 1;
 }
 
 .region-detail-map__shape {
@@ -89,7 +102,7 @@
 
 .map-pin__label {
   font-family: var(--font-family-base);
-  font-size: 10px;
+  font-size: calc(10px * var(--region-map-zoom));
   /* Light by default — city is the one bold exception (below). Puts Seoraksan and Yangyang
      beaches' always-on labels at the same weight/density as the ski pins' reveal-on-hover ones,
      so all the "nature feature" labels read as one consistent, softer register next to the bold
@@ -114,13 +127,13 @@
 }
 
 .map-pin--city .map-pin__label {
-  font-size: 11px;
+  font-size: calc(11px * var(--region-map-zoom));
   font-weight: 600;
 }
 
 .map-pin__note {
   font-weight: 400;
-  font-size: 9px;
+  font-size: calc(9px * var(--region-map-zoom));
   fill: var(--color-text-muted);
 }
 
@@ -194,7 +207,7 @@
 
 .map-pin__detail {
   font-family: var(--font-family-base);
-  font-size: 9px;
+  font-size: calc(9px * var(--region-map-zoom));
   fill: var(--color-text-muted);
   /* Same Green-tint halo as .map-pin__label above, same reasoning — this line is one of the
      "labels" the halo instruction covers too, not just the class literally named __label. Without
@@ -228,7 +241,7 @@
 /* Orientation-only labels for neighbouring regions, placed outside the province outline. */
 .region-detail-map__neighbor {
   font-family: var(--font-family-base);
-  font-size: 11px;
+  font-size: calc(11px * var(--region-map-zoom));
   font-style: italic;
   fill: var(--color-text-muted);
   opacity: 0.75;
