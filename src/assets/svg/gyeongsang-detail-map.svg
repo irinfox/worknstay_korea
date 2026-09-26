@@ -16,31 +16,36 @@
   <text class="region-detail-map__neighbor" x="290" y="600" text-anchor="middle">Jeolla-do</text>
 
   <!-- KTO searchKeyword2 coordinates (lng,lat), same shared affine calibration as
-       gyeonggi-detail-map.svg (see that file's comment for the fit methodology). Busan (Busan
-       Tower, central Nampo-dong rather than the far-flung Haeundae Beach, for a better city-
-       center fit) 129.0324,35.1012, nudged ~7 units for polygon margin · Daegu (Seomun Market)
-       128.5808,35.8689 · Ulsan (Taehwagang National Garden) 129.2912,35.5487 · Gyeongju
-       (Bulguksa Temple) 129.3318,35.7893 · Andong Hahoe Village [UNESCO] 128.5283,36.5506
-       (hanok glyph — the site itself is the landmark, not a proxy for the city of Andong). -->
+       gyeonggi-detail-map.svg (see that file's comment for the fit methodology), then hand-
+       calibrated against the polygon below. Busan (Busan Tower, central Nampo-dong rather than
+       the far-flung Haeundae Beach, for a better city-center fit) 129.0324,35.1012 · Daegu
+       (Seomun Market) 128.5808,35.8689 · Ulsan (Taehwagang National Garden) 129.2912,35.5487 ·
+       Gyeongju (Bulguksa Temple) 129.3318,35.7893 · Andong Hahoe Village [UNESCO]
+       128.5283,36.5506 (hanok glyph — the site itself is the landmark, not a proxy for the city
+       of Andong).
 
-  <g class="map-pin map-pin--city" transform="translate(608.4,758.6)">
-    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Busan</text>
+       Glyph size and label offset (below) are scaled by --region-map-zoom (550/432, this file's
+       viewBox width over Gangwon's 432 reference) — same reasoning as the font-size scaling in
+       region-detail-map.css, extended to glyph width/height/x/y and the label y attribute. -->
+
+  <g class="map-pin map-pin--city" transform="translate(627.7,740.6)">
+    <svg class="map-pin__glyph" x="-9.55" y="-17.82" width="19.1" height="19.1" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="15.28" text-anchor="middle">Busan</text>
   </g>
-  <g class="map-pin map-pin--city" transform="translate(533.9,602.0)">
-    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Daegu</text>
+  <g class="map-pin map-pin--city" transform="translate(531.0,614.6)">
+    <svg class="map-pin__glyph" x="-9.55" y="-17.82" width="19.1" height="19.1" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="15.28" text-anchor="middle">Daegu</text>
   </g>
-  <g class="map-pin map-pin--city" transform="translate(656.8,670.0)">
-    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Ulsan</text>
+  <g class="map-pin map-pin--city" transform="translate(648.6,669.1)">
+    <svg class="map-pin__glyph" x="-9.55" y="-17.82" width="19.1" height="19.1" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="15.28" text-anchor="middle">Ulsan</text>
   </g>
-  <g class="map-pin map-pin--city" transform="translate(665.1,618.6)">
-    <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Gyeongju</text>
+  <g class="map-pin map-pin--city" transform="translate(654.9,612.2)">
+    <svg class="map-pin__glyph" x="-9.55" y="-17.82" width="19.1" height="19.1" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="15.28" text-anchor="middle">Gyeongju</text>
   </g>
   <g class="map-pin" transform="translate(527.8,456.6)">
-    <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M0.9 5.7l1.2 1.2q1.1 0 2.4-3.9c2.3.9 4.7.9 7 0q1.3 3.9 2.4 3.9l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 13.5V9.8M11.5 13.5V9.8M2.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Andong Hahoe Village</text>
+    <svg class="map-pin__glyph map-pin__glyph--nature" x="-10.19" y="-17.82" width="20.37" height="20.37" viewBox="0 0 16 16" aria-hidden="true"><path d="M0.9 5.7l1.2 1.2q1.1 0 2.4-3.9c2.3.9 4.7.9 7 0q1.3 3.9 2.4 3.9l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 13.5V9.8M11.5 13.5V9.8M2.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label" x="0" y="15.28" text-anchor="middle">Andong Hahoe Village</text>
   </g>
 </svg>
