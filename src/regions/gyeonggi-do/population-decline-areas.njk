@@ -1,11 +1,11 @@
 ---
 layout: layouts/page.njk
-title: "Gyeonggi-do decline-designated counties"
-description: "The Gyeonggi-do and Incheon counties that qualify for the F-1-D visa's lower, non-capital income threshold despite sitting inside the capital area."
-permalink: "/regions/gyeonggi-do/population-decline-counties/"
+title: "Gyeonggi-do population-decline areas"
+description: "The Gyeonggi-do and Incheon areas that qualify for the F-1-D visa's lower, non-capital income threshold despite sitting inside the capital area."
+permalink: "/regions/gyeonggi-do/population-decline-areas/"
 ---
 {# Not paginated like regions/region.njk — Gyeonggi-do is the only capital-tier region, so it's
-   the only place a population-decline county can change the eligibility outcome (architecture.md
+   the only place a population-decline area can change the eligibility outcome (architecture.md
    §7). Redesign style: same wide .region-page shell + two-column headline as region.njk, with a
    tinted threshold-summary card in place of the rent recap. #}
 {% set declineCounties = [] %}
@@ -39,53 +39,42 @@ permalink: "/regions/gyeonggi-do/population-decline-counties/"
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
   <a href="/#map">Regions</a> <span aria-hidden="true">/</span>
   <a href="/regions/gyeonggi-do/">Gyeonggi-do</a> <span aria-hidden="true">/</span>
-  <span class="region-breadcrumb__here">Decline-designated counties</span>
+  <span class="region-breadcrumb__here">Population-decline areas</span>
 </nav>
 
 <header class="region-header region-header--split">
   <div class="region-header__main">
     <span class="region-header__rule" aria-hidden="true"></span>
-    <h1>Gyeonggi-do decline-designated counties</h1>
+    <h1>Gyeonggi-do population-decline areas</h1>
     <p class="county-page__ko" lang="ko">경기도 인구감소지역</p>
     <p class="region-header__intro">
-      Gyeonggi-do is a capital-area region, so its F-1-D income threshold is the country's
-      highest. Seven counties are the exception.
-    </p>
-    <p class="region-header__intro">
-      They sit inside the capital area administratively, but the government lists them as
-      population-decline or watch-list areas — so they are assessed at the lower, non-capital
-      threshold. Everything else in Gyeonggi-do and Incheon uses the capital figure.
+      Gyeonggi-do is part of Korea's capital area, where the F-1-D income threshold is higher.
+      Seven areas are an exception: they qualify for the lower non-capital threshold because they
+      are designated as population-decline or watch-list areas.
     </p>
   </div>
 
   <aside class="region-header__aside">
     <div class="threshold-card">
-      <p class="threshold-card__lead">
-        These seven counties are assessed at Korea's non-capital F-1-D income threshold — the
-        same as Gangwon-do or Jeolla-do.
-      </p>
       <dl class="threshold-card__table">
         <div>
-          <dt>In these seven counties</dt>
+          <dt>These seven areas</dt>
           <dd>₩{{ visaRules.thresholdsByMultiplier["1"] / 1000000 }}M–{{ visaRules.thresholdsByMultiplier["1.5"] / 1000000 }}M</dd>
         </div>
         <div>
           <dt>Rest of Gyeonggi-do &amp; Incheon</dt>
           <dd>₩{{ visaRules.thresholdsByMultiplier["1.5"] / 1000000 }}M–{{ visaRules.thresholdsByMultiplier["2"] / 1000000 }}M</dd>
         </div>
-        <div>
-          <dt>How many qualify</dt>
-          <dd>{{ declineCounties.length }} designated · {{ watchCounties.length }} watch-list</dd>
-        </div>
       </dl>
       <p class="threshold-card__note">
-        Non-capital vs capital rate — the exact figure depends on your age and whether family
-        join you.
+        The exact threshold depends on your age and whether you are accompanied by family.
       </p>
       <p class="threshold-card__links">
         <a href="/visa-info/">Visa info →</a>
-        <a href="/settling-in/">Settling in →</a>
       </p>
+    </div>
+    <div class="note-plate note-plate--stricter">
+      <span class="note-plate__text">This interpretation is <a href="/visa-info/#notes">awaiting ministry confirmation.</a></span>
     </div>
   </aside>
 </header>
@@ -95,18 +84,12 @@ permalink: "/regions/gyeonggi-do/population-decline-counties/"
     <span class="source-note__head"><span class="source-note__tick" aria-hidden="true"></span>Source:</span>
     <div class="region-guides__item">
       <a class="region-guides__link" href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do" target="_blank" rel="noopener">Population-decline area designation ↗</a>
-      <span class="region-guides__meta">mois.go.kr · Designated every 5 years, due October 2026</span>
+      <span class="region-guides__meta">mois.go.kr · Designation cycle: every 5 years · Next expected designation: October 2026</span>
     </div>
   </div>
 </section>
 
 <section class="region-section region-section--tiers">
-  <div class="region-section__head">
-    <span class="region-section__tick" aria-hidden="true"></span>
-    <h2>The seven, by tier</h2>
-  </div>
-  <p class="region-section__sub">Formally designated first, then the watch-list.</p>
-
   <div class="tier-group">
     <p class="tier-label">
       <span class="tier-chip tier-chip--designated">Designated · {{ declineCounties.length }}</span>
@@ -120,7 +103,7 @@ permalink: "/regions/gyeonggi-do/population-decline-counties/"
   <div class="tier-group">
     <p class="tier-label">
       <span class="tier-chip tier-chip--watch">Watch-list · {{ watchCounties.length }}</span>
-      Monitored, not yet designated — status can change year to year.
+      Monitored, not yet designated
     </p>
     <ul class="tier-grid">
       {% for c in watchCounties %}{{ tierCard(c) }}{% endfor %}

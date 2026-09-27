@@ -40,7 +40,7 @@ until Phase 19.
       callout together. Narrow: tap-to-fill single card (clones the infographic card),
       reduced-motion-aware scroll, `.region--selected` map class. `sessionStorage` "available to
       you" badge ~~tried, dropped~~ (only worked for one nav path); replaced by the standalone
-      `/regions/gyeonggi-do/population-decline-counties/` page.
+      `/regions/gyeonggi-do/population-decline-areas/` page.
 - [x] **19 — Deploy.** Cloudflare Pages project, `KTO_API_KEY`/`KTO_GALLERY_API_KEY` secrets,
       native Web Analytics, custom `src/404.njk`, `robots.txt` disallow-all + `noindex` (both
       come off in Phase 29). Secret-leak check clean. `functions/**` JSON-import constraint →
@@ -92,8 +92,8 @@ Iterative editorial/research work, mostly hand-curation — do one region at a t
       has real behavior (own category order, reorder-bug fix, dropped on jeju-do).
 - [x] VE07 stays whitelisted to VE070100/070500/070600 — live checks found no thin culture list
       anywhere, so no widening needed.
-- [ ] Region description rewrite (all 6).
-- [ ] Home region cards: vibe-tags.
+- [x] Region description rewrite (all 6).
+- [x] Home region cards: vibe-tags.
 - [x] Home region cards: food gallery.
 - [ ] Home region cards: real money figures (replace MOCK).
 

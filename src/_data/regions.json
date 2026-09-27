@@ -8,11 +8,23 @@
     "isCapitalArea": true,
     "ktoLDongRegnCds": ["11", "28", "41"],
     "ktoAreaCodes": [1, 2, 31],
-    "vibeTags": ["capital area", "commute"],
+    "vibeTags": ["fast-paced", "convenient", "crowded"],
     "nomadScore": 62,
-    "shortIntro": "The capital region — best infrastructure, but the toughest visa income threshold. Includes Seoul and Incheon.",
-    "longIntro": "Gyeonggi-do wraps around Seoul and Incheon, giving digital nomads the country's densest transit network, fastest internet, and largest coworking scene. It's the capital-tier region for visa purposes, so the income bar is highest — except in a handful of population-decline-designated counties (see the region page for details), which qualify at the lower non-capital threshold.",
-    "heroImageIds": []
+    "shortIntro": "A good match for those who enjoy big-city life and an active urban lifestyle.",
+    "longIntro": [
+      "Gyeonggi-do, together with Seoul and Incheon, is also known as the Seoul Metropolitan or Capital Area.",
+      "The concentration of prestigious universities and convenient infrastructure has made it the most populated area in Korea, with 51% of the country's population (26.3M out of 51.8M) living here.",
+      "With Seoul being the country's most well-known and crowded city, many satellite cities are being built and the subway network continues to expand to ease population concentration."
+    ],
+    "heroImageIds": [],
+    "usefulLinks": [
+      {
+        "label": "Scenic Hiking & Walking Trails in/near Seoul",
+        "url": "https://www.koreatodo.com/best-hiking-trails-korea",
+        "sourceLabel": "koreatodo.com",
+        "sourceDate": "2026"
+      }
+    ]
   },
   {
     "slug": "gangwon-do",
@@ -26,7 +38,7 @@
     "ktoAreaCodes": [32],
     "vibeTags": ["surf", "mountains", "snow", "coffee"],
     "nomadScore": 74,
-    "shortIntro": "A good match for outdoor activity lovers, with snowy mountains and beaches for surfing.",
+    "shortIntro": "A good match for those who enjoy both summer and winter outdoor activities.",
     "longIntro": [
       "Gangwon-do is the Korean region with both the highest density of mountains and plenty of beaches. That makes it especially suitable for those who prefer outdoor activities — hiking, surfing and winter sports — over big city vibes. Gangneung is also known for its strong coffee culture and sea-view cafes.",
       "Reachable within a few hours from the capital region, it's a popular leisure destination for Koreans, so expect it to get more crowded on weekends and public holidays. Developed coworking spaces are rare, but every city has plenty of study cafés that offer quite similar facilities."
@@ -62,11 +74,35 @@
     "ktoLDongRegnCds": ["30", "36110", "43", "44"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; Sejong is the 5-digit code \"36110\", not \"36\".",
     "ktoAreaCodes": [3, 8, 33, 34],
-    "vibeTags": ["central", "KTX", "quiet"],
+    "vibeTags": ["central", "laid-back", "bread"],
     "nomadScore": 68,
-    "shortIntro": "Central and well-connected — an easy KTX ride from Seoul without capital-area prices or thresholds.",
-    "longIntro": "Covering Chungcheongbuk-do, Chungcheongnam-do, Daejeon, and Sejong, this region sits at Korea's geographic center with strong KTX rail links to both Seoul and the south. Daejeon's research-institute density gives it a quietly technical, unpretentious feel — good for nomads who want short trips to the capital without living (or paying) there.",
-    "heroImageIds": []
+    "shortIntro": "A good match for those who prefer focused work and occasional nature escapes.",
+    "longIntro": [
+      "Chungcheong-do is Korea's central region with an active international airport. The region is known for its relaxed pace of life, which is even reflected in the local dialect.",
+      "Northern Chungcheong (Chungcheongbuk-do) is the only region in Korea without access to the sea. Instead, it is famous for canyons and lakes, including Dodamsambong Peaks and Chungjuho. Cheongju is also home to the region's international airport.",
+      "Southern Chungcheong (Chungcheongnam-do) is home to research and administrative cities, alongside a mix of culinary and historic sites. The Taean coastline is also known for its mix of sand and mud, including Korea's only Sinduri Coastal Sand Dune and Mongsanpo Mudflat, where beginners can try activities such as clam digging."
+    ],
+    "heroImageIds": [],
+    "usefulLinks": [
+      {
+        "label": "Chungcheong-do Guide",
+        "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=&vcontsId=1591589",
+        "sourceLabel": "visitkorea.or.kr",
+        "sourceDate": "Jul 2026"
+      },
+      {
+        "label": "Korean Mudflat Experience",
+        "url": "https://kculture.com/korean-mudflat-experience-clam-digging-guide/",
+        "sourceLabel": "kculture.com",
+        "sourceDate": "Jul 2026"
+      },
+      {
+        "label": "Cycling logistical guide",
+        "url": "https://kcampus.kr/news/cycling-in-korea--a-simple-logistical-guide-for-the-uninitiated-7841",
+        "sourceLabel": "kcampus.kr",
+        "sourceDate": "Jul 2026"
+      }
+    ]
   },
   {
     "slug": "gyeongsang-do",
@@ -77,11 +113,41 @@
     "isCapitalArea": false,
     "ktoLDongRegnCds": ["26", "27", "31", "47", "48"],
     "ktoAreaCodes": [4, 6, 7, 35, 36],
-    "vibeTags": ["coastal", "city", "food"],
+    "vibeTags": ["historic", "industrial", "big-cities", "sea"],
     "nomadScore": 71,
-    "shortIntro": "Korea's biggest non-capital cities — Busan, Daegu, Ulsan — plus historic Gyeongju and quiet coastal towns.",
-    "longIntro": "Gyeongsangbuk-do, Gyeongsangnam-do, Busan, Daegu, and Ulsan give this region the widest range of any non-capital area: a genuine second-city nomad scene in Busan, ancient temples and tombs around Gyeongju, and industrial-turned-creative pockets in Daegu. Non-capital visa thresholds apply throughout.",
-    "heroImageIds": []
+    "shortIntro": "A good match for history lovers and those who enjoy big coastal cities.",
+    "longIntro": [
+      "Gyeongsang-do is Korea's second major region, with a high concentration of modern big cities and important historic sites. Koreans often describe people from this region as strong and direct, but also passionate and warm-hearted.",
+      "Northern Gyeongsang (Gyeongsangbuk-do) is rich in historic sites. Gyeongju is known for preserving a thousand years of Silla history (57 BCE–935 CE). Andong is home to Hahoe Village (14th–15th centuries), a <a href=\"https://whc.unesco.org/en/list/1324/\" target=\"_blank\" rel=\"noopener\">UNESCO World Heritage ↗</a> hanok village in a river bend where residents still live. The city also hosts an annual autumn <a href=\"https://en.maskdance.com/\" target=\"_blank\" rel=\"noopener\">Maskdance Festival ↗</a>.",
+      "Southern Gyeongsang (Gyeongsangnam-do), together with Busan and Ulsan, forms a highly urbanized coastal belt with a mix of city life and natural landscapes."
+    ],
+    "heroImageIds": [],
+    "usefulLinks": [
+      {
+        "label": "Gyeongju Travel Guide",
+        "url": "https://korea-insider.com/gyeongju-travel-guide/",
+        "sourceLabel": "korea-insider.com",
+        "sourceDate": "Mar 2026"
+      },
+      {
+        "label": "Daegu Travel Guide",
+        "url": "https://korea-insider.com/daegu-travel-guide/",
+        "sourceLabel": "korea-insider.com",
+        "sourceDate": "Mar 2026"
+      },
+      {
+        "label": "Busan Travel Guide",
+        "url": "https://korea-insider.com/busan-travel-guide/",
+        "sourceLabel": "korea-insider.com",
+        "sourceDate": "Mar 2026"
+      },
+      {
+        "label": "Ulsan Travel Guide",
+        "url": "https://mileasia.com/korea/ulsan-travel-guide/",
+        "sourceLabel": "mileasia.com",
+        "sourceDate": "Jul 2026"
+      }
+    ]
   },
   {
     "slug": "jeolla-do",
@@ -93,11 +159,39 @@
     "ktoLDongRegnCds": ["12", "52"],
     "ktoLDongRegnCdsNote": "Corrected 2026-08-18 — live-verified against EngService2 (areaBasedList2), twice independently; \"12\" = merged Jeollanam-do + Gwangju, \"52\" = Jeollabuk-do.",
     "ktoAreaCodes": [5, 37, 38],
-    "vibeTags": ["food", "cheapest", "rural"],
+    "vibeTags": ["gourmet", "historic", "sea", "mountains"],
     "nomadScore": 65,
-    "shortIntro": "Korea's food capital region — Jeonju and Gwangju anchor a slower, flavor-forward southwest.",
-    "longIntro": "Jeollabuk-do, Jeollanam-do, and Gwangju are widely considered the heart of Korean cuisine, and the pace here matches: fewer crowds, lower costs, and a strong sense of place. Some of the lowest population density outside Gangwon, which also means some of the most population-decline-support-eligible counties in the country.",
-    "heroImageIds": []
+    "shortIntro": "A good match for lovers of food, history, hiking and a somewhat slower pace of life.",
+    "longIntro": [
+      "Jeolla-do is often considered Korea's gourmet food region.",
+      "Northern Jeolla (Jeollabuk-do) is closely associated with the origins of the Joseon dynasty, which ruled Korea for almost five hundred years. It is also home to the largest urban hanok (traditional Korean house) village.",
+      "Southern Jeolla (Jeollanam-do) combines Gwangju, a major center of democracy and the arts, with a more natural landscape: Jirisan, the highest peak on the Korean mainland, Boseong's green tea plantations, national parks and night sea views.",
+      "Keep in mind that getting around the region can be less convenient than getting to Seoul or Busan."
+    ],
+    "seasonTags": [
+      { "emoji": "🏔️", "label": "Year-round · best in spring and fall" }
+    ],
+    "heroImageIds": [],
+    "usefulLinks": [
+      {
+        "label": "Gwangju & Jeollanam-do",
+        "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=228603",
+        "sourceLabel": "visitkorea.or.kr",
+        "sourceDate": "Aug 2025"
+      },
+      {
+        "label": "Jirisan hike review",
+        "url": "https://www.thegonegoat.com/south-korea/jirisan-national-park",
+        "sourceLabel": "thegonegoat.com",
+        "sourceDate": "Sept 2025"
+      },
+      {
+        "label": "Yeosu top places",
+        "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=&vcontsId=1593187",
+        "sourceLabel": "visitkorea.or.kr",
+        "sourceDate": "Sept 2026"
+      }
+    ]
   },
   {
     "slug": "jeju-do",
@@ -108,10 +202,43 @@
     "isCapitalArea": false,
     "ktoLDongRegnCds": ["50"],
     "ktoAreaCodes": [39],
-    "vibeTags": ["island", "slow", "expat"],
+    "vibeTags": ["hiking", "surfing", "island"],
     "nomadScore": 78,
-    "shortIntro": "Korea's original workation island — volcanic coastline, and the country's most established remote-work culture.",
-    "longIntro": "Jeju-do has the longest track record as a Korean remote-work destination, with coworking spaces and month-long-stay guesthouses concentrated around Jeju City and Seogwipo. Island living means higher import costs than the mainland non-capital average, offset by direct flights from Seoul and a mature short/medium-term rental market.",
-    "heroImageIds": []
+    "shortIntro": "A good match for nature lovers and a popular Korean workation destination.",
+    "longIntro": [
+      "Jeju-do is a volcanic island and a popular travel and workation destination for Koreans. Some Korean companies even offer one-month work-from-Jeju programs as an employee benefit.",
+      "The island is best known for Hallasan, the country's highest point, its island-loop coastal Olle trail, flower blossoms all year round, surfing beaches and scenic ocean roads. Jeju-do also produces most of Korea's tangerines and is home to haenyeo, women freedivers known for harvesting seafood that you can enjoy fresh.",
+      "There are only two major cities, but you can also stay in smaller coastal villages, many of which are full of sea-view cafés. While a car is the easiest way to explore the island, the bus network is also well developed.",
+      "Keep in mind that the weather can sometimes be harsh and windy."
+    ],
+    "seasonTags": [
+      { "emoji": "🏄", "label": "May–Aug beginner · Sep–Oct prime" },
+      { "emoji": "🏔️", "label": "Year-round" },
+      { "emoji": "🌸", "label": "blooming year-round" }
+    ],
+    "heroImageIds": [],
+    "usefulLinks": [
+      {
+        "label": "Official Jeju Tourism Portal",
+        "url": "https://visitjeju.net/en/",
+        "sourceLabel": "visitjeju.net"
+      },
+      {
+        "label": "Surfing beaches comparison",
+        "url": "https://theklocal.com/best-surfing-beaches-in-jeju/",
+        "sourceLabel": "theklocal.com",
+        "sourceDate": "Jul 2026"
+      },
+      {
+        "label": "Hallasan Reservation",
+        "url": "https://visithalla.jeju.go.kr/main/main.do",
+        "sourceLabel": "visithalla.jeju.go.kr"
+      },
+      {
+        "label": "Olle Trail",
+        "url": "https://www.jejuolle.org/trail_en#/",
+        "sourceLabel": "jejuolle.org"
+      }
+    ]
   }
 ]

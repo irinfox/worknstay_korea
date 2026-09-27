@@ -30,6 +30,20 @@
   max-width: 640px;
   height: auto;
   margin: 0 auto;
+  /* font-size lives in SVG user-unit space, so it scales with each map's own viewBox width —
+     same declared px renders bigger on a narrower viewBox. Cancel that out: set
+     --region-map-zoom inline on a map's <svg> root as (its viewBox width / 432, Gangwon's
+     reference width). Gangwon needs no override (1 is already correct). */
+  --region-map-zoom: 1;
+}
+
+/* Chungcheong-do's 5 cities (Daejeon/Sejong/Cheongju/Gongju/Taean) sit closer together in real
+   distance than any other region's city set, so the shared 640px cap reads more cramped here than
+   elsewhere even at the same zoom formula — raising the cap (~10%, same aspect, height follows
+   via height:auto) gives every pin/label more absolute pixel room without re-deriving their
+   positions. Chungcheong-do only; not a general pattern for the other five maps. */
+#chungcheong-detail-map {
+  max-width: 704px;
 }
 
 .region-detail-map__shape {
@@ -76,18 +90,20 @@
    above. -webkit-tap-highlight-color: transparent kills that too, same reasoning: the label
    reveal is the feedback, not a rectangle flash. */
 .map-pin--ski,
-.map-pin--surf {
+.map-pin--surf,
+.map-pin--beach {
   -webkit-tap-highlight-color: transparent;
 }
 
 .map-pin--ski:focus,
-.map-pin--surf:focus {
+.map-pin--surf:focus,
+.map-pin--beach:focus {
   outline: none;
 }
 
 .map-pin__label {
   font-family: var(--font-family-base);
-  font-size: 10px;
+  font-size: calc(10px * var(--region-map-zoom));
   /* Light by default — city is the one bold exception (below). Puts Seoraksan and Yangyang
      beaches' always-on labels at the same weight/density as the ski pins' reveal-on-hover ones,
      so all the "nature feature" labels read as one consistent, softer register next to the bold
@@ -112,13 +128,13 @@
 }
 
 .map-pin--city .map-pin__label {
-  font-size: 11px;
+  font-size: calc(11px * var(--region-map-zoom));
   font-weight: 600;
 }
 
 .map-pin__note {
   font-weight: 400;
-  font-size: 9px;
+  font-size: calc(9px * var(--region-map-zoom));
   fill: var(--color-text-muted);
 }
 
@@ -156,6 +172,32 @@
   opacity: 1;
 }
 
+/* Named-beach pins (Jeju-do): unlike Yangyang's one clustered surf pin below, each Jeju beach is
+   its own pin, and the KTO listing names ("Jungmun Saekdal Beach", "Woljeongri Beach") are long
+   enough on the island's own small footprint to collide with neighbouring labels if left always
+   on. Same hide-until-hover/focus/tap mechanism as the ski pins above, not a second one. */
+.map-pin--beach {
+  cursor: pointer;
+}
+
+.map-pin--beach .map-pin__label {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+@media (hover: hover) {
+  .map-pin--beach:hover .map-pin__label {
+    opacity: 1;
+  }
+}
+
+.map-pin--beach:focus .map-pin__label,
+.map-pin--beach:focus-within .map-pin__label,
+.map-pin--beach.map-pin--revealed .map-pin__label {
+  opacity: 1;
+}
+
 /* Yangyang surf pin: the "Yangyang beaches" label itself stays always-on (there's only one pin
    here, unlike the 8-deep ski cluster above), but a second line naming the individual beaches
    (Jukdo/Surfyy/Gisamun/Ingu) stays hidden until hover/focus/tap — same reveal mechanism as the
@@ -166,7 +208,7 @@
 
 .map-pin__detail {
   font-family: var(--font-family-base);
-  font-size: 9px;
+  font-size: calc(9px * var(--region-map-zoom));
   fill: var(--color-text-muted);
   /* Same Green-tint halo as .map-pin__label above, same reasoning — this line is one of the
      "labels" the halo instruction covers too, not just the class literally named __label. Without
@@ -200,7 +242,7 @@
 /* Orientation-only labels for neighbouring regions, placed outside the province outline. */
 .region-detail-map__neighbor {
   font-family: var(--font-family-base);
-  font-size: 11px;
+  font-size: calc(11px * var(--region-map-zoom));
   font-style: italic;
   fill: var(--color-text-muted);
   opacity: 0.75;

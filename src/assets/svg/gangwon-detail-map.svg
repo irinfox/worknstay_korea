@@ -27,28 +27,28 @@
 
   <g class="map-pin map-pin--city" transform="translate(517,122)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Sokcho</text>
+    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Sokcho</text>
   </g>
   <g class="map-pin map-pin--city" transform="translate(592,222)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Gangneung</text>
+    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Gangneung</text>
   </g>
   <!-- Nudged 16 units north of its plain in-town coordinate to leave centered-below label
        clearance from the Elysian Gangchon ski pin just south (translate(386,220)). -->
   <g class="map-pin map-pin--city" transform="translate(392,172)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Chuncheon</text>
+    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Chuncheon</text>
   </g>
   <g class="map-pin map-pin--city" transform="translate(416,298)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="18" text-anchor="middle">Wonju</text>
+    <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Wonju</text>
   </g>
 
   <!-- Seoraksan: ~6.5km W / 4.4km S of Sokcho (128.5173,38.1671 vs Sokcho's coordinate above) —
        essentially Sokcho's back yard, placed close enough to read that way without touching. -->
   <g class="map-pin" transform="translate(483,136)">
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 12.5 6 4.5l2.6 4.6M6.6 12.5 10.5 5.5l4 7H1.5" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle">Seoraksan</text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Seoraksan</text>
   </g>
   <!-- Yangyang beaches: one pin for the whole cluster (Surfyy/Hajodae-Gisamun/Jukdo/Ingu, coords
        above), centroid ~26km from Sokcho / ~30km from Gangneung — nearly equidistant, hence y=172
@@ -58,8 +58,8 @@
   <g class="map-pin map-pin--surf" tabindex="0" transform="translate(544,172)">
     <circle class="map-pin__hit-target" r="25" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-14" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle">Yangyang beaches</text>
-    <text class="map-pin__detail" x="0" y="30" text-anchor="middle">Surfyy · Gisamun · Jukdo · Ingu</text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Yangyang beaches</text>
+    <text class="map-pin__detail" x="0" y="24" text-anchor="middle">Surfyy · Gisamun · Jukdo · Ingu</text>
   </g>
   <!-- Ski resorts, plain pins (no links — visitkorea.or.kr guide is in "Useful links" below the
        map). Yongpyong + Alpensia are ~1.5km apart, bundled under one pin. Positions are hand-fit
@@ -71,50 +71,50 @@
     <title>Yongpyong · Alpensia</title>
     <circle class="map-pin__hit-target" r="25" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="20" text-anchor="middle"><tspan x="0" dy="0">Yongpyong · Alpensia</tspan><tspan x="0" dy="11" class="map-pin__note">Olympic 2018</tspan></text>
+    <text class="map-pin__label" x="0" y="14" text-anchor="middle"><tspan x="0" dy="0">Yongpyong · Alpensia</tspan><tspan x="0" dy="11" class="map-pin__note">Olympic 2018</tspan></text>
   </g>
   <!-- Phoenix Park: 128.3205,37.5841 — ~62km SE of Chuncheon, ~44km NE of Wonju, ~32km W of
        Yongpyong/Alpensia. Placed closer to Wonju than Chuncheon to match that ratio. -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(475,222)">
     <circle class="map-pin__hit-target" r="21" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle"><tspan x="0" dy="0">Phoenix Park</tspan></text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle"><tspan x="0" dy="0">Phoenix Park</tspan></text>
   </g>
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(560,312)">
     <circle class="map-pin__hit-target" r="20" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle"><tspan x="0" dy="0">High1</tspan></text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle"><tspan x="0" dy="0">High1</tspan></text>
   </g>
   <!-- Vivaldi Park: 127.6874,37.6524 (Hongcheon-gun) — south of Chuncheon, northwest of Wonju. -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(410,235)">
     <circle class="map-pin__hit-target" r="13" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle"><tspan x="0" dy="0">Vivaldi Park</tspan></text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle"><tspan x="0" dy="0">Vivaldi Park</tspan></text>
   </g>
   <!-- Welli Hilli: 128.2493,37.4872 (Hoengseong-gun, not Hongcheon — ~53km from Vivaldi Park,
        a different resort in a different county, not a neighbouring pair). -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(476,268)">
     <circle class="map-pin__hit-target" r="21" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle"><tspan x="0" dy="0">Welli Hilli</tspan></text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle"><tspan x="0" dy="0">Welli Hilli</tspan></text>
   </g>
   <!-- O2 Resort: 128.9485,37.1703, Taebaek-si (not Jeongseon) — ~10km ESE of High1. -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(602,329)">
     <circle class="map-pin__hit-target" r="20" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle"><tspan x="0" dy="0">O2 Resort</tspan></text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle"><tspan x="0" dy="0">O2 Resort</tspan></text>
   </g>
   <!-- Elysian Gangchon: no KTO hit under any name tried; anchored to "Gangchon Rail Park"
        127.7121,37.8157, ~1.6km W / ~7.1km S of Chuncheon. -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(386,220)">
     <circle class="map-pin__hit-target" r="13" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle">Elysian Gangchon</text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Elysian Gangchon</text>
   </g>
   <!-- Oak Valley: 127.8159,37.4057 — ~9km W / 7-10km N of Wonju (northwest, not northeast). -->
   <g class="map-pin map-pin--ski" tabindex="0" transform="translate(410,275)">
     <circle class="map-pin__hit-target" r="11" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8" y="-13" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="18" text-anchor="middle">Oak Valley</text>
+    <text class="map-pin__label" x="0" y="12" text-anchor="middle">Oak Valley</text>
   </g>
 </svg>

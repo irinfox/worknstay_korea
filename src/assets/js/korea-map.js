@@ -51,7 +51,7 @@ function dimMapLink(link) {
   dimLink(link);
 }
 
-const POPULATION_DECLINE_COUNTIES_PAGE = "/regions/gyeonggi-do/population-decline-counties/";
+const POPULATION_DECLINE_COUNTIES_PAGE = "/regions/gyeonggi-do/population-decline-areas/";
 
 function markPartial(link, countyNamesEn) {
   link.classList.remove("region--active");

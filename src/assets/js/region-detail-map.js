@@ -1,5 +1,5 @@
-// Region-page detail map (Gangwon-do): ski/surf pin labels are hidden until hover/focus
-// (region-detail-map.css), which phone users can never trigger. This adds the tap equivalent —
+// Region-page detail map (Gangwon-do, Jeju-do): ski/surf/beach pin labels are hidden until
+// hover/focus (region-detail-map.css), which phone users can never trigger. This adds the tap equivalent —
 // tapping a pin toggles the same .map-pin--revealed class the CSS hover rules already key off, so
 // there's one show/hide path, not a second one built in JS. Tapping elsewhere (another pin, or off
 // the map entirely) dismisses whatever was revealed, and so does a timeout — a tap-revealed label
@@ -11,7 +11,7 @@
 // unconditionally (keyboard users need that, on every device, not just hover-capable ones) — so a
 // pin left focused keeps its label visible no matter what the class says. Removing the class alone
 // looked like nothing happened, on a real device, with real touch.
-const REVEALABLE = ".map-pin--ski, .map-pin--surf";
+const REVEALABLE = ".map-pin--ski, .map-pin--surf, .map-pin--beach";
 const REVEALED_CLASS = "map-pin--revealed";
 const AUTO_DISMISS_MS = 3000;
 
