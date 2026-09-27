@@ -97,27 +97,16 @@
       "cpyrhtDivCd": "Type1",
       "galContentId": "4062103"
     },
-    "heyri-art-village-paju.jpg": {
-      "titleEn": "Heyri Art Village",
-      "titleKo": "헤이리 예술마을",
-      "cityEn": "Paju",
-      "cityKo": "파주",
-      "addressEn": "Tanhyeon-myeon, Paju-si, Gyeonggi-do",
-      "addressKo": "탄현면, 파주시, 경기도",
+    "bundang-city-street-seongnam.jpg": {
+      "titleEn": "Bundang Cafe Street",
+      "titleKo": "분당카페거리",
+      "cityEn": "Seongnam",
+      "cityKo": "성남",
+      "addressEn": "Bundang-gu, Seongnam-si, Gyeonggi-do",
+      "addressKo": "분당구, 성남시, 경기도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "2599570"
-    },
-    "ilsan-lake-park-goyang.jpg": {
-      "titleEn": "Ilsan Lake Park",
-      "titleKo": "일산호수공원",
-      "cityEn": "Goyang",
-      "cityKo": "고양",
-      "addressEn": "Ilsandong-gu, Goyang-si, Gyeonggi-do",
-      "addressKo": "일산동구, 고양시, 경기도",
-      "source": "PhotoGalleryService1",
-      "cpyrhtDivCd": "Type1",
-      "galContentId": "3553030"
+      "galContentId": "1982040"
     },
     "songdo-central-park-incheon.jpg": {
       "titleEn": "Songdo Central Park",
@@ -219,16 +208,17 @@
       "cpyrhtDivCd": "Type1",
       "galContentId": "2449586"
     },
-    "yecheon-hoeryongpo-bend.jpg": {
-      "titleEn": "Hoeryongpo River Bend",
-      "titleKo": "회룡포",
-      "cityEn": "Yecheon",
-      "cityKo": "예천",
-      "addressEn": "Yonggung-myeon, Yecheon-gun, Gyeongsangbuk-do",
-      "addressKo": "용궁면, 예천군, 경상북도",
+    "ulsan-daewangam-park.jpg": {
+      "titleEn": "Daewangam Park",
+      "titleKo": "대왕암의 아침",
+      "cityEn": "Ulsan",
+      "cityKo": "울산",
+      "addressEn": "Ilsan-dong, Dong-gu, Ulsan",
+      "addressKo": "일산동, 동구, 울산광역시",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "2761842"
+      "galContentId": "1960693",
+      "note": "Trial swap for Hoeryongpo River Bend (2026-09-28) — pending user decision. Other Daewangam Park / Biseulsan / Yeongnam Alps candidates sit in temp-gyeongsang-do/ as alternates."
     },
     "cheongju-ullidan-street.jpg": {
       "titleEn": "Ullidan-gil Street",
