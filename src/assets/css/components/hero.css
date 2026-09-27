@@ -23,6 +23,9 @@
 }
 
 .hero__inner {
+  /* Shared by .hero__credit (margin-bottom) and .hero__calculator (negative margin-top) below —
+     they're siblings, so the pull-up amount lives here on their common ancestor. */
+  --hero-calc-pull: 52px;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -36,7 +39,10 @@
   display: flex;
   flex-direction: column;
   margin: 0 calc(var(--space-4) * -1);
-  padding: 64px var(--space-4) 12px;
+  /* Top padding clears the transparent header and gives the headline breathing room off it;
+     the extra room comes out of the middle gap (.hero__credit's auto top margin), not the
+     photo's bottom, so the credit line keeps its own clearance above the calculator. */
+  padding: 84px var(--space-4) 12px;
   /* Landscape photo cropped by width, never by viewport height. Kept short so the calculator —
      and its longest ("partly eligible") result state — clears the viewport without scrolling. */
   min-height: min(108vw, 430px);
@@ -118,6 +124,11 @@
   color: #fff;
 }
 
+.hero__heading-line {
+  display: block;
+  text-wrap: balance;
+}
+
 .hero__intro {
   font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
   line-height: 1.5;
@@ -129,7 +140,10 @@
 .hero__credit {
   position: relative;
   z-index: 2;
-  margin: 16px 0 0;
+  /* auto-top pushes it to the bottom of .hero__frame's flex column (its only sibling is
+     .hero__content); bottom margin matches .hero__calculator's pull-up below so the line clears
+     the opaque card instead of sitting underneath it. */
+  margin: auto 0 var(--hero-calc-pull);
   font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
 }
@@ -139,7 +153,7 @@
 .hero__calculator {
   position: relative;
   z-index: 3;
-  margin-top: -52px;
+  margin-top: calc(-1 * var(--hero-calc-pull));
 }
 
 /* Foot-of-photo scroll cue — desktop only (see the media block: the phone photo is a short crop

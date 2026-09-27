@@ -81,6 +81,12 @@ export default function (eleventyConfig) {
     return Array.isArray(value);
   });
 
+  // Splits a period-delimited string (e.g. site.tagline) into its sentences, period kept, so a
+  // template can lay each one on its own line without duplicating the copy in the template.
+  eleventyConfig.addFilter("splitSentences", function (value) {
+    return (value || "").match(/[^.]+\.?/g)?.map((s) => s.trim()).filter(Boolean) || [];
+  });
+
   // Prev/next region for the shared footer's between-regions nav. Needed here because the footer
   // partial only has `page.url` to work from, and no existing filter maps a URL back to its
   // position in `regions`. Returns null on any page that isn't a region page.
