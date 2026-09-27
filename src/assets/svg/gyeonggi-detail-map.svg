@@ -31,7 +31,7 @@
        Seongnam (2001 Outlet, Bundang — representative of the Bundang/Pangyo side of the city, no
        single obvious KTO-listed landmark for Seongnam itself) 127.1075,37.3491. -->
 
-  <g class="map-pin map-pin--city" transform="translate(260.9,239.7)">
+  <g class="map-pin map-pin--city" transform="translate(261.4,248.4)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Seoul</text>
   </g>
@@ -42,7 +42,7 @@
   <!-- Suwon/Seongnam are only ~22 units apart here (genuinely close in real life, ~20km) — labels
        may overlap at small viewport widths; check by eye and offset one if so, don't just delete
        a pin to fix it. -->
-  <g class="map-pin map-pin--city" transform="translate(265.7,300.1)">
+  <g class="map-pin map-pin--city" transform="translate(265.7,312.1)">
     <svg class="map-pin__glyph" x="-7.5" y="-14" width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <text class="map-pin__label map-pin__label--city" x="0" y="12" text-anchor="middle">Suwon</text>
   </g>
