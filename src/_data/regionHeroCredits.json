@@ -2,38 +2,65 @@
   "licenseNote": "All entries are 공공누리 (KOGL) Type 1 — attribution required, modification/derivative works permitted. Two source APIs feed this file: KTO TourAPI EngService2 (detailImage2, cpyrhtDivCd checked per-photo) and KTO PhotoGalleryService1 (gallerySearchList1, whole catalog is uniformly Type1 by product definition — no cpyrhtDivCd field exists on those records). `source` on each entry says which. `titleKo`/`cityKo` are plain translations/transliterations for display and are not KTO-supplied English-service fields (EngService2 has no Korean-name field; PhotoGalleryService1 is Korean-only and has no English one) — kept so a user can search the Korean name directly (CLAUDE.md rule 9).",
   "captionNote": "Rendered hero caption is `titleEn, cityEn` plus a `titleKo, cityKo` line. `cityEn`/`cityKo` are the short display form — bare city/metro name, no gu/si/do — and are omitted entirely for province- or island-wide subjects. `addressEn`/`addressKo` hold the full administrative address and are not displayed, kept in case the caption format is revisited. Image files live in `src/assets/img/hero/<region-slug>/`.",
   "photos": {
-    "taejo-ro-jeonju.jpg": {
-      "titleEn": "Taejo-ro",
-      "titleKo": "태조로",
+    "jeonju-hanok-village-snow.jpg": {
+      "titleEn": "Jeonju Hanok Village",
+      "titleKo": "눈내린 한옥마을",
       "cityEn": "Jeonju",
       "cityKo": "전주",
       "addressEn": "Jeonju-si, Jeollabuk-do",
       "addressKo": "전주시, 전라북도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "1022787"
+      "galContentId": "2504326",
+      "note": "2017 tourism-photo-contest entry: elevated overview after snowfall, visitors walking the lane below. Other Jeonju Hanok Village candidates (Gyeonggijeon drone/autumn shots, Jeondong Cathedral drone shot, a hanbok-shopfront street view) sit in temp-jeolla-do/ as swap options."
     },
-    "gunsan-dongguksa-temple.jpg": {
-      "titleEn": "Dongguksa Temple",
-      "titleKo": "군산 동국사",
-      "cityEn": "Gunsan",
-      "cityKo": "군산",
-      "addressEn": "Gunsan-si, Jeollabuk-do",
-      "addressKo": "군산시, 전라북도",
+    "gwangju-penguin-village.jpg": {
+      "titleEn": "Penguin Village (Yangnim-dong)",
+      "titleKo": "펭귄마을 (양림동)",
+      "cityEn": "Gwangju",
+      "cityKo": "광주",
+      "addressEn": "Nam-gu, Gwangju",
+      "addressKo": "남구, 광주광역시",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "2811818"
+      "galContentId": "2549987",
+      "note": "Found-object folk-art alley in Yangnim-dong, Gwangju's historic neighbourhood — picked for the region text's \"major center of ... the arts\" line. A second angle (galContentId 2549980, the Yi Jang-u hanok house) and two Mudeungsan shots sit in temp-jeolla-do/ as other Gwangju candidates."
     },
-    "jucheon-ecological-park.jpg": {
-      "titleEn": "Jucheon Ecological Park",
-      "titleKo": "주천생태공원",
-      "cityEn": "Jinan",
-      "cityKo": "진안",
-      "addressEn": "Jinan-gun, Jeollabuk-do",
-      "addressKo": "진안군, 전라북도",
+    "daehan-dawon-tea-plantation.jpg": {
+      "titleEn": "Daehan Dawon Tea Plantation",
+      "titleKo": "대한다원",
+      "cityEn": "Boseong",
+      "cityKo": "보성",
+      "addressEn": "Boseong-gun, Jeollanam-do",
+      "addressKo": "보성군, 전라남도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "4069955"
+      "galContentId": "1030101",
+      "note": "titleKo/titleEn use the plantation's actual name rather than KTO's generic gallery title (보성다원, \"Boseong tea garden\") — same reasoning as CLAUDE.md rule 9. Other angles of this shoot (galContentId 1029675/1029905/1030175/1030227) sit in temp-jeolla-do/ as swap candidates."
+    },
+    "jirisan-nogodan-cloud-sea.jpg": {
+      "titleEn": "Jirisan National Park (Nogodan)",
+      "titleKo": "지리산 국립공원 (노고단)",
+      "cityEn": "Gurye",
+      "cityKo": "구례",
+      "addressEn": "Gurye-gun, Jeollanam-do",
+      "addressKo": "구례군, 전라남도",
+      "source": "PhotoGalleryService1",
+      "cpyrhtDivCd": "Type1",
+      "galContentId": "2535130",
+      "note": "Nogodan is Jirisan's Gurye-side (Jeolla) trailhead, not the Hadong/Sancheong/Hamyang (Gyeongsang) side — matches jeolla-detail-map.svg's Jirisan pin."
+    },
+    "naganeupseong-canola-field.jpg": {
+      "titleEn": "Naganeupseong Folk Village (Walled Town)",
+      "titleKo": "순천 낙안읍성",
+      "cityEn": "Suncheon",
+      "cityKo": "순천",
+      "addressEn": "Suncheon-si, Jeollanam-do",
+      "addressKo": "순천시, 전라남도",
+      "source": "PhotoGalleryService1",
+      "cpyrhtDivCd": "Type1",
+      "galContentId": "1032801",
+      "note": "A thatched house behind a bright yellow canola-flower field — colourful spring close-up, not an overview shot. 9 other Naganeupseong candidates (fog/night/drone/snow overviews of the whole walled town) sit in temp-jeolla-do/ as swap options."
     },
     "yeosu-romantic-pocha-street.png": {
       "titleEn": "Romantic Pocha Street",
@@ -294,18 +321,6 @@
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/08/3309808_image2_1.jpg",
       "note": "Standby only — was chungcheong-do's single pick before the 7-photo gallery; file kept in assets/img/hero/chungcheong-do/ but not listed in regionHeroPhotos.json."
-    },
-    "uhwajeong-pavilion.jpg": {
-      "titleEn": "Uhwajeong Pavilion (Naejangsan)",
-      "titleKo": "우화정 (내장산)",
-      "cityEn": "Jeongeup",
-      "cityKo": "정읍",
-      "addressEn": "Naejangsan National Park, Jeongeup-si, Jeollabuk-do",
-      "addressKo": "내장산국립공원, 정읍시, 전라북도",
-      "source": "EngService2",
-      "contentid": "658438",
-      "cpyrhtDivCd": "Type1",
-      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/76/3028376_image2_1.jpg"
     },
     "seoraksan-national-park.jpg": {
       "titleEn": "Seoraksan National Park",
