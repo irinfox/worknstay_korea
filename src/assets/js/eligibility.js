@@ -15,7 +15,7 @@
 // Precondition, not a runtime edge case this function is expected to handle: callers must
 // validate age >= visaRules.additionalFacts.minApplicantAge (18) before calling
 // calculateEligibility(). A 17-year-old typing their age is routine input, but the right
-// response ("F-1-D requires applicants to be 18+") is a form-validation message, not a tier —
+// response ("F-1-D applicants must be 18 or older") is a form-validation message, not a tier —
 // Phase 16's inline validation is what's meant to catch this, not a try/catch here.
 function ageBandFor(age, rules) {
   const band = rules.ageBands.find(
