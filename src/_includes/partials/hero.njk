@@ -20,11 +20,13 @@
     {# Desktop only (hero.css): two flex-grow spacers straddle .hero__inner (this one above it,
        .hero__spacer--bottom below, before .hero__scroll-cue) so a viewport taller than both
        floors splits its extra height evenly top and bottom instead of dumping it all below the
-       card, on first paint. hero-layout.js then locks --top's height right after the calculator's
-       initial render — see its own comment and hero.css's .hero__spacer--top for why: a submit
-       later on must only ever grow the card *downward*, never move the headline. Can't be
-       ::before/::after on .hero__cover — those only attach at the very start/end of its children,
-       not between three specific siblings. #}
+       card, on first paint. hero-layout.js then locks --top's height, computed against the
+       *worst-case* result caption rather than whatever's actually on screen — see its own comment
+       for why (a short viewport + a card that starts empty and later renders a long caption can
+       otherwise overflow .hero__cover itself, visibly rescaling the photo behind it, since
+       background-size: cover recomputes against a taller box). Can't be ::before/::after on
+       .hero__cover — those only attach at the very start/end of its children, not between three
+       specific siblings. #}
     <div class="hero__spacer hero__spacer--top" aria-hidden="true"></div>
     <div class="hero__inner">
       <div class="hero__frame">
