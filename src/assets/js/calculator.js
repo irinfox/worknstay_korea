@@ -251,6 +251,26 @@ function renderError(resultEl, message, complete) {
   resultEl.hidden = false;
 }
 
+// Brings the just-rendered result into view after a real submit (not the URL-prefill path on
+// load, which shouldn't move the page). Prefers landing on the whole card (form + result) so the
+// question the visitor just answered stays visible above the answer; falls back to the result
+// itself when the card alone is taller than the viewport, since centering on the card would then
+// push the result off-screen. No-ops if the result is already fully visible.
+function scrollResultIntoView(cardEl, resultEl) {
+  const resultRect = resultEl.getBoundingClientRect();
+  const fullyVisible = resultRect.top >= 0 && resultRect.bottom <= window.innerHeight;
+  if (fullyVisible) return;
+
+  const cardRect = cardEl.getBoundingClientRect();
+  const targetRect = cardRect.height > window.innerHeight ? resultRect : cardRect;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  window.scrollTo({
+    top: window.scrollY + targetRect.top - 16,
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
+}
+
 function hasReadableInput(userInput, rawInput) {
   return (
     rawInput.salaryRaw.trim() !== "" &&
@@ -287,6 +307,7 @@ function paramsFromUserInput(userInput) {
 export function init(onResult = () => {}) {
   const form = document.querySelector("[data-calculator-form]");
   const resultEl = document.querySelector("[data-eligibility-result]");
+  const cardEl = document.querySelector("[data-calculator-mount]");
   const resetButton = document.querySelector("[data-calculator-reset]");
   if (!form || !resultEl) return;
 
@@ -340,6 +361,7 @@ export function init(onResult = () => {}) {
     if (computeAndRender(userInput, { markInvalid: true })) {
       history.replaceState(null, "", `?${paramsFromUserInput(userInput)}`);
     }
+    if (cardEl) scrollResultIntoView(cardEl, resultEl);
   });
 
   if (resetButton) {

@@ -110,7 +110,13 @@
 }
 
 .calculator-form__submit {
-  flex: 1 1 100%;
+  /* Not flex: 1 1 100% (the bug this replaced): .calculator-form is flex-direction: column on
+     phone, so a 100% flex-basis there resolves against the *column's height*, not its width —
+     with a definite form height, that made this item's hypothetical size the whole form, which
+     flex-shrink then crushed back down to its own content minimum (~25px, not the 46px below).
+     Full width already happens for free from the column's default align-items: stretch; this only
+     needs to opt out of grow/shrink so the declared height actually holds. */
+  flex: 0 0 auto;
   height: 46px;
   padding: 0 16px;
   border: none;
@@ -246,6 +252,7 @@
     box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
   }
 
+
   /* Desktop keeps the original two-line arrangement — [salary  age  Check eligibility] on line
      one, [checkbox … Clear] on line two — via `order` rather than DOM position, since the
      checkbox now sits above the button in source order for the phone layout (task audit). */
@@ -278,11 +285,14 @@
     flex: 0 0 66px;
   }
 
-  /* Button takes the width left after the two fixed-width fields, on the same row. */
+  /* Button takes the width left after the two fixed-width fields, on the same row. Height
+     matches the 44px inputs it's flex-end-aligned with in the same row (DESIGN.md's 44px
+     control minimum — was 42px, visibly short of both the inputs beside it and the tap-target
+     rule). */
   .calculator-form__submit {
     order: 4;
     flex: 1 1 auto;
-    height: 42px;
+    height: 44px;
     font-size: 14px;
   }
 

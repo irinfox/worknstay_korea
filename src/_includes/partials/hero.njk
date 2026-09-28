@@ -17,6 +17,15 @@
 
 <section class="hero" aria-labelledby="hero-heading">
   <div class="hero__cover">
+    {# Desktop only (hero.css): two flex-grow spacers straddle .hero__inner (this one above it,
+       .hero__spacer--bottom below, before .hero__scroll-cue) so a viewport taller than both
+       floors splits its extra height evenly top and bottom instead of dumping it all below the
+       card, on first paint. hero-layout.js then locks --top's height right after the calculator's
+       initial render — see its own comment and hero.css's .hero__spacer--top for why: a submit
+       later on must only ever grow the card *downward*, never move the headline. Can't be
+       ::before/::after on .hero__cover — those only attach at the very start/end of its children,
+       not between three specific siblings. #}
+    <div class="hero__spacer hero__spacer--top" aria-hidden="true"></div>
     <div class="hero__inner">
       <div class="hero__frame">
         <div
@@ -124,6 +133,11 @@
         </div>
       </div>
     </div>
+
+    {# Desktop only (hero.css): a flex-grow spacer with a min-height floor — unlike
+       .hero__spacer--top above, this one stays reactive for the page's whole lifetime, so it's
+       what actually absorbs the calculator card opening downward on submit. #}
+    <div class="hero__spacer hero__spacer--bottom" aria-hidden="true"></div>
 
     {# Desktop only — the cover photo is full-viewport there, so a foot-of-photo nudge toward the
        map earns its place. A real anchor (CLAUDE.md rule 6), hidden on phone where the photo is
