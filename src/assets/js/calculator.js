@@ -4,20 +4,36 @@ import { calculateEligibility } from "./eligibility.js";
 // calling calculateEligibility() — this function doesn't handle under-18 itself.
 const MIN_APPLICANT_AGE = 18;
 
-const CAPTIONS = {
-  ineligible: (result) =>
-    `Not eligible yet. You're ₩${formatKrw(result.gapToNonCapitalKrw)} short of the ` +
-    `non-capital-area threshold (₩${formatKrw(result.thresholdNonCapitalKrw)}).`,
-  nonCapitalOnly: (result) =>
-    `Eligible outside the capital area. Non-capital regions are open to you now — ` +
-    `₩${formatKrw(result.gapToCapitalKrw)} more (₩${formatKrw(result.thresholdCapitalKrw)}) ` +
-    `would also unlock the capital area.`,
-  all: () => "Eligible everywhere, including the capital area.",
-};
+const MILLION = 1_000_000;
 
-const PARTIAL_NOTE =
-  " Gyeonggi-do's population-decline-designated counties are open to you too, even though the " +
-  "rest of the province isn't.";
+// Below ₩1M, a .toFixed(1) figure ("₩0.3M") reads as false precision for a gap this small and
+// currency-conversion rounding could erase it entirely — so this range gets a fixed sentence
+// instead of a computed number, plus a nudge to check the applicant's own embassy rate.
+function formatGapMillions(gapKrw) {
+  return `₩${(gapKrw / MILLION).toFixed(1)}M`;
+}
+
+const CAPTIONS = {
+  ineligible: (result) => {
+    const gap = result.gapToNonCapitalKrw;
+    const gapSentence =
+      gap < MILLION
+        ? "You need less than ₩1M more to meet the minimum threshold. Consult with your " +
+          "embassy about the conversion rate they use."
+        : `You need about ${formatGapMillions(gap)} more to reach the minimum threshold.`;
+    return `Not eligible yet. ${gapSentence}`;
+  },
+  nonCapitalOnly: (result) => {
+    const gap = result.gapToCapitalKrw;
+    const gapSentence =
+      gap < MILLION
+        ? "You need less than ₩1M more to be eligible everywhere. Consult with your embassy " +
+          "about the conversion rate they use."
+        : `To be eligible everywhere you'll need about ${formatGapMillions(gap)} more.`;
+    return `Eligible outside the capital area and in population-decline areas. ${gapSentence}`;
+  },
+  all: () => "Eligible everywhere.",
+};
 
 const FULL_RULES_LINK = ' <a href="/visa-info/">Visa info →</a>';
 
@@ -34,10 +50,6 @@ const ALL_RESULT_TONES = Object.values(RESULT_TONE);
 function setResultTone(resultEl, tone) {
   resultEl.classList.remove(...ALL_RESULT_TONES);
   if (tone) resultEl.classList.add(tone);
-}
-
-function formatKrw(value) {
-  return new Intl.NumberFormat("en-US").format(value);
 }
 
 // The salary field is a type="text" input (hero.njk) shown with thousand separators. These two
@@ -76,6 +88,18 @@ function bindSalaryFormatting(input) {
   });
 }
 
+// type="number" natively lets "-" (and "+"/"e"/".") be typed or pasted in as part of valid
+// number syntax — the form has `novalidate`, so the HTML `min="18"` never blocks submission
+// either. Stripping to digits-only on every keystroke makes the age field reject a leading "-"
+// the same way the salary field already does (parseSalary), rather than only catching it later
+// as a confusing "must be 18 or older" message for a negative number.
+function bindAgeSanitizing(input) {
+  input.addEventListener("input", () => {
+    const digits = input.value.replace(/\D/g, "");
+    if (digits !== input.value) input.value = digits;
+  });
+}
+
 function readReferenceData() {
   const el = document.getElementById("eligibility-reference-data");
   return JSON.parse(el.textContent);
@@ -99,23 +123,15 @@ export function validate(userInput, rawInput) {
   const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0;
   const ageMissing = rawInput.ageRaw.trim() === "";
 
-  if (salaryMissing || ageMissing) {
-    const missingLabel =
-      salaryMissing && ageMissing
-        ? "your annual salary and age"
-        : salaryMissing
-          ? "your annual salary"
-          : "your age";
-    return (
-      "Eligibility is based on your age, salary, and whether family is accompanying you — " +
-      `please fill in ${missingLabel}.`
-    );
-  }
+  if (salaryMissing && ageMissing) return "Please enter your age and annual income.";
+  if (salaryMissing) return "Please enter your annual income.";
+  if (ageMissing) return "Please enter your age.";
+
   if (!Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0) {
-    return "Enter a salary of 0 or more.";
+    return "Enter an income of 0 or more.";
   }
   if (!Number.isFinite(userInput.age) || userInput.age < MIN_APPLICANT_AGE) {
-    return `F-1-D requires applicants to be ${MIN_APPLICANT_AGE}+.`;
+    return `F-1-D applicants must be ${MIN_APPLICANT_AGE} or older.`;
   }
   return null;
 }
@@ -155,14 +171,17 @@ function buildShowAllResult() {
   };
 }
 
+// Pure (no DOM) so the rounding rules above are unit-testable — see
+// scripts/verify-calculator.mjs — the same reasoning as validate().
+export function captionFor(result) {
+  return CAPTIONS[result.tier](result);
+}
+
 // Both render into the same #eligibility-result box, distinguished by plate tint (setResultTone)
 // rather than two differently-positioned elements — an in-form message and a below-form caption
 // read as inconsistent UI for what's the same "result of checking" concept.
 function renderCaption(resultEl, result) {
-  let text = CAPTIONS[result.tier](result);
-  if (result.partialRegionSlugs.length > 0) {
-    text += PARTIAL_NOTE;
-  }
+  const text = captionFor(result);
   setResultTone(resultEl, RESULT_TONE[result.tier]);
   resultEl.innerHTML = text + FULL_RULES_LINK;
   resultEl.hidden = false;
@@ -245,6 +264,7 @@ export function init(onResult = () => {}) {
   form.hidden = false;
 
   bindSalaryFormatting(form.elements.salaryKrw);
+  bindAgeSanitizing(form.elements.age);
 
   const prefill = userInputFromParams(new URLSearchParams(window.location.search));
   if (prefill) {
