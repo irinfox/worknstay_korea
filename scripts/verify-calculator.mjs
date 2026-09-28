@@ -72,6 +72,15 @@ check(
     "more to be eligible everywhere. Consult with your embassy about the conversion rate they use."
 );
 check(
+  // Regression: ₩77,600,000 salary vs. the ₩78,620,000 age-27 capital threshold left a
+  // ₩1,020,000 gap that used to render as "about ₩1.0M more" — a trailing ".0" that reads like
+  // a typo right next to the "less than ₩1M" wording used just below this cutoff.
+  "nonCapitalOnly, gap just over 1M -> whole-million figure has no trailing .0",
+  captionFor(resultFor("nonCapitalOnly", 0, 1020000)),
+  "Eligible outside the capital area and in population-decline areas. To be eligible " +
+    "everywhere you'll need about ₩1M more."
+);
+check(
   "nonCapitalOnly, gap over 1M -> rounded to one decimal place",
   captionFor(resultFor("nonCapitalOnly", 0, 12250000)),
   "Eligible outside the capital area and in population-decline areas. To be eligible " +

@@ -93,10 +93,20 @@
   font-weight: 500;
 }
 
+/* offset 2px (not the usual 1px) so that on a field that's both focused and marked invalid, the
+   blue ring sits outside the orange border with a visible gap instead of touching/overlapping it. */
 .calculator-form__field input[type="text"]:focus-visible,
 .calculator-form__field input[type="number"]:focus-visible {
   outline: 2px solid var(--color-focus-ring);
-  outline-offset: 1px;
+  outline-offset: 2px;
+}
+
+/* Invalid-field mark: border colour only, no icon/red/helper text (DESIGN.md keeps red out of
+   the calculator's palette). box-sizing: border-box (base.css) keeps the field's outer size
+   identical to the 1px default border, so the field doesn't shift when the mark appears.
+   calculator.js toggles aria-invalid. */
+.calculator-form__field input[aria-invalid="true"] {
+  border: 1.5px solid var(--color-accent);
 }
 
 .calculator-form__submit {

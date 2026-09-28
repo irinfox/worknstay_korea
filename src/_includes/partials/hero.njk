@@ -46,7 +46,7 @@
       </div>
 
       {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
-       caption itself into #eligibility-result below. JS-only per CLAUDE.md rule 6 — the
+       caption itself into #calc-msg below. JS-only per CLAUDE.md rule 6 — the
        <noscript> fallback sends no-JS visitors to the static thresholds table instead.
        Markup order here is free to change (calculator.js keys off data-* / element names, not
        DOM order); the comparison logic and its messages are frozen. #}
@@ -76,12 +76,22 @@
               inputmode="numeric"
               autocomplete="off"
               placeholder="e.g. 70,000,000"
+              aria-describedby="calc-msg"
               required
             >
           </div>
           <div class="calculator-form__field calculator-form__field--age">
             <label for="calc-age">Age</label>
-            <input type="number" id="calc-age" name="age" inputmode="numeric" min="18" max="120" required>
+            <input
+              type="number"
+              id="calc-age"
+              name="age"
+              inputmode="numeric"
+              min="18"
+              max="120"
+              aria-describedby="calc-msg"
+              required
+            >
           </div>
         </div>
         {# Its own row on phone, directly above "Check eligibility"; on desktop CSS `order` drops
@@ -101,9 +111,11 @@
 
       {# Result-caption mount point — calculator.js (Phase 16) owns all caption rendering here;
          korea-map.js (Phase 17) only applies map state, it doesn't touch this element. Sits
-         inside the card but outside the <form> so form.reset() and form.elements never see it. #}
+         inside the card but outside the <form> so form.reset() and form.elements never see it.
+         id="calc-msg" is what the fields' aria-describedby points at — aria-live="polite" means
+         every result or validation message gets announced whether or not it's what moved focus. #}
       <p
-        id="eligibility-result"
+        id="calc-msg"
         class="eligibility-result"
         data-eligibility-result
         aria-live="polite"

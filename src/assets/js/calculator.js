@@ -9,8 +9,14 @@ const MILLION = 1_000_000;
 // Below ₩1M, a .toFixed(1) figure ("₩0.3M") reads as false precision for a gap this small and
 // currency-conversion rounding could erase it entirely — so this range gets a fixed sentence
 // instead of a computed number, plus a nudge to check the applicant's own embassy rate.
+//
+// A gap just above that cutoff (e.g. ₩1,020,000) still rounds to a whole million — stripping the
+// trailing ".0" shows "₩1M" instead of "₩1.0M", which reads like a typo sitting right next to the
+// "less than ₩1M" wording used just below the cutoff. Genuinely fractional gaps ("₩7.5M") keep
+// their decimal.
 function formatGapMillions(gapKrw) {
-  return `₩${(gapKrw / MILLION).toFixed(1)}M`;
+  const rounded = (gapKrw / MILLION).toFixed(1).replace(/\.0$/, "");
+  return `₩${rounded}M`;
 }
 
 const CAPTIONS = {
@@ -114,11 +120,25 @@ function readUserInput(form) {
   };
 }
 
-// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs. Takes the raw input
-// strings alongside the parsed userInput because Number("") === Number("0") === 0: an empty age
-// field would otherwise read as age 0 (→ "must be 18+" instead of "enter your age"). A salary
-// of 0 — blank, "0", or all-zeros like "0,000,000" — is likewise not an answer, so it's flagged
-// for entry rather than run as a real (trivially "not eligible") result.
+// A salary of 0 — blank, "0", or all-zeros like "0,000,000" — is likewise not an answer, so it's
+// flagged for entry rather than run as a real (trivially "not eligible") result.
+function isSalaryInvalid(userInput, rawInput) {
+  if (rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0) return true;
+  return !Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0;
+}
+
+// Deliberately NOT "|| userInput.age < MIN_APPLICANT_AGE": being under 18 is a real, validly
+// entered answer that fails the visa's own eligibility rule, not a data-entry mistake — it gets
+// the amber "must be 18+" result caption, but the field itself shouldn't get the invalid-field
+// border mark (that's reserved for missing/malformed input). The raw-string check still matters:
+// Number("") is 0, so a blank age must not read as age 0 (→ "must be 18+") instead of "enter
+// your age".
+function isAgeInvalid(userInput, rawInput) {
+  if (rawInput.ageRaw.trim() === "") return true;
+  return !Number.isFinite(userInput.age);
+}
+
+// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs.
 export function validate(userInput, rawInput) {
   const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0;
   const ageMissing = rawInput.ageRaw.trim() === "";
@@ -127,13 +147,48 @@ export function validate(userInput, rawInput) {
   if (salaryMissing) return "Please enter your annual income.";
   if (ageMissing) return "Please enter your age.";
 
-  if (!Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0) {
-    return "Enter an income of 0 or more.";
-  }
+  if (isSalaryInvalid(userInput, rawInput)) return "Enter an income of 0 or more.";
   if (!Number.isFinite(userInput.age) || userInput.age < MIN_APPLICANT_AGE) {
     return `F-1-D applicants must be ${MIN_APPLICANT_AGE} or older.`;
   }
   return null;
+}
+
+function setFieldInvalid(input, invalid) {
+  if (invalid) {
+    input.setAttribute("aria-invalid", "true");
+  } else {
+    input.removeAttribute("aria-invalid");
+  }
+}
+
+// Field-level invalid marking (border colour, via the [aria-invalid="true"] rule in
+// calculator.css) only ever appears from a submit attempt — never live while typing. It clears
+// the moment the visitor edits the field at all (any `input` event, whether the new value is
+// actually valid yet or not) rather than waiting for it to become valid — the mark's job is
+// "this was wrong last time you checked," which stops being true as soon as they've touched it;
+// the next submit re-validates from scratch and marks again if it's still wrong. Submit itself
+// never touches focus or the cursor — only setAttribute, nothing that could move either.
+function bindFieldValidityMarking(form) {
+  const fields = [
+    { input: form.elements.salaryKrw, isInvalid: isSalaryInvalid },
+    { input: form.elements.age, isInvalid: isAgeInvalid },
+  ];
+
+  for (const field of fields) {
+    field.input.addEventListener("input", () => setFieldInvalid(field.input, false));
+  }
+
+  return {
+    mark(userInput, rawInput) {
+      for (const field of fields) {
+        setFieldInvalid(field.input, field.isInvalid(userInput, rawInput));
+      }
+    },
+    clear() {
+      for (const field of fields) setFieldInvalid(field.input, false);
+    },
+  };
 }
 
 // A failed validation means we never got a real EligibilityResult — but korea-map.js's
@@ -236,11 +291,16 @@ export function init(onResult = () => {}) {
   if (!form || !resultEl) return;
 
   const referenceData = readReferenceData();
+  const fieldValidity = bindFieldValidityMarking(form);
 
-  function computeAndRender(userInput) {
+  // markInvalid is true only for a real submit — the URL-prefill path below also runs through
+  // here, but a permalink loading on page open isn't a submit attempt, so it shouldn't paint any
+  // field red before the visitor has interacted with the page at all.
+  function computeAndRender(userInput, { markInvalid = false } = {}) {
     resultEl.hidden = true;
 
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
+    if (markInvalid) fieldValidity.mark(userInput, rawInput);
     const validationMessage = validate(userInput, rawInput);
     if (validationMessage) {
       const complete = hasReadableInput(userInput, rawInput);
@@ -277,7 +337,7 @@ export function init(onResult = () => {}) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const userInput = readUserInput(form);
-    if (computeAndRender(userInput)) {
+    if (computeAndRender(userInput, { markInvalid: true })) {
       history.replaceState(null, "", `?${paramsFromUserInput(userInput)}`);
     }
   });
@@ -288,6 +348,7 @@ export function init(onResult = () => {}) {
       // fields stayed filled with e.g. "17", so every region reading as open now looked like the
       // site was claiming a 17-year-old is eligible everywhere, rather than "no check is active."
       form.reset();
+      fieldValidity.clear();
       resultEl.hidden = true;
       setResultTone(resultEl, null);
       history.replaceState(null, "", window.location.pathname);
