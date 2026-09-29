@@ -92,7 +92,7 @@ One Google Fonts request, exactly this:
   (all-caps at 11px reads larger than its size). Used for festival THIS MONTH/LONG-TERM and
   note-card category tags (visa-info Important notes).
 - Sentence case everywhere. All-caps only in the 11px status chip above. Lowercase is fine in
-  tags and pills (`spicy`, `surf`) — they are labels, not sentences.
+  tags, pills (`spicy`, `surf`), and non-sentence table values (`none`, `varies`) — they're labels, not sentences.
 
 ## Geometry
 

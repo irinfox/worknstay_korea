@@ -95,7 +95,7 @@ Iterative editorial/research work, mostly hand-curation — do one region at a t
 - [x] Region description rewrite (all 6).
 - [x] Home region cards: vibe-tags.
 - [x] Home region cards: food gallery.
-- [ ] Home region cards: real money figures (replace MOCK).
+- [x] Home region cards: real money figures (replace MOCK).
 
 ## Phase 25 — Compliance: drop caching, top-picks boost, Elsewhere tab
 KTO confirmed any caching needs a separate approval form (3-5 day review, won't clear before the
