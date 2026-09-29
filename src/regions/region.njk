@@ -30,9 +30,9 @@ eleventyComputed:
   "jeju-do": ["jeju-city", "seogwipo"],
   "chungcheong-do": ["daejeon", "cheongju", "sejong"]
 } %}
-{# Furnished short-term monthly rent for the headline recap card and the cost table below.
-   Gangwon-do is the only region with a market scan behind it (src/_data/rentalMarketScan.js). #}
-{% set gangwonRent = (rentalMarketScan.regionSummary | findBySlug("gangwon-do")).furnishedShortTermMonthly %}
+{# Rent summary for the headline recap card and the cost table below — hand-checked market
+   research per region (src/_data/rentalMarketScan.js). #}
+{% set rentSummary = rentalMarketScan.regionSummary | findBySlug(region.slug) %}
 <div class="content-page region-page" id="top">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
@@ -73,11 +73,11 @@ eleventyComputed:
   </div>
 
   <aside class="region-header__aside">
-    {% if isGangwon %}
+    {% if rentSummary %}
     <div class="rent-summary">
       <div class="rent-summary__row">
         <span class="rent-summary__label">Furnished short-term,<br>per month</span>
-        <span class="rent-summary__figure">{{ gangwonRent }}</span>
+        <span class="rent-summary__figure">{{ rentSummary.furnishedShortTermMonthly }}</span>
       </div>
       <div class="rent-summary__note">
         <div>Based on hand-checked, decent furnished listings available to foreigners.</div>
@@ -276,16 +276,19 @@ eleventyComputed:
         <span class="region-section__tick" aria-hidden="true"></span>
         <h2>Rental prices</h2>
       </div>
-      {% if isGangwon %}
-      {# Rows and note are a restructuring of the existing verified Gangwon cost copy into the
-         design's table form; figures unchanged. #}
+      {% if rentSummary and rentSummary.costRows.length %}
+      {# Rows/notes per region: hand-checked market-scan research (src/_data/rentalMarketScan.js).
+         Row sets differ by region — Gyeonggi-do breaks down by city/district rather than the
+         short-term/typical-size/Seoul-comparison/deposit shape the other regions share, and not
+         every region has a deposit figure or a Seoul comparison. #}
       <dl class="cost-table">
-        <div><dt>Short-term stay, per month</dt><dd>{{ gangwonRent }}</dd></div>
-        <div><dt>Typical size</dt><dd>23–30 m² and up</dd></div>
-        <div><dt>Same money in Seoul</dt><dd>13–16 m²</dd></div>
-        <div><dt>Upfront deposit</dt><dd>none or ₩330K</dd></div>
+        {% for row in rentSummary.costRows %}
+        <div><dt>{{ row.label }}</dt><dd>{{ row.value }}</dd></div>
+        {% endfor %}
       </dl>
-      <p class="cost-note">The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. Stays in this region generally offer more space for the money than in Seoul. Sokcho has the widest range of flexible options, while Wonju is the cheapest overall.</p>
+      {% for para in rentSummary.costNote %}
+      <p class="cost-note">{{ para }}</p>
+      {% endfor %}
       <p class="cost-link"><a href="/settling-in/">A short intro into Korean renting →</a></p>
       {% else %}
       <p class="empty-state">No cost-of-living figures for this region yet.</p>

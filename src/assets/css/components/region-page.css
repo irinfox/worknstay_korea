@@ -710,7 +710,7 @@ ul.region-seasons {
   }
 }
 
-/* Gangwon-do cost table (design reference 5b): white card, one figure per row on a light rule. */
+/* Region cost table (design reference 5b, Gangwon-do): white card, one figure per row on a light rule. */
 .cost-table {
   margin: 0 0 14px;
   padding: 2px 18px;
@@ -749,6 +749,10 @@ ul.region-seasons {
   font-size: 14px;
   line-height: 1.65;
   color: var(--color-text-soft);
+}
+
+.cost-note + .cost-note {
+  margin-top: 10px;
 }
 
 .cost-link {
