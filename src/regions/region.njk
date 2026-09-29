@@ -21,14 +21,14 @@ eleventyComputed:
 {% set isJeolla = region.slug == "jeolla-do" %}
 {% set hasDetailMap = isGangwon or isJeju or isGyeonggi or isChungcheong or isGyeongsang or isJeolla %}
 {# Hand-chosen city set/order per region (mirrors Gangwon-do's existing pattern below) —
-   bySlugs lets cities.json keep other records (e.g. Paju/Ganghwa, Andong/Tongyeong, Boryeong)
-   for later reuse without surfacing them here. #}
+   bySlugs lets cities.json keep other records (e.g. Paju/Ganghwa, Andong/Tongyeong, Boryeong,
+   Gongju) for later reuse without surfacing them here. #}
 {% set cityOrder = {
   "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
   "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
   "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
   "jeju-do": ["jeju-city", "seogwipo"],
-  "chungcheong-do": ["daejeon", "sejong", "cheongju", "gongju"]
+  "chungcheong-do": ["daejeon", "cheongju", "sejong"]
 } %}
 {# Furnished short-term monthly rent for the headline recap card and the cost table below.
    Gangwon-do is the only region with a market scan behind it (src/_data/rentalMarketScan.js). #}
@@ -210,6 +210,8 @@ eleventyComputed:
       <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.6 3.4 9 10.4c.9.9 2.1 1.3 3.4 1.1M4.2 1.8l7.4 7c.9.9 2.1 1.3 3.4 1.1" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Ski resort</span>
       {% elif isJeju %}
       <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.2 12.6c1.4-1.5 2.8-1.5 4.2 0 1.4 1.5 2.8 1.5 4.2 0 1.4-1.5 2.8-1.5 4.2 0" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.4 1.6c.6 3.4-1.2 6.4-4.9 8 .6-3.9 2.4-6.6 4.9-8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Surf beach</span>
+      {% elif isChungcheong %}
+      <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7.5v6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>Beach</span>
       {% elif isGyeongsang %}
       <span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M0.9 5.7l1.2 1.2q1.1 0 2.4-3.9c2.3.9 4.7.9 7 0q1.3 3.9 2.4 3.9l1.2-1.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 13.5V9.8M11.5 13.5V9.8M2.5 13.5h11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>History</span>
       {% elif isJeolla %}

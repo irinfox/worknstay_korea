@@ -392,8 +392,9 @@
     "ktoLDongRegnCd": "43",
     "ktoLDongSignguCds": ["110", "111", "112", "113", "114"],
     "gettingAround": [
-      { "label": "Dodamsambong Peaks", "value": "1.5–2h", "mode": "car" },
       { "label": "Maltijae Observatory", "value": "50 min", "mode": "car" },
+      { "label": "Chungjuho", "value": "1h", "mode": "car" },
+      { "label": "Dodamsambong Peaks", "value": "1.5–2h", "mode": "car" },
       { "label": "Seoul", "value": "1.5h", "mode": "train+bus" }
     ],
     "population": { "total": 879244, "year": 2025, "note": "KOSIS's English-language export mislabels this row \"Chungju-si\"; its sub-district breakdown (Sangdang-gu/Seowon-gu/Heungdeok-gu/Cheongwon-gu) matches Cheongju-si, not Chungju-si (which has no gu subdivisions and is listed separately at 217,413)." },
@@ -443,12 +444,13 @@
     "nameKo": "세종특별자치시",
     "lat": 36.4801,
     "lng": 127.289,
-    "blurb": "A newly planned administrative smart city with parks, cycling infrastructure and streets largely free of overhead utility wires. It can feel short on attractions, but offers a quiet, organized urban environment and modern apartments.",
+    "blurb": "A newly planned administrative smart city with parks, cycling infrastructure and streets largely free of overhead utility wires. It can feel short on attractions, but offers a quiet and organized urban environment.",
     "vibeTags": ["smart-city", "cycling"],
     "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
     "ktoLDongRegnCd": "36110",
     "ktoLDongSignguCds": [],
     "gettingAround": [
+      { "label": "Gongsanseong Fortress", "value": "50 min", "mode": "bus" },
       { "label": "Daejeon", "value": "50 min", "mode": "bus" },
       { "label": "Seoul", "value": "1.5h", "mode": "train+bus" },
       { "label": "Gwangju", "value": "2h", "mode": "express bus" }
