@@ -106,8 +106,8 @@ worknstay_korea/
 │   └── lib/{kto-client,normalize,region-map,city-map,boost-curated}.mjs
 ├── src/
 │   ├── _data/       # editorial JSON: site, regions, cities, visaRules (DATA not code, §6),
-│   │                #   costOfLiving, food, transport, communities, populationDeclineAreas[Full]
-│   │                #   (§7), eligibilityReferenceData.js (build-time island for calculator.js);
+│   │                #   food, settlingIn (renting/work/communities), rentalMarketScan,
+│   │                #   populationDeclineAreas[Full] (§7);
 │   │                #   topAttractions.json = per-region picks, boosted + no-key/quota fallback
 │   │                #   (§5); eventsSnapshot.json = no-key-only, a point-in-time capture (§5);
 │   │                #   {region,county}Hero{Photos,Credits}.json = cover-photo galleries + KOGL credits
@@ -119,7 +119,7 @@ worknstay_korea/
 │   │   │          attraction-filters, region-hero-gallery
 │   │   ├── img/hero/, img/food/   # committed KOGL/KTO Type1 photos, credited per _data/*Credits.json
 │   │   └── svg/   korea-regions.svg (+ source/korea-provinces-blank.svg — Wikimedia, public domain)
-│   ├── index.njk / visa-info.njk / settling-in.njk / 404.njk
+│   ├── index.njk / visa-info.njk / settling-in.njk / about.njk / 404.njk
 │   └── regions/region.njk (paginates regions.json → /regions/<slug>/);
 │       regions/gyeonggi-do/population-decline-areas.njk
 ├── scripts/   # verify-{eligibility,calculator,kto-client,normalize,boost-curated,kto-dev-cache}.mjs
@@ -235,12 +235,9 @@ Dish          regionSlug, city, nameEn, nameKo, imagePath, heat?: 'spicy',
               // static; heat and kind are independent axes. city omitted for Jeju (no
               // per-dish city breakdown in the source data)
 
-CostOfLiving  regionSlug, currency, asOf, source, sourceUrl,
-              rent1brCityCentre, monthlyBudgetSingle, mealInexpensive,
-              transitPass, utilities, indexVsSeoul // static, hand-curated snapshot
-
-Transport     regionSlug, airports[{name, iata, note}], railNote,
-              intercityBusNote, localTransitNote, carRecommended:bool
+RentalMarketScan  regionSummary[{ regionSlug, furnishedShortTermMonthly, source }],
+              scans[{ regionSlug, citySlug, asOf, source, sourceUrl, note, platforms[] }]
+              // static, hand-checked market research
 
 NatureActivity  regionSlug, name, type, difficulty, season, url   // stretch; leaning cut
 
