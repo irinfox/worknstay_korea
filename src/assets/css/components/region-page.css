@@ -784,6 +784,22 @@ ul.region-seasons {
   border-bottom: 0;
 }
 
+/* Small column-label row above the city rows (design reference 7b): same grid columns as the
+   data rows, just smaller and muted so it reads as a caption, not another data row. Equal
+   top/bottom padding balances the gap to the card's top border against the gap to the first
+   city row. The dd.cost-table__size selector is repeated to out-specificity the later
+   `.cost-table dd.cost-table__size` rule below — without it, the "Size" label alone would fall
+   back to that rule's 14px/soft-color style while "City"/"Per month" stayed small and muted. */
+.cost-table--3col .cost-table__head dt,
+.cost-table--3col .cost-table__head dd,
+.cost-table--3col .cost-table__head dd.cost-table__size {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
 /* The two tiers read as one row: no divider between them and a tighter gap than between
    cities. */
 .cost-table--3col dd.cost-table__cell--stacked-first {

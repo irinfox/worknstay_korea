@@ -283,6 +283,11 @@ eleventyComputed:
          every region has a deposit figure or a Seoul comparison. #}
       {% if isGyeonggi %}
       <dl class="cost-table cost-table--3col">
+        <div class="cost-table__head">
+          <dt>City</dt>
+          <dd class="cost-table__size">Size</dd>
+          <dd>Per month</dd>
+        </div>
         {% for row in rentSummary.costRows %}
         <div{% if loop.last %} class="cost-table__row--deposit"{% elif loop.index == loop.length - 1 %} class="cost-table__row--before-deposit"{% endif %}>
           <dt style="grid-row: span {{ row.tiers.length }}">{{ row.label }}</dt>
