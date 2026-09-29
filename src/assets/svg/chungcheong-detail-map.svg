@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" id="chungcheong-detail-map" viewBox="75 278 525 331" style="--region-map-zoom: calc(525 / 432 * 640 / 704)" class="region-detail-map__svg" role="img" aria-label="Map of Chungcheong-do showing Daejeon, Cheongju, and Sejong; Mongsanpo Mudflat and Daecheon Beach (Boryeong) on the west coast (revealed on hover or tap); and neighbouring Gyeonggi-do, Gangwon-do, Gyeongsang-do, and Jeolla-do for orientation">
+<svg xmlns="http://www.w3.org/2000/svg" id="chungcheong-detail-map" viewBox="75 278 525 331" style="--region-map-zoom: calc(525 / 432 * 640 / 704)" class="region-detail-map__svg" role="img" aria-label="Map of Chungcheong-do showing Daejeon, Cheongju, and Sejong; Mongsanpo Beach and Daecheon Beach (Boryeong) on the west coast (revealed on hover or tap); and neighbouring Gyeonggi-do, Gangwon-do, Gyeongsang-do, and Jeolla-do for orientation">
   <!-- Province + carved-out metro-city outlines: src/assets/svg/korea-regions.svg#region-chungcheong
        (Chungcheongbuk-do + Chungcheongnam-do polygons, plus Daejeon and Sejong drawn as their own
        carved-out polygons in that group). Cropped to the combined bounding box, not a lat/lng
@@ -21,9 +21,15 @@
        No Gongju pin — its city card is dropped from region.njk's cityOrder (poor rental-market
        coverage); cities.json keeps the record, and Gongsanseong Fortress is still named in the
        region description and Sejong's gettingAround.
-       Mongsanpo Mudflat (126.2875,36.6701) keeps Taean's old anchor point/nudge as its own plain
-       beach pin. Daecheon Beach, Boryeong (126.5093,36.3132) is a new point from the same affine
-       fit, nudged inland for a safe polygon margin (script-checked, not eyeballed).
+       Mongsanpo (126.2875,36.6701) keeps Taean's old anchor point/nudge as its own plain beach
+       pin — labeled "Mongsanpo Beach" on the map (KTO itself lists it as "Mongsanpo Mudflat";
+       shortened here to match the umbrella glyph and the other beach pin's naming, the mudflat/
+       clam-digging framing stays in the region description prose). Daecheon Beach, Boryeong
+       (126.5093,36.3132) is a new point from the same affine fit, nudged inland (+8 x from the
+       raw fit) for a safe polygon margin on both the glyph and its always-centered label
+       (script-checked, not eyeballed) — the whole pin moves as one unit, never just the label
+       text, so the label stays centered directly below the glyph at the same fixed distance
+       every pin on this map uses.
 
        Glyph/label sizing scaled by --region-map-zoom, which also folds in a ×640/704 correction
        (this map's own max-width override, region-detail-map.css) so glyphs/labels render at the
@@ -32,18 +38,18 @@
        viewBox trimmed from 72,265,546,368 so the terrain renders bigger without resizing pins. -->
 
   <g class="map-pin map-pin--city" transform="translate(329.0,502.3)">
-    <svg class="map-pin__glyph" x="-8.25" y="-15.41" width="16.51" height="16.51" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="0" y="13.21" text-anchor="middle">Daejeon</text>
+    <svg class="map-pin__glyph" x="-8.29" y="-15.47" width="16.57" height="16.57" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="13.26" text-anchor="middle">Daejeon</text>
   </g>
-  <g class="map-pin map-pin--city" transform="translate(345.2,447.1)">
-    <svg class="map-pin__glyph" x="-8.25" y="-15.41" width="16.51" height="16.51" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="5" y="13.21" text-anchor="middle">Cheongju</text>
+  <g class="map-pin map-pin--city" transform="translate(335.2,437.1)">
+    <svg class="map-pin__glyph" x="-8.29" y="-15.47" width="16.57" height="16.57" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="5" y="13.26" text-anchor="middle">Cheongju</text>
   </g>
-  <g class="map-pin map-pin--city" transform="translate(299.2,445.2)">
-    <svg class="map-pin__glyph" x="-8.25" y="-15.41" width="16.51" height="16.51" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label map-pin__label--city" x="-5" y="13.21" text-anchor="middle">Sejong</text>
+  <g class="map-pin map-pin--city" transform="translate(308.2,462.2)">
+    <svg class="map-pin__glyph" x="-8.29" y="-15.47" width="16.57" height="16.57" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 13.5V6.2l4-2.7 4 2.7v7.3M10.5 13.5V8h3v5.5M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <text class="map-pin__label map-pin__label--city" x="0" y="13.26" text-anchor="middle">Sejong</text>
   </g>
-  <!-- Mongsanpo Mudflat and Daecheon Beach: attractions, not cities — nature (green) glyph/label,
+  <!-- Mongsanpo and Daecheon Beach: attractions, not cities — nature (green) glyph/label,
        plain (non-bold) names, beach glyph (map glyphs/beach.svg), standard .map-pin--beach
        hide-until-hover label (not Taean's old always-on .map-pin--surf pattern).
        Glyph uses the shared nature base (16 × --region-map-zoom), same formula as every
@@ -53,11 +59,11 @@
   <g class="map-pin map-pin--beach" tabindex="0" transform="translate(139.2,431.0)">
     <circle class="map-pin__hit-target" r="20" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8.84" y="-15.47" width="17.68" height="17.68" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7.5v6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="13.21" text-anchor="middle">Mongsanpo Mudflat</text>
+    <text class="map-pin__label" x="0" y="13.26" text-anchor="middle">Mongsanpo Beach</text>
   </g>
-  <g class="map-pin map-pin--beach" tabindex="0" transform="translate(182.7,510.1)">
+  <g class="map-pin map-pin--beach" tabindex="0" transform="translate(190.7,513.1)">
     <circle class="map-pin__hit-target" r="20" />
     <svg class="map-pin__glyph map-pin__glyph--nature" x="-8.84" y="-15.47" width="17.68" height="17.68" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 7.5c0-3 2.5-5 5.5-5s5.5 2 5.5 5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 7.5v6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13.5h13" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <text class="map-pin__label" x="0" y="13.21" text-anchor="middle">Daecheon Beach</text>
+    <text class="map-pin__label" x="0" y="13.26" text-anchor="middle">Daecheon Beach</text>
   </g>
 </svg>
