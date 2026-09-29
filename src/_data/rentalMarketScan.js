@@ -16,15 +16,10 @@
 // same single eyeballed figure as `label`, just reformatted, which made the file look like it had
 // verified range data it didn't. Removed rather than kept as unused, misleading duplication.
 //
-// `regionSummary` holds the hand-checked figures surfaced outside the per-city scans below
-// (homepage region cards, each region page's rent-summary card and cost dl/note) — kept here
-// rather than in its own file since it's the same market-scan research, just rolled up to
-// region level instead of per-city/per-platform. `costRows` are the region page's cost-table
-// dt/dd pairs; rows are omitted rather than filled with a guess where no figure was checked
-// (no Seoul comparison for Jeolla/Gyeongsang). Every region but Gangwon-do was scanned purely on
-// Enkostay (a no-deposit platform), so their deposit row is a flat "none" rather than a range.
-// Gyeonggi-do's rows break down by city/district instead of the shape the other regions share,
-// since that's how its own research came back.
+// `regionSummary` rolls this research up to region level: homepage cards, region-page
+// rent-summary card, cost table/note. `costRows` omits rows with no checked figure (no Seoul
+// comparison for Jeolla/Gyeongsang). Only Gangwon-do's scan included a deposit-charging
+// platform, so elsewhere deposit is a flat "none". Gyeonggi-do's rows break down by city instead.
 export default {
   regionSummary: [
     {
@@ -32,17 +27,19 @@ export default {
       furnishedShortTermMonthly: "₩1.4–2M+",
       source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
-        { label: "Incheon, Songdo · 23–29 m²", value: "₩1.5–1.7M" },
-        { label: "Seongnam, Bundang · 24–40 m²", value: "₩1.8–2M" },
-        { label: "Suwon · 20–26 m²", value: "₩1.4–1.7M" },
-        { label: "Seoul · 12–21 m²", value: "₩1–1.4M" },
-        { label: "Seoul · ~25 m²", value: "₩1.7M+" },
-        { label: "Upfront deposit", value: "none" }
+        { label: "Seoul", tiers: [
+            { size: "12–21 m²", value: "₩1–1.4M" },
+            { size: "~25 m²", value: "₩1.7M+" }
+          ] },
+        { label: "Incheon, Songdo", tiers: [{ size: "23–29 m²", value: "₩1.5–1.7M" }] },
+        { label: "Suwon", tiers: [{ size: "20–26 m²", value: "₩1.4–1.7M" }] },
+        { label: "Seongnam, Bundang", tiers: [{ size: "24–40 m²", value: "₩1.8–2M" }] },
+        { label: "Upfront deposit", tiers: [{ value: "none" }] }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
         "In this region, rental costs highly depend on the specific district and the level of comfort you expect (e.g., a wet room vs. an enclosed shower). Incheon's Songdo area offers very standardized floor plans with a stable price range. Seongnam's Bundang has a high price floor with almost no budget options. Across all cities, cheaper stays can be found in other districts, though usually with smaller floor space and older facilities.",
-        "In Seoul, the price also heavily depends on the district: compact studios (12–21 m²) typically cost around ₩1–1.4M, while larger units (~25 m²) start at ₩1.7M."
+        "In Seoul, the price also heavily depends on the district."
       ]
     },
     {
@@ -55,8 +52,9 @@ export default {
         { label: "Same money in Seoul", value: "12–21 m²" },
         { label: "Upfront deposit", value: "none or ₩330K" }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. Stays in this region generally offer more space for the money than in Seoul. Sokcho has the widest range of flexible options, while Wonju is the cheapest overall."
+        "Stays in this region generally offer more space for the money than in Seoul. Sokcho has the widest range of flexible options, while Wonju is the cheapest overall. Gangneung is more local-oriented, with more options on the 33m2 platform."
       ]
     },
     {
@@ -69,8 +67,9 @@ export default {
         { label: "Same money in Seoul", value: "12–21 m²" },
         { label: "Upfront deposit", value: "none" }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. In this region, Daejeon has the highest number of listings across foreigner-friendly platforms. Cheongju has fewer options on these platforms, while Sejong's short-term rentals are mostly limited to the local-oriented 33m2 platform."
+        "In this region, Daejeon has the highest number of listings across foreigner-friendly platforms. Cheongju has fewer options on these platforms, while Sejong's short-term rentals are mostly limited to the local-oriented 33m2 platform."
       ]
     },
     {
@@ -82,8 +81,9 @@ export default {
         { label: "Typical size", value: "24–33 m²" },
         { label: "Upfront deposit", value: "none" }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. In this region, both Busan and Daegu have a good number of listings across foreigner-friendly platforms. Ulsan is more local-oriented, with more options on the 33m2 platform, and Gyeongju month-long stay options tend to be more family-oriented with larger floor space and higher rents."
+        "In this region, both Busan and Daegu have a good number of listings across foreigner-friendly platforms. Ulsan is more local-oriented, with more options on the 33m2 platform, and Gyeongju month-long stay options tend to be more family-oriented with larger floor space and higher rents."
       ]
     },
     {
@@ -95,8 +95,9 @@ export default {
         { label: "Typical size", value: "20–40 m²" },
         { label: "Upfront deposit", value: "none" }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. The majority of listings lack a dedicated computer desk. Overall, options are quite limited across the region with somewhat better coverage in Jeonju and Yeosu. Suncheon shows decent budget stays mainly on the local-oriented 33m2 platform, while Gwangju is the most local-oriented of them all — the majority of short-term stays are 2–3 room apartments with ~₩1.8M rent."
+        "The majority of listings lack a dedicated computer desk. Overall, options are quite limited across the region with somewhat better coverage in Jeonju and Yeosu. Suncheon shows decent budget stays mainly on the local-oriented 33m2 platform, while Gwangju is the most local-oriented of them all — the majority of short-term stays are 2–3 room apartments with ~₩1.8M rent."
       ]
     },
     {
@@ -106,11 +107,11 @@ export default {
       costRows: [
         { label: "Short-term stay, per month", value: "₩1.1–1.6M" },
         { label: "Typical size", value: "23–30 m² and up" },
-        { label: "Same money in Seoul", value: "12–21 m²" },
         { label: "Upfront deposit", value: "none" }
       ],
+      costCaption: "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract.",
       costNote: [
-        "The prices shown are for decent furnished stays available to foreigners, without a large upfront deposit or long-term contract. Depending on the platform, Jeju City has a larger number of listings, while Seogwipo tends to offer more spacious options. Since Jeju is a highly popular destination for both locals and foreigners, Airbnb coverage across the island is broad, with monthly discounts that can bring prices even below the indicated range."
+        "Depending on the platform, Jeju City has a larger number of listings, while Seogwipo tends to offer more spacious options. Since Jeju is a highly popular destination for both locals and foreigners, Airbnb coverage across the island is broad, with monthly discounts that can bring prices even below the indicated range."
       ]
     }
   ],
@@ -143,8 +144,8 @@ export default {
         },
         {
           name: "Airbnb",
-          currency: "USD",
-          units: [{ type: null, sizeM2: null, label: { rent: "~$1,000" } }]
+          currency: "KRW",
+          units: [{ type: null, sizeM2: null, label: { rent: "~₩1.4M" } }]
         }
       ]
     },
@@ -172,12 +173,12 @@ export default {
         {
           name: "33m2",
           currency: "KRW",
-          units: [{ type: null, sizeM2: 23, note: "Very few listings", label: { size: "23 m²", rent: "₩1.3M", noteShort: "very few" } }]
+          units: [{ type: null, sizeM2: 26, label: { size: "26 m²", rent: "₩1.1–1.4M" } }]
         },
         {
           name: "Airbnb",
-          currency: "USD",
-          units: [{ type: null, sizeM2: null, label: { rent: "$1,000+" } }]
+          currency: "KRW",
+          units: [{ type: null, sizeM2: null, label: { rent: "₩1.4M+" } }]
         }
       ]
     },
@@ -209,8 +210,8 @@ export default {
         },
         {
           name: "Airbnb",
-          currency: "USD",
-          units: [{ type: null, sizeM2: null, note: "Unusually wide/high range in the sampled listings — low confidence, worth re-checking.", label: { rent: "$2,000–4,000" } }]
+          currency: "KRW",
+          units: [{ type: null, sizeM2: null, note: "Unusually wide/high range in the sampled listings — low confidence, worth re-checking.", label: { rent: "₩2.7–5.4M" } }]
         }
       ]
     },
@@ -242,8 +243,8 @@ export default {
         },
         {
           name: "Airbnb",
-          currency: "USD",
-          units: [{ type: null, sizeM2: null, label: { rent: "$500–750" } }]
+          currency: "KRW",
+          units: [{ type: null, sizeM2: null, label: { rent: "₩680K–1M" } }]
         }
       ]
     }

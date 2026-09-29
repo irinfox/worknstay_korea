@@ -281,13 +281,30 @@ eleventyComputed:
          Row sets differ by region — Gyeonggi-do breaks down by city/district rather than the
          short-term/typical-size/Seoul-comparison/deposit shape the other regions share, and not
          every region has a deposit figure or a Seoul comparison. #}
+      {% if isGyeonggi %}
+      <dl class="cost-table cost-table--3col">
+        {% for row in rentSummary.costRows %}
+        <div{% if loop.last %} class="cost-table__row--deposit"{% elif loop.index == loop.length - 1 %} class="cost-table__row--before-deposit"{% endif %}>
+          <dt style="grid-row: span {{ row.tiers.length }}">{{ row.label }}</dt>
+          {% for tier in row.tiers %}
+          <dd class="cost-table__size{% if row.tiers.length > 1 %}{% if loop.first %} cost-table__cell--stacked-first{% else %} cost-table__cell--stacked-last{% endif %}{% endif %}">{{ tier.size }}</dd>
+          <dd{% if row.tiers.length > 1 %} class="{% if loop.first %}cost-table__cell--stacked-first{% else %}cost-table__cell--stacked-last{% endif %}"{% endif %}>{{ tier.value }}</dd>
+          {% endfor %}
+        </div>
+        {% endfor %}
+      </dl>
+      {% else %}
       <dl class="cost-table">
         {% for row in rentSummary.costRows %}
         <div><dt>{{ row.label }}</dt><dd>{{ row.value }}</dd></div>
         {% endfor %}
       </dl>
+      {% endif %}
+      {% if rentSummary.costCaption %}
+      <p class="cost-caption">{{ rentSummary.costCaption }}</p>
+      {% endif %}
       {% for para in rentSummary.costNote %}
-      <p class="cost-note">{{ para }}</p>
+      <p class="cost-note">{{ para | safe }}</p>
       {% endfor %}
       <p class="cost-link"><a href="/settling-in/">A short intro into Korean renting →</a></p>
       {% else %}
