@@ -107,6 +107,9 @@
   .city-card-list__item {
     flex: 0 0 86%;
     max-width: 340px;
+    /* min-width:auto default lets unbreakable content override flex-shrink:0 and grow the card
+       past 86%/340px — zeroing it keeps card width content-independent. */
+    min-width: 0;
     scroll-snap-align: start;
   }
 
@@ -136,6 +139,23 @@
 
   .work-venue__name {
     flex-wrap: wrap;
+  }
+
+  /* Mangrove's "coworking · coliving · community" broke the desktop 3-col grid on mobile —
+     drop to 2 cols (name, site), kind wraps on its own row below. */
+  .work-venue-chains {
+    grid-template-columns: auto auto;
+    /* Wider row-gap = the "between chains" gap; kind's negative margin-top below pulls it back
+       up to its own name, so that pair reads tighter than the gap to the next chain. */
+    row-gap: 16px;
+  }
+
+  .work-venue-chains .work-venue__kind {
+    grid-column: 1 / -1;
+    justify-self: start;
+    text-align: left;
+    white-space: normal;
+    margin-top: -10px;
   }
 }
 
@@ -330,6 +350,7 @@
   font-size: 14px;
   font-weight: 500;
   color: var(--color-text-soft);
+  white-space: nowrap;
 }
 
 .work-venue__chain-site {
@@ -340,9 +361,11 @@
   white-space: nowrap;
 }
 
-/* Kind chip stays flush to the card's right edge, same as a solo venue's row. */
-.work-venue-chains .work-venue__kind {
-  justify-self: end;
+/* Kind chip flush to the card's right edge — desktop only, mobile moves it to its own row. */
+@media (min-width: 900px) {
+  .work-venue-chains .work-venue__kind {
+    justify-self: end;
+  }
 }
 
 /* 4-cell study-café battery + count label + Naver Map search link, one non-wrapping row on a
@@ -448,6 +471,7 @@
   }
 
   .city-card-list__item {
-    flex-basis: 92%;
+    /* 99%: 92% left Seoul Startup Hub's row a few px short of fitting on one line at 360px. */
+    flex-basis: 99%;
   }
 }
