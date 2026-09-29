@@ -19,7 +19,7 @@
     "heroImageIds": [],
     "usefulLinks": [
       {
-        "label": "Scenic Hiking & Walking Trails in/near Seoul",
+        "label": "Scenic hiking & walking trails in/near Seoul",
         "url": "https://www.koreatodo.com/best-hiking-trails-korea",
         "sourceLabel": "koreatodo.com",
         "sourceDate": "2026"
@@ -79,19 +79,19 @@
     "shortIntro": "A good match for those who prefer focused work and occasional nature escapes.",
     "longIntro": [
       "Chungcheong-do is Korea's central region with an active international airport. The region is known for its relaxed pace of life, which is even reflected in the local dialect.",
-      "Northern Chungcheong (Chungcheongbuk-do) is the only region in Korea without access to the sea. Instead, it is famous for canyons and lakes, including Dodamsambong Peaks and Chungjuho. Cheongju is also home to the region's international airport.",
-      "Southern Chungcheong (Chungcheongnam-do) is home to research and administrative cities, alongside a mix of culinary and historic sites. The Taean coastline is also known for its mix of sand and mud, including Korea's only Sinduri Coastal Sand Dune and Mongsanpo Mudflat, where beginners can try activities such as clam digging."
+      "Northern Chungcheong (Chungcheongbuk-do) is the only region in Korea without access to the sea. Instead, it is famous for canyons, lakes, and scenic mountain passes, including Dodamsambong Peaks, Chungjuho, and Maltijae Observatory.",
+      "Southern Chungcheong (Chungcheongnam-do) is home to research and administrative cities, as well as historic, culinary and coastal sites. Gongju, a former Baekje Kingdom capital (475–538 CE), hosts UNESCO World Heritage sites such as Gongsanseong Fortress and the Tomb of King Muryeong. Further west, the Taean coastline area has Mongsanpo Mudflat, a popular spot for beginner-friendly clam digging, while Daecheon Beach in Boryeong has an annual Mud Festival and a ziptrek over the sea."
     ],
     "heroImageIds": [],
     "usefulLinks": [
       {
-        "label": "Chungcheong-do Guide",
+        "label": "Chungcheong-do guide",
         "url": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?menuSn=&vcontsId=1591589",
         "sourceLabel": "visitkorea.or.kr",
         "sourceDate": "Jul 2026"
       },
       {
-        "label": "Korean Mudflat Experience",
+        "label": "Korean mudflat experience",
         "url": "https://kculture.com/korean-mudflat-experience-clam-digging-guide/",
         "sourceLabel": "kculture.com",
         "sourceDate": "Jul 2026"
@@ -101,6 +101,12 @@
         "url": "https://kcampus.kr/news/cycling-in-korea--a-simple-logistical-guide-for-the-uninitiated-7841",
         "sourceLabel": "kcampus.kr",
         "sourceDate": "Jul 2026"
+      },
+      {
+        "label": "Boryeong Mud Festival",
+        "url": "https://mudfestival.or.kr/en/festival/main.html",
+        "sourceLabel": "mudfestival.or.kr",
+        "sourceDate": "Sep 2026"
       }
     ]
   },
@@ -124,25 +130,25 @@
     "heroImageIds": [],
     "usefulLinks": [
       {
-        "label": "Gyeongju Travel Guide",
+        "label": "Gyeongju travel guide",
         "url": "https://korea-insider.com/gyeongju-travel-guide/",
         "sourceLabel": "korea-insider.com",
         "sourceDate": "Mar 2026"
       },
       {
-        "label": "Daegu Travel Guide",
+        "label": "Daegu travel guide",
         "url": "https://korea-insider.com/daegu-travel-guide/",
         "sourceLabel": "korea-insider.com",
         "sourceDate": "Mar 2026"
       },
       {
-        "label": "Busan Travel Guide",
+        "label": "Busan travel guide",
         "url": "https://korea-insider.com/busan-travel-guide/",
         "sourceLabel": "korea-insider.com",
         "sourceDate": "Mar 2026"
       },
       {
-        "label": "Ulsan Travel Guide",
+        "label": "Ulsan travel guide",
         "url": "https://mileasia.com/korea/ulsan-travel-guide/",
         "sourceLabel": "mileasia.com",
         "sourceDate": "Jul 2026"
@@ -219,7 +225,7 @@
     "heroImageIds": [],
     "usefulLinks": [
       {
-        "label": "Official Jeju Tourism Portal",
+        "label": "Official Jeju tourism portal",
         "url": "https://visitjeju.net/en/",
         "sourceLabel": "visitjeju.net"
       },
@@ -230,12 +236,12 @@
         "sourceDate": "Jul 2026"
       },
       {
-        "label": "Hallasan Reservation",
+        "label": "Hallasan reservation",
         "url": "https://visithalla.jeju.go.kr/main/main.do",
         "sourceLabel": "visithalla.jeju.go.kr"
       },
       {
-        "label": "Olle Trail",
+        "label": "Olle trail",
         "url": "https://www.jejuolle.org/trail_en#/",
         "sourceLabel": "jejuolle.org"
       }

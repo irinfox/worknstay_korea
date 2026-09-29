@@ -180,6 +180,19 @@
   cursor: pointer;
 }
 
+/* Halo on the glyph itself, not just its label — a plain beach pin (Chungcheong's Mongsanpo/
+   Daecheon) has no always-on text to anchor it, so on a jagged coastline the umbrella's thin
+   strokes blend into the boundary hatching until hovered. Same halo colour as .map-pin__label's
+   paint-order stroke above, but a path glyph has no fill+stroke pairing paint-order can reorder,
+   so it's built as a stack of blurred drop-shadows instead — three copies (rather than one) to
+   read as a solid ring instead of a soft glow. */
+.map-pin--beach .map-pin__glyph {
+  filter:
+    drop-shadow(0 0 1.5px var(--color-primary-tint))
+    drop-shadow(0 0 1.5px var(--color-primary-tint))
+    drop-shadow(0 0 1.5px var(--color-primary-tint));
+}
+
 .map-pin--beach .map-pin__label {
   opacity: 0;
   pointer-events: none;

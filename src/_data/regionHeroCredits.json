@@ -243,6 +243,17 @@
       "cpyrhtDivCd": "Type1",
       "galContentId": "3585615"
     },
+    "gongju-gongsanseong-fortress.jpg": {
+      "titleEn": "Gongsanseong Fortress",
+      "titleKo": "공산성",
+      "cityEn": "Gongju",
+      "cityKo": "공주",
+      "addressEn": "Geumseong-dong, Gongju-si, Chungcheongnam-do",
+      "addressKo": "금성동, 공주시, 충청남도",
+      "source": "PhotoGalleryService1",
+      "cpyrhtDivCd": "Type1",
+      "galContentId": "3404561"
+    },
     "gongju-heritage-night-tour.jpg": {
       "titleEn": "Gongju Heritage Night Tour",
       "titleKo": "공주 문화유산 야행",
@@ -252,7 +263,8 @@
       "addressKo": "공주시, 충청남도",
       "source": "PhotoGalleryService1",
       "cpyrhtDivCd": "Type1",
-      "galContentId": "3404420"
+      "galContentId": "3404420",
+      "note": "Standby only — superseded by gongju-gongsanseong-fortress.jpg (2026-09-29, user pick from temp-gongsanseong-fortress/); file kept in assets/img/hero/chungcheong-do/ but not listed in regionHeroPhotos.json."
     },
     "daejeon-expo-science-park.jpg": {
       "titleEn": "Expo Science Park",
