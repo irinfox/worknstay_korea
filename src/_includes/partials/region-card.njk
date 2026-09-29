@@ -5,9 +5,8 @@
 <div class="region-card region-card--{{ modifier | default("carousel") }}" data-region-slug="{{ region.slug }}">
   <div class="region-card__header">
     <h3 class="region-card__name">{{ region.nameEn }}</h3>
-    {# Rent figure only where a real hand-checked range exists (Gangwon-do — see
-       rentalMarketScan.js regionSummary). Other regions have no verified figure yet,
-       so the row is omitted rather than filled with a city-centre estimate. #}
+    {# Rent figure only where a real hand-checked range exists (rentalMarketScan.js
+       regionSummary) — omitted rather than filled with a city-centre estimate if missing. #}
     {% if rentSummary and rentSummary.furnishedShortTermMonthly %}
     <span class="region-card__rent">{{ rentSummary.furnishedShortTermMonthly }}/mo</span>
     {% endif %}

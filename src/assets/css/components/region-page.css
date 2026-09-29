@@ -710,7 +710,7 @@ ul.region-seasons {
   }
 }
 
-/* Gangwon-do cost table (design reference 5b): white card, one figure per row on a light rule. */
+/* Region cost table (design reference 5b, Gangwon-do): white card, one figure per row on a light rule. */
 .cost-table {
   margin: 0 0 14px;
   padding: 2px 18px;
@@ -744,11 +744,117 @@ ul.region-seasons {
   white-space: nowrap;
 }
 
+/* Gyeonggi-do's per-city breakdown: city, size and price each get their own column instead of
+   the shared label/value pair. Columns are defined on the <dl> itself (not per-row) and each row
+   is display:contents so every dt/dd is a direct grid item sharing one set of column tracks —
+   sizing each row's own grid independently (the first version of this) let the "auto" price
+   column's width vary row to row (e.g. "none" vs "₩1.8–2M"), which pushed the size column's
+   start position sideways per row and produced a staircase instead of a lined-up column. */
+/* align-items: stretch (not baseline) — dt is 14px, the size dd is 14px/400 and the price dd is
+   15px/500, so baseline alignment let each cell's padding box end at a slightly different height
+   per column, and the shared row divider came out visibly stepped at the column boundaries.
+   Stretching every cell to the full row height makes every border-bottom land on the same line
+   regardless of its own font size. */
+.cost-table--3col {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
+  align-items: stretch;
+}
+
+.cost-table--3col > div {
+  display: contents;
+}
+
+/* No column-gap: cells sit flush against each other so each row's border-bottom is one
+   continuous edge-to-edge line instead of breaking at the column gaps. The 12px gap that used to
+   come from column-gap is recreated as padding-right on the two non-last columns instead. */
+.cost-table--3col dt,
+.cost-table--3col dd {
+  padding: 11px 0;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.cost-table--3col dt,
+.cost-table--3col dd.cost-table__size {
+  padding-right: 12px;
+}
+
+.cost-table--3col > div:last-child dt,
+.cost-table--3col > div:last-child dd {
+  border-bottom: 0;
+}
+
+/* Small column-label row above the city rows (design reference 7b): same grid columns as the
+   data rows, just smaller and muted so it reads as a caption, not another data row. Equal
+   top/bottom padding balances the gap to the card's top border against the gap to the first
+   city row. The dd.cost-table__size selector is repeated to out-specificity the later
+   `.cost-table dd.cost-table__size` rule below — without it, the "Size" label alone would fall
+   back to that rule's 14px/soft-color style while "City"/"Per month" stayed small and muted. */
+.cost-table--3col .cost-table__head dt,
+.cost-table--3col .cost-table__head dd,
+.cost-table--3col .cost-table__head dd.cost-table__size {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+}
+
+/* The two tiers read as one row: no divider between them and a tighter gap than between
+   cities. */
+.cost-table--3col dd.cost-table__cell--stacked-first {
+  padding-bottom: 3px;
+  border-bottom: 0;
+}
+
+.cost-table--3col dd.cost-table__cell--stacked-last {
+  padding-top: 3px;
+}
+
+/* The row right above "Upfront deposit" gives up its own bottom divider so only the deposit
+   row's (stronger) top divider draws there — otherwise the two 1px lines sit flush against each
+   other and read as one thick/doubled line. */
+.cost-table--3col .cost-table__row--before-deposit dt,
+.cost-table--3col .cost-table__row--before-deposit dd {
+  border-bottom: 0;
+}
+
+/* Upfront deposit is a different kind of row from the city prices above it — a visibly heavier
+   rule, not just the same hairline in a darker shade. */
+.cost-table--3col .cost-table__row--deposit dt,
+.cost-table--3col .cost-table__row--deposit dd {
+  border-top: 2px solid var(--color-border);
+  border-bottom: 0;
+}
+
+.cost-table dd.cost-table__size {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-soft);
+}
+
+.cost-caption {
+  margin: 0 0 12px;
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
 .cost-note {
   margin: 0;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.65;
   color: var(--color-text-soft);
+}
+
+/* Keeps a ₩ range from breaking at its dash on narrow viewports (same fix as
+   .settling-nowrap in static-pages.css). */
+.cost-nowrap {
+  white-space: nowrap;
+}
+
+.cost-note + .cost-note {
+  margin-top: 10px;
 }
 
 .cost-link {
