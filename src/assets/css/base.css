@@ -203,6 +203,11 @@ button:focus-visible,
     position: absolute;
     inset: -14px -4px;
   }
+  /* Already ~31px tall, so less slop is needed to reach 44px. */
+  .region-card__link::after,
+  .dish-card__restaurant::after {
+    inset: -7px -4px;
+  }
   .region-hero-gallery__nav {
     width: 44px;
     height: 44px;
