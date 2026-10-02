@@ -468,7 +468,7 @@
     "lng": 127.1189,
     "blurb": "Historic city and former capital (475–538 CE) of the Baekje Kingdom. It is home to UNESCO World Heritage sites such as Gongsanseong Fortress and the Tomb of King Muryeong, with Magoksa Temple nearby.",
     "vibeTags": ["historic"],
-    "otherWorkspaces": [{ "name": "Study cafés", "level": 4 }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 1 }],
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["150"],
     "gettingAround": [
@@ -489,7 +489,7 @@
     "lng": 129.22,
     "blurb": "Former capital of the Silla kingdom, often described as a \"museum without walls\". The royal tombs are right in the city center, and ancient Bulguksa Temple nearby. It attracts visitors from Korea and abroad and gets especially crowded during the autumn foliage season.",
     "vibeTags": ["historic"],
-    "otherWorkspaces": [{ "name": "Study cafés", "level": 3 }],
+    "otherWorkspaces": [{ "name": "Study cafés", "level": 2 }],
     "ktoLDongRegnCd": "47",
     "ktoLDongSignguCds": ["130"],
     "gettingAround": [
