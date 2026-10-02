@@ -14,7 +14,7 @@
       "contentid": "264189",
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/52/3034152_image2_1.jpg",
-      "note": "PLACEHOLDER — not currently live; kept as a candidate for a cherry-blossom/spring rotation if a matching photo turns up."
+      "note": "Backup hero photo (real KTO photo) — not currently live; kept as a candidate for a cherry-blossom/spring rotation if a matching photo turns up."
     },
     "pyeongchang-yukbaekmajigi.jpg": {
       "title": "Pyeongchang Yukbaekmajigi",
@@ -23,7 +23,7 @@
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/30/3331630_image2_1.jpg",
       "needsDarkerScrim": true,
-      "note": "PLACEHOLDER — not currently live; user really likes this one. needsDarkerScrim: bright sky/field made hero text hard to read in testing, applies .hero__scrim--dark when this photo is selected."
+      "note": "Backup hero photo (real KTO photo) — not currently live; a favourite. needsDarkerScrim: bright sky/field made hero text hard to read in testing, applies .hero__scrim--dark when this photo is selected."
     }
   }
 }
