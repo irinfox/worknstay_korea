@@ -45,7 +45,8 @@ function addressRules(city) {
 export async function countStudyCafes(city, env) {
   const key = env?.KAKAO_REST_API_KEY;
   const cfg = city.studyCafeSearch;
-  if (!key || !cfg) return { degraded: true };
+  if (!key) return { degraded: true, reason: "KAKAO_REST_API_KEY not set in this environment" };
+  if (!cfg) return { degraded: true, reason: "no studyCafeSearch config for this city" };
   try {
     const matched = new Set();
     let retrieved = 0;
@@ -69,7 +70,8 @@ export async function countStudyCafes(city, env) {
     // the share of the retrieved 45 that passed the filters.
     const count = capped && retrieved ? Math.round((matched.size / retrieved) * totalCount) : matched.size;
     return { count, estimated: capped, ...levelFor(count) };
-  } catch {
-    return { degraded: true };
+  } catch (e) {
+    // reason is a non-sensitive diagnostic (HTTP status or network error), never the key.
+    return { degraded: true, reason: String(e.message || e) };
   }
 }
