@@ -139,7 +139,6 @@ function pinIcon(className) {
 const PIN_ICON = pinIcon("event-place__icon");
 const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
 // Tear-off desk calendar with a blank page — the empty state ("no dates listed").
-const CAL_EMPTY_ICON = `<svg class="event-empty__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="8.5" cy="4" r="1.3"/><circle cx="15.5" cy="4" r="1.3"/><path d="M8.5 5.3v1.7M15.5 5.3v1.7"/><rect x="4" y="7" width="16" height="14" rx="2"/><path d="M4 11h16" stroke-dasharray="2 2"/></svg>`;
 
 function todayIso() {
   const d = new Date();
@@ -174,11 +173,16 @@ function readableRange(start, end) {
 function dateRangeShort(ev) {
   const s = new Date(`${ev.startDate}T00:00:00`);
   const e = new Date(`${ev.endDate}T00:00:00`);
+  const thisYear = Number(todayIso().slice(0, 4));
+  const NB = "\u00a0"; // each date stays whole; only a cross-month range may wrap, after the dash
   const MON = (d) => d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
-  if (ev.startDate === ev.endDate) return `${s.getDate()} ${MON(s)}`;
+  // Any date outside the current year carries its year, so next year's festivals aren't ambiguous.
+  const withYear = (d) =>
+    `${d.getDate()}${NB}${MON(d)}${d.getFullYear() === thisYear ? "" : `${NB}${d.getFullYear()}`}`;
+  if (ev.startDate === ev.endDate) return withYear(s);
   if (s.getFullYear() === e.getFullYear() && s.getMonth() === e.getMonth())
-    return `${s.getDate()} – ${e.getDate()} ${MON(s)}`;
-  return `${s.getDate()} ${MON(s)} – ${e.getDate()} ${MON(e)}`;
+    return `${s.getDate()}${NB}–${NB}${withYear(e)}`; // same month: never breaks
+  return `${withYear(s)}${NB}– ${withYear(e)}`;
 }
 
 // Ongoing-panel badge: multi-month festivals are "Long-term", everything else is "This month".
@@ -284,7 +288,7 @@ function buildUpcomingPanel(later) {
 
   // One month → skip the month-tab strip, it'd just be a single chip.
   if (keys.length === 1) {
-    return `<div class="event-monthpanel">${renderCardList(byMonth.get(keys[0]), { rangeContext: ` in ${monthLabelLong(keys[0])}` })}</div>`;
+    return `<div class="event-monthpanel">${renderCardList(byMonth.get(keys[0]))}</div>`;
   }
 
   const tabs = keys
@@ -298,7 +302,7 @@ function buildUpcomingPanel(later) {
     .map(
       (key, i) =>
         `<div class="event-monthpanel" role="tabpanel" data-month="${key}"${i === 0 ? "" : " hidden"}>
-           ${renderCardList(byMonth.get(key), { rangeContext: ` in ${monthLabelLong(key)}` })}
+           ${renderCardList(byMonth.get(key))}
          </div>`
     )
     .join("");
@@ -326,7 +330,6 @@ function applyPreview(events) {
   return events;
 }
 
-const EVENTS_SUBTITLE_DEFAULT = "Ongoing now, and what's coming up.";
 const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
 const EVENTS_PROVENANCE_FALLBACK =
   "Source: © Korea Tourism Organization (한국관광공사), saved sample from 16 September 2026. Live data currently unavailable.";
@@ -344,7 +347,6 @@ function renderEventsTimeline(container, data) {
   const subtitle = document.querySelector("[data-events-subtitle]");
   if (subtitle) {
     subtitle.hidden = quotaExceeded;
-    subtitle.textContent = EVENTS_SUBTITLE_DEFAULT;
   }
   // Attributing an empty result to KTO is only honest when KTO was actually reached — a real
   // zero-events region (e.g. Jeju) got a real answer and keeps the credit; a quota-exceeded
@@ -373,40 +375,61 @@ function renderEventsTimeline(container, data) {
   const hasLater = later.length > 0;
 
   if (!hasOngoing && !hasLater) {
-    // Same card shape as a real event, with a struck-through calendar chip instead of a date.
-    container.innerHTML = `
-      <div class="event-empty">
-        <span class="event-empty__chip" aria-hidden="true">${CAL_EMPTY_ICON}</span>
-        <p class="event-empty__text">This region has no events listed yet.</p>
-      </div>`;
+    if (subtitle) subtitle.hidden = true;
+    container.innerHTML = `<p class="event-empty">No events listed for this region yet.</p>`;
     return;
   }
 
-  const ongoingInner = renderCardList(ongoing, { badge: true, rangeContext: " running now" });
+  // Both tabs always render; the one with nothing in it is disabled (muted, like a pager arrow
+  // at its end) and the other is the default.
+  const ongoingInner = renderCardList(ongoing, { badge: true });
+  const active = hasOngoing ? "ongoing" : "upcoming";
+  const tab = (name, label, has) =>
+    `<button type="button" role="tab" class="event-tabs__tab" aria-selected="${name === active}"
+       tabindex="${name === active ? 0 : -1}" data-panel="${name}"${has ? "" : " disabled"}>${label}</button>`;
+  container.innerHTML = `
+    <div class="event-tabs" data-active="${active}" role="tablist" aria-label="Festivals &amp; events">
+      ${tab("ongoing", `Ongoing · ${ongoing.length}`, hasOngoing)}${tab("upcoming", `Upcoming · ${later.length}`, hasLater)}
+    </div>
+    <div class="event-panel" role="tabpanel" data-panel="ongoing"${active === "ongoing" ? "" : " hidden"}>${hasOngoing ? ongoingInner : ""}</div>
+    <div class="event-panel" role="tabpanel" data-panel="upcoming"${active === "upcoming" ? "" : " hidden"}>${hasLater ? buildUpcomingPanel(later) : ""}</div>`;
+  setupEventTabs(container);
 
-  if (hasOngoing && hasLater) {
-    container.innerHTML = `
-      <div class="event-tabs" data-active="ongoing" role="tablist" aria-label="Festivals &amp; events">
-        <button type="button" role="tab" class="event-tabs__tab" aria-selected="true" tabindex="0" data-panel="ongoing">Ongoing</button>
-        <button type="button" role="tab" class="event-tabs__tab" aria-selected="false" tabindex="-1" data-panel="upcoming">Upcoming</button>
-      </div>
-      <div class="event-panel" role="tabpanel" data-panel="ongoing">${ongoingInner}</div>
-      <div class="event-panel" role="tabpanel" data-panel="upcoming" hidden>${buildUpcomingPanel(later)}</div>`;
-    setupEventTabs(container);
-  } else if (hasOngoing) {
-    container.innerHTML = `<div class="event-panel">${ongoingInner}</div>`;
-  } else {
-    container.innerHTML = `<div class="event-panel">${buildUpcomingPanel(later)}</div>`;
-  }
-
+  reserveListHeight(container);
   setupMonthTabs(container);
   setupPagers(container);
   setupAddressCopy(container);
 }
 
+// Reserve one list height for every tab / month panel / page, so switching or paging never moves
+// the source line below. Measured with all panels briefly un-hidden (no paint in between) and
+// each page of a paged list shown in turn; consumed as --event-list-h by event-timeline.css.
+function reserveListHeight(container) {
+  const hiddenEls = Array.from(container.querySelectorAll("[hidden]"));
+  hiddenEls.forEach((el) => (el.hidden = false));
+  let max = 0;
+  container.querySelectorAll(".event-list-wrap").forEach((wrap) => {
+    const ul = wrap.querySelector(".event-list");
+    const items = Array.from(ul.children);
+    if (!wrap.hasAttribute("data-paged")) {
+      max = Math.max(max, ul.offsetHeight);
+      return;
+    }
+    for (let start = 0; start < items.length; start += EVENTS_PAGE_SIZE) {
+      items.forEach((li, i) => {
+        li.hidden = i < start || i >= start + EVENTS_PAGE_SIZE;
+      });
+      max = Math.max(max, ul.offsetHeight);
+    }
+    items.forEach((li) => (li.hidden = false));
+  });
+  hiddenEls.forEach((el) => (el.hidden = true));
+  container.style.setProperty("--event-list-h", `${Math.ceil(max)}px`);
+}
+
 function setupEventTabs(container) {
   const strip = container.querySelector(".event-tabs");
-  const tabs = Array.from(container.querySelectorAll(".event-tabs__tab"));
+  const tabs = Array.from(container.querySelectorAll(".event-tabs__tab:not(:disabled)"));
   const panels = Array.from(container.querySelectorAll(".event-panel[data-panel]"));
   if (tabs.length < 2) return;
 

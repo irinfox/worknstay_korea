@@ -5,8 +5,11 @@
    address as city + pin + a copy-full-address control. The list area reserves a fixed height so
    switching tabs / paging never shifts the page. */
 
+/* Constant height whatever the data (tabs + list + pager + month chips), so the source line below
+   always sits in the same place; --event-list-h is the tallest page, measured by region-data.js. */
 .event-timeline {
   margin-top: 0;
+  min-height: calc(max(23rem, var(--event-list-h, 0px)) + 135px);
 }
 
 /* --- Ongoing / Upcoming pill toggles ------------------------------------ */
@@ -29,7 +32,7 @@
   cursor: pointer;
 }
 
-.event-tabs__tab:hover {
+.event-tabs__tab:hover:not(:disabled) {
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
@@ -38,6 +41,11 @@
   color: #fff;
   background: var(--color-primary);
   border-color: var(--color-primary);
+}
+
+.event-tabs__tab:disabled {
+  color: color-mix(in srgb, var(--color-text-soft) 40%, transparent);
+  cursor: default;
 }
 
 /* --- Month chips inside the Upcoming panel ---------------------------- */
@@ -78,14 +86,13 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  /* Fixed reserved height (design reference: ~355px) so tab switches and paging never move the
-     rest of the page. */
-  min-height: 22.25rem;
+  /* Reserved height so tab switches and paging never move the rest of the page. */
+  min-height: max(23rem, var(--event-list-h, 0px));
 }
 
 .event-card {
   display: grid;
-  grid-template-columns: 104px 1fr;
+  grid-template-columns: 118px 1fr;
   gap: 14px;
   align-items: start;
   padding: 12px 0;
@@ -110,12 +117,6 @@
   line-height: 1.45;
   font-variant-numeric: tabular-nums;
   color: var(--color-text-muted);
-}
-
-/* The date itself never breaks; only the trailing status chip wraps below it in the narrow
-   desktop date column. */
-.event-card__daterange {
-  white-space: nowrap;
 }
 
 .event-card__body {
@@ -334,32 +335,6 @@
 /* --- Zero-events empty state --------------------------------------- */
 
 .event-empty {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 22.25rem;
-  padding: 0;
-}
-
-.event-empty__chip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3.25rem;
-  height: 3rem;
-  flex-shrink: 0;
-  background: var(--color-bg);
-  border: 1px solid var(--color-primary-tint-border);
-  border-radius: var(--radius-sm);
-}
-
-.event-empty__icon {
-  width: 22px;
-  height: 22px;
-  color: var(--color-text-muted);
-}
-
-.event-empty__text {
   margin: 0;
   font-size: 13px;
   color: var(--color-text-muted);
@@ -432,17 +407,17 @@
 /* --- Phone: rows stack (date → name → place) ----------------------- */
 
 @media (max-width: 599.98px) {
+  .event-timeline {
+    min-height: calc(max(27rem, var(--event-list-h, 0px)) + 160px);
+  }
+
   .event-list {
-    min-height: 27rem;
+    min-height: max(27rem, var(--event-list-h, 0px));
   }
 
   .event-card {
     grid-template-columns: 1fr;
     gap: 3px;
-  }
-
-  .event-empty {
-    min-height: 27rem;
   }
 
   .event-place {
