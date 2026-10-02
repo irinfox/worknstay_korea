@@ -338,10 +338,12 @@
 
 /* --- Zero-events empty state --------------------------------------- */
 
+/* Body text, same as the rental-costs .cost-note beside it. */
 .event-empty {
   margin: 0;
-  font-size: 13px;
-  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
 }
 
 .region-loading {
