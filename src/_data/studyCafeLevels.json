@@ -1,0 +1,7 @@
+[
+  { "min": 0, "label": "none" },
+  { "min": 1, "label": "a few" },
+  { "min": 10, "label": "good" },
+  { "min": 30, "label": "lots" },
+  { "min": 100, "label": "plenty" }
+]

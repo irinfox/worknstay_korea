@@ -30,6 +30,7 @@
     {% for wc in soloVenues %}
     <div class="work-venue">
       <p class="work-venue__name">{{ wc.name }} <span class="work-venue__kind">{{ wc.kind or "coworking" }}</span></p>
+      {% if wc.microcopy %}<p class="work-venue__micro">{{ wc.microcopy }}</p>{% endif %}
       {% if wc.address %}
       <p class="work-venue__addr"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ wc.address }}</p>
       {% endif %}
@@ -53,15 +54,16 @@
     {% endif %}
 
     {% for space in city.otherWorkspaces %}
-    <div class="study-cafes">
+    {# Fallback level (editorial, optional) renders server-side; study-cafes.js replaces it with the
+       live Kakao count when that call succeeds. No level + no live data shows "not rated yet". #}
+    <div class="study-cafes" data-study-cafes data-city="{{ city.slug }}"{% if space.fallbackLevel !== undefined %} data-has-fallback{% endif %}>
       <span class="study-cafes__label">Study cafés</span>
-      <span class="study-cafes__battery" aria-hidden="true">
-        {% for n in range(1, 5) %}<span class="study-cafes__cell{% if n <= space.level %} study-cafes__cell--on{% endif %}"></span>{% endfor %}
+      <span class="study-cafes__battery" aria-hidden="true"{% if space.fallbackLevel === undefined %} hidden{% endif %}>
+        {% for n in range(1, 5) %}<span class="study-cafes__cell{% if space.fallbackLevel and n <= space.fallbackLevel %} study-cafes__cell--on{% endif %}"></span>{% endfor %}
       </span>
-      <span class="study-cafes__count">
-        {%- if space.level == 0 -%}none{%- elif space.level == 1 -%}a few{%- elif space.level == 2 -%}good{%- elif space.level == 3 -%}lots{%- else -%}plenty{%- endif -%}
+      <span class="study-cafes__count{% if space.fallbackLevel === undefined %} study-cafes__count--unrated{% endif %}" data-study-cafes-count>
+        {%- if space.fallbackLevel === undefined -%}not rated yet{%- else -%}{{ studyCafeLevels[space.fallbackLevel].label }}{%- endif -%}
       </span>
-      <span class="sr-only">({{ space.level }} of 4)</span>
       <a class="study-cafes__search" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map<span class="study-cafes__search-word"> search</span> ↗</a>
     </div>
     {% endfor %}

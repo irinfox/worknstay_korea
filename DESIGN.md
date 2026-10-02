@@ -92,7 +92,7 @@ One Google Fonts request, exactly this:
   (all-caps at 11px reads larger than its size). Used for festival THIS MONTH/LONG-TERM and
   note-card category tags (visa-info Important notes).
 - Sentence case everywhere. All-caps only in the 11px status chip above. Lowercase is fine in
-  tags, pills (`spicy`, `surf`), and non-sentence table values (`none`, `varies`) — they're labels, not sentences.
+  tags, pills (`spicy`, `surf`), and short value labels — table cells (`none`, `varies`) and the study-café count (`a few`, `lots`, `not rated yet`) — they're labels, not sentences.
 
 ## Geometry
 
@@ -200,6 +200,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 - **Study cafés**: 4-cell battery (12–15×9px, `#0F7B54` filled / `#DCE3DF` empty) + count label
   + `Naver Map search ↗` at the right of the same row, 12px orange. No description. The row never
   wraps at any width — shorten the label to `Naver Map ↗` at 360 rather than wrapping it.
+  Unrated: no battery (empty reads as `none`), muted 400 `not rated yet`.
 - **Chains**: grouped under their own "Chains" subtitle (13px/600 muted) below the solo venues,
   non-Korean ones first. Name is plain ink, not a link (orange got loud repeated); a small
   `Website ↗` (`(KR)` suffix when Korean-only) sits alongside instead, in a shared grid so every
