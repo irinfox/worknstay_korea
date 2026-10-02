@@ -396,6 +396,14 @@ function renderEventsTimeline(container, data) {
   setupEventTabs(container);
 
   reserveListHeight(container);
+  // Row wrapping depends on the font and the width (a phone stacks and wraps far more), so
+  // re-measure once the web font lands and when the viewport changes.
+  document.fonts?.ready.then(() => reserveListHeight(container));
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => reserveListHeight(container), 150);
+  });
   setupMonthTabs(container);
   setupPagers(container);
   setupAddressCopy(container);
@@ -405,6 +413,7 @@ function renderEventsTimeline(container, data) {
 // the source line below. Measured with all panels briefly un-hidden (no paint in between) and
 // each page of a paged list shown in turn; consumed as --event-list-h by event-timeline.css.
 function reserveListHeight(container) {
+  container.style.removeProperty("--event-list-h"); // else the old reservation inflates the measure
   const hiddenEls = Array.from(container.querySelectorAll("[hidden]"));
   hiddenEls.forEach((el) => (el.hidden = false));
   let max = 0;
