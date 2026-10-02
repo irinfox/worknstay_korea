@@ -402,6 +402,10 @@
   flex-shrink: 0;
 }
 
+.study-cafes__battery[hidden] {
+  display: none;
+}
+
 .study-cafes__cell {
   width: 15px;
   height: 9px;
@@ -417,6 +421,12 @@
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
+}
+
+/* No rating yet: a muted empty-state label, not the bold green count (DESIGN.md § Empty & fallback states). */
+.study-cafes__count--unrated {
+  font-weight: 400;
+  color: var(--color-text-muted);
 }
 
 /* Outbound Naver Map link — orange with the ↗, per the DESIGN.md palette. */
