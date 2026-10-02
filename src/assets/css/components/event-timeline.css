@@ -32,9 +32,11 @@
   cursor: pointer;
 }
 
-.event-tabs__tab:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+@media (hover: hover) {
+  .event-tabs__tab:hover:not(:disabled):not([aria-selected="true"]) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
 }
 
 .event-tabs__tab[aria-selected="true"] {
@@ -68,8 +70,10 @@
   cursor: pointer;
 }
 
-.event-months__tab:hover {
-  color: var(--color-text);
+@media (hover: hover) {
+  .event-months__tab:hover:not([aria-selected="true"]) {
+    color: var(--color-text);
+  }
 }
 
 .event-months__tab[aria-selected="true"] {
