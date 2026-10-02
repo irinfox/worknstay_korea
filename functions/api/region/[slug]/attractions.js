@@ -39,7 +39,7 @@ export async function onRequestGet({ params, env }) {
   const regionTopPicks = topAttractions.filter((a) => a.regionSlug === slug);
 
   if (!env?.KTO_API_KEY) {
-    return Response.json({ items: regionTopPicks, quotaExceeded: false });
+    return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true });
   }
 
   const codes = slugToLDongRegnCds(slug);

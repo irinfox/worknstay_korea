@@ -25,6 +25,15 @@ async function fetchJson(url) {
 
 const ATTRACTIONS_SUBTITLE_DEFAULT = "What to explore in the region";
 const ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED = "Top picks for today, the full list will be back tomorrow";
+const ATTRACTIONS_SUBTITLE_FALLBACK = "Top picks, live attraction data is currently unavailable";
+
+// Source lines keep their live text in the markup; when the endpoint served the saved set
+// instead, swap in the fallback text, and restore the live text on every other render.
+function setProvenance(el, fallbackText, fallback) {
+  if (!el) return;
+  if (!el.dataset.liveText) el.dataset.liveText = el.textContent;
+  el.textContent = fallback ? fallbackText : el.dataset.liveText;
+}
 
 function renderAttractions(container, data) {
   // attractions.js and events.js both return { items, quotaExceeded }, but fetchJson's own
@@ -32,6 +41,8 @@ function renderAttractions(container, data) {
   // the object one always arrives.
   const attractions = Array.isArray(data) ? data : data.items || [];
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // fallback: the endpoint served the saved top-picks set without trying KTO (no key configured).
+  const fallback = !Array.isArray(data) && Boolean(data.fallback);
   // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
   // back to the curated set rather than send an empty/partial list — so the subtitle should
   // say "today's picks", not imply this is the full live gallery. Reset to the default on every
@@ -39,7 +50,11 @@ function renderAttractions(container, data) {
   // a stale "top picks" message.
   const subtitle = document.querySelector("[data-attractions-subtitle]");
   if (subtitle) {
-    subtitle.textContent = quotaExceeded ? ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED : ATTRACTIONS_SUBTITLE_DEFAULT;
+    subtitle.textContent = quotaExceeded
+      ? ATTRACTIONS_SUBTITLE_QUOTA_EXCEEDED
+      : fallback
+        ? ATTRACTIONS_SUBTITLE_FALLBACK
+        : ATTRACTIONS_SUBTITLE_DEFAULT;
   }
   if (!attractions.length) {
     // A true empty result only happens now if a region genuinely has none *and* KTO's quota
@@ -313,11 +328,15 @@ function applyPreview(events) {
 
 const EVENTS_SUBTITLE_DEFAULT = "Ongoing now, and what's coming up.";
 const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
+const EVENTS_PROVENANCE_FALLBACK =
+  "Source: © Korea Tourism Organization (한국관광공사), saved sample from 16 September 2026. Live data currently unavailable.";
 
 function renderEventsTimeline(container, data) {
   // fetchJson's own network-failure fallback is still a bare `[]` (see renderAttractions above),
   // so handle both shapes rather than assuming the { items, quotaExceeded } one always arrives.
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
+  // fallback: events came from the saved snapshot (no KTO key), so the list may be out of date.
+  const fallback = !Array.isArray(data) && Boolean(data.fallback);
   // The subtitle is a small-caption "sub" line meant to sit under a live section — misleading
   // here ("Ongoing now...") and visually wrong (region-page.css tightens the H2 gap for it).
   // Hide it outright and put the real message in the body instead, same .empty-state treatment
@@ -333,6 +352,7 @@ function renderEventsTimeline(container, data) {
   // that isn't there.
   const provenance = document.querySelector("[data-events-provenance]");
   if (provenance) provenance.hidden = quotaExceeded;
+  setProvenance(provenance, EVENTS_PROVENANCE_FALLBACK, fallback);
   if (quotaExceeded) {
     container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
     return;
