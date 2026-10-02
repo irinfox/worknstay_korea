@@ -129,6 +129,7 @@ function setupImageFallback(container) {
 // ---------------------------------------------------------------------------
 
 const EVENTS_PAGE_SIZE = 5;
+const EVENTS_MIN_ROWS = 3;
 
 // Small inline glyphs (project rule: inline SVG, zero icon libraries).
 // Shared glyph, sized per context via `className` (event-place__icon for festival cards,
@@ -409,11 +410,14 @@ function renderEventsTimeline(container, data) {
   setupAddressCopy(container);
 }
 
-// Reserve one list height for every tab / month panel / page, so switching or paging never moves
-// the source line below. Measured with all panels briefly un-hidden (no paint in between) and
-// each page of a paged list shown in turn; consumed as --event-list-h by event-timeline.css.
+// Reserve heights for this region's tallest case, so switching tabs / month chips / pages never
+// moves the source line below, yet a sparse region (e.g. Jeju) isn't padded out. Measured with
+// panels briefly un-hidden and each page shown in turn (no paint in between):
+// 1. --event-list-h (event-timeline.css) = the tallest single list page, so the pager holds still;
+// 2. container min-height = the tallest whole state (tab × month chip × page).
 function reserveListHeight(container) {
   container.style.removeProperty("--event-list-h"); // else the old reservation inflates the measure
+  container.style.minHeight = "";
   const hiddenEls = Array.from(container.querySelectorAll("[hidden]"));
   hiddenEls.forEach((el) => (el.hidden = false));
   let max = 0;
@@ -432,8 +436,46 @@ function reserveListHeight(container) {
     }
     items.forEach((li) => (li.hidden = false));
   });
+  // Floor: never reserve less than a few rows, so a near-empty region isn't squashed.
+  const tallestCard = Math.max(0, ...Array.from(container.querySelectorAll(".event-card"), (c) => c.offsetHeight));
+  max = Math.max(max, EVENTS_MIN_ROWS * tallestCard);
   hiddenEls.forEach((el) => (el.hidden = true));
   container.style.setProperty("--event-list-h", `${Math.ceil(max)}px`);
+  reserveContainerHeight(container);
+}
+
+function reserveContainerHeight(container) {
+  const panels = Array.from(container.querySelectorAll(":scope > .event-panel"));
+  if (!panels.length) return; // empty / quota state: natural height
+  const stateEls = Array.from(container.querySelectorAll(".event-panel, .event-monthpanel, .event-card"));
+  const saved = stateEls.map((el) => el.hidden);
+  let max = 0;
+  const measure = () => {
+    max = Math.max(max, container.getBoundingClientRect().height);
+  };
+  const pageThrough = (scope) => {
+    const wrap = scope.querySelector(".event-list-wrap[data-paged]");
+    if (!wrap) return measure();
+    const items = Array.from(wrap.querySelectorAll(".event-list > .event-card"));
+    for (let start = 0; start < items.length; start += EVENTS_PAGE_SIZE) {
+      items.forEach((li, i) => {
+        li.hidden = i < start || i >= start + EVENTS_PAGE_SIZE;
+      });
+      measure();
+    }
+    items.forEach((li) => (li.hidden = false));
+  };
+  panels.forEach((panel) => {
+    panels.forEach((o) => (o.hidden = o !== panel));
+    const months = Array.from(panel.querySelectorAll(".event-monthpanel[data-month]"));
+    if (!months.length) return pageThrough(panel);
+    months.forEach((mp) => {
+      months.forEach((o) => (o.hidden = o !== mp));
+      pageThrough(mp);
+    });
+  });
+  stateEls.forEach((el, i) => (el.hidden = saved[i]));
+  container.style.minHeight = `${Math.ceil(max)}px`;
 }
 
 function setupEventTabs(container) {

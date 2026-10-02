@@ -721,6 +721,12 @@ ul.region-seasons {
   .region-band__col--costs {
     max-width: 32rem;
   }
+
+  /* Stacked: the band's bottom padding already sits below the source line, so give it a bit more
+     air above than below rather than an equal gap. */
+  .region-page .region-band__col--events .data-provenance {
+    margin-top: 44px;
+  }
 }
 
 /* Region cost table (design reference 5b, Gangwon-do): white card, one figure per row on a light rule. */

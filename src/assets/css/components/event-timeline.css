@@ -5,11 +5,10 @@
    address as city + pin + a copy-full-address control. The list area reserves a fixed height so
    switching tabs / paging never shifts the page. */
 
-/* Constant height whatever the data (tabs + list + pager + month chips), so the source line below
-   always sits in the same place; --event-list-h is the tallest page, measured by region-data.js. */
+/* Height is reserved per region by region-data.js (inline min-height = tallest state), so the
+   source line below never moves; --event-list-h is the tallest single list page. */
 .event-timeline {
   margin-top: 0;
-  min-height: calc(max(23rem, var(--event-list-h, 0px)) + 135px);
 }
 
 /* --- Ongoing / Upcoming pill toggles ------------------------------------ */
@@ -91,7 +90,7 @@
   display: flex;
   flex-direction: column;
   /* Reserved height so tab switches and paging never move the rest of the page. */
-  min-height: max(23rem, var(--event-list-h, 0px));
+  min-height: var(--event-list-h, 0px);
 }
 
 .event-card {
@@ -413,14 +412,6 @@
 /* --- Phone: rows stack (date → name → place) ----------------------- */
 
 @media (max-width: 599.98px) {
-  .event-timeline {
-    min-height: calc(max(27rem, var(--event-list-h, 0px)) + 160px);
-  }
-
-  .event-list {
-    min-height: max(27rem, var(--event-list-h, 0px));
-  }
-
   .event-card {
     grid-template-columns: 1fr;
     gap: 3px;
