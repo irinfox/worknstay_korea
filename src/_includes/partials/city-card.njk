@@ -30,6 +30,7 @@
     {% for wc in soloVenues %}
     <div class="work-venue">
       <p class="work-venue__name">{{ wc.name }} <span class="work-venue__kind">{{ wc.kind or "coworking" }}</span></p>
+      {% if wc.microcopy %}<p class="work-venue__micro">{{ wc.microcopy }}</p>{% endif %}
       {% if wc.address %}
       <p class="work-venue__addr"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ wc.address }}</p>
       {% endif %}

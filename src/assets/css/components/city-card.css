@@ -279,6 +279,13 @@
   white-space: nowrap;
 }
 
+.work-venue__micro {
+  margin: -4px 0 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
 .work-venue__addr {
   margin: 3px 0 8px;
   font-size: 13px;
