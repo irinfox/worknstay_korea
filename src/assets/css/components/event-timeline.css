@@ -354,13 +354,18 @@
    Padding only — the Ongoing/Upcoming pills and pager buttons keep their designed look, the tap
    target grows. */
 @media (max-width: 767.98px) {
+  /* 40px visible pill (still taller than the month chips, ~34px, so main/sub levels read);
+     the 44px tap target comes from the ::before below. */
   .event-tabs__tab {
-    padding-block: 12px;
+    position: relative;
+    min-height: 40px;
+    padding-block: 0;
   }
 
   /* 44px tap target without resizing the visible pill — an invisible centred hit area
      (DESIGN.md § Mobile). */
   .event-pager__btn::before,
+  .event-tabs__tab::before,
   .event-months__tab::before {
     content: "";
     position: absolute;

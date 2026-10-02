@@ -335,8 +335,9 @@ No library, no store. Three tiers:
 
 ## 10. Designated Task #4 alignment (for the eventual 기능설명서)
 
-The task's hashtags **#workation #month-long-stay #2030s-youth #local-tourism** are the site's
-vibe-tag vocabulary. Every major feature traces back to one:
+The task's hashtags **#workation #month-long-stay #2030s-youth #local-tourism** are the
+contest's thematic keywords, not copy the site must repeat. They are satisfied by what the
+service does, never by quoting them in site text. Every major feature traces back to one:
 - Eligibility calculator + map gating → sustainable-residency framing (not one-off tourism)
 - Region living-info (cost of living, transport, workation cities) → month-long-stay support
 - Attractions/festivals/food → local-tourism content, framed as "living here," not sightseeing

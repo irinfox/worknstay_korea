@@ -129,27 +129,20 @@ deadline) — real-time calls only in production. Full report: `notes/attraction
 ## Phase 26 — Workation-city expansion
 Depends on 12.
 
-- [ ] ~4–6 cities/region, ≥1 verified workation center each.
+- [ ] ~4–6 cities/region, ≥1 verified workation center each where one exists.
+      Regions with zero centers today: Chungcheong-do, Jeolla-do.
 - Verify: per-region count scripted, every center URL resolves.
 
 ## Phase 27 — Remaining de-MOCK + Task #4 copy pass
-- [x] Food gallery: real dishes, descriptions, photos, and credits for all 6 regions —
-      `food.json` clean of MOCK/PLACEHOLDER.
-- [ ] Grep `MOCK`/`PLACEHOLDER` in remaining `_data/*.json`, replace with real values
-      (cost-of-living w/ `asOf`/`source`/`sourceUrl`).
-- [x] `communities.json` MOCK entries replaced — real, sourced links now in `settlingIn.json`
-      (settling-in page redesign).
-- [x] `/visa-info/` copy verified against current official sources.
-- Verify: grep clean outside dev-only KTO mock fixtures; hashtags confirmed present.
+- [x] Food gallery, communities, `/visa-info/` copy: real and sourced.
+- [x] Cost-of-living: all six regions carry real figures + source in `rentalMarketScan.js`.
+- [x] `MOCK`/`PLACEHOLDER` grep clean across `_data`.
 
 ## Phase 28 — Accessibility + robustness (scriptable)
-- [ ] `aria-live` on the result caption, keyboard path through the map, 44px hit targets.
-- [ ] No-JS pass covering **both** gated surfaces now: the calculator (Phase 16) + map
-      click-gating (Phase 17), and region-page KTO content (Phase 23's decision). The sitewide
-      nav/tabs/map-link baseline is already closed by `SCAFFOLDING_TODO.md` Phase 9's exhaustive
-      static link audit — this pass only needs to cover what's new since then.
-- [ ] Resolve `.empty-state` class double-duty (real empty state vs. visa-info's disclaimer use).
-- Verify: each item explicitly checked, not eyeballed.
+- [x] `aria-live` on result caption and keyboard path through map already in place (real `<a href>`, `:focus-visible` styles).
+- [x] 44px hit targets: `pointer: coarse` hit-slop for standalone links/buttons (`base.css`).
+- [x] No-JS: map + card links are real hrefs; `<noscript>` fallbacks on calculator, events, attractions.
+- [x] `.empty-state` double-duty already gone (single use).
 
 ## Phase 29 — Responsive + real-device pass
 - [ ] 360/768/1280 + landscape-phone on hero/calculator/caption/map.
@@ -191,7 +184,6 @@ Phase 29's deploy freeze, since it can change calculator output for real regions
 - [ ] **Non-capital decline flag scope.** Decide if non-capital cities that MOIS also lists
       (Gangneung, Gyeongju, Boryeong, Andong, +16 more in `populationDeclineAreasFull.json`)
       deserve their own editorial badge — not needed for the calculator, deliberately deferred.
-- [ ] Log other eligibility-rule ambiguities surfaced in Phase 15/16 here instead of guessing.
 - [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
       Type1; revisit if a Type3 photo is ever swapped in.
 - [x] attraction cards: `.attraction-card__media` keeps `cover` for Type3 too (35 live entries in

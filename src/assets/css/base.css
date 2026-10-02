@@ -171,3 +171,40 @@ button:focus-visible,
 .skip-link:focus {
   top: var(--space-2);
 }
+
+/* 44px touch targets for standalone text links/buttons: an invisible ::after enlarges the hit
+   area without moving any layout. Inline prose links are exempt. */
+@media (pointer: coarse) {
+  .site-footer__link,
+  .region-card__link,
+  .dish-card__restaurant,
+  .study-cafes__search,
+  .region-guides__link,
+  .settling-coliving-row__name,
+  .settling-otherresult__link,
+  .visa-inline-link,
+  .note-plate__link,
+  .about-why__card-link,
+  .calculator-form__reset {
+    position: relative;
+  }
+  .site-footer__link::after,
+  .region-card__link::after,
+  .dish-card__restaurant::after,
+  .study-cafes__search::after,
+  .region-guides__link::after,
+  .settling-coliving-row__name::after,
+  .settling-otherresult__link::after,
+  .visa-inline-link::after,
+  .note-plate__link::after,
+  .about-why__card-link::after,
+  .calculator-form__reset::after {
+    content: "";
+    position: absolute;
+    inset: -14px -4px;
+  }
+  .region-hero-gallery__nav {
+    width: 44px;
+    height: 44px;
+  }
+}
