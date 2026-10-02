@@ -28,6 +28,19 @@
   margin-top: 28px;
 }
 
+/* A second provenance line (study-café fallback note under the population line) is the same
+   footnote block: 8px on phone, where each note wraps and needs to stay its own item, none from
+   768px up (the line-height already spaces the two lines). */
+.region-page .data-provenance + .data-provenance {
+  margin-top: 8px;
+}
+
+@media (min-width: 768px) {
+  .region-page .data-provenance + .data-provenance {
+    margin-top: 0;
+  }
+}
+
 /* Breadcrumb row under the nav (DESIGN.md § Recurring parts): 13px muted, hairline underneath. */
 .region-breadcrumb {
   margin-bottom: 28px;

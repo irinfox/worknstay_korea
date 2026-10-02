@@ -264,6 +264,7 @@ eleventyComputed:
   {% endif %}
   {% if cityList.length %}
   <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
+  <p class="data-provenance" data-study-cafes-fallback-note hidden></p>
   {% endif %}
 </section>
 
