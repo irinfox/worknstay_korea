@@ -325,7 +325,7 @@
   color: var(--color-text-muted);
 }
 
-/* "1–5 of 17 in October" / "… running now" range line, trailing the pager. */
+/* "1–5 of 17" range line, trailing the pager. */
 .event-pager__range {
   margin-left: 4px;
   font-size: 13px;
@@ -429,14 +429,5 @@
   .event-place {
     flex-wrap: wrap;
     gap: 2px 10px;
-  }
-
-  .event-pager {
-    flex-wrap: wrap;
-  }
-
-  .event-pager__range {
-    width: 100%;
-    margin-left: 0;
   }
 }
