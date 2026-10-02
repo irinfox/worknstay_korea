@@ -80,6 +80,13 @@ export function applyFilters(root = document) {
 
   const knownAreas = knownAreaSlugs(areaPills);
   const cards = Array.from(list.querySelectorAll(".attraction-card"));
+
+  // Cards stretch to the tallest visible one, so the gap below the strip shifted with the filter.
+  // Pin the height to the all-cards layout so every filter keeps the "All" spacing.
+  list.style.minHeight = "";
+  cards.forEach((card) => (card.hidden = false));
+  list.style.minHeight = `${list.offsetHeight}px`;
+
   const cityPriority =
     area === "elsewhere" ? ELSEWHERE_CATEGORY_PRIORITY[list.dataset.regionSlug] : CITY_CATEGORY_PRIORITY[area];
   let visibleCount = 0;
