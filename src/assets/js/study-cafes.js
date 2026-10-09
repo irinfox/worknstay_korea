@@ -1,36 +1,52 @@
 // Live Kakao study-café count per city card (functions/api/city/[slug]/study-cafes.js). Nothing
-// is stored client-side either. On any failure the card keeps its server-rendered editorial
-// fallback level and the region page's fallback note is shown.
+// is stored client-side. Retryable failures (network, 5xx) are retried once; quota (429)
+// and other 4xx are not. All-or-nothing per page: live data is applied only if every city
+// succeeded, otherwise every card keeps its server-rendered editorial fallback and the fallback
+// note is shown, so live and editorial figures are never mixed on one page.
 const CELLS_SELECTOR = ".study-cafes__cell";
+const RETRY_DELAYS_MS = [300];
 const FALLBACK_NOTE =
   "Study-café data is a manual editorial estimate, last updated in October 2026. Live data currently unavailable.";
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function fetchLive(slug) {
-  try {
-    const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`);
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.degraded ? null : data;
-  } catch {
-    return null;
+  for (let attempt = 0; ; attempt++) {
+    let retryable = true;
+    try {
+      const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`);
+      if (res.ok) {
+        const data = await res.json();
+        if (!data.degraded) return data;
+        retryable = data.retryable === true;
+      } else {
+        retryable = res.status >= 500;
+      }
+    } catch {
+      // network error: retryable
+    }
+    if (!retryable || attempt >= RETRY_DELAYS_MS.length) return null;
+    await wait(RETRY_DELAYS_MS[attempt]);
   }
 }
 
-async function update(row) {
-  const data = await fetchLive(row.dataset.city);
-  if (!data) {
-    // Quota (429) or any other failed call: the card keeps its editorial fallback, so say so.
-    if ("hasFallback" in row.dataset) {
-      const note = document.querySelector("[data-study-cafes-fallback-note]");
-      note.textContent = FALLBACK_NOTE;
-      note.hidden = false;
-      document.querySelector("[data-study-cafes-live-note]").hidden = true;
-    }
-    return;
-  }
-  if (document.querySelector("[data-study-cafes-fallback-note]").hidden) {
-    document.querySelector("[data-study-cafes-live-note]").hidden = false;
-  }
+// While the live call is in flight: empty battery + grey "loading…". The server-rendered
+// fallback is snapshotted so it can be restored verbatim if the page falls back.
+function showLoading(row) {
+  const battery = row.querySelector(".study-cafes__battery");
+  const count = row.querySelector("[data-study-cafes-count]");
+  const saved = [battery.cloneNode(true), count.cloneNode(true)];
+  battery.hidden = false;
+  battery.querySelectorAll(CELLS_SELECTOR).forEach((cell) => cell.classList.remove("study-cafes__cell--on"));
+  count.textContent = "loading…";
+  count.classList.add("study-cafes__count--unrated");
+  return () => {
+    battery.replaceWith(saved[0]);
+    count.replaceWith(saved[1]);
+  };
+}
+
+function applyLive(row, data) {
   row.querySelector(".study-cafes__battery").hidden = false;
   row.querySelectorAll(CELLS_SELECTOR).forEach((cell, i) => {
     cell.classList.toggle("study-cafes__cell--on", i + 1 <= data.level);
@@ -40,6 +56,18 @@ async function update(row) {
   count.classList.remove("study-cafes__count--unrated");
 }
 
-export function init() {
-  document.querySelectorAll("[data-study-cafes]").forEach(update);
+export async function init() {
+  const rows = [...document.querySelectorAll("[data-study-cafes]")];
+  if (!rows.length) return;
+  const restore = rows.map(showLoading);
+  const results = await Promise.all(rows.map((row) => fetchLive(row.dataset.city)));
+  if (results.every(Boolean)) {
+    rows.forEach((row, i) => applyLive(row, results[i]));
+    document.querySelector("[data-study-cafes-live-note]").hidden = false;
+  } else {
+    restore.forEach((fn) => fn());
+    const note = document.querySelector("[data-study-cafes-fallback-note]");
+    note.textContent = FALLBACK_NOTE;
+    note.hidden = false;
+  }
 }

@@ -72,6 +72,8 @@ export async function countStudyCafes(city, env) {
     return { count, estimated: capped, ...levelFor(count) };
   } catch (e) {
     // reason is a non-sensitive diagnostic (HTTP status or network error), never the key.
-    return { degraded: true, reason: String(e.message || e) };
+    // retryable: network/timeout/5xx only; 4xx (incl. 429 quota) won't recover within a retry.
+    const status = /^Kakao HTTP (\d+)/.exec(e.message)?.[1];
+    return { degraded: true, retryable: !status || Number(status) >= 500, reason: String(e.message || e) };
   }
 }

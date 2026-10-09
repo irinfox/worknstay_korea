@@ -9,6 +9,8 @@ Korea's six regions the applicant is eligible for. Each region page then surface
 friendly co-working spaces, curated local food, and — pulled live from the Korea Tourism
 Organization's public API — nearby attractions and festivals.
 
+**Live site: <https://worknstay-korea.com/>**
+
 Built solo for the 2026 [관광데이터 활용 공모전](https://api.visitkorea.or.kr/#/cntSearchDetail?no=3)
 (Tourism Data Utilization Contest), ②-2 웹·앱 구현 부문, Designated Task #4 — sustainable
 long-term residency vs. one-off tourism in population-declining regions.
@@ -55,6 +57,29 @@ repository.
 Hero photos and dish photos are the one deliberate exception — they're hand-picked once (via the KTO API)
 and committed as static files, since which photo represents a region or dish is an editorial choice, not 
 something a live query should pick at random on each visit.
+
+## Study-café battery
+
+The study-café levels shown on the website are based on real-time Kakao® Map REST API
+(Search place by keyword) results. Sources: [Kakao® Maps API docs](https://developers.kakao.com/docs/en/kakaomap/common)
+and the [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5) on permitted use.
+
+- **Live:** on each region-page view, a Pages Function searches `<city> 스터디카페` via the Kakao®
+  Local API, keeps results whose category/name match and whose address is in that city (Kakao®'s
+  search spills into neighbouring cities), and maps the count to a 4-cell battery. Kakao® caps
+  any query at 45 retrievable results; past that, the count is estimated by scaling Kakao®'s
+  `total_count` by the share of retrieved results that passed the filter. While the calls are in
+  flight, cards show an empty battery with "loading…". Transient errors (network, 5xx) are
+  retried once; quota (429) and other 4xx errors are not.
+- **Thresholds** (`src/_data/studyCafeLevels.json`): 0 → none (0 cells), 1–9 → a few (1),
+  10–29 → good (2), 30–99 → lots (3), 100+ → plenty (4).
+- **No caching or storage** of Kakao® results, per its terms — responses are `no-store`.
+- **Fallback:** each city carries an editorial `fallbackLevel` in `src/_data/cities.json`. These
+  were first estimated by hand on Naver Map, zooming in and out around each city to gauge
+  study-café density. That pass also set the initial thresholds and served to sanity-check the
+  live Kakao® levels. All-or-nothing per region page: if any city's live call still
+  fails, every card on that page shows its fallback level plus a note saying the data is a
+  manual editorial estimate.
 
 ## Getting started
 
