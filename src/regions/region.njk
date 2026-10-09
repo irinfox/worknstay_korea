@@ -265,6 +265,7 @@ eleventyComputed:
   {% if cityList.length %}
   <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
   <p class="data-provenance" data-study-cafes-fallback-note hidden></p>
+  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="https://developers.kakao.com/docs/en/kakaomap/common" target="_blank" rel="noopener">Kakao® Local API ↗</a> results.</p>
   {% endif %}
 </section>
 

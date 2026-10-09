@@ -24,8 +24,12 @@ async function update(row) {
       const note = document.querySelector("[data-study-cafes-fallback-note]");
       note.textContent = FALLBACK_NOTE;
       note.hidden = false;
+      document.querySelector("[data-study-cafes-live-note]").hidden = true;
     }
     return;
+  }
+  if (document.querySelector("[data-study-cafes-fallback-note]").hidden) {
+    document.querySelector("[data-study-cafes-live-note]").hidden = false;
   }
   row.querySelector(".study-cafes__battery").hidden = false;
   row.querySelectorAll(CELLS_SELECTOR).forEach((cell, i) => {
