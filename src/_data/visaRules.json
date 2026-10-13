@@ -47,7 +47,7 @@
     "accompanyingFamily": "Spouse & minor children",
     "convertibleFromVisas": ["B‑1", "B‑2", "C‑3"],
     "eligibleApplicantSummary": "Employed by an overseas company in a remote-work-capable role, with at least 1 year in the same job/industry; accompanying spouse and minor children may join",
-    "nonCapitalDefinitionNote": "\"Non-capital area\" for visa purposes includes areas officially designated as population-decrease (인구감소관심지역), even when they sit administratively inside a capital-tier province — see populationDeclineAreas.json (list not yet sourced)."
+    "nonCapitalDefinitionNote": "\"Non-capital area\" for visa purposes includes areas officially designated as population-decrease (인구감소관심지역), even when they sit administratively inside a capital-tier province — see populationDeclineAreas.json."
   },
   "natlTaxServiceUrl": "https://www.nts.go.kr/english/main.do",
   "nhisUrl": "https://www.nhis.or.kr/english/wbheaa02900m01.do",

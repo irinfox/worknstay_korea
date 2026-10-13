@@ -42,6 +42,11 @@ export default function (eleventyConfig) {
     return new Intl.NumberFormat("en-US").format(value);
   });
 
+  // Compact KRW for prose, e.g. 100000000 -> "₩100M".
+  eleventyConfig.addFilter("krwShort", function (value) {
+    return `₩${value / 1_000_000}M`;
+  });
+
   // City-card population line: cities.json stores the raw KOSIS total, rounded here to 2
   // significant figures (K below a million, M above), e.g. 211628 -> "210K", 1221616 -> "1.2M".
   eleventyConfig.addFilter("popRound", function (value) {

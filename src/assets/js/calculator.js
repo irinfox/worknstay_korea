@@ -1,9 +1,5 @@
 import { calculateEligibility } from "./eligibility.js";
 
-// ARCHITECTURE.md §7 / eligibility.js precondition: age must be validated >= this before
-// calling calculateEligibility() — this function doesn't handle under-18 itself.
-const MIN_APPLICANT_AGE = 18;
-
 const MILLION = 1_000_000;
 
 // Below ₩1M, a .toFixed(1) figure ("₩0.3M") reads as false precision for a gap this small and
@@ -127,9 +123,9 @@ function isSalaryInvalid(userInput, rawInput) {
   return !Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0;
 }
 
-// Deliberately NOT "|| userInput.age < MIN_APPLICANT_AGE": being under 18 is a real, validly
+// Deliberately NOT "|| userInput.age < minAge": being under the minimum age is a real, validly
 // entered answer that fails the visa's own eligibility rule, not a data-entry mistake — it gets
-// the amber "must be 18+" result caption, but the field itself shouldn't get the invalid-field
+// the amber "must be N+" result caption, but the field itself shouldn't get the invalid-field
 // border mark (that's reserved for missing/malformed input). The raw-string check still matters:
 // Number("") is 0, so a blank age must not read as age 0 (→ "must be 18+") instead of "enter
 // your age".
@@ -138,8 +134,10 @@ function isAgeInvalid(userInput, rawInput) {
   return !Number.isFinite(userInput.age);
 }
 
-// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs.
-export function validate(userInput, rawInput) {
+// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs. `minAge` is
+// visaRules.additionalFacts.minApplicantAge; callers must pass it (eligibility.js precondition:
+// age is validated against it before calculateEligibility(), which doesn't handle under-age itself).
+export function validate(userInput, rawInput, minAge) {
   const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0;
   const ageMissing = rawInput.ageRaw.trim() === "";
 
@@ -148,8 +146,8 @@ export function validate(userInput, rawInput) {
   if (ageMissing) return "Please enter your age.";
 
   if (isSalaryInvalid(userInput, rawInput)) return "Enter an income of 0 or more.";
-  if (!Number.isFinite(userInput.age) || userInput.age < MIN_APPLICANT_AGE) {
-    return `F-1-D applicants must be ${MIN_APPLICANT_AGE} or older.`;
+  if (!Number.isFinite(userInput.age) || userInput.age < minAge) {
+    return `F-1-D applicants must be ${minAge} or older.`;
   }
   return null;
 }
@@ -299,7 +297,7 @@ export function init(onResult = () => {}) {
 
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
     if (markInvalid) fieldValidity.mark(userInput, rawInput);
-    const validationMessage = validate(userInput, rawInput);
+    const validationMessage = validate(userInput, rawInput, referenceData.rules.additionalFacts.minApplicantAge);
     if (validationMessage) {
       const complete = hasReadableInput(userInput, rawInput);
       renderError(resultEl, validationMessage, complete);
