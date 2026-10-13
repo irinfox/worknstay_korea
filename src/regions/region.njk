@@ -19,17 +19,6 @@ eleventyComputed:
 {% set isChungcheong = region.slug == "chungcheong-do" %}
 {% set isGyeongsang = region.slug == "gyeongsang-do" %}
 {% set isJeolla = region.slug == "jeolla-do" %}
-{% set hasDetailMap = isGangwon or isJeju or isGyeonggi or isChungcheong or isGyeongsang or isJeolla %}
-{# Hand-chosen city set/order per region (mirrors Gangwon-do's existing pattern below) —
-   bySlugs lets cities.json keep other records (e.g. Paju/Ganghwa, Andong/Tongyeong, Boryeong,
-   Gongju) for later reuse without surfacing them here. #}
-{% set cityOrder = {
-  "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
-  "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
-  "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
-  "jeju-do": ["jeju-city", "seogwipo"],
-  "chungcheong-do": ["daejeon", "cheongju", "sejong"]
-} %}
 {# Rent summary for the headline recap card and the cost table below — hand-checked market
    research per region (src/_data/rentalMarketScan.js). #}
 {% set rentSummary = rentalMarketScan.regionSummary | findBySlug(region.slug) %}
@@ -101,19 +90,15 @@ eleventyComputed:
 
 {# Sticky page-contents strip (DESIGN.md § "Page contents strip") — same shared component as
    visa-info/settling-in, reused as-is. Labels stay short generic nouns, not "Regional dishes" /
-   "Region map" — the section's own H2 already carries the full wording. Map only exists where
-   hasDetailMap is true (every region now has a hand-authored detail map), Dishes only where
-   regionFood has entries — both
-   real <a href>, so a page without one just doesn't render that link rather than pointing at a
-   missing section. Rent and Events sit in the same tinted band and start at the same height on
+   "Region map" — the section's own H2 already carries the full wording. Dishes only where
+   regionFood has entries — a real <a href>, so a page without dishes just doesn't render that
+   link rather than pointing at a missing section. Rent and Events sit in the same tinted band and start at the same height on
    desktop, so page-contents.js detects the tie by position and highlights both together while
    the band is in view — no markup needed here for that, and on phone (where the band stacks)
    the same geometry check naturally activates just one at a time. #}
 <div class="page-contents">
   <div class="page-contents__links">
-    {% if hasDetailMap %}
     <a href="#region-map"><span class="page-contents__full">Map</span><span class="page-contents__short">Map</span></a>
-    {% endif %}
     <a href="#cities"><span class="page-contents__full">Cities</span><span class="page-contents__short">Cities</span></a>
     <a href="#rent"><span class="page-contents__full">Rent</span><span class="page-contents__short">Rent</span></a>
     <a href="#events"><span class="page-contents__full">Events</span><span class="page-contents__short">Events</span></a>
@@ -170,7 +155,6 @@ eleventyComputed:
 </section>
 {% endif %}
 
-{% if hasDetailMap %}
 {# Hand-authored detail maps — one per region (src/assets/svg/{slug}-detail-map.svg). Pin
    coordinates are looked up via the KTO OpenAPI (searchKeyword2) where a place is in its
    catalog. Gangwon/Jeju each use their own lat/lng-to-local-xy linear fit (calibrated on their
@@ -220,7 +204,6 @@ eleventyComputed:
     </p>
   </div>
 </section>
-{% endif %}
 
 {% if region.usefulLinks.length %}
 <section class="region-section region-section--guides">
@@ -247,16 +230,9 @@ eleventyComputed:
     <h2>Cities</h2>
   </div>
   <p class="region-section__sub">Where to stay and work in the region</p>
-  {% if isGangwon %}
-  {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
-     not somewhere to base a month-long stay, so it's map-only — see its surf-beach pin above). #}
-  {% set cityList = cities | bySlugs(["sokcho", "gangneung", "chuncheon", "wonju"]) %}
-  {% include "partials/city-card-list.njk" %}
-  {% elif cityOrder[region.slug] %}
-  {% set cityList = cities | bySlugs(cityOrder[region.slug]) %}
-  {% include "partials/city-card-list.njk" %}
-  {% elif regionCities.length %}
-  {% set cityList = regionCities %}
+  {# Cards = cities.json records with a cardOrder (ascending); the rest stay map-only. #}
+  {% set cityList = regionCities | cardCities %}
+  {% if cityList.length %}
   {% include "partials/city-card-list.njk" %}
   {% else %}
   {% set message = "No cities listed for this region yet." %}
@@ -372,7 +348,7 @@ eleventyComputed:
       <div class="attraction-filters__pills">
         <button type="button" class="filter-pill is-selected" aria-pressed="true" data-filter-group="area" data-filter-value="all">All</button>
         {% for city in cityList %}
-        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="{{ city.slug }}">{{ city.nameEn }}</button>
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="{{ city.slug }}"{% if city.attractionPriority %} data-attraction-priority="{{ city.attractionPriority }}"{% endif %}>{{ city.nameEn }}</button>
         {% endfor %}
         {% if region.slug != "jeju-do" %}
         <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="elsewhere">Elsewhere</button>
@@ -389,7 +365,7 @@ eleventyComputed:
     </div>
   </div>
   {# Same live-fetch pattern as the events timeline above. #}
-  <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}">
+  <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}"{% if region.elsewhereAttractionPriority %} data-elsewhere-priority="{{ region.elsewhereAttractionPriority }}"{% endif %}>
     <noscript>
       <li class="empty-state">Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></li>
     </noscript>

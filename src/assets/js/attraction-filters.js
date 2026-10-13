@@ -9,7 +9,7 @@
 // "Elsewhere" (Area) means a card's data-city is either empty or set to a citySlug that isn't
 // one of the Area pills actually rendered on the page (e.g. Goyang's cards on gyeonggi-do —
 // resolved to a real citySlug but deliberately has no pill). Computed live from the rendered DOM
-// (not hardcoded), so it stays correct if region.njk's cityOrder ever changes.
+// (not hardcoded), so it stays correct if cities.json's cardOrder ever changes.
 //
 // A city can prefer a different category order than the region default (e.g. Suncheon's nature
 // draws outrank its culture picks, even though the rest of jeolla-do leads with culture) — but
@@ -19,30 +19,10 @@
 // re-sorts), so any server-side per-city reorder inescapably changed the "All" tab's order too.
 // Doing it here with inline flex `order` — applied only to the active city's own cards, cleared
 // on every other pill — keeps the underlying DOM order (and therefore "All"/"Elsewhere") untouched.
-// Incheon flips gyeonggi-do's region-wide culture-first default (its nature draws outrank
-// culture); Gangneung flips gangwon-do's region-wide nature-first default the other way.
-const CITY_CATEGORY_PRIORITY = {
-  suncheon: "nature",
-  incheon: "nature",
-  gangneung: "culture",
-};
-
-// Same idea as CITY_CATEGORY_PRIORITY, but keyed by region slug instead of city slug: "Elsewhere"
-// is the same pill value on every region page, so it can't reuse that flat map without one
-// region's override leaking into every other region's Elsewhere tab. Needed because "Elsewhere"
-// pools whichever curated top picks don't belong to a named city, and that mix doesn't
-// necessarily match the region's own culture/nature-first default — gyeonggi-do leads with
-// culture region-wide, but every one of its curated Elsewhere picks (Ilsan Lake Park, Garden of
-// Morning Calm, Hwadam Botanic Garden) is nature, so a plain culture-first Elsewhere view buried
-// them behind uncurated culture cards. chungcheong-do has the same mismatch (its one Elsewhere
-// hard pick, Dodamsambong Peaks, is nature against a culture-first region default) — kept nature
-// here too for consistency, even though chungcheong-do's culture spots are strong in their own
-// right; gyeongsang-do/gangwon-do aren't listed because their Elsewhere picks already match their
-// region's own default category.
-const ELSEWHERE_CATEGORY_PRIORITY = {
-  "gyeonggi-do": "nature",
-  "chungcheong-do": "nature",
-};
+// The preference is data: cities.json `attractionPriority` (rendered as the pill's
+// data-attraction-priority). "Elsewhere" pools whichever curated picks don't belong to a named
+// city, and that mix needn't match the region's own default, so it has its own per-region value:
+// regions.json `elsewhereAttractionPriority` (rendered as the list's data-elsewhere-priority).
 
 function selectedValue(pills) {
   const selected = pills.find((p) => p.classList.contains("is-selected"));
@@ -87,8 +67,9 @@ export function applyFilters(root = document) {
   cards.forEach((card) => (card.hidden = false));
   list.style.minHeight = `${list.offsetHeight}px`;
 
+  const selectedAreaPill = areaPills.find((p) => p.classList.contains("is-selected"));
   const cityPriority =
-    area === "elsewhere" ? ELSEWHERE_CATEGORY_PRIORITY[list.dataset.regionSlug] : CITY_CATEGORY_PRIORITY[area];
+    area === "elsewhere" ? list.dataset.elsewherePriority : selectedAreaPill?.dataset.attractionPriority;
   let visibleCount = 0;
   cards.forEach((card) => {
     const matchesArea =

@@ -1,7 +1,7 @@
 // Boosts curated attraction picks into live areaBasedList2 results (ARCHITECTURE.md §5) — pure
 // function, no KTO calls. Runs per-category bucket
 // (nature/culture split independently, then recombined) *before* attractions.js's
-// `CATEGORY_PRIORITY` sort; that sort is stable, so the interleave built here survives it.
+// `attractionPriority` sort; that sort is stable, so the interleave built here survives it.
 //
 // Priority semantics (confirmed with user):
 // - `hard` — must appear somewhere in the first ~3 scroll-pages. If missing from live results,
@@ -17,7 +17,7 @@ const BOOST_STEP = [2, 3];
 
 // Order categories are recombined in — matches the order attractions.js's own fan-out emits them
 // (NATURE_GROUPS before CULTURE_GROUPS). Not load-bearing for the final response (attractions.js
-// re-sorts by CATEGORY_PRIORITY right after this runs), kept only for a stable, predictable
+// re-sorts by the region's attractionPriority right after this runs), kept only for a stable, predictable
 // intermediate order.
 const CATEGORY_ORDER = ["nature", "culture"];
 

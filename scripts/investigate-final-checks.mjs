@@ -37,18 +37,12 @@ function citySlugFor(lDongRegnCd, lDongSignguCd) {
   return whole ? whole.slug : null;
 }
 
-// Mirrors region.njk's hand-chosen cityOrder — the exact city pills real pages render (and
-// therefore the exact "Elsewhere" definition: any citySlug not in this list, per
-// attraction-filters.js's knownAreaSlugs). Gangwon-do isn't in that map there either — it gets
-// its own isGangwon branch with this same 4-city list.
-const CITY_PILLS = {
-  "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
-  "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
-  "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
-  "jeju-do": ["jeju-city", "seogwipo"],
-  "chungcheong-do": ["daejeon", "sejong", "cheongju", "gongju"],
-  "gangwon-do": ["sokcho", "gangneung", "chuncheon", "wonju"],
-};
+// The city pills real pages render: cities.json records with a cardOrder, which is also the exact
+// "Elsewhere" definition (any citySlug not in this list, per attraction-filters.js's knownAreaSlugs).
+const CITY_PILLS = {};
+for (const c of [...cities].filter((c) => c.cardOrder != null).sort((a, b) => a.cardOrder - b.cardOrder)) {
+  (CITY_PILLS[c.regionSlug] ||= []).push(c.slug);
+}
 
 // contentTypeId/classify mirror attraction-fetch.mjs's own filters exactly (kept in sync by
 // hand — small, stable, and duplicating them here is cheaper than exporting internals solely for

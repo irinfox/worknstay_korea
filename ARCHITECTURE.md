@@ -152,8 +152,9 @@ a count and level, or a degraded marker. `Cache-Control: no-store`
 `total_count`. The client is all-or-nothing per page and falls back to the editorial
 `otherWorkspaces[].fallbackLevel`; level thresholds live in `studyCafeLevels.json`.
 
-**Attraction ordering:** the server orders per region (`CATEGORY_PRIORITY`); a per-city override
-applies client-side only while that city's filter is active (`CITY_CATEGORY_PRIORITY`), because
+**Attraction ordering:** the server orders per region (`regions.json` `attractionPriority`); a per-city override
+(`cities.json` `attractionPriority`, and `elsewhereAttractionPriority` for the "Elsewhere" pill)
+applies client-side only while that city's filter is active, because
 the server emits one array and per-city order would otherwise leak into "All". Attractions
 without a photo are dropped.
 

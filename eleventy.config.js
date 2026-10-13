@@ -71,6 +71,12 @@ export default function (eleventyConfig) {
     return (arr || []).filter((item) => item.regionSlug === slug);
   });
 
+  // City cards: only cities.json records that carry a `cardOrder`, sorted by it. The rest stay
+  // map-only (pin without a card).
+  eleventyConfig.addFilter("cardCities", function (arr) {
+    return (arr || []).filter((c) => c.cardOrder != null).sort((a, b) => a.cardOrder - b.cardOrder);
+  });
+
   // Looks up a record by `name` or `type` within a small array — settling-in.njk's Gangwon-do
   // price table uses this to pull a named platform out of a city's `platforms` array, and a typed
   // unit (Officetel/One-room) out of a platform's `units` array, without a Jinja2-only selectattr.

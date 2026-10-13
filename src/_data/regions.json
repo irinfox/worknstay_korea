@@ -1,6 +1,8 @@
 [
   {
     "slug": "gyeonggi-do",
+    "attractionPriority": "culture",
+    "elsewhereAttractionPriority": "nature",
     "nameEn": "Gyeonggi-do",
     "nameKo": "경기도",
     "svgGroupId": "region-gyeonggi",
@@ -28,6 +30,7 @@
   },
   {
     "slug": "gangwon-do",
+    "attractionPriority": "nature",
     "nameEn": "Gangwon-do",
     "nameKo": "강원도",
     "svgGroupId": "region-gangwon",
@@ -66,6 +69,8 @@
   },
   {
     "slug": "chungcheong-do",
+    "attractionPriority": "culture",
+    "elsewhereAttractionPriority": "nature",
     "nameEn": "Chungcheong-do",
     "nameKo": "충청도",
     "svgGroupId": "region-chungcheong",
@@ -112,6 +117,7 @@
   },
   {
     "slug": "gyeongsang-do",
+    "attractionPriority": "culture",
     "nameEn": "Gyeongsang-do",
     "nameKo": "경상도",
     "svgGroupId": "region-gyeongsang",
@@ -157,6 +163,7 @@
   },
   {
     "slug": "jeolla-do",
+    "attractionPriority": "culture",
     "nameEn": "Jeolla-do",
     "nameKo": "전라도",
     "svgGroupId": "region-jeolla",
@@ -201,6 +208,7 @@
   },
   {
     "slug": "jeju-do",
+    "attractionPriority": "nature",
     "nameEn": "Jeju-do",
     "nameKo": "제주도",
     "svgGroupId": "region-jeju",

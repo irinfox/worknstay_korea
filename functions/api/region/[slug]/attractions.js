@@ -11,22 +11,12 @@
 // The fetch/classify/dedupe orchestration itself lives in lib/attraction-fetch.mjs (no JSON
 // imports there, unlike this file) so it's importable from a plain Node investigation script too
 // — see that module's header comment and notes/attraction-gallery-report.md §7.
+import regions from "../../../../src/_data/regions.json";
 import topAttractions from "../../../../src/_data/topAttractions.json";
 import { fetchRegionAttractions } from "../../lib/attraction-fetch.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 import { citySlugFor } from "../../lib/city-map.mjs";
 import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
-
-// Display-order priority per region (not a filter — every bucket fetched by fetchRegionAttractions
-// is always fetched).
-const CATEGORY_PRIORITY = {
-  "gyeonggi-do": "culture",
-  "gyeongsang-do": "culture",
-  "jeolla-do": "culture",
-  "chungcheong-do": "culture",
-  "gangwon-do": "nature",
-  "jeju-do": "nature",
-};
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
@@ -65,9 +55,10 @@ export async function onRequestGet({ params, env }) {
   // end only toggles card visibility, it never re-sorts) — so it must stay a single, region-wide
   // rule with no per-city exception. A per-city category preference (e.g. Suncheon wanting nature
   // before culture) belongs client-side instead, applied only while that city's own pill is
-  // active (attraction-filters.js's CITY_CATEGORY_PRIORITY) — an earlier server-side attempt at
+  // active (cities.json attractionPriority, applied in attraction-filters.js) — an earlier server-side attempt at
   // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
-  const priority = CATEGORY_PRIORITY[slug];
+  // Display order per region (not a filter): regions.json attractionPriority.
+  const priority = regions.find((r) => r.slug === slug)?.attractionPriority;
   if (priority) {
     const rank = (category) => (category === priority ? 0 : 1);
     items.sort((a, b) => rank(a.category) - rank(b.category));

@@ -34,6 +34,7 @@
   {
     "slug": "seoul",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 1,
     "nameEn": "Seoul",
     "nameKo": "서울특별시",
     "lat": 37.5665,
@@ -168,6 +169,8 @@
   {
     "slug": "incheon",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 2,
+    "attractionPriority": "nature",
     "nameEn": "Incheon",
     "nameKo": "인천광역시",
     "lat": 37.4563,
@@ -225,6 +228,7 @@
   {
     "slug": "seongnam",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 4,
     "nameEn": "Seongnam",
     "nameKo": "성남시",
     "lat": 37.3826,
@@ -260,6 +264,7 @@
   {
     "slug": "suwon",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 3,
     "nameEn": "Suwon",
     "nameKo": "수원시",
     "lat": 37.2636,
@@ -310,6 +315,7 @@
   {
     "slug": "sokcho",
     "regionSlug": "gangwon-do",
+    "cardOrder": 1,
     "nameEn": "Sokcho",
     "nameKo": "속초시",
     "lat": 38.207,
@@ -360,6 +366,8 @@
   {
     "slug": "gangneung",
     "regionSlug": "gangwon-do",
+    "cardOrder": 2,
+    "attractionPriority": "culture",
     "nameEn": "Gangneung",
     "nameKo": "강릉시",
     "lat": 37.75,
@@ -413,6 +421,7 @@
   {
     "slug": "chuncheon",
     "regionSlug": "gangwon-do",
+    "cardOrder": 3,
     "nameEn": "Chuncheon",
     "nameKo": "춘천시",
     "lat": 37.88,
@@ -435,6 +444,7 @@
   {
     "slug": "wonju",
     "regionSlug": "gangwon-do",
+    "cardOrder": 4,
     "nameEn": "Wonju",
     "nameKo": "원주시",
     "lat": 37.3422,
@@ -488,6 +498,7 @@
   {
     "slug": "cheongju",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 2,
     "nameEn": "Cheongju",
     "nameKo": "청주시",
     "lat": 36.64,
@@ -541,6 +552,7 @@
   {
     "slug": "daejeon",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 1,
     "nameEn": "Daejeon",
     "nameKo": "대전광역시",
     "lat": 36.3504,
@@ -617,6 +629,7 @@
   {
     "slug": "sejong",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 3,
     "nameEn": "Sejong",
     "nameKo": "세종특별자치시",
     "lat": 36.4801,
@@ -689,6 +702,7 @@
   {
     "slug": "gyeongju",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 4,
     "nameEn": "Gyeongju",
     "nameKo": "경주시",
     "lat": 35.86,
@@ -728,6 +742,7 @@
   {
     "slug": "busan",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 1,
     "nameEn": "Busan",
     "nameKo": "부산광역시",
     "lat": 35.1796,
@@ -805,6 +820,7 @@
   {
     "slug": "daegu",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 2,
     "nameEn": "Daegu",
     "nameKo": "대구광역시",
     "lat": 35.8714,
@@ -827,6 +843,7 @@
   {
     "slug": "ulsan",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 3,
     "nameEn": "Ulsan",
     "nameKo": "울산광역시",
     "lat": 35.5384,
@@ -849,6 +866,7 @@
   {
     "slug": "jeonju",
     "regionSlug": "jeolla-do",
+    "cardOrder": 1,
     "nameEn": "Jeonju",
     "nameKo": "전주시",
     "lat": 35.82,
@@ -869,6 +887,7 @@
   {
     "slug": "yeosu",
     "regionSlug": "jeolla-do",
+    "cardOrder": 3,
     "nameEn": "Yeosu",
     "nameKo": "여수시",
     "lat": 34.76,
@@ -891,6 +910,7 @@
   {
     "slug": "gwangju",
     "regionSlug": "jeolla-do",
+    "cardOrder": 2,
     "nameEn": "Gwangju",
     "nameKo": "광주광역시",
     "lat": 35.1595,
@@ -940,6 +960,8 @@
   {
     "slug": "suncheon",
     "regionSlug": "jeolla-do",
+    "cardOrder": 4,
+    "attractionPriority": "nature",
     "nameEn": "Suncheon",
     "nameKo": "순천시",
     "lat": 34.9506,
@@ -962,6 +984,7 @@
   {
     "slug": "jeju-city",
     "regionSlug": "jeju-do",
+    "cardOrder": 1,
     "nameEn": "Jeju City",
     "nameKo": "제주시",
     "lat": 33.5,
@@ -1036,6 +1059,7 @@
   {
     "slug": "seogwipo",
     "regionSlug": "jeju-do",
+    "cardOrder": 2,
     "nameEn": "Seogwipo",
     "nameKo": "서귀포시",
     "lat": 33.25,
