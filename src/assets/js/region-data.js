@@ -310,31 +310,14 @@ function buildUpcomingPanel(later) {
   return `<div class="event-months" role="tablist" aria-label="Upcoming events by month">${tabs}</div>${panels}`;
 }
 
-// Ongoing tab = "what's on around now": festivals currently running (often multi-month) plus
-// ones that start later this calendar month, as one list — each card carries a "Long-term" /
-// "This month" badge. Upcoming tab = strictly later months, grouped into month sub-tabs. The tab
-// strip and the "no events" message only appear when they're actually warranted (see cases).
-// Dev/QA preview hook: `?preview=empty` forces the zero-events state, `?preview=thismonth`
-// forces a mix with same-month events (the live data currently has neither). No effect without
-// the query param.
-function applyPreview(events) {
-  const mode = new URLSearchParams(location.search).get("preview");
-  if (mode === "empty") return [];
-  if (mode === "thismonth") {
-    return [
-      { startDate: "2026-08-20", endDate: "2026-08-24", titleEn: "Hanriver Summer Night Market", address: "160 Yeouidong-ro, Yeongdeungpo-gu, Seoul" },
-      { startDate: "2026-08-29", endDate: "2026-08-31", titleEn: "Seochon Alley Jazz Weekend", address: "12 Jahamun-ro, Jongno-gu, Seoul" },
-      { startDate: "2026-05-01", endDate: "2026-11-30", titleEn: "City Wall Lantern Walk", address: "Naksan-ro, Jongno-gu, Seoul" },
-      { startDate: "2026-10-02", endDate: "2026-10-05", titleEn: "Autumn Hanok Craft Fair", address: "99 Bukchon-ro, Jongno-gu, Seoul" },
-    ];
-  }
-  return events;
-}
-
 const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
 const EVENTS_PROVENANCE_FALLBACK =
   "Source: © Korea Tourism Organization (한국관광공사), saved sample from 16 September 2026. Live data currently unavailable.";
 
+// Ongoing tab = "what's on around now": festivals currently running (often multi-month) plus
+// ones that start later this calendar month, as one list — each card carries a "Long-term" /
+// "This month" badge. Upcoming tab = strictly later months, grouped into month sub-tabs. The tab
+// strip and the "no events" message only appear when they're actually warranted (see cases).
 function renderEventsTimeline(container, data) {
   // fetchJson's own network-failure fallback is still a bare `[]` (see renderAttractions above),
   // so handle both shapes rather than assuming the { items, quotaExceeded } one always arrives.
@@ -361,7 +344,7 @@ function renderEventsTimeline(container, data) {
     return;
   }
 
-  const events = applyPreview(Array.isArray(data) ? data : data.items || []);
+  const events = Array.isArray(data) ? data : data.items || [];
   const today = todayIso();
   const currentMonth = monthKeyOf(today);
 

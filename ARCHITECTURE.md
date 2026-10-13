@@ -4,10 +4,8 @@ Technical reference: stack, data, pipelines, and the decisions behind them.
 
 ## 0. What this site is
 
-An English-language site helping F-1-D (Digital Nomad Visa) holders find a Korean region to
-stay in, with the focus on regions beyond the Seoul Capital Area: the visa's income-eligibility
-rules gate/filter a 6-region map, then region pages give living info (rent, workation cities with
-nearby attractions and workspaces, study-café density, festivals, food).
+An English-language site helping F-1-D (Digital Nomad Visa) applicants choose a Korean region to
+settle in; see `README.md` for the full description.
 
 Built for the [2026 관광데이터 활용 공모전](https://api.visitkorea.or.kr/#/cntSearchDetail?no=3),
 ②-2 웹·앱 구현 부문, **Designated Task #4**: 단순 흥미 위주 일회성 관광의 한계 및 인구 감소 지역의
@@ -55,7 +53,7 @@ the infographic too. Both modes render from the same region-card partial.
 
 **Eligibility-gated regions:** greyed-out regions aren't clickable — showing them as navigable
 would misrepresent the visa gating, the core value prop. Gating is link-only (href stripped from
-the map shape and the card's "Learn more →"); the *why* lives in the calculator caption and map
+the map shape and the card's "Open <region> →" link); the *why* lives in the calculator caption and map
 legend.
 
 **Partial state (Gyeonggi-do):** a nominally capital-tier region with population-decline counties
@@ -64,7 +62,7 @@ re-pointed to `/regions/gyeonggi-do/population-decline-areas/` (`pointLinkTo` in
 
 **Region → metro grouping:**
 ```
-gyeonggi-do    → Gyeonggi-do, Seoul, Incheon           [capitalArea: true]
+gyeonggi-do    → Gyeonggi-do, Seoul, Incheon           [isCapitalArea: true]
 gangwon-do     → Gangwon-do
 chungcheong-do → Chungcheongbuk-do, Chungcheongnam-do, Daejeon, Sejong
 gyeongsang-do  → Gyeongsangbuk-do, Gyeongsangnam-do, Busan, Daegu, Ulsan
@@ -82,7 +80,7 @@ filename and `korea-map.js applyResult()` keys off `data-slug`:
   <g id=…>  .region__shape | .region__city (metro shapes) | .region__label
 ```
 Jeju keeps its true geographic distance (sea-tinted background, not an inset) — deliberate.
-Size budget ≤60KB. **Region detail maps** (`src/assets/svg/*-detail-map.svg`, cut from the
+Size budget ≤65KB (it's inlined into the homepage). **Region detail maps** (`src/assets/svg/*-detail-map.svg`, cut from the
 national map) are inlined per region page with pins for cities and some attractions; labels that
 would crowd the map are revealed on hover/tap (`region-detail-map.js`).
 
@@ -95,8 +93,9 @@ functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
 src/_data/          editorial data and API fallbacks (§6)
 src/_includes/      layouts/ + partials/ (region-card, city-card, korea-map, hero, …)
 src/assets/         css/ (tokens, base, components/), js/ (one module per behaviour),
-                    img/ (committed KOGL/KTO Type1 photos), svg/ (national + detail maps)
-src/regions/        region.njk paginates regions.json → /regions/<slug>/
+                    img/ (committed photos, credited per `_data/*Credits.json`), svg/ (national + detail maps)
+src/regions/        region.njk paginates regions.json → /regions/<slug>/;
+                    gyeonggi-do/population-decline-areas.njk is hand-authored
 scripts/            verify-*.mjs checks and one-off data investigations
 ```
 
@@ -105,7 +104,7 @@ usually named after its partial; one JS module per interactive behaviour. SVGs i
 `inlineSvg` shortcode so CSS can target their elements. `functions/**` imports JSON bare —
 Cloudflare's Functions bundler rejects `with { type: "json" }`; Eleventy-side `_data/*.js` may
 still use it. Dev secrets (`KTO_API_KEY`, `KAKAO_REST_API_KEY`) live in `.dev.vars`; `.env` is
-only for `scripts/*`.
+for `scripts/*` (`node --env-file=.env`).
 
 ## 5. External-API data flow (the compliance-critical part)
 
@@ -136,12 +135,15 @@ simulates quota exhaustion.
 - **Kakao®:** 100,000 calls/day free for a first app
   ([quota docs](https://developers.kakao.com/docs/en/getting-started/quota)).
 
-**No key (local dev):** attractions and events serve `topAttractions.json` /
-`eventsSnapshot.json` with `fallback: true`, so the UI can be tested with zero live calls.
+**Quota-exceeded handling:** attractions serve the region's `topAttractions.json` picks with
+`quotaExceeded: true` (the client swaps the section subtitle to "Top picks for today"); events
+return `[]` with a "come back tomorrow" message — a point-in-time snapshot would show stale
+dates.
 
-**Quota-exceeded handling:** attractions fall back to `topAttractions.json` (response carries
-`fallback: true`, and `region-data.js` swaps the provenance text); events return `[]`
-with a "come back tomorrow" message — a point-in-time snapshot would show stale dates.
+**No key (local dev):** attractions and events serve `topAttractions.json` /
+`eventsSnapshot.json` with `fallback: true`, so the UI can be tested with zero live calls; for
+events the client also swaps the provenance line to say it's a saved sample.
+
 Fan-out orchestration lives in `attraction-fetch.mjs` so Node scripts can import it.
 
 **Static exceptions:** region/county **hero photos** and **dish photos** are hand-picked once
@@ -162,19 +164,19 @@ the server emits one array and per-city order would otherwise leak into "All". A
 without a photo are dropped.
 
 **Known KTO quirks** (baked into `kto-client.mjs`/`normalize.mjs`):
-- Attraction content type is `76` (KTO v4 numbering).
 - `areaBasedList2` uses undocumented `arrange=P` (view-count); `Q` (modified-date) buries
   landmarks. If the first fan-out call comes back genuinely empty (not 429 code 22), the fan-out
   switches to `arrange=R`. `{ items, quotaExceeded }` distinguishes quota from a true empty.
 - `topAttractions.json` (hand-verified, per region) is boosted into live results
   (`boost-curated.mjs`): `hard` picks are injected if missing, `soft` picks only repositioned.
 - Attractions: 3 broad calls per `lDongRegnCd` (`lclsSystm1=NA/VE/HS`, `numOfRows: 250`),
-  reclassified client-side into curated `lclsSystm2/3` codes (`cat1/2/3` under-surfaced popular
-  sites). Cheaper than one call per sub-code and spans `contentTypeId`. City tagging matches
-  `lDongSignguCd` against `cities.json`.
-- City filtering adds `lDongSignguCd` to `lDongRegnCd`; stored per city as
-  `ktoLDongRegnCd`/`ktoLDongSignguCds[]` (empty = whole `lDongRegnCd`). Gwangju fans out across
-  its 5 gu codes (merged region `"12"` has no single signgu code).
+  reclassified in the Function (after KTO responds) into curated `lclsSystm2/3` codes
+  (`cat1/2/3` under-surfaced popular sites). `contentTypeId` is never sent; selection is by
+  the `lclsSystm` classification only. Cheaper than one call per sub-code.
+- Cities are tagged after the fetch by matching each item's `lDongSignguCd` against
+  `cities.json` (`ktoLDongRegnCd`/`ktoLDongSignguCds[]`; empty = whole `lDongRegnCd`); the city
+  filter itself is client-side visibility, with no extra KTO calls. Gwangju's merged region
+  `"12"` has no single signgu code, so it lists its 5 gu codes.
 - `areacode` is empty on festival records — always filter by `lDongRegnCd`.
 - Raw `items` is `""` on zero results, a bare object on one, an array at 2+ — always normalized
   to an array.
@@ -195,9 +197,11 @@ regions; `topAttractions.json` already covers it.
 ## 6. Data models
 
 **Editorial data** (`src/_data/`; the files are the schema):
-- `regions.json` — the 6 regions; `cities.json` — workation cities (KTO codes, workspaces,
+- `site.json`, `regions.json` — site settings; the 6 regions; `cities.json` — workation cities (KTO codes, workspaces,
   study-café search rules, getting around), joined to regions via `regionSlug`.
-- `visaRules.json`, `populationDeclineAreas*.json` — visa thresholds and decline counties (§7).
+- `visaRules.json`, `populationDeclineAreas.json`, `populationSource.json` — visa thresholds,
+  Gyeonggi-do decline counties and their source line (§7). `populationDeclineAreasFull.json` is
+  the full MOIS list, unread by the build.
 - `rentalMarketScan.js`, `settlingIn.json`, `food.json` — rent research, settling-in guide, dishes.
 - `studyCafeLevels.json` — level thresholds for Kakao® counts; `*Hero{Photos,Credits}.json` —
   cover photos and credits; `topAttractions.json` / `eventsSnapshot.json` — fallbacks (§5).
@@ -206,7 +210,7 @@ regions; `topAttractions.json` already covers it.
 ```
 Attraction  contentId, regionSlug, lDongRegnCd, lDongSignguCd, titleEn, titleKo, summary,
             address, imageUrl, imageThumbUrl, imageLicense, lat, lng,
-            category: 'nature' | 'culture', citySlug | null
+            category: 'nature' | 'culture', citySlug | null, sourceModifiedAt, priority?
 Event       contentId, regionSlug, lDongRegnCd, titleEn, titleKo, startDate, endDate,
             address, imageUrl, imageLicense, tel, homepageUrl
 EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all'
@@ -215,7 +219,7 @@ EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all'
 ```
 
 Invariants:
-- `Region`/`City`/`Attraction` always carry both `nameEn` and `nameKo`.
+- `Region`/`City` carry both `nameEn` and `nameKo`; attractions and events carry `titleEn`/`titleKo`.
 - `lDongRegnCd` is the canonical KTO key.
 - `eligibility.js` is a pure function `(userInput, referenceData) → EligibilityResult`
   (`userInput = { salaryKrw, age, hasFamily }`), no DOM, tested via

@@ -75,7 +75,6 @@ until Phase 19.
       Type1 credit + caption (attraction + short city EN/KO, full address in `addressEn`/Ko).
       Scroll-snap track + `region-hero-gallery.js` (prev/next/dots/autoplay), `.region-hero`
       `16/9`. Yeosu entry's Type1 rests on a manual classification, noted inline.
-  - [x] Zero-events / same-month states previewable via `?preview=empty` / `?preview=thismonth`
         on any region page (region-data.js — live data has neither right now; jeju-do at 1 event
         exercises the no-tabs single-month path).
 

@@ -1,6 +1,6 @@
 # Work&Stay Korea
 
-English-language web service helping Digital Nomad Visa (F-1-D) holders find and settle in a
+English-language web service helping Digital Nomad Visa (F-1-D) applicants find and settle in a
 non-capital Korean region. Solo-developer MVP for the 2026 관광데이터 활용 공모전
 (②-2 웹·앱 구현 부문), Designated Task #4 (sustainable long-term residency vs. one-off tourism
 in population-declining regions). See `ARCHITECTURE.md` for full technical detail — this file is
@@ -9,17 +9,13 @@ the durable, brief set of project-scope agreements.
 ## Contest constraints (do not violate)
 
 - **KTO OpenAPI use is mandatory** and judged (20/100 pts). Judges verify actual call-history
-  logs on the submitted key during the dev period (2026-07-27 to 09-21). **Do not build a
-  pure build-time-fetch / committed-JSON-only pipeline for KTO-sourced content** — it reads as
-  "local DB storage," which the contest FAQ explicitly discourages and flags as inspectable.
-  KTO-sourced content (attractions, festivals, hero images) must go through the live proxy
-  layer described in ARCHITECTURE.md, not git-committed snapshots.
+  logs on the submitted key during the dev period (2026-07-27 to 09-21). **Do not build a pure
+  build-time-fetch / committed-JSON-only pipeline for KTO-sourced content** — it reads as "local
+  DB storage," which the contest FAQ explicitly discourages and flags as inspectable.
+  KTO-sourced content (attractions, festivals) must go through the live proxy layer described
+  in ARCHITECTURE.md, not git-committed snapshots. The committed `topAttractions.json` /
+  `eventsSnapshot.json` are fallbacks only (no key, quota exhausted).
 - Submission needs a **live URL** (web track requires no store approval, just a working link).
-- One designated task only: **#4**. Feature work should trace back to its hashtags
-  (#workation #month-long-stay #2030s-youth #local-tourism) — the functional spec submission
-  will be checked against them.
-- Hard deadline: **2026-09-21 16:00 KST**. Real target: feature-complete by **~Sept 7** to leave
-  2–2.5 weeks for user testing and the submission write-up.
 
 ## Workflow constraints (do not violate)
 
@@ -40,7 +36,7 @@ the durable, brief set of project-scope agreements.
      served from an in-memory cache instead of hitting KTO again. Dev-only — never set this in
      Cloudflare's production environment.
 - `ARCHITECTURE.md` is a decisions record, not a scratchpad. So keep two rules:
-1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is supposed to be "independent of project scheduling" per its own header.
+1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is independent of project scheduling.
 2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.
 - keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase or marked as undone during current phase.
 
@@ -51,7 +47,7 @@ Keep existing site copy — the design HTML is layout/style reference only.
 ## Tech stack (do not add to this list without strong justification)
 
 Eleventy (11ty) v3 + Nunjucks, hand-written CSS, vanilla ES module JS, inline SVG map,
-Cloudflare Pages + Pages Functions. Zero client-side libraries. One direct npm dependency.
+Cloudflare Pages + Pages Functions. Zero client-side libraries. One runtime dependency (`@11ty/eleventy`).
 No database. See ARCHITECTURE.md §2 for why each choice was made — the reasoning is the
 guardrail, not just the list.
 
@@ -66,21 +62,21 @@ guardrail, not just the list.
    never rely on it for filtering.
 4. Content and numbers (visa thresholds, rent figures, region metadata) live in
    `src/_data/*.json`, never hardcoded in templates or JS.
-   - Unverified/placeholder values in `_data/*.json` are marked inline with the literal string
-     `MOCK` or `PLACEHOLDER` in a `source`/`credit`/`note`/`url` field on that record — never
-     silently. Grepping `_data/*.json` for these two strings is the canonical way to find
-     everything that still needs real sourcing before launch; there is no separate tracking list.
+   - The `MOCK`/`PLACEHOLDER` marker convention was scaffolding-only and is no longer used; no
+     such markers remain in `_data`. Don't ship unverified values — if one is unavoidable, mark
+     it on its record (`source`/`note`) and say so.
 5. Every KTO-derived UI block shows data provenance and has a designed empty state (some
    regions currently have zero upcoming festivals — that's expected, not a bug).
-6. Progressive enhancement: every region link is a real `<a href>`, tabs are real anchors, the
-   site is navigable with JS disabled. Only the calculator and live map states require JS.
+6. Progressive enhancement: links and static content work without JS (every region link is a
+   real `<a href>`). The calculator, the live map states and the API-fed blocks (attractions,
+   events, study-café counts) need JS and show a `<noscript>` notice instead.
 7. Mobile-first CSS, test at 360 / 768 / 1280px plus a real iOS Safari pass before considering
    a feature done.
 8. Pin dependencies (`package-lock.json`, `.nvmrc` committed). No automated dependency bumps.
    Upgrades are deliberate and one at a time.
-9. i18n is not implemented in v1, but `Region`/`City`/`Attraction` models always carry both
-   `nameEn` and `nameKo` — don't strip this "for simplicity," it's there for the planned
-   post-MVP language extension and for users cross-referencing Naver Map by Korean name.
+9. Keep both English and Korean names on regions, cities, attractions and events
+   (`nameEn`/`nameKo`, `titleEn`/`titleKo`) — don't strip the Korean "for simplicity". Users
+   search by Korean name (e.g. in Naver Map), where romanized search is often worse.
 
 ## UX decisions
 
