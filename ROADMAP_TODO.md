@@ -126,12 +126,11 @@ deadline) — real-time calls only in production. Full report: `notes/attraction
       (KTO returns `totalCount: 0` for a comma-joined value). Dropping codes from a region's
       fan-out — rejected, every code is load-bearing (region or its metro city).
 
-## Phase 26 — Workation-city expansion
+## Phase 26 — done (workation-city expansion)
 Depends on 12.
 
-- [ ] ~4–6 cities/region, ≥1 verified workation center each where one exists.
-      Regions with zero centers today: Chungcheong-do, Jeolla-do.
-- Verify: per-region count scripted, every center URL resolves.
+- [x] ~4–6 cities/region, ≥1 verified workation center each where one exists.
+- [x] Verify: every region has ≥1 center; all center URLs resolve.
 
 ## Phase 27 — Remaining de-MOCK + Task #4 copy pass
 - [x] Food gallery, communities, `/visa-info/` copy: real and sourced.
