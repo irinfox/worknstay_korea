@@ -17,9 +17,9 @@ import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
+// Today's date in Korea (YYYYMMDD) — Workers run in UTC, which is a day behind KST until 09:00.
 function queryStartDate() {
-  const d = new Date();
-  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date()).replaceAll("-", "");
 }
 
 export async function onRequestGet({ params, env }) {

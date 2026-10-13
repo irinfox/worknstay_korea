@@ -141,9 +141,9 @@ const PIN_ICON = pinIcon("event-place__icon");
 const COPY_ICON = `<svg class="event-place__copy-icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M10 1H4a2 2 0 0 0-2 2v7h2V3h6V1Zm2 3H8a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>`;
 // Tear-off desk calendar with a blank page — the empty state ("no dates listed").
 
+// Today's date in Korea, not the visitor's timezone — events.js queries KTO with the same date.
 function todayIso() {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date());
 }
 
 function monthKeyOf(isoDate) {
@@ -156,7 +156,7 @@ function monthKeyOf(isoDate) {
 function monthLabelLong(key) {
   const [y, m] = key.split("-").map(Number);
   const mon = new Date(y, m - 1, 1).toLocaleDateString("en-US", { month: "long" });
-  return y === new Date().getFullYear() ? mon : `${mon} ${y}`;
+  return y === Number(todayIso().slice(0, 4)) ? mon : `${mon} ${y}`;
 }
 
 // Full, screen-reader-facing date range (the visible calendar chip is aria-hidden).
