@@ -100,6 +100,13 @@ export default function (eleventyConfig) {
     };
   });
 
+  // Wraps each hyphenated word (Gangnam-daero, 2-gil) in a no-wrap span so a line can only break at
+  // spaces; the text keeps its plain hyphen-minus. Escapes first, so use with `| safe`.
+  eleventyConfig.addFilter("keepHyphenated", function (text) {
+    const esc = String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return esc.replace(/\S*\S-\S*/g, '<span class="nowrap">$&</span>');
+  });
+
   // Splits workationCenters into solo venues vs. chains (DESIGN.md § "Chains"), dropping CLOSED
   // entries; chains sort non-Korean-first, solo venues keep cities.json's order.
   eleventyConfig.addFilter("activeVenues", function (centers, wantChains) {
