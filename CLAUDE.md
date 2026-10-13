@@ -13,8 +13,9 @@ the durable, brief set of project-scope agreements.
   build-time-fetch / committed-JSON-only pipeline for KTO-sourced content** — it reads as "local
   DB storage," which the contest FAQ explicitly discourages and flags as inspectable.
   KTO-sourced content (attractions, festivals) must go through the live proxy layer described
-  in ARCHITECTURE.md, not git-committed snapshots. The committed `topAttractions.json` /
-  `eventsSnapshot.json` are fallbacks only (no key, quota exhausted).
+  in ARCHITECTURE.md, not git-committed snapshots. The only committed exceptions:
+  `topAttractions.json` (curated picks that boost live results and serve as the fallback) and
+  `eventsSnapshot.json` (no-key dev testing only).
 - Submission needs a **live URL** (web track requires no store approval, just a working link).
 
 ## Workflow constraints (do not violate)
@@ -22,7 +23,7 @@ the durable, brief set of project-scope agreements.
 - The user runs all `git add`/`git commit` themselves — only propose the
   `git add` file list and commit message after each phase, never execute git commands that stage
   or commit.
-- Dev server: `npm run pages:dev` (port 8788; runs Pages Functions, reads KTO keys from
+- Dev server: `npm run pages:dev` (port 8788; runs Pages Functions, reads API keys from
   `.dev.vars`). Kill the port first: `lsof -ti:8788 -sTCP:LISTEN | xargs -r kill`.
 - Two ways to avoid burning KTO quota — both still need `pages:dev` running (plain `npm run
   serve` skips Pages Functions entirely, so `/api/region/.../attractions` 404s and the page
@@ -42,7 +43,6 @@ the durable, brief set of project-scope agreements.
 
 ## Design conventions
 Follow DESIGN.md for all visual decisions (palette, type, spacing, component rules).
-Keep existing site copy — the design HTML is layout/style reference only.
 
 ## Tech stack (do not add to this list without strong justification)
 
@@ -61,7 +61,7 @@ guardrail, not just the list.
 3. `lDongRegnCd` is the canonical KTO regional key. `areacode` is empty on festival records —
    never rely on it for filtering.
 4. Content and numbers (visa thresholds, rent figures, region metadata) live in
-   `src/_data/*.json`, never hardcoded in templates or JS.
+   `src/_data/`, never hardcoded in templates or JS.
    - The `MOCK`/`PLACEHOLDER` marker convention was scaffolding-only and is no longer used; no
      such markers remain in `_data`. Don't ship unverified values — if one is unavoidable, mark
      it on its record (`source`/`note`) and say so.
@@ -69,7 +69,7 @@ guardrail, not just the list.
    regions currently have zero upcoming festivals — that's expected, not a bug).
 6. Progressive enhancement: links and static content work without JS (every region link is a
    real `<a href>`). The calculator, the live map states and the API-fed blocks (attractions,
-   events, study-café counts) need JS and show a `<noscript>` notice instead.
+   events, study-café counts) need JS.
 7. Mobile-first CSS, test at 360 / 768 / 1280px plus a real iOS Safari pass before considering
    a feature done.
 8. Pin dependencies (`package-lock.json`, `.nvmrc` committed). No automated dependency bumps.

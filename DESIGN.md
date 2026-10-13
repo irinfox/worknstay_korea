@@ -59,7 +59,7 @@ a third face.
 
 | Script | Family | Weights | Stack |
 | --- | --- | --- | --- |
-| Latin | **Instrument Sans** | 400, 500, 600 | `'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif` |
+| Latin | **Instrument Sans** | 400, 500, 600 | `'Instrument Sans', 'Instrument Sans Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif` |
 | Korean | **Noto Sans KR** | 400, 500 | `'Noto Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif` |
 
 One Google Fonts request, exactly this:
@@ -217,7 +217,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon that
   copies the full address — icon + tooltip on desktop, icon + "Copy full address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
-- **National map** (homepage): at 900px and below, tapping a region scrolls to its card and selects
+- **National map** (homepage): below the wide breakpoint (1024px), tapping a region scrolls to its card and selects
   it; tapping the card itself does nothing. Real Korea outline on a Panel `#F7F9F8` ground, not a
   green tint (collides with the partly-eligible fill). Regions filled by eligibility; legend
   swatches render the *composited* colour, never the raw token. Metropolitan cities: an explicit
@@ -228,8 +228,8 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   not-eligible included (its own grey step, not the green default). Labels: ink `#16201C`, one
   opacity at every state. No pins.
 - **Region map** (region pages): the region outline on white with a pale green fill, 13–15px line
-  pictograms placed by coordinate, and a pictogram legend. Place names appear on hover on desktop
-  and on tap on phone. Context labels for neighbouring areas are muted italic. No eligibility
+  pictograms placed by coordinate, and a pictogram legend. Pin labels that would crowd the map appear
+  on hover on desktop and on tap on phone; the rest are always shown. Context labels for neighbouring areas are muted italic. No eligibility
   states, so no ground tint.
 - **Map labels** (both maps): ink `#16201C`, `paint-order: stroke` with a tinted halo, 2px —
   never white or plain green/grey chrome; masks the boundary stroke/hatching under the text.

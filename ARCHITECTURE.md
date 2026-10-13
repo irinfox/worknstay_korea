@@ -18,8 +18,8 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
   judges check call-history logs on the submitted key. §5 uses a live proxy instead of a
   build-time fetch.
 - **Attribution is fixed by the FAQ**: plain text naming the institution — never a CI/BI logo,
-  never "TourAPI" alone. Rendered as "Source: © Korea Tourism Organization (한국관광공사)." on
-  every `.data-provenance`/photo-credit line.
+  never "TourAPI" alone. Shown as "Source: © Korea Tourism Organization (한국관광공사)." on
+  every KTO-derived block.
 
 ## 2. Tech stack and why
 
@@ -93,7 +93,7 @@ functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
 src/_data/          editorial data and API fallbacks (§6)
 src/_includes/      layouts/ + partials/ (region-card, city-card, korea-map, hero, …)
 src/assets/         css/ (tokens, base, components/), js/ (one module per behaviour),
-                    img/ (committed photos, credited per `_data/*Credits.json`), svg/ (national + detail maps)
+                    img/ (committed photos, each credited), svg/ (national + detail maps)
 src/regions/        region.njk paginates regions.json → /regions/<slug>/;
                     gyeonggi-do/population-decline-areas.njk is hand-authored
 scripts/            verify-*.mjs checks and one-off data investigations
@@ -115,7 +115,7 @@ for `scripts/*` (`node --env-file=.env`).
   functions/api/region/[slug]/{attractions,events}.js   → KTO EngService2 on every request
   functions/api/city/[slug]/study-cafes.js              → Kakao® Local on every request
         ▼
-  normalize.mjs (title split, http→https, HTML-entity strip, license filter)
+  KTO: normalize.mjs (title split, http→https, HTML-entity strip, license filter)
         ▼
   Pages fetch these endpoints client-side (`region-data.js`, `study-cafes.js`) into skeleton
   mounts — a real, live call on every visit, never a git-committed snapshot.
@@ -135,16 +135,10 @@ simulates quota exhaustion.
 - **Kakao®:** 100,000 calls/day free for a first app
   ([quota docs](https://developers.kakao.com/docs/en/getting-started/quota)).
 
-**Quota-exceeded handling:** attractions serve the region's `topAttractions.json` picks with
-`quotaExceeded: true` (the client swaps the section subtitle to "Top picks for today"); events
-return `[]` with a "come back tomorrow" message — a point-in-time snapshot would show stale
-dates.
-
-**No key (local dev):** attractions and events serve `topAttractions.json` /
-`eventsSnapshot.json` with `fallback: true`, so the UI can be tested with zero live calls; for
-events the client also swaps the provenance line to say it's a saved sample.
-
-Fan-out orchestration lives in `attraction-fetch.mjs` so Node scripts can import it.
+**Fallbacks:** when KTO's quota is exhausted, attractions serve the region's
+`topAttractions.json` picks and events return empty — the events snapshot is never a production
+fallback, since its dates would be out of date. With no key (local dev), both serve their files
+(`topAttractions.json`, `eventsSnapshot.json`), so the UI can be tested with zero live calls.
 
 **Static exceptions:** region/county **hero photos** and **dish photos** are hand-picked once
 (KTO PhotoGalleryService1/EngService2, Wikimedia Commons, own photos), then committed under
@@ -152,7 +146,7 @@ Fan-out orchestration lives in `attraction-fetch.mjs` so Node scripts can import
 `_data` bypasses the pipeline entirely.
 
 **Kakao® study cafés:** `GET /api/city/[slug]/study-cafes` →
-`{count, estimated, level, label}` or `{degraded, retryable, reason}`. `Cache-Control: no-store`
+a count and level, or a degraded marker. `Cache-Control: no-store`
 (Kakao® terms forbid caching or storing results). Results are filtered by address rules from
 `cities.json` `studyCafeSearch`; above Kakao®'s 45-result cap the count is scaled from
 `total_count`. The client is all-or-nothing per page and falls back to the editorial
@@ -199,14 +193,14 @@ regions; `topAttractions.json` already covers it.
 **Editorial data** (`src/_data/`; the files are the schema):
 - `site.json`, `regions.json` — site settings; the 6 regions; `cities.json` — workation cities (KTO codes, workspaces,
   study-café search rules, getting around), joined to regions via `regionSlug`.
-- `visaRules.json`, `populationDeclineAreas.json`, `populationSource.json` — visa thresholds,
-  Gyeonggi-do decline counties and their source line (§7). `populationDeclineAreasFull.json` is
+- `visaRules.json`, `populationDeclineAreas.json`, — visa thresholds and
+  Gyeonggi-do decline counties (§7); `populationSource.json` — KOSIS source for city populations. `populationDeclineAreasFull.json` is
   the full MOIS list, unread by the build.
 - `rentalMarketScan.js`, `settlingIn.json`, `food.json` — rent research, settling-in guide, dishes.
 - `studyCafeLevels.json` — level thresholds for Kakao® counts; `*Hero{Photos,Credits}.json` —
   cover photos and credits; `topAttractions.json` / `eventsSnapshot.json` — fallbacks (§5).
 
-**Computed shapes** (`Attraction`/`Event` built by `normalize.mjs`, `EligibilityResult` by `eligibility.js`; no data file):
+**Computed shapes** (built in the Functions and `eligibility.js`; no data file):
 ```
 Attraction  contentId, regionSlug, lDongRegnCd, lDongSignguCd, titleEn, titleKo, summary,
             address, imageUrl, imageThumbUrl, imageLicense, lat, lng,
@@ -240,8 +234,8 @@ Thresholds and visa facts live in `visaRules.json` (rendered by `visa-info.njk`)
 
 No library, no store. Three tiers:
 
-1. **Local/DOM state** — burger open/closed, page-contents strip. Lives in the owning module as
-   a CSS class on one element.
+1. **Local UI state** — burger open/closed, page-contents strip. Lives in the DOM (classes and
+   attributes set by the module that owns it), not in a JS variable or store.
 2. **Shared state — exactly one piece:** `EligibilityResult`. `calculator.js` reads inputs →
    calls pure `eligibility.js` → renders its own result caption; `main.js` passes
    `koreaMap.applyResult` into `initCalculator` as a callback for the map. One-directional, no
