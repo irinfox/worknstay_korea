@@ -347,13 +347,13 @@
         "kind": "coworking · community",
         "url": "https://mindtouch.ai/en/hinomad-lab",
         "instagram": "hinomad",
-        "microcopy": "Opens 1 Nov 2026",
+        "microcopy": "Opening in November",
         "address": "2F, 114-1 Jungang-ro, Sokcho-si, Gangwon-do",
         "addressKo": "",
         "mapUrl": "",
         "source": "",
         "actualizedAt": "2026-10-13",
-        "note": "Opens 1 Nov 2026."
+        "note": "Opening in November."
       }
     ]
   },
@@ -560,7 +560,7 @@
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
-        "name": "worknplay",
+        "name": "Worknplay",
         "isChain": true,
         "kind": "coworking",
         "korOnly": true,
@@ -915,13 +915,12 @@
         "korOnly": true,
         "url": "",
         "instagram": "familiaspace_official",
-        "microcopy": "App registration may need a Korean phone number",
         "address": "4F, 1 Hanam-daero 680beon-gil, Seo-gu, Gwangju",
         "addressKo": "전남광주 서구 하남대로680번길 1 4층",
         "mapUrl": "https://naver.me/FPn5YHzh",
         "source": "",
         "actualizedAt": "2026-10-13",
-        "note": "Korean name: 파밀리아 스페이스. App registration may need a Korean phone number."
+        "note": "Korean name: 파밀리아 스페이스."
       },
       {
         "name": "On-Off Shared Office",
