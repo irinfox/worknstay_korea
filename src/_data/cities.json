@@ -12,7 +12,6 @@
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["480"],
     "population": { "total": 524107, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -28,7 +27,6 @@
     "ktoLDongRegnCd": "28",
     "ktoLDongSignguCds": ["710"],
     "population": { "total": 67210, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -46,7 +44,6 @@
     "ktoLDongRegnCd": "11",
     "ktoLDongSignguCds": [],
     "population": { "total": 9315066, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hoppin",
@@ -185,7 +182,6 @@
       { "label": "Seoul", "value": "1–1.5h", "mode": "subway / express bus" }
     ],
     "population": { "total": 3093590, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Stage9 (Dive9)",
@@ -243,7 +239,6 @@
       { "label": "Seoul", "value": "20–40 min", "mode": "subway" }
     ],
     "population": { "total": 893970, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Five Spot",
@@ -279,7 +274,6 @@
       { "label": "Seoul", "value": "1h", "mode": "subway", "alt": [{ "value": "40 min", "mode": "train" }] }
     ],
     "population": { "total": 1221616, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Cospot",
@@ -309,7 +303,6 @@
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["285"],
     "population": { "total": 1036961, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -333,7 +326,6 @@
       { "label": "Seoul", "value": "2.5–3h", "mode": "bus" }
     ],
     "population": { "total": 78972, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Dadoo Coworking",
@@ -385,7 +377,6 @@
       { "label": "Seoul", "value": "2.5h", "mode": "train" }
     ],
     "population": { "total": 211628, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Padosalon",
@@ -415,7 +406,6 @@
     "ktoLDongRegnCd": "51",
     "ktoLDongSignguCds": ["830"],
     "population": { "total": 26544, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -438,7 +428,6 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train", "alt": [{ "value": "2h", "mode": "subway" }] }
     ],
     "population": { "total": 293524, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -463,7 +452,6 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train" }
     ],
     "population": { "total": 367326, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -479,7 +467,6 @@
     "ktoLDongRegnCd": "51",
     "ktoLDongSignguCds": ["820"],
     "population": { "total": 27706, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": [
       {
         "name": "Mangrove (Goseong branch)",
@@ -516,7 +503,6 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train+bus" }
     ],
     "population": { "total": 879244, "year": 2025, "note": "KOSIS's English-language export mislabels this row \"Chungju-si\"; its sub-district breakdown (Sangdang-gu/Seowon-gu/Heungdeok-gu/Cheongwon-gu) matches Cheongju-si, not Chungju-si (which has no gu subdivisions and is listed separately at 217,413)." },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hellowork",
@@ -546,7 +532,6 @@
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["180"],
     "population": { "total": 94459, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -569,7 +554,6 @@
       { "label": "Busan", "value": "1.5h", "mode": "train" }
     ],
     "population": { "total": 1469299, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Worknplay",
@@ -647,7 +631,6 @@
       { "label": "Gwangju", "value": "2h", "mode": "express bus" }
     ],
     "population": { "total": 392471, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hellowork",
@@ -696,7 +679,6 @@
       { "label": "Daejeon", "value": "30–60 min", "mode": "bus" }
     ],
     "population": { "total": 104504, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -720,7 +702,6 @@
       { "label": "Seoul", "value": "2h", "mode": "train" }
     ],
     "population": { "total": 260108, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -736,7 +717,6 @@
     "ktoLDongRegnCd": "47",
     "ktoLDongSignguCds": ["170"],
     "population": { "total": 154183, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
@@ -757,7 +737,6 @@
       { "label": "Seoul", "value": "2.5–3h", "mode": "train" }
     ],
     "population": { "total": 3235362, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Busaness",
@@ -800,7 +779,6 @@
     "ktoLDongRegnCd": "48",
     "ktoLDongSignguCds": ["220"],
     "population": { "total": 118589, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Local Stitch Tongyeong",
@@ -837,7 +815,6 @@
       { "label": "Busan", "value": "50 min", "mode": "train" }
     ],
     "population": { "total": 2363643, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -860,7 +837,6 @@
       { "label": "Busan", "value": "20 min", "mode": "train" }
     ],
     "population": { "total": 1103509, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -881,7 +857,6 @@
       { "label": "Seoul", "value": "2h", "mode": "train" }
     ],
     "population": { "total": 641632, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -904,7 +879,6 @@
       { "label": "Seoul", "value": "3h", "mode": "train" }
     ],
     "population": { "total": 262133, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -927,7 +901,6 @@
       { "label": "Jirisan", "value": "1.5h", "mode": "car" }
     ],
     "population": { "total": 1431903, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Familia Space",
@@ -978,7 +951,6 @@
       { "label": "Naganeupseong Walled Town", "value": "40 min", "mode": "bus" }
     ],
     "population": { "total": 271415, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -1001,7 +973,6 @@
       { "label": "Seoul", "value": "1h", "mode": "plane" }
     ],
     "population": { "total": 491186, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Mangrove",
@@ -1075,7 +1046,6 @@
       { "label": "Jungmun Saekdal Beach", "value": "50 min", "mode": "bus" }
     ],
     "population": { "total": 178168, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "O-peace",

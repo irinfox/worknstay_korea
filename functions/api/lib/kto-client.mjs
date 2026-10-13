@@ -57,14 +57,14 @@ function sleep(ms) {
 
 // Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.dev.vars` — never
 // in Cloudflare's production env; `wrangler.jsonc` has no `vars` block, so this can never leak
-// into production by any path in this repo). Exists because production caching is disabled
-// pending KTO's caching-approval form (notes/attraction-gallery-report.md), which otherwise makes
-// manual QA of live data burn real quota on every reload. Only successful, non-degraded,
-// non-quota results are cached — a quota-exceeded response must keep reflecting real quota state
-// on every check, never a stale cached one. Module-level, no persistence: resets with the dev
-// process, same lifetime as `devSessionCallCount` above. 24h TTL: active development means
-// constantly reloading localhost, and a code change already resets this (a fresh `pages:dev`
-// module instance on file save) well before 24h would elapse on its own.
+// into production by any path in this repo). Exists because there is no production caching
+// (ARCHITECTURE.md §5), which otherwise makes manual QA of live data burn real quota on every
+// reload. Only successful, non-degraded, non-quota results are cached — a quota-exceeded
+// response must keep reflecting real quota state on every check, never a stale cached one.
+// Module-level, no persistence: resets with the dev process, same lifetime as
+// `devSessionCallCount` above. 24h TTL: active development means constantly reloading
+// localhost, and a code change already resets this (a fresh `pages:dev` module instance on file
+// save) well before 24h would elapse on its own.
 const DEV_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const devCache = new Map(); // request URL -> { result, expiresAt }
 

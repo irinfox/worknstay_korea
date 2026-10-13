@@ -194,9 +194,10 @@ regions; `topAttractions.json` already covers it.
 **Editorial data** (`src/_data/`; the files are the schema):
 - `site.json`, `regions.json` — site settings; the 6 regions; `cities.json` — workation cities (KTO codes, workspaces,
   study-café search rules, getting around), joined to regions via `regionSlug`.
-- `visaRules.json`, `populationDeclineAreas.json`, — visa thresholds and
-  Gyeonggi-do decline counties (§7); `populationSource.json` — KOSIS source for city populations. `populationDeclineAreasFull.json` is
-  the full MOIS list, unread by the build.
+- `visaRules.json` — visa thresholds; `populationDeclineAreas.json` — the Gyeonggi-do region's
+  decline counties (§7). The nationwide MOIS list is reference only, kept outside the build in
+  `notes/populationDeclineAreasFull.json`.
+- `populationSource.json` — KOSIS source for city populations.
 - `rentalMarketScan.js`, `settlingIn.json`, `food.json` — rent research, settling-in guide, dishes.
 - `studyCafeLevels.json` — level thresholds for Kakao® counts; `*Hero{Photos,Credits}.json` —
   cover photos and credits; `topAttractions.json` / `eventsSnapshot.json` — fallbacks (§5).
