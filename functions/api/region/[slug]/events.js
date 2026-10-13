@@ -33,8 +33,9 @@ export async function onRequestGet({ params, env }) {
 
   if (!env?.KTO_API_KEY) {
     return Response.json({
-      items: eventsSnapshot.filter((e) => e.regionSlug === slug),
+      items: eventsSnapshot.items.filter((e) => e.regionSlug === slug),
       quotaExceeded: false,
+      snapshotDate: eventsSnapshot.capturedAt,
       fallback: true, // served from the saved snapshot, not live KTO — the page says so
     });
   }

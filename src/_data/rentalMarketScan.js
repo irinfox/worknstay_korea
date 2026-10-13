@@ -21,11 +21,11 @@
 // comparison for Jeolla/Gyeongsang). Only Gangwon-do's scan included a deposit-charging
 // platform, so elsewhere deposit is a flat "none". Gyeonggi-do's rows break down by city instead.
 export default {
+  scanDate: "2026-09",
   regionSummary: [
     {
       regionSlug: "gyeonggi-do",
       furnishedShortTermMonthly: "₩1.4–2M+",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Seoul", tiers: [
             { size: "12–21 m²", value: "₩1–1.4M" },
@@ -45,7 +45,6 @@ export default {
     {
       regionSlug: "gangwon-do",
       furnishedShortTermMonthly: "₩1–1.4M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1–1.4M" },
         { label: "Typical size", value: "23–30 m² and up" },
@@ -60,7 +59,6 @@ export default {
     {
       regionSlug: "chungcheong-do",
       furnishedShortTermMonthly: "₩1–1.4M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1–1.4M" },
         { label: "Typical size", value: "20–40 m²" },
@@ -75,7 +73,6 @@ export default {
     {
       regionSlug: "gyeongsang-do",
       furnishedShortTermMonthly: "₩1.1–1.5M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1.1–1.5M" },
         { label: "Typical size", value: "24–33 m²" },
@@ -89,7 +86,6 @@ export default {
     {
       regionSlug: "jeolla-do",
       furnishedShortTermMonthly: "₩800K–1.2M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩800K–1.2M" },
         { label: "Typical size", value: "20–40 m²" },
@@ -103,7 +99,6 @@ export default {
     {
       regionSlug: "jeju-do",
       furnishedShortTermMonthly: "₩1.1–1.6M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1.1–1.6M" },
         { label: "Typical size", value: "23–30 m² and up" },

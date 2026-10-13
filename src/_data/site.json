@@ -1,6 +1,7 @@
 {
   "name": "worknstay korea",
   "tagline": "Work from Korea. Stay where it suits you.",
+  "dataDates": { "studyCafes": "2026-10" },
   "noindex": true,
   "nav": [
     { "label": "Regions", "href": "/#map" },

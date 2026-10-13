@@ -10,7 +10,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <h1>Settling in</h1>
   <div class="settling-hero__ko">정착하기</div>
   <p class="settling-hero__intro">A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in.</p>
-  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated }}</div>
+  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated | monthYear }}</div>
 </header>
 
 <div class="page-contents">
@@ -204,7 +204,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
         {% endfor %}
       </div>
 
-      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early September 2026 for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
+      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early {{ rentalMarketScan.scanDate | monthYear }} for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
     </div>
   </details>
 

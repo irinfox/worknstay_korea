@@ -81,7 +81,7 @@ eleventyComputed:
       </div>
       <div class="rent-summary__note">
         <div>Based on hand-checked, decent furnished listings available to foreigners.</div>
-        <div style="margin-top:4px">Last updated: September 2026.</div>
+        <div style="margin-top:4px">Last updated: {{ rentalMarketScan.scanDate | monthYear }}.</div>
       </div>
     </div>
     {% endif %}
@@ -264,7 +264,7 @@ eleventyComputed:
   {% endif %}
   {% if cityList.length %}
   <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
-  <p class="data-provenance" data-study-cafes-fallback-note hidden></p>
+  <p class="data-provenance" data-study-cafes-fallback-note hidden>Study-café data is a manual editorial estimate, last updated in {{ site.dataDates.studyCafes | monthYear }}. Live data currently unavailable.</p>
   <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="https://developers.kakao.com/docs/en/kakaomap/common" target="_blank" rel="noopener">Kakao® Local API ↗</a> results.</p>
   {% endif %}
 </section>

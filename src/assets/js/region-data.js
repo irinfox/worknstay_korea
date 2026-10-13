@@ -311,8 +311,12 @@ function buildUpcomingPanel(later) {
 }
 
 const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
-const EVENTS_PROVENANCE_FALLBACK =
-  "Source: © Korea Tourism Organization (한국관광공사), saved sample from 16 September 2026. Live data currently unavailable.";
+const eventsProvenanceFallback = (isoDate) => {
+  const when = new Date(`${isoDate}T00:00:00Z`).toLocaleDateString("en-GB", {
+    day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
+  });
+  return `Source: © Korea Tourism Organization (한국관광공사), saved sample from ${when}. Live data currently unavailable.`;
+};
 
 // Ongoing tab = "what's on around now": festivals currently running (often multi-month) plus
 // ones that start later this calendar month, as one list — each card carries a "Long-term" /
@@ -338,7 +342,7 @@ function renderEventsTimeline(container, data) {
   // that isn't there.
   const provenance = document.querySelector("[data-events-provenance]");
   if (provenance) provenance.hidden = quotaExceeded;
-  setProvenance(provenance, EVENTS_PROVENANCE_FALLBACK, fallback);
+  setProvenance(provenance, fallback ? eventsProvenanceFallback(data.snapshotDate) : "", fallback);
   if (quotaExceeded) {
     container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
     return;

@@ -31,6 +31,12 @@ export default function (eleventyConfig) {
     return readFileSync(filePath, "utf8").replace(/<\?xml[^>]*\?>\s*/, "");
   });
 
+  // Data files store dates as "YYYY-MM"; format at render time, e.g. "2026-09" -> "September 2026".
+  eleventyConfig.addFilter("monthYear", function (value) {
+    const [y, m] = String(value).split("-").map(Number);
+    return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+  });
+
   // Thousand-separator formatting for KRW figures (costOfLiving.json values are raw integers).
   eleventyConfig.addFilter("krw", function (value) {
     return new Intl.NumberFormat("en-US").format(value);
