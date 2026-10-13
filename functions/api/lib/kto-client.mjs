@@ -236,7 +236,7 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
 
 /**
  * Fetch all pages up to `maxPages`, deduping is the caller's job (contentId can repeat across
- * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md §5 Phase 22). Stops early once
+ * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md §5). Stops early once
  * a page returns fewer rows than requested or `totalCount` is covered. One degraded page
  * degrades the whole result (no partial-page merging) — a caller wanting partial-region
  * resilience across *codes* should call fetchKto per code itself (see region-map.mjs), not rely

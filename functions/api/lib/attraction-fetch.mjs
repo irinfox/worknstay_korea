@@ -79,14 +79,13 @@ const ROWS_PER_GROUP = 250;
 // living under KTO's "VE" top code — grouped with nature here.
 const VE07_WHITELIST = new Set(["VE070100", "VE070500", "VE070600"]);
 
-// Reclassification table for broad VE/HS results, keyed by lclsSystm2 — the client-side
-// equivalent of what used to be 6 separate narrowed calls (the 7th being the NA branch, handled
-// above). A VE/HS item whose lclsSystm2 isn't a key here is discarded: broadening the query pulls
+// Reclassification table for broad VE/HS results, keyed by lclsSystm2 — done in the Function
+// after one broad call, replacing what used to be 6 separate narrowed calls (the 7th being the
+// NA branch, handled above). A VE/HS item whose lclsSystm2 isn't a key here is discarded: broadening the query pulls
 // in sub-codes with zero curation history (e.g. VE02 shopping, HS02 monuments), and this table is
 // what keeps the reclassified result identical in *intent* to the narrow calls it replaces — see
 // the curation reference above for the full wanted/so-so/not-wanted breakdown behind each entry.
-// If a region/city's culture list ever comes back too thin, ROADMAP_TODO.md Phase 24 tracks
-// widening VE07 to its full range instead of the cut below.
+// VE07 stays limited to VE07_WHITELIST, not its full range: every city already has enough attractions.
 const RECLASSIFY_BY_LCLS_SYSTM2 = new Map([
   ["VE03", { category: "nature" }],
   ["HS01", { category: "culture" }],

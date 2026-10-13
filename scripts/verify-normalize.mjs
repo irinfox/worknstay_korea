@@ -1,4 +1,4 @@
-// Phase 21 verification — real live-captured raw samples (via kto-client.mjs, 2026-08-25)
+// Verification — real live-captured raw samples (via kto-client.mjs, 2026-08-25)
 // plus constructed edge cases for the quirks that don't show up in every sample. Run with:
 //   node scripts/verify-normalize.mjs
 import {

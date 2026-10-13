@@ -11,7 +11,7 @@ import { init as initPageContents } from "./page-contents.js";
 
 initNav();
 initKoreaMap();
-// Phase 17 glue: calculator computes eligibility and renders its own caption; this is the only
+// Glue: calculator computes eligibility and renders its own caption; this is the only
 // place that also tells the map about it (ARCHITECTURE.md §8 — map state only, not captions).
 initCalculator(applyResult);
 initRegionCard();

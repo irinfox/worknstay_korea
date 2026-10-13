@@ -1,4 +1,4 @@
-// One-off investigation for ROADMAP_TODO.md Phase 25's open item / notes/attraction-gallery-report.md
+// One-off investigation for notes/attraction-gallery-report.md
 // §4. Not a standing verify script. Pulls real `totalCount` (numOfRows: 1 — cheap, reflects the
 // full result set regardless of numOfRows, and costs the same one call as any other numOfRows)
 // for the 3 broad lclsSystm1 buckets (NA/VE/HS) across every lDongRegnCd code the site's 6 regions

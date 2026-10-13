@@ -439,7 +439,7 @@ ol.region-carousel__dots {
     transition: stroke 0.15s ease, stroke-width 0.15s ease, stroke-opacity 0.15s ease;
   }
 
-  /* Cross-hover: hovering/focusing a map region highlights its card too (Phase 18). */
+  /* Cross-hover: hovering/focusing a map region highlights its card too. */
   .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) [data-region-slug="gyeonggi-do"],
   .region-infographic:has(.region[data-slug="gangwon-do"]:hover) [data-region-slug="gangwon-do"],
   .region-infographic:has(.region[data-slug="chungcheong-do"]:hover) [data-region-slug="chungcheong-do"],
@@ -475,7 +475,7 @@ ol.region-carousel__dots {
     border-color: var(--color-text-muted);
   }
 
-  /* Leader-line highlight, triggered from either end (Phase 18). */
+  /* Leader-line highlight, triggered from either end. */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],
   .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region-infographic__lines line[data-slug="gyeonggi-do"],
   .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],

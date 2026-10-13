@@ -1,5 +1,5 @@
 // Live KTO call (ARCHITECTURE.md §5) — areaBasedList2, one broad call per lDongRegnCd code per
-// lclsSystm1 top bucket (NA/VE/HS), reclassified client-side into today's curated lclsSystm2/3
+// lclsSystm1 top bucket (NA/VE/HS), reclassified server-side (in this Function) into today's curated lclsSystm2/3
 // whitelist (not the retired cat1/2/3 tree, which under-surfaced popular sites). Fanned out
 // across every lDongRegnCd code a region owns (Promise.allSettled: one code/bucket failing only
 // drops that slice), deduped by contentId. Edge caching is disabled in production pending KTO's
@@ -18,8 +18,7 @@ import { citySlugFor } from "../../lib/city-map.mjs";
 import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
 
 // Display-order priority per region (not a filter — every bucket fetched by fetchRegionAttractions
-// is always fetched). Provisional; user wants to refine after seeing live results
-// (ROADMAP_TODO.md Phase 24).
+// is always fetched).
 const CATEGORY_PRIORITY = {
   "gyeonggi-do": "culture",
   "gyeongsang-do": "culture",

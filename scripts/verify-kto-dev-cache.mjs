@@ -1,4 +1,4 @@
-// Phase 25 verification — stubs globalThis.fetch with a call-counting fake, no live KTO calls
+// Verification — stubs globalThis.fetch with a call-counting fake, no live KTO calls
 // needed. Run with:
 //   node scripts/verify-kto-dev-cache.mjs
 import { fetchKto } from "../functions/api/lib/kto-client.mjs";

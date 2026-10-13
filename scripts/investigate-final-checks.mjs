@@ -1,5 +1,4 @@
-// One-off investigation for ROADMAP_TODO.md Phase 25's "final checks" item /
-// notes/attraction-gallery-report.md §7. Runs the shipped broad-collapse
+// One-off investigation for notes/attraction-gallery-report.md §7. Runs the shipped broad-collapse
 // `fetchRegionAttractions` (functions/api/lib/attraction-fetch.mjs) once per region — the exact
 // production fetch/classify/dedupe path, just with a script-local `citySlugFor` standing in for
 // city-map.mjs (which reads cities.json without an import attribute — fine for Cloudflare's

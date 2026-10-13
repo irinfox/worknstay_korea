@@ -1,4 +1,4 @@
-// ROADMAP_TODO.md Phase 23 — region pages fetch live KTO data at request time from
+// Region pages fetch live KTO data at request time from
 // functions/api/region/[slug]/{attractions,events}.js, replacing the old build-time mock loop
 // (ARCHITECTURE.md §5: KTO-sourced content can't be a git-committed/build-time snapshot).
 // No-JS story: each mount's <noscript> fallback (region.njk) is the real degraded path — an
@@ -67,7 +67,7 @@ function renderAttractions(container, data) {
     .map((a) => {
       // imageLicense is null for an unlicensed/missing image (normalize.mjs) — never render
       // those, per CLAUDE.md rule 4/ARCHITECTURE.md §5. object-fit: cover applies to Type1/Type3
-      // alike, a deliberate call (ROADMAP Phase 31), not an oversight.
+      // alike, a deliberate call, not an oversight.
       // KTO's firstimage/firstimage2 don't always both resolve — one can 404 on KTO's own CDN
       // even though the license and the other URL are fine (ARCHITECTURE.md §5). data-fallback
       // carries the other URL so setupImageFallback can recover instead of showing a broken

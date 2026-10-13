@@ -1,4 +1,4 @@
-// ROADMAP_TODO.md Phase 15 verify step: one hand-computed case per eligibility tier, run against
+// Verification — one hand-computed case per eligibility tier, run against
 // the real data files (not fixtures) so this also catches drift if visaRules.json or
 // populationDeclineAreas.json change. Run with: node scripts/verify-eligibility.mjs
 import { calculateEligibility } from "../src/assets/js/eligibility.js";

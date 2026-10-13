@@ -207,7 +207,7 @@ function buildInvalidInputResult(referenceData) {
   };
 }
 
-// "Show all regions" reset (ROADMAP feedback): a visitor who doesn't know their salary/age yet,
+// "Show all regions" reset: a visitor who doesn't know their salary/age yet,
 // or just wants to browse, had no way to see an un-gated map short of typing throwaway numbers
 // that happen to clear every threshold. Shares eligibility.js's own "all" tier shape — that tier
 // already means nothing dimmed/partial — so this is what a real "all" result looks like, not a

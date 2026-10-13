@@ -1,4 +1,4 @@
-{# Home-page hero (ARCHITECTURE.md Phase 14, restyled to DESIGN.md § "Homepage" / design
+{# Home-page hero (restyled to DESIGN.md § "Homepage" / design
    reference 5a): full-bleed cover photo behind the transparent site header (see .has-hero in
    header.css/base.njk), holding the headline block (orange 56×3 rule → H1 → intro) and the
    photo-credit line. The calculator card overlaps the photo's lower edge — its top sits on the
@@ -51,7 +51,7 @@
         {% endif %}
       </div>
 
-      {# Calculator (Phase 16): real <form>, calculator.js calls eligibility.js and renders the
+      {# Calculator: real <form>, calculator.js calls eligibility.js and renders the
        caption itself into #calc-msg below. JS-only per CLAUDE.md rule 6 — the
        <noscript> fallback sends no-JS visitors to the static thresholds table instead.
        Markup order here is free to change (calculator.js keys off data-* / element names, not
@@ -115,8 +115,8 @@
         <button type="button" class="calculator-form__reset" data-calculator-reset>Clear</button>
       </form>
 
-      {# Result-caption mount point — calculator.js (Phase 16) owns all caption rendering here;
-         korea-map.js (Phase 17) only applies map state, it doesn't touch this element. Sits
+      {# Result-caption mount point — calculator.js owns all caption rendering here;
+         korea-map.js only applies map state, it doesn't touch this element. Sits
          inside the card but outside the <form> so form.reset() and form.elements never see it.
          id="calc-msg" is what the fields' aria-describedby points at — aria-live="polite" means
          every result or validation message gets announced whether or not it's what moved focus. #}

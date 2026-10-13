@@ -1,4 +1,4 @@
-// Phase 20 verification — exercises kto-client.mjs against the real live API (contributes to
+// Verification — exercises kto-client.mjs against the real live API (contributes to
 // the contest's call-history log) plus a forced-failure case. Run with:
 //   node --env-file=.env scripts/verify-kto-client.mjs
 import { fetchKto, fetchKtoAllPages } from "../functions/api/lib/kto-client.mjs";

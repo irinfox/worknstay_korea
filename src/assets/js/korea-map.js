@@ -1,4 +1,4 @@
-// ROADMAP_TODO.md Phase 17: applyResult() toggles .region--active/--partial/--ineligible on the
+// applyResult() toggles .region--active/--partial/--ineligible on the
 // map's real <a href> region links and click-gates ineligible ones. Click-gating means the
 // element stops being a link at all (href removed) rather than staying a link with JS-only
 // preventDefault — CLAUDE.md rule 6 already requires every region link to be a real <a href>,

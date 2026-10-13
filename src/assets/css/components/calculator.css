@@ -1,5 +1,5 @@
 /*
- * Eligibility calculator (Phase 16), restyled to DESIGN.md § "Homepage": a white card that
+ * Eligibility calculator, restyled to DESIGN.md § "Homepage": a white card that
  * overlaps the hero photo's lower edge (positioning is in hero.css — .hero__calculator). The
  * comparison logic and its messages are frozen; this file is layout, colour and states only.
  *
