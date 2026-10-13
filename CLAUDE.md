@@ -64,7 +64,7 @@ guardrail, not just the list.
    `src/`, `_site/`, or any template.
 3. `lDongRegnCd` is the canonical KTO regional key. `areacode` is empty on festival records —
    never rely on it for filtering.
-4. Content and numbers (visa thresholds, cost-of-living figures, region metadata) live in
+4. Content and numbers (visa thresholds, rent figures, region metadata) live in
    `src/_data/*.json`, never hardcoded in templates or JS.
    - Unverified/placeholder values in `_data/*.json` are marked inline with the literal string
      `MOCK` or `PLACEHOLDER` in a `source`/`credit`/`note`/`url` field on that record — never
@@ -82,25 +82,7 @@ guardrail, not just the list.
    `nameEn` and `nameKo` — don't strip this "for simplicity," it's there for the planned
    post-MVP language extension and for users cross-referencing Naver Map by Korean name.
 
-## Feedback log (approach decisions made and why)
+## UX decisions
 
-- Rejected *dynamic, hover-triggered* floating popups for the region map info panel — bug-prone
-  (edge clipping, z-index, mobile focus-trap). Adopted instead: a **static, always-visible
-  infographic** (6 fixed callouts + hand-positioned leader lines, all authored once, nothing
-  computed at runtime) above a width breakpoint. The breakpoint is width-only (not a
-  device/orientation check) specifically so wide landscape phones get the infographic too, not
-  just desktop. Border/leader-line/callout highlight on hover (wide) is v1, not deferred polish.
-- Below the breakpoint: a real horizontal scroll-snap **carousel of all 6 region cards + dot
-  indicators** (redesign, superseding the earlier "single card whose content JS overwrites on
-  map tap" approach) — tapping a map region scrolls to the matching real card instead of
-  rewriting one placeholder's content. Simpler no-JS fallback (every card is a real, always-
-  rendered link) and matches the wide-viewport infographic's "all 6 always present" principle.
-- Rejected pure build-time-fetch-and-commit for KTO data after reading the contest FAQ — judges
-  check live call history, not just that OpenAPI was used once during a scrape. This is a
-  contest-compliance decision, not a taste preference — don't revert to full static-bake for
-  KTO content even if it'd simplify hosting.
-- Ineligible (greyed) regions are intentionally not clickable through — showing them as
-  navigable would misrepresent the visa-eligibility gating that's the site's core value prop.
-- Region map uses real province boundaries (Wikimedia source, simplified), not placeholder
-  shapes — user wants genuine geography. Jeju keeps its true geographic distance (sea-tinted
-  background, not an inset) — deliberate, don't "fix" the gap.
+Region map and info panel, carousel, eligibility gating: decisions and reasons live in
+`architecture.md` §3 (map conventions included). Read them before changing any of those.

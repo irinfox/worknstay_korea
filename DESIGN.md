@@ -122,6 +122,12 @@ full-width cards with a peeking edge (region, city) get dots. Where roughly a th
 the next card is visible, that cut card is the affordance — no dots.
 
 Blurbs are never clamped to make a row line up — equal height comes from `align-items:stretch`.
+
+**Implementation.** Header nav is one `<ul>` always in the DOM (never two navs); `nav.js` toggles
+`[aria-expanded]` on the burger, which shows under ~768px. Swipe rows are plain CSS
+(`scroll-snap-type: x mandatory` + `overflow-x: auto`) — no carousel library, no JS needed. The
+region map's Jeju shape has an invisible `.region__hit-target` ellipse that pads its tap area to
+≥44px at 360px width (the shape alone is ~39px tall).
 `src/_data/` is verified content: the layout adapts to it, never the reverse.
 
 Stepping controls are one size site-wide: the festival pager matches the region-page gallery
