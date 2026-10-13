@@ -1,3 +1,15 @@
+/* Metric-matched fallback for Instrument Sans (Capsize values from the served v4 latin woff2 vs
+   Arial) so the swap to the web font doesn't re-wrap text. Liberation Sans/Arimo are
+   Arial-metric clones for Linux. */
+@font-face {
+  font-family: "Instrument Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
+  size-adjust: 102.7365%;
+  ascent-override: 94.4163%;
+  descent-override: 24.3341%;
+  line-gap-override: 0%;
+}
+
 :root {
   /*
    * Color — the DESIGN.md palette. "Reference tool, not a magazine": white ground, quiet type,
@@ -123,7 +135,7 @@
   /* Type (DESIGN.md § Type — two families, no others; loaded via the single Google Fonts link
      in base.njk). --font-family-base is the Latin default set once on body; --font-family-ko is
      applied only to elements holding Hangul (region/city/dish names, Korean subheads). */
-  --font-family-base: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-base: "Instrument Sans", "Instrument Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-family-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --font-size-base: 0.9375rem; /* DESIGN.md § Type — body 15px */
