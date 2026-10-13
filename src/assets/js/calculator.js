@@ -1,6 +1,6 @@
 import { calculateEligibility } from "./eligibility.js";
 
-// architecture.md §7 / eligibility.js precondition: age must be validated >= this before
+// ARCHITECTURE.md §7 / eligibility.js precondition: age must be validated >= this before
 // calling calculateEligibility() — this function doesn't handle under-18 itself.
 const MIN_APPLICANT_AGE = 18;
 
@@ -280,7 +280,7 @@ function hasReadableInput(userInput, rawInput) {
   );
 }
 
-// architecture.md §8: calculator.js owns caption rendering; main.js's glue passes onResult so
+// ARCHITECTURE.md §8: calculator.js owns caption rendering; main.js's glue passes onResult so
 // korea-map.js's applyResult() can react to the same result for map state only — one-directional,
 // no event bus, no separate module.
 export function init(onResult = () => {}) {

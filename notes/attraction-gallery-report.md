@@ -26,7 +26,7 @@ Two related rejections, logged here since they inform the numbers below:
 - Even under the correct sort, a live measurement on Seoul (`lDongRegnCd 11`, `contentTypeId 76`)
   found **455 total records**, with Gyeongbokgung Palace ranking **#32** by view count — a naive
   "just take the top N" cut would still miss it. This is why curated picks are boosted into live
-  results (`boost-curated.mjs`, `topAttractions.json`, architecture.md §5) rather than trusting
+  results (`boost-curated.mjs`, `topAttractions.json`, ARCHITECTURE.md §5) rather than trusting
   the algorithmic sort alone, and why "broadening the query" (below) needed real per-item
   verification, not just a totalCount comparison, before trusting it wouldn't reintroduce the same
   crowding problem.

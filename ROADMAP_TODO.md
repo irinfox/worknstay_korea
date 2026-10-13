@@ -17,15 +17,15 @@ until Phase 19.
 - [x] **12 — Population-decline areas.** MOIS 인구감소지역 list sourced into
       `populationDeclineAreas.json` (7 gyeonggi-do records); 107-record nationwide backup in
       `populationDeclineAreasFull.json`. `cities.json` `isPopulationDeclineArea` flags updated
-      (`ganghwa` only). See architecture.md §7.
+      (`ganghwa` only). See ARCHITECTURE.md §7.
 - [x] **13 — Real Korea boundary SVG.** 17 source shapes simplified into the 6 region groups;
       `regions.json` centroids + 6 leader-line coords re-derived; labels positioned; Jeju hit
       target padded to ≥44px via `.region__hit-target`. Inlined SVG ~49KB (≤60KB budget). SVG
-      structure contract now in architecture.md §3.
+      structure contract now in ARCHITECTURE.md §3.
 - [x] **14 — Home hero + layout.** `partials/hero.njk` + `hero.css`, calculator/result mount
       points, intro copy, KTO-sourced Type1 hero photo. Narrow/wide viewport bug pass.
 - [x] **15 — `eligibility.js`.** Pure `(userInput, referenceData) → EligibilityResult`
-      (architecture.md §6); `'partial'` tier via `partialRegionSlugs[]`, global `tier` stays
+      (ARCHITECTURE.md §6); `'partial'` tier via `partialRegionSlugs[]`, global `tier` stays
       3-way. Review caught the rounded-GNI bug → `visaRules.json` now stores MOJ's published
       figures via `thresholdsByMultiplier`. Verify: `scripts/verify-eligibility.mjs`.
 - [x] **16 — `calculator.js` + caption + persistence.** Real `<form>` with inline validation
@@ -44,7 +44,7 @@ until Phase 19.
 - [x] **19 — Deploy.** Cloudflare Pages project, `KTO_API_KEY`/`KTO_GALLERY_API_KEY` secrets,
       native Web Analytics, custom `src/404.njk`, `robots.txt` disallow-all + `noindex` (both
       come off in Phase 29). Secret-leak check clean. `functions/**` JSON-import constraint →
-      architecture.md §4.
+      ARCHITECTURE.md §4.
 
 ## Phases 20–22 — done (KTO client → normalize → live endpoints)
 
@@ -53,7 +53,7 @@ until Phase 19.
       throws. Verify: `scripts/verify-kto-client.mjs`.
 - [x] **21 — `normalize.mjs`.** `isUpcomingOrOngoing` (guards `eventStartDate` start-only
       filtering), unknown-`cpyrhtDivCd` images dropped, title En/Ko split, entity strip,
-      http→https. KTO quirks list is architecture.md §5. Verify: `scripts/verify-normalize.mjs`.
+      http→https. KTO quirks list is ARCHITECTURE.md §5. Verify: `scripts/verify-normalize.mjs`.
 - [x] **22 — Endpoint wiring + fan-out + caching.** Both endpoints live; mock JSON is the
       `KTO_API_KEY`-absent dev fallback. Multi-code regions fan out via `Promise.allSettled`,
       dedupe by `contentid`, one code failing drops only its items. Cache via `cf.cacheTtl` —
@@ -102,7 +102,7 @@ KTO confirmed any caching needs a separate approval form (3-5 day review, won't 
 deadline) — real-time calls only in production. Full report: `notes/attraction-gallery-report.md`.
 
 - [x] Drop production caching in `attractions.js`/`events.js`; dev-only cache via
-      `KTO_DEV_CACHE=1` instead. architecture.md §5 updated.
+      `KTO_DEV_CACHE=1` instead. ARCHITECTURE.md §5 updated.
 - [x] Pre-flight `arrange` probe replaces the reactive whole-fan-out retry — never double-pays.
 - [x] Real "Elsewhere" filter tab — closes the open item from Phase 24.
 - [x] Boost top picks into live results (`boost-curated.mjs`, new); `src/_data/mock/attractions.json`
@@ -121,7 +121,7 @@ deadline) — real-time calls only in production. Full report: `notes/attraction
       empty-filter-combination sweep, see `notes/attraction-gallery-report.md` §7. Broad collapse
       resolved the Seongnam/Cheongju empty-combo cases as a side effect.
 - [x] `locationBasedList2` as a second-tier fallback — rejected, logged in
-      architecture.md §11.
+      ARCHITECTURE.md §11.
 - [x] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported
       (KTO returns `totalCount: 0` for a comma-joined value). Dropping codes from a region's
       fan-out — rejected, every code is load-bearing (region or its metro city).
@@ -160,7 +160,7 @@ Milestone bucket, not a day/branch phase.
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
       right before submission.
 - [x] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
-- [ ] refactor pass: code + docs (architecture.md / ROADMAP / SCAFFOLDING) — drop anything stale
+- [ ] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP / SCAFFOLDING) — drop anything stale
       or excessive
 - [decide] Real interactive event calendar (month-to-month navigation, hover detail on event
       days) on top of Phase 23's timeline list — worth building given remaining time?
@@ -175,7 +175,7 @@ Phase 29's deploy freeze, since it can change calculator output for real regions
 - [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과, contact in
       `visa_rules.pdf` p.2, or immigration.go.kr) whether the 18 「관심지역」 watch counties
       qualify for the lower threshold, or only the 89 official 「인구감소지역」 do — see
-      architecture.md §7. If narrow: drop the 3 `category: 'watch'` rows from
+      ARCHITECTURE.md §7. If narrow: drop the 3 `category: 'watch'` rows from
       `populationDeclineAreas.json` (and from the full backup).
       Sources: [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
       [official mirror PDF](https://www.kla.kr/api/boards/6/posts/25311/files/4305/download),
@@ -195,7 +195,7 @@ Phase 29's deploy freeze, since it can change calculator output for real regions
 ## Cut / descoped
 
 **Decided cuts:** `/regions/` index page — regions are navigable from the interactive map only.
-Nomad score stays a static editorial int (architecture.md §6).
+Nomad score stays a static editorial int (ARCHITECTURE.md §6).
 
 **Proposed cuts, not yet confirmed:** nature activities / Go Camping API integration (leaning
 cut); tax-info page content — currently one disclaimer line instead of real guidance.

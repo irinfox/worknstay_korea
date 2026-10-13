@@ -1,4 +1,4 @@
-// Live KTO OpenAPI transport (architecture.md §5) — EngService2 only (areaBasedList2,
+// Live KTO OpenAPI transport (ARCHITECTURE.md §5) — EngService2 only (areaBasedList2,
 // searchFestival2). Owns URL building, paging, timeout, and bounded 429/5xx
 // backoff-retry. Never throws: any failure (missing key, network error, timeout, non-2xx,
 // bad JSON, non-zero resultCode) degrades to { items: [], degraded: true } so callers can
@@ -147,7 +147,7 @@ function extractItems(body) {
  *   repeat identical calls from an in-memory cache instead of hitting KTO again.
  *   `KTO_DEV_FORCE_QUOTA: "1"` (dev-only) short-circuits to a quota-exceeded result with no
  *   network call, to QA the fallback UI on demand.
- * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (architecture.md §5); omit
+ * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (ARCHITECTURE.md §5); omit
  *   to bypass the edge cache (used for verify scripts and other one-off calls).
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
@@ -236,7 +236,7 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
 
 /**
  * Fetch all pages up to `maxPages`, deduping is the caller's job (contentId can repeat across
- * a fan-out of multiple lDongRegnCd codes — see architecture.md §5 Phase 22). Stops early once
+ * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md §5 Phase 22). Stops early once
  * a page returns fewer rows than requested or `totalCount` is covered. One degraded page
  * degrades the whole result (no partial-page merging) — a caller wanting partial-region
  * resilience across *codes* should call fetchKto per code itself (see region-map.mjs), not rely

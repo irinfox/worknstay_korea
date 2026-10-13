@@ -43,7 +43,7 @@ maintaining this solo:
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting, plus
   a thin serverless proxy for the one thing that needs a backend: live KTO API calls
 
-See [`architecture.md`](./architecture.md) for the full breakdown of this stack, data models, and
+See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full breakdown of this stack, data models, and
 known quirks of the KTO API.
 
 ## Why the API calls are live
@@ -117,7 +117,7 @@ scripts/                 Standalone verification scripts (no test framework)
 
 ## Contributing / project docs
 
-- [`architecture.md`](./architecture.md) — stack, folder structure, data models, and KTO
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind the notable decisions
 - [`DESIGN.md`](./DESIGN.md) — visual/design conventions
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest

@@ -1,4 +1,4 @@
-// Live KTO call (architecture.md §5) — areaBasedList2, one broad call per lDongRegnCd code per
+// Live KTO call (ARCHITECTURE.md §5) — areaBasedList2, one broad call per lDongRegnCd code per
 // lclsSystm1 top bucket (NA/VE/HS), reclassified client-side into today's curated lclsSystm2/3
 // whitelist (not the retired cat1/2/3 tree, which under-surfaced popular sites). Fanned out
 // across every lDongRegnCd code a region owns (Promise.allSettled: one code/bucket failing only

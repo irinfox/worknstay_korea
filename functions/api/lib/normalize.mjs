@@ -1,5 +1,5 @@
-// Raw KTO EngService2 item -> our Attraction/Event models (architecture.md §6). Encodes the
-// "known quirks" list in architecture.md §5, confirmed against live-captured samples: bilingual
+// Raw KTO EngService2 item -> our Attraction/Event models (ARCHITECTURE.md §6). Encodes the
+// "known quirks" list in ARCHITECTURE.md §5, confirmed against live-captured samples: bilingual
 // title split, HTML-entity strip, http->https, license gating (never render an image with a
 // missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset).
 //
@@ -62,7 +62,7 @@ function splitTitle(rawTitle) {
 }
 
 // Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use"
-// (architecture.md §5).
+// (ARCHITECTURE.md §5).
 function licenseOf(raw) {
   return KNOWN_LICENSES.has(raw) ? raw : null;
 }

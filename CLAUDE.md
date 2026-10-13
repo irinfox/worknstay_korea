@@ -3,7 +3,7 @@
 English-language web service helping Digital Nomad Visa (F-1-D) holders find and settle in a
 non-capital Korean region. Solo-developer MVP for the 2026 관광데이터 활용 공모전
 (②-2 웹·앱 구현 부문), Designated Task #4 (sustainable long-term residency vs. one-off tourism
-in population-declining regions). See `architecture.md` for full technical detail — this file is
+in population-declining regions). See `ARCHITECTURE.md` for full technical detail — this file is
 the durable, brief set of project-scope agreements.
 
 ## Contest constraints (do not violate)
@@ -13,7 +13,7 @@ the durable, brief set of project-scope agreements.
   pure build-time-fetch / committed-JSON-only pipeline for KTO-sourced content** — it reads as
   "local DB storage," which the contest FAQ explicitly discourages and flags as inspectable.
   KTO-sourced content (attractions, festivals, hero images) must go through the live proxy
-  layer described in architecture.md, not git-committed snapshots.
+  layer described in ARCHITECTURE.md, not git-committed snapshots.
 - Submission needs a **live URL** (web track requires no store approval, just a working link).
 - One designated task only: **#4**. Feature work should trace back to its hashtags
   (#workation #month-long-stay #2030s-youth #local-tourism) — the functional spec submission
@@ -39,8 +39,8 @@ the durable, brief set of project-scope agreements.
      the key set, and also add `KTO_DEV_CACHE=1` to `.dev.vars`. Repeat identical calls are then
      served from an in-memory cache instead of hitting KTO again. Dev-only — never set this in
      Cloudflare's production environment.
-- `architecture.md` is a decisions record, not a scratchpad. So keep two rules:
-1. Never reference ROADMAP_TODO.md phase numbers inside architecture.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; architecture.md is supposed to be "independent of project scheduling" per its own header.
+- `ARCHITECTURE.md` is a decisions record, not a scratchpad. So keep two rules:
+1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is supposed to be "independent of project scheduling" per its own header.
 2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.
 - keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase or marked as undone during current phase.
 
@@ -52,7 +52,7 @@ Keep existing site copy — the design HTML is layout/style reference only.
 
 Eleventy (11ty) v3 + Nunjucks, hand-written CSS, vanilla ES module JS, inline SVG map,
 Cloudflare Pages + Pages Functions. Zero client-side libraries. One direct npm dependency.
-No database. See architecture.md §2 for why each choice was made — the reasoning is the
+No database. See ARCHITECTURE.md §2 for why each choice was made — the reasoning is the
 guardrail, not just the list.
 
 ## Non-negotiable rules
@@ -85,4 +85,4 @@ guardrail, not just the list.
 ## UX decisions
 
 Region map and info panel, carousel, eligibility gating: decisions and reasons live in
-`architecture.md` §3 (map conventions included). Read them before changing any of those.
+`ARCHITECTURE.md` §3 (map conventions included). Read them before changing any of those.

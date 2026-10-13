@@ -9,7 +9,7 @@
 // (Phase 16) sources it and calls this function; this module never touches the DOM or fetches
 // anything itself.
 //
-// architecture.md §6/§8: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
+// ARCHITECTURE.md §6/§8: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
 // per-region (today only gyeonggi-do), carried via partialRegionSlugs[] rather than a 4th tier.
 
 // Precondition, not a runtime edge case this function is expected to handle: callers must
@@ -41,7 +41,7 @@ function thresholdFor(multiplier, rules) {
  * @param {object} userInput
  * @param {number} userInput.salaryKrw - annual salary in KRW
  * @param {number} userInput.age
- * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (architecture.md
+ * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (ARCHITECTURE.md
  *   §7: overrides the age-based multiplier with a flat family multiplier, regardless of age)
  * @param {object} referenceData
  * @param {object} referenceData.rules - visaRules.json

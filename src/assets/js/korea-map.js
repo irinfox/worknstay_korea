@@ -37,7 +37,7 @@ function dimLink(link) {
 // Every call restores every region to baseline (active, real href) before applying the new
 // result, rather than layering classes on top of whatever the previous run left — otherwise a
 // region eligible under this result but dimmed by a previous one would stay stuck dimmed
-// (architecture.md §8 "restore path").
+// (ARCHITECTURE.md §8 "restore path").
 function restoreMapLink(link) {
   link.classList.remove(...STATE_CLASSES);
   link.classList.add("region--active");

@@ -118,7 +118,7 @@
 
 /* Phase 17: eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for
    .region--active — the base .region__shape/.region__city rules above already render that
-   state, since it's also what the map shows before any calculator run (architecture.md §8:
+   state, since it's also what the map shows before any calculator run (ARCHITECTURE.md §8:
    "un-gated by default"). */
 /* Flat "Green light" fill for the partly-eligible state (DESIGN.md palette), not the old hatch —
    the legend swatch below matches. */
@@ -316,7 +316,7 @@
 /* All 17 admin-division names + city carve-outs, at every width — confirmed on a real Pixel 9
    (2026-08-21) that full detail naming reads fine at phone width, so the earlier
    merged-region-summary fallback (Chungcheong-do/Gyeongsang-do/Jeolla-do as one label each)
-   was retired; see architecture.md §9. */
+   was retired; see ARCHITECTURE.md §9. */
 .region__label--detail {
   display: block;
   font-size: 17px;

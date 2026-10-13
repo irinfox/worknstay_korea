@@ -1,6 +1,6 @@
 // ROADMAP_TODO.md Phase 23 — region pages fetch live KTO data at request time from
 // functions/api/region/[slug]/{attractions,events}.js, replacing the old build-time mock loop
-// (architecture.md §5: KTO-sourced content can't be a git-committed/build-time snapshot).
+// (ARCHITECTURE.md §5: KTO-sourced content can't be a git-committed/build-time snapshot).
 // No-JS story: each mount's <noscript> fallback (region.njk) is the real degraded path — an
 // honest "needs JavaScript" message with an outbound link, not fake/stale data. That's inert the
 // moment JS runs, since init() below replaces the mount's innerHTML unconditionally.
@@ -43,7 +43,7 @@ function renderAttractions(container, data) {
   const quotaExceeded = !Array.isArray(data) && Boolean(data.quotaExceeded);
   // fallback: the endpoint served the saved top-picks set without trying KTO (no key configured).
   const fallback = !Array.isArray(data) && Boolean(data.fallback);
-  // KTO's daily call quota being gone (architecture.md §5) means attractions.js already fell
+  // KTO's daily call quota being gone (ARCHITECTURE.md §5) means attractions.js already fell
   // back to the curated set rather than send an empty/partial list — so the subtitle should
   // say "today's picks", not imply this is the full live gallery. Reset to the default on every
   // render (not just set-once) so a page that loads mid-outage and later re-fetches doesn't keep
@@ -66,10 +66,10 @@ function renderAttractions(container, data) {
   container.innerHTML = attractions
     .map((a) => {
       // imageLicense is null for an unlicensed/missing image (normalize.mjs) — never render
-      // those, per CLAUDE.md rule 4/architecture.md §5. object-fit: cover applies to Type1/Type3
+      // those, per CLAUDE.md rule 4/ARCHITECTURE.md §5. object-fit: cover applies to Type1/Type3
       // alike, a deliberate call (ROADMAP Phase 31), not an oversight.
       // KTO's firstimage/firstimage2 don't always both resolve — one can 404 on KTO's own CDN
-      // even though the license and the other URL are fine (architecture.md §5). data-fallback
+      // even though the license and the other URL are fine (ARCHITECTURE.md §5). data-fallback
       // carries the other URL so setupImageFallback can recover instead of showing a broken
       // image; a li that has neither renders straight to the placeholder as before.
       const primary = a.imageThumbUrl || a.imageUrl;
@@ -78,7 +78,7 @@ function renderAttractions(container, data) {
         ? `<img class="attraction-card__media" src="${primary}"${fallback ? ` data-fallback="${fallback}"` : ""} alt="${escapeHtml(a.titleEn)}" loading="lazy">`
         : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
       // a.category/a.citySlug come from the whitelist lclsSystm1/2/3 match + lDongSignguCd city
-      // lookup in functions/api/region/[slug]/attractions.js (architecture.md §5) — surfaced
+      // lookup in functions/api/region/[slug]/attractions.js (ARCHITECTURE.md §5) — surfaced
       // here as data-category/data-city so attraction-filters.js can filter without a refetch.
       const category = a.category === "nature" ? "Nature" : "Culture";
       // KTO's EngService2 leaves addr1/addr2 both blank on some records (e.g. Ara-dong History

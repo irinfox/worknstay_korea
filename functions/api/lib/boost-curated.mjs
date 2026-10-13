@@ -1,4 +1,4 @@
-// Boosts curated attraction picks into live areaBasedList2 results (architecture.md §5) — pure
+// Boosts curated attraction picks into live areaBasedList2 results (ARCHITECTURE.md §5) — pure
 // function, no KTO calls. Runs per-category bucket
 // (nature/culture split independently, then recombined) *before* attractions.js's
 // `CATEGORY_PRIORITY` sort; that sort is stable, so the interleave built here survives it.

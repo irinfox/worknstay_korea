@@ -69,7 +69,7 @@ function initTapToFill() {
       return;
     }
 
-    // Wide viewport lets the click navigate normally (architecture.md §3) — only narrow
+    // Wide viewport lets the click navigate normally (ARCHITECTURE.md §3) — only narrow
     // viewport substitutes tap-to-fill-the-single-card for real navigation.
     event.preventDefault();
     selectRegion(link, link.dataset.slug);

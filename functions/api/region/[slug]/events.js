@@ -1,4 +1,4 @@
-// Live KTO call (architecture.md §5) — searchFestival2, fanned out across every lDongRegnCd code
+// Live KTO call (ARCHITECTURE.md §5) — searchFestival2, fanned out across every lDongRegnCd code
 // a region owns (one code failing only drops that code's items), deduped by contentId. Edge
 // caching is disabled in production pending KTO's caching-approval form
 // (notes/attraction-gallery-report.md) — every page view is a live call. `eventStartDate` is set
