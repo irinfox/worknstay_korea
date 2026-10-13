@@ -1,5 +1,5 @@
-/* Footer (DESIGN.md): white ground, a single hairline on top. The disclaimer + "About" sit on
-   one row (muted 13px disclaimer left, green link right). On region pages, a row of prev/next
+/* Footer (DESIGN.md): white ground, a single hairline on top. The disclaimer + GitHub/Feedback links sit on
+   one row (muted 13px disclaimer left, orange outbound links right). On region pages, a row of prev/next
    region links sits above that (design reference). */
 .site-footer {
   border-top: 1px solid var(--color-border-soft);
@@ -18,12 +18,12 @@
 /* Prev/next region links — their own row above the disclaimer: prev flush with the content's
    left edge, next flush with its right edge (margin-left:auto also right-aligns "next" when
    it's the only link, e.g. the first region). The wide gap below (in place of a second
-   hairline) keeps this row visually separate from the © / About line. */
+   hairline) keeps this row visually separate from the © line. */
 .site-footer__regions {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 20px;
-  /* Separates this row from the © / About line without a hairline — ~32px of visible space
+  /* Separates this row from the © line without a hairline — ~32px of visible space
      between the two rows' text. */
   margin-bottom: 28px;
 }
@@ -35,8 +35,15 @@
 .site-footer__row {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 12px;
+}
+
+.site-footer__links {
+  display: flex;
+  flex-shrink: 0;
+  gap: 20px;
+  white-space: nowrap;
 }
 
 .site-footer__disclaimer {
@@ -63,6 +70,20 @@
   text-decoration: underline;
 }
 
+/* Outbound (target=_blank): orange, always underlined, ↗ in the label; hover to orange ink
+   (DESIGN.md § Links). */
+.site-footer__link--out,
+.site-footer__link--out:visited {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.site-footer__link--out:hover,
+.site-footer__link--out:focus-visible {
+  color: var(--color-accent-ink);
+  text-decoration: underline;
+}
+
 @media (min-width: 768px) {
   .site-footer__inner {
     padding: 28px var(--space-4);
@@ -70,7 +91,7 @@
 
   .site-footer__row {
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
   }
