@@ -52,15 +52,15 @@
         "kind": "coworking · coliving",
         "url": "https://www.hoppin.life/hoppinhouse/coliving",
         "instagram": "hoppin.life",
-        "address": "7-10 Yeonhui-ro 2-an-gil, Seodaemun-gu, Seoul (03784)",
-        "addressKo": "서울 서대문구 연희로2안길 7-10 (03784)",
+        "address": "7-10 Yeonhui-ro 2-an-gil, Seodaemun-gu, Seoul",
+        "addressKo": "서울 서대문구 연희로2안길 7-10",
         "mapUrl": "",
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
         "actualizedAt": "2026-09-01",
         "note": "Coworking + coliving. Address corrected from the article's original listing per direct verification."
       },
       {
-        "name": "FiveSpot",
+        "name": "Five Spot",
         "isChain": true,
         "kind": "coworking",
         "korOnly": true,
@@ -131,12 +131,26 @@
         "kind": "free coworking",
         "url": "https://hubgongdeok.startup-plus.kr/en",
         "instagram": "",
-        "address": "1F, 370-4 Gongdeok-dong, Mapo-gu, Seoul (04147)",
+        "address": "1F, 370-4 Gongdeok-dong, Mapo-gu, Seoul",
         "addressKo": "",
         "mapUrl": "https://naver.me/5Q37QLIT",
         "source": "https://www.digitalnomadskorea.com/post/best-coworking-spaces-seoul",
         "actualizedAt": "2026-09-01",
         "note": "Free startup space, English page available."
+      },
+      {
+        "name": "Stage9 (Dive9)",
+        "branch": "Gangnam",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.stage9.co.kr/branches?bid=gangnam2",
+        "instagram": "stage9_official",
+        "address": "1F-4F, 17 Gangnam-daero 61-gil, Seocho-gu, Seoul",
+        "addressKo": "서울 서초구 강남대로61길 17 1~4층",
+        "mapUrl": "https://naver.me/513ikTtS",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
       },
       {
         "name": "Google for Startups Campus (Gangnam)",
@@ -171,33 +185,30 @@
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
-        "name": "Stage9 (Dive9) · Posco Tower Songdo",
+        "name": "Stage9 (Dive9)",
         "kind": "coworking",
         "korOnly": true,
         "url": "https://www.stage9.co.kr/dive9",
         "instagram": "stage9_official",
-        "address": "26F, Posco Tower Songdo, 165 Convensia-daero, Yeonsu-gu, Incheon",
-        "addressKo": "인천 연수구 컨벤시아대로 165 포스코타워송도 26층",
-        "mapUrl": "https://naver.me/FZ2xqtgF",
+        "branches": [
+          {
+            "address": "26F, Posco Tower Songdo, 165 Convensia-daero, Yeonsu-gu, Incheon",
+            "addressKo": "인천 연수구 컨벤시아대로 165 포스코타워송도 26층",
+            "mapUrl": "https://naver.me/FZ2xqtgF"
+          },
+          {
+            "address": "30F, Bldg B, 323 Incheontower-daero, Yeonsu-gu, Incheon",
+            "addressKo": "인천 연수구 인천타워대로 323 B동 30층",
+            "mapUrl": "https://naver.me/F5DoFrDn"
+          }
+        ],
         "source": "",
         "actualizedAt": "2026-10-13",
-        "note": ""
+        "note": "Two Songdo branches."
       },
       {
-        "name": "Stage9 (Dive9) · Centrod",
-        "kind": "coworking",
-        "korOnly": true,
-        "url": "https://www.stage9.co.kr/dive9",
-        "instagram": "stage9_official",
-        "address": "30F, Bldg B, 323 Incheontower-daero, Yeonsu-gu, Incheon",
-        "addressKo": "인천 연수구 인천타워대로 323 B동 30층",
-        "mapUrl": "https://naver.me/F5DoFrDn",
-        "source": "",
-        "actualizedAt": "2026-10-13",
-        "note": ""
-      },
-      {
-        "name": "Fivespot · Songdo Central",
+        "name": "Five Spot",
+        "branch": "Songdo Central",
         "kind": "coworking",
         "korOnly": true,
         "url": "https://fivespot.io/spot/280",
@@ -231,7 +242,8 @@
     "isPopulationDeclineArea": false,
     "workationCenters": [
       {
-        "name": "Fivespot · Pangyo",
+        "name": "Five Spot",
+        "branch": "Pangyo",
         "kind": "coworking",
         "korOnly": true,
         "url": "https://fivespot.io/spot/67",

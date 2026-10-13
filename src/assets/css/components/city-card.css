@@ -313,6 +313,34 @@
   font-size: 13px;
 }
 
+/* Multi-branch venue: name + site links once; each branch is one address line
+   ending in its Naver Map link. */
+/* Hanging indent (pin 12px + 4px gap): wrapped text and the map link line up under the address,
+   not under the pin. */
+.work-venue__branch {
+  padding-left: 16px;
+  text-indent: -16px;
+}
+
+/* Collapses with the previous line's 8px bottom margin to a 4px gap between branches. */
+.work-venue__branch + .work-venue__branch {
+  margin-top: -4px;
+}
+
+.work-venue__branch-map {
+  margin-left: 6px;
+  color: var(--color-accent);
+  font-size: 13px;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* "Five Spot · Songdo Central": brand stays ink, the branch drops to the chain-name grey. */
+.work-venue__name-branch {
+  font-weight: 500;
+  color: var(--color-text-soft);
+}
+
 /* Website / Instagram / Naver Map — outbound links, so orange with the ↗ (DESIGN.md palette). */
 .work-venue__links a {
   color: var(--color-accent);
