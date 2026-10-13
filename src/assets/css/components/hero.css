@@ -174,9 +174,8 @@
 @media (min-width: 768px) {
   .hero__cover {
     /* Desktop: the cover photo fills the viewport. .hero__spacer--top/--bottom (below) straddle
-       .hero__inner; see those rules for how they split viewport slack and why the top one gets
-       locked in place by JS after the first render instead of staying reactive forever.
-       min-height keeps the photo full-viewport-tall in the empty state. */
+       .hero__inner; see those rules for how they split viewport slack. min-height keeps the photo
+       full-viewport-tall. */
     min-height: 100svh;
     display: flex;
     flex-direction: column;
@@ -190,31 +189,19 @@
     flex: 1 1 0;
   }
 
-  /* CSS-only default (also the permanent no-JS fallback, and what every visitor sees for the
-     first paint): flex-grow centres this the same way as --bottom below. hero-layout.js then
-     measures this element's *already-rendered* height once, right after the calculator's initial
-     render (including a URL-prefilled result, if any — calculator.js's init() runs first) settles,
-     and pins it there with an inline `flex: 0 0 <px>` — same value, so nothing visibly moves at
-     that moment. From then on this spacer no longer reacts to anything: a later submit that grows
-     or shrinks the card can only push .hero__spacer--bottom and everything below it, never move
-     the headline above. That's the fix for the headline-jump bug a purely-reactive dynamic layout
-     had (see feedback_hero_fixed_vs_dynamic_layout memory) — freeze the position, not the card's
-     height (an earlier version of this reserved #calc-msg's longest-state height instead, which
-     traded the jump for a permanent empty gap in the card before any result — worse). Floor:
-     .site-header's own height (floats absolute over the hero at y:0 — header.css .has-hero
-     .site-header, measured 65px) + a ~28px gap before the orange rule. */
+  /* Pure-CSS vertical centring with no layout work in JS. The calculator wrapper below always
+     reserves the longest result state's height, so the headline + card block has one constant
+     height whatever the card shows (empty, short or long caption) and before/after the form is
+     revealed. Constant block => constant centre => the headline never moves and .hero__cover
+     never outgrows 100svh (the photo never rescales). The floors are the flex-basis (flex-shrink
+     0): --top clears .site-header (floats over the hero, ~65px) + ~28px before the orange rule;
+     --bottom keeps the card clear of the scroll cue. Slack above both floors splits evenly. */
   .hero__spacer--top {
-    min-height: 93px;
+    flex: 1 0 93px;
   }
 
-  /* Stays reactive for the whole page lifetime (no JS lock) — this is what actually absorbs the
-     calculator card opening downward on submit, and what gravitates .hero__scroll-cue toward the
-     photo's bottom edge when there's slack. Floor tuned at 900x768 (the shortest real desktop
-     viewport this is tested at) so the cue clears .hero__credit — see the cue's own margin-bottom,
-     which is what actually keeps the two apart; this floor only keeps the *card* from crowding it.
-     Re-measure if the empty-state card height, copy, or header height changes. */
   .hero__spacer--bottom {
-    min-height: 24px;
+    flex: 1 0 24px;
   }
 
   /* Frame contributes no box — media/scrim/credit resolve against .hero__cover (full-bleed),
@@ -241,8 +228,11 @@
     color: rgba(255, 255, 255, 0.55);
   }
 
+  /* 345px = the card's height with the longest caption (calculator.js CAPTIONS.nonCapitalOnly,
+     under ₩1M) at its 520px max-width; re-measure if that copy or the card width changes. */
   .hero__calculator {
     margin-top: 40px;
+    min-height: 345px;
   }
 
   /* Normal in-flow element (not position:absolute) so it can't overlap the card above it whatever
