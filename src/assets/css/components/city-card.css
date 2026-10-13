@@ -293,6 +293,14 @@
   color: var(--color-text-muted);
   word-break: keep-all;
   overflow-wrap: break-word;
+  /* Hanging indent (pin 12px + 4px gap): wrapped lines start under the address text, not the pin. */
+  padding-left: 16px;
+  text-indent: -16px;
+}
+
+/* Hyphenated words in addresses (see the keepHyphenated filter) never break at the hyphen. */
+.work-venue__addr .nowrap {
+  white-space: nowrap;
 }
 
 /* Same glyph/sizing as the attraction card's pin (region-page.css .attraction-card__pin) —
@@ -315,20 +323,22 @@
 
 /* Multi-branch venue: name + site links once; each branch is one address line
    ending in its Naver Map link. */
-/* Hanging indent (pin 12px + 4px gap): wrapped text and the map link line up under the address,
-   not under the pin. */
-.work-venue__branch {
-  padding-left: 16px;
-  text-indent: -16px;
-}
-
 /* Collapses with the previous line's 8px bottom margin to a 4px gap between branches. */
 .work-venue__branch + .work-venue__branch {
   margin-top: -4px;
 }
 
+/* The gap lives on the address text's trailing edge, not on the link: a link that wraps onto its
+   own line then starts flush with the address (a leading space or margin-left would indent it).
+   inline-block gives the link a break opportunity; text-indent reset so the hanging indent
+   doesn't shift it back. */
+.work-venue__branch-addr {
+  margin-right: 6px;
+}
+
 .work-venue__branch-map {
-  margin-left: 6px;
+  display: inline-block;
+  text-indent: 0;
   color: var(--color-accent);
   font-size: 13px;
   text-decoration: underline;
@@ -339,6 +349,18 @@
 .work-venue__name-branch {
   font-weight: 500;
   color: var(--color-text-soft);
+}
+
+/* Phones <=360px: the branch drops under the venue name so the kind label keeps the first line. */
+@media (max-width: 360px) {
+  .work-venue__name-branch {
+    display: block;
+    margin-top: -6px;
+  }
+
+  .work-venue__name-dot {
+    display: none;
+  }
 }
 
 /* Website / Instagram / Naver Map — outbound links, so orange with the ↗ (DESIGN.md palette). */

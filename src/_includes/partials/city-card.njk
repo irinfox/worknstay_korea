@@ -29,13 +29,13 @@
 
     {% for wc in soloVenues %}
     <div class="work-venue">
-      <p class="work-venue__name"><span>{{ wc.name }}{% if wc.branch %} <span class="work-venue__name-branch">· {{ wc.branch }}</span>{% endif %}</span> <span class="work-venue__kind">{{ wc.kind or "coworking" }}</span></p>
+      <p class="work-venue__name"><span>{{ wc.name }}{% if wc.branch %} <span class="work-venue__name-branch"><span class="work-venue__name-dot">· </span>{{ wc.branch }}</span>{% endif %}</span> <span class="work-venue__kind">{{ wc.kind or "coworking" }}</span></p>
       {% if wc.microcopy %}<p class="work-venue__micro">{{ wc.microcopy }}</p>{% endif %}
       {% if wc.address %}
-      <p class="work-venue__addr"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ wc.address }}</p>
+      <p class="work-venue__addr"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ wc.address | keepHyphenated | safe }}</p>
       {% endif %}
       {% for b in wc.branches %}
-      <p class="work-venue__addr work-venue__branch"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ b.address }}{% if b.mapUrl %} <a class="work-venue__branch-map" href="{{ b.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}</p>
+      <p class="work-venue__addr work-venue__branch"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg><span class="work-venue__branch-addr">{{ b.address | keepHyphenated | safe }}</span>{% if b.mapUrl %}<a class="work-venue__branch-map" href="{{ b.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}</p>
       {% endfor %}
       <p class="work-venue__links">
         {% if wc.url %}<a href="{{ wc.url }}" target="_blank" rel="noopener">Website{% if wc.korOnly %} (KR){% endif %} ↗</a>{% endif %}
