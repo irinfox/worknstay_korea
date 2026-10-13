@@ -39,13 +39,14 @@ const CAPTIONS = {
 
 const FULL_RULES_LINK = ' <a href="/visa-info/">Visa info →</a>';
 
-// Plate tint follows the site palette — never red. The calculator gives answers ("not eligible"
-// / "under 18" → amber) and, when the form isn't complete enough to answer, a neutral panel.
+// Plate tint follows the site palette (see calculator.css) — never red. The calculator gives
+// answers ("not eligible" / under the minimum age → amber) and, when the form isn't complete
+// enough to answer, a neutral panel.
 const RESULT_TONE = {
-  all: "eligibility-result--all", // #DCEFE5 — eligible everywhere
-  nonCapitalOnly: "eligibility-result--near", // #EAF4EF — eligible outside the capital area
-  ineligible: "eligibility-result--none", // #FDF0E4 — not eligible yet / under 18
-  incomplete: "eligibility-result--info", // #F7F9F8 — can't answer yet (a field is missing)
+  all: "eligibility-result--all", // eligible everywhere
+  nonCapitalOnly: "eligibility-result--near", // eligible outside the capital area
+  ineligible: "eligibility-result--none", // not eligible yet / under the minimum age
+  incomplete: "eligibility-result--info", // can't answer yet (a field is missing)
 };
 const ALL_RESULT_TONES = Object.values(RESULT_TONE);
 
