@@ -169,7 +169,47 @@
     ],
     "population": { "total": 3093590, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Stage9 (Dive9) · Posco Tower Songdo",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.stage9.co.kr/dive9",
+        "instagram": "stage9_official",
+        "address": "26F, Posco Tower Songdo, 165 Convensia-daero, Yeonsu-gu, Incheon",
+        "addressKo": "인천 연수구 컨벤시아대로 165 포스코타워송도 26층",
+        "mapUrl": "https://naver.me/FZ2xqtgF",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      },
+      {
+        "name": "Stage9 (Dive9) · Centrod",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.stage9.co.kr/dive9",
+        "instagram": "stage9_official",
+        "address": "30F, Bldg B, 323 Incheontower-daero, Yeonsu-gu, Incheon",
+        "addressKo": "인천 연수구 인천타워대로 323 B동 30층",
+        "mapUrl": "https://naver.me/F5DoFrDn",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      },
+      {
+        "name": "Fivespot · Songdo Central",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://fivespot.io/spot/280",
+        "instagram": "",
+        "address": "5F, 185 Incheontower-daero, Yeonsu-gu, Incheon",
+        "addressKo": "인천 연수구 인천타워대로 185 5층",
+        "mapUrl": "https://naver.me/G28bOItn",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      }
+    ]
   },
   {
     "slug": "seongnam",
@@ -189,7 +229,21 @@
     ],
     "population": { "total": 893970, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Fivespot · Pangyo",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://fivespot.io/spot/67",
+        "instagram": "",
+        "address": "B1F, 660 Daewangpangyo-ro, Bundang-gu, Seongnam-si, Gyeonggi-do",
+        "addressKo": "경기 성남시 분당구 대왕판교로 660 지하 1층",
+        "mapUrl": "https://naver.me/xOxH570F",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      }
+    ]
   },
   {
     "slug": "suwon",
@@ -209,7 +263,21 @@
     ],
     "population": { "total": 1221616, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Cospot",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "http://www.cospot.co.kr/",
+        "instagram": "",
+        "address": "6F, SR Plaza, 51 Gatmaesan-ro, Paldal-gu, Suwon-si, Gyeonggi-do",
+        "addressKo": "경기도 수원시 팔달구 갓매산로 51, 에스알프라자 6층",
+        "mapUrl": "https://naver.me/GaldyesF",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      }
+    ]
   },
   {
     "slug": "goyang",
@@ -261,6 +329,19 @@
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
         "actualizedAt": "2026-09-01",
         "note": "Coworking. Korean only — no separate website found. Naver Map-verified 2026-09-01."
+      },
+      {
+        "name": "Hinomad Lab",
+        "kind": "coworking · community",
+        "url": "https://mindtouch.ai/en/hinomad-lab",
+        "instagram": "hinomad",
+        "microcopy": "Opens 1 Nov 2026",
+        "address": "2F, 114-1 Jungang-ro, Sokcho-si, Gangwon-do",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Opens 1 Nov 2026."
       }
     ]
   },
@@ -413,7 +494,21 @@
     ],
     "population": { "total": 879244, "year": 2025, "note": "KOSIS's English-language export mislabels this row \"Chungju-si\"; its sub-district breakdown (Sangdang-gu/Seowon-gu/Heungdeok-gu/Cheongwon-gu) matches Cheongju-si, not Chungju-si (which has no gu subdivisions and is listed separately at 217,413)." },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Hellowork",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "",
+        "instagram": "hellowork_office",
+        "address": "Rooms 302-303, 3F, Gangseo Minerva Bldg, 4 Seohyeondong-ro, Heungdeok-gu, Cheongju-si, Chungcheongbuk-do",
+        "addressKo": "충북 청주시 흥덕구 서현동로 4 3층 302호, 303호 강서미네르바 빌딩",
+        "mapUrl": "https://naver.me/5RhbXxEE",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 헬로우워크."
+      }
+    ]
   },
   {
     "slug": "boryeong",
@@ -451,7 +546,61 @@
     ],
     "population": { "total": 1469299, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "worknplay",
+        "isChain": true,
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://worknplay.io/location",
+        "instagram": "",
+        "address": "",
+        "addressKo": "",
+        "mapUrl": "",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Multi-location chain."
+      },
+      {
+        "name": "Meetground",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.meetground.co.kr/",
+        "instagram": "meet_ground",
+        "address": "8F, Daeseung Bldg, 21 Dunsan-ro 137beon-gil, Seo-gu, Daejeon",
+        "addressKo": "대전 서구 둔산로 137번길 21, 대승빌딩 8층",
+        "mapUrl": "https://naver.me/xs3dn9P8",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      },
+      {
+        "name": "Inbetween",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.spacecloud.kr/space/54948",
+        "instagram": "inbetween.co.kr",
+        "address": "2F, 19 Munjeong-ro 90beon-gil, Seo-gu, Daejeon",
+        "addressKo": "대전 서구 문정로90번길 19, 2층",
+        "mapUrl": "https://naver.me/xs3dnVfr",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": ""
+      },
+      {
+        "name": "Hellowork",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "",
+        "instagram": "hellowork_office",
+        "address": "3F, 13-8 Eungubinam-ro 33beon-gil, Yuseong-gu, Daejeon (34086)",
+        "addressKo": "대전 유성구 은구비남로33번길 13-8 3층 (34086)",
+        "mapUrl": "https://naver.me/5xj2o5bv",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 헬로우워크."
+      }
+    ]
   },
   {
     "slug": "sejong",
@@ -474,7 +623,34 @@
     ],
     "population": { "total": 392471, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Hellowork",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "",
+        "instagram": "hellowork_office",
+        "address": "Rooms 701-703, 7F, 21 Naseongbuk-ro, Sejong",
+        "addressKo": "세종 나성북로 21 7층 701~703호",
+        "mapUrl": "https://naver.me/FlZnGcra",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 헬로우워크."
+      },
+      {
+        "name": "Withwork",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.withwork.net/",
+        "instagram": "",
+        "address": "6F, 350 Hannuri-daero, Sejong",
+        "addressKo": "세종 한누리대로 350 6층",
+        "mapUrl": "https://naver.me/Gubwsr0X",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 위드워크."
+      }
+    ]
   },
   {
     "slug": "gongju",
@@ -720,7 +896,35 @@
     ],
     "population": { "total": 1431903, "year": 2025 },
     "isPopulationDeclineArea": false,
-    "workationCenters": []
+    "workationCenters": [
+      {
+        "name": "Familia Space",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "",
+        "instagram": "familiaspace_official",
+        "microcopy": "App registration may need a Korean phone number",
+        "address": "4F, 1 Hanam-daero 680beon-gil, Seo-gu, Gwangju",
+        "addressKo": "전남광주 서구 하남대로680번길 1 4층",
+        "mapUrl": "https://naver.me/FPn5YHzh",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 파밀리아 스페이스. App registration may need a Korean phone number."
+      },
+      {
+        "name": "On-Off Shared Office",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "",
+        "instagram": "",
+        "address": "3F, J Tower, 38 Cheomdanyeonsin-ro 91beon-gil, Buk-gu, Gwangju",
+        "addressKo": "전남광주 북구 첨단연신로91번길 38 제이타워 3층",
+        "mapUrl": "https://naver.me/G65HtMr1",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 공유오피스 온오프."
+      }
+    ]
   },
   {
     "slug": "suncheon",
@@ -776,6 +980,45 @@
         "source": "",
         "actualizedAt": "2026-09-17",
         "note": ""
+      },
+      {
+        "name": "Jilgeuraengi Gujwa Center",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.sehwamaeulcoop.com/our/workcation/rental",
+        "instagram": "sehwa_cci",
+        "address": "2F, Sumbibille Park Office, 1392 Haemajihaean-ro, Gujwa-eup, Jeju-si, Jeju-do",
+        "addressKo": "제주 제주시 구좌읍 해맞이해안로 1392 2층 숨비빌레파크 오피스",
+        "mapUrl": "https://naver.me/5xjuZVs1",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 세화워케이션 질그랭이 거점센터."
+      },
+      {
+        "name": "Reflow Jeju",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://www.reflow.city/37",
+        "instagram": "reflow.city",
+        "address": "3F, 3 Tapdong-ro 2-gil, Jeju-si, Jeju-do",
+        "addressKo": "제주 제주시 탑동로2길 3 3층",
+        "mapUrl": "https://naver.me/F2Zbch6x",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 리플로우."
+      },
+      {
+        "name": "Weare Port",
+        "kind": "coworking",
+        "korOnly": true,
+        "url": "https://weareport.com/#/port-space",
+        "instagram": "weare_port",
+        "address": "4F, 248 Jungang-ro, Jeju-si, Jeju-do",
+        "addressKo": "제주 제주시 중앙로 248 4층",
+        "mapUrl": "https://naver.me/GeURrzkZ",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 위아포트."
       }
     ]
   },
@@ -811,6 +1054,19 @@
         "source": "https://english.visitkorea.or.kr/svc/contents/contentsView.do?vcontsId=194109",
         "actualizedAt": "2026-09-01",
         "note": "Coworking + coliving (workation). Website Korean only."
+      },
+      {
+        "name": "Olle Stay",
+        "kind": "lounge",
+        "korOnly": true,
+        "url": "https://ganse.kr/space",
+        "instagram": "",
+        "address": "3F, Jeju Olle Travel Center, 22 Jungjeong-ro, Seogwipo-si, Jeju-do",
+        "addressKo": "제주 서귀포시 중정로 22 제주올레여행자센터 3층",
+        "mapUrl": "https://naver.me/FEUpk3q8",
+        "source": "",
+        "actualizedAt": "2026-10-13",
+        "note": "Korean name: 올레스테이."
       }
     ]
   }
