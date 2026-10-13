@@ -17,8 +17,6 @@ import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
-const CACHE_TTL_SECONDS = 4 * 60 * 60;
-
 function queryStartDate() {
   const d = new Date();
   return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
@@ -53,9 +51,7 @@ export async function onRequestGet({ params, env }) {
           // 59; one call now covers it instead of paging (attraction-fetch.mjs's same reasoning:
           // more rows per call is free, a second page is a whole extra live call).
           numOfRows: 100,
-          maxPages: 1 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
-          approval form for any caching (3-5 day review, too slow for the deadline); uncomment
-          once approved (notes/attraction-gallery-report.md) */,
+          maxPages: 1,
         }
       )
     )

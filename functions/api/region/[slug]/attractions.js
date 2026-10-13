@@ -37,8 +37,8 @@ export async function onRequestGet({ params, env }) {
   if (codes.length) {
     ({ items, quotaExceeded } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
 
-    // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (a
-    // mix of stale edge-cache hits and quota-blocked misses), so fall back to the top-picks set
+    // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (some
+    // calls were quota-blocked), so fall back to the top-picks set
     // rather than show a partial or empty gallery. `quotaExceeded` stays true so the front end
     // swaps in "Top picks for today" instead of implying this is the full live list
     // (region-data.js).

@@ -123,12 +123,11 @@ function isSalaryInvalid(userInput, rawInput) {
   return !Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0;
 }
 
-// Deliberately NOT "|| userInput.age < minAge": being under the minimum age is a real, validly
-// entered answer that fails the visa's own eligibility rule, not a data-entry mistake — it gets
-// the amber "must be N+" result caption, but the field itself shouldn't get the invalid-field
-// border mark (that's reserved for missing/malformed input). The raw-string check still matters:
-// Number("") is 0, so a blank age must not read as age 0 (→ "must be 18+") instead of "enter
-// your age".
+// Decides only the red invalid-field border, so it deliberately has no minAge check: being under
+// the minimum age is a real, validly entered answer that fails the visa's eligibility rule, not a
+// data-entry mistake (that gets the amber "must be N+" caption from validate() below, without the
+// border). The raw-string check still matters: Number("") is 0, so a blank age must not read as
+// age 0 (→ "must be N+") instead of "enter your age".
 function isAgeInvalid(userInput, rawInput) {
   if (rawInput.ageRaw.trim() === "") return true;
   return !Number.isFinite(userInput.age);

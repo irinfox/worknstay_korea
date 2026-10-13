@@ -1,6 +1,6 @@
 // Per-city short-term rental market research: what a listing actually costs, broken down by
 // platform (Zigbang, Enkostay, "33m2", Airbnb). This is the raw price scan behind the region
-// page's "Cost of living" summary paragraph.
+// page's "Rental prices" section.
 //
 // `scans` is one flat array across all regions (same convention as cities.json/food.json —
 // filter by regionSlug) — add more regions here as they get scanned.
@@ -10,7 +10,7 @@
 //
 // Each unit only carries `type` (for the byName lookups in settling-in.njk), `sizeM2` and
 // `label` — the reviewed, hand-finalized display strings for the settling-in page's
-// price-snapshot table (Settling in.dc.html). There used to be separate depositMin/depositMax/
+// price-snapshot table. There used to be separate depositMin/depositMax/
 // rentMin/rentMax numeric fields alongside `label`, but they were never read anywhere (the page
 // only ever renders `label.*`) and didn't actually hold a real observed min/max — they were the
 // same single eyeballed figure as `label`, just reformatted, which made the file look like it had

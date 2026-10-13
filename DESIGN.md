@@ -140,7 +140,7 @@ No dashed or dotted borders — they read as unfinished wireframe. An empty stat
 `#5C6660` sentence in the slot the content would have filled, heading kept; `#F7F9F8` fill only
 where the slot must hold its shape (image placeholders). Missing data and no-JS fallbacks get the
 same treatment — they are ordinary states, not errors. Wording says what is missing:
-"No cost-of-living figures for this region yet."
+"No rental price figures for this region yet."
 
 ## Recurring parts
 

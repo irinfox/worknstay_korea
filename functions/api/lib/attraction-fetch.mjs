@@ -110,9 +110,7 @@ function fetchBroadBucket(lDongRegnCd, lclsSystm1, arrange, env) {
     env,
     {
       numOfRows: ROWS_PER_GROUP,
-      maxPages: 1 /*, cacheTtl — disabled 2026-09, KTO requires a separate approval form for any
-      caching (3-5 day review, too slow for the deadline); uncomment once approved
-      (notes/attraction-gallery-report.md) */,
+      maxPages: 1,
     }
   );
 }

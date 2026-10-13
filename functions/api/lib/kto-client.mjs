@@ -32,12 +32,8 @@ const DAILY_QUOTA_REASON_CODE = "22";
 // there either — it exists purely to make the running total visible in the terminal *during*
 // local testing. Added after burning a full day's 1,000-call dev-key quota in ~4 hours of live
 // verification in one session (repeated full-region endpoint checks, each fanning out to up to
-// 35 KTO calls). Counts every attempt this process actually sends over the network — including
-// retries and, in principle, requests Cloudflare's edge cache would normally have intercepted
-// before they reached KTO — because local dev's cache emulation isn't reliable (confirmed:
-// identical back-to-back local requests weren't served from cache), so almost every attempt here
-// really does round-trip to KTO's origin during dev testing, even though far fewer would in
-// production.
+// 35 KTO calls). Counts every attempt this process actually sends over the network, including
+// retries.
 const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key is 1,000/day — warn well before hitting it
 let devSessionCallCount = 0;
 let warnedAtThreshold = false;
@@ -66,10 +62,9 @@ function sleep(ms) {
 // manual QA of live data burn real quota on every reload. Only successful, non-degraded,
 // non-quota results are cached — a quota-exceeded response must keep reflecting real quota state
 // on every check, never a stale cached one. Module-level, no persistence: resets with the dev
-// process, same lifetime as `devSessionCallCount` above — matches production's old (now-disabled)
-// 24h attractions TTL, since active development means constantly reloading localhost over many
-// days and a code change already resets this (a fresh `pages:dev` module instance on file save)
-// well before 24h would ever elapse on its own.
+// process, same lifetime as `devSessionCallCount` above. 24h TTL: active development means
+// constantly reloading localhost, and a code change already resets this (a fresh `pages:dev`
+// module instance on file save) well before 24h would elapse on its own.
 const DEV_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const devCache = new Map(); // request URL -> { result, expiresAt }
 

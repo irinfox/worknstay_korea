@@ -37,7 +37,7 @@ export default function (eleventyConfig) {
     return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
   });
 
-  // Thousand-separator formatting for KRW figures (costOfLiving.json values are raw integers).
+  // Thousand-separator formatting for KRW figures (rent figures in the data are raw integers).
   eleventyConfig.addFilter("krw", function (value) {
     return new Intl.NumberFormat("en-US").format(value);
   });
@@ -60,12 +60,12 @@ export default function (eleventyConfig) {
   });
 
   // Looks up a record by `slug` or `regionSlug` — regions.json uses the former,
-  // costOfLiving.json (and other per-region data files) use the latter.
+  // rentalMarketScan.js regionSummary (and other per-region data files) use the latter.
   eleventyConfig.addFilter("findBySlug", function (arr, slug) {
     return (arr || []).find((item) => item.slug === slug || item.regionSlug === slug);
   });
 
-  // Filters a per-region data array (cities, food, mock KTO content) down to one region —
+  // Filters a per-region data array (cities, food, rental scans) down to one region —
   // Nunjucks has no built-in selectattr/rejectattr (that's Jinja2-only).
   eleventyConfig.addFilter("byRegion", function (arr, slug) {
     return (arr || []).filter((item) => item.regionSlug === slug);
