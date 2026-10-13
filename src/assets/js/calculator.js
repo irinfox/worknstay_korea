@@ -251,11 +251,10 @@ function renderError(resultEl, message, complete) {
   resultEl.hidden = false;
 }
 
-// Brings the just-rendered result into view after a real submit (not the URL-prefill path on
-// load, which shouldn't move the page). Prefers landing on the whole card (form + result) so the
-// question the visitor just answered stays visible above the answer; falls back to the result
-// itself when the card alone is taller than the viewport, since centering on the card would then
-// push the result off-screen. No-ops if the result is already fully visible.
+// Brings the just-rendered result into view after a submit. Prefers landing on the whole card
+// (form + result) so the question the visitor just answered stays visible above the answer; falls
+// back to the result itself when the card alone is taller than the viewport, since centering on
+// the card would then push the result off-screen. No-ops if the result is already fully visible.
 function scrollResultIntoView(cardEl, resultEl) {
   const resultRect = resultEl.getBoundingClientRect();
   const fullyVisible = resultRect.top >= 0 && resultRect.bottom <= window.innerHeight;
@@ -281,26 +280,6 @@ function hasReadableInput(userInput, rawInput) {
   );
 }
 
-// Permalink covers prefill + caption + map state (via onResult) — nothing is persisted beyond
-// the URL itself (no sessionStorage — region pages deliberately don't remember a calculator run
-// from the home page; see ROADMAP feedback on that ambiguity).
-function userInputFromParams(params) {
-  if (!params.has("salaryKrw") || !params.has("age")) return null;
-  return {
-    salaryKrw: parseSalary(params.get("salaryKrw")),
-    age: Number(params.get("age")),
-    hasFamily: params.get("hasFamily") === "1",
-  };
-}
-
-function paramsFromUserInput(userInput) {
-  const params = new URLSearchParams();
-  params.set("salaryKrw", String(userInput.salaryKrw));
-  params.set("age", String(userInput.age));
-  if (userInput.hasFamily) params.set("hasFamily", "1");
-  return params;
-}
-
 // architecture.md §8: calculator.js owns caption rendering; main.js's glue passes onResult so
 // korea-map.js's applyResult() can react to the same result for map state only — one-directional,
 // no event bus, no separate module.
@@ -314,9 +293,7 @@ export function init(onResult = () => {}) {
   const referenceData = readReferenceData();
   const fieldValidity = bindFieldValidityMarking(form);
 
-  // markInvalid is true only for a real submit — the URL-prefill path below also runs through
-  // here, but a permalink loading on page open isn't a submit attempt, so it shouldn't paint any
-  // field red before the visitor has interacted with the page at all.
+  // markInvalid: true only for a real submit, so no field is painted red before the visitor acts.
   function computeAndRender(userInput, { markInvalid = false } = {}) {
     resultEl.hidden = true;
 
@@ -347,20 +324,10 @@ export function init(onResult = () => {}) {
   bindSalaryFormatting(form.elements.salaryKrw);
   bindAgeSanitizing(form.elements.age);
 
-  const prefill = userInputFromParams(new URLSearchParams(window.location.search));
-  if (prefill) {
-    form.elements.salaryKrw.value = formatSalary(prefill.salaryKrw);
-    form.elements.age.value = prefill.age;
-    form.elements.hasFamily.checked = prefill.hasFamily;
-    computeAndRender(prefill);
-  }
-
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const userInput = readUserInput(form);
-    if (computeAndRender(userInput, { markInvalid: true })) {
-      history.replaceState(null, "", `?${paramsFromUserInput(userInput)}`);
-    }
+    computeAndRender(userInput, { markInvalid: true });
     if (cardEl) scrollResultIntoView(cardEl, resultEl);
   });
 
@@ -373,7 +340,6 @@ export function init(onResult = () => {}) {
       fieldValidity.clear();
       resultEl.hidden = true;
       setResultTone(resultEl, null);
-      history.replaceState(null, "", window.location.pathname);
       onResult(buildShowAllResult(), referenceData);
     });
   }

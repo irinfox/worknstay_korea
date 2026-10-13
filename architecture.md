@@ -313,9 +313,9 @@ No library, no store. Three tiers:
 2. **Shared state — exactly one piece:** `EligibilityResult`. `calculator.js` reads inputs →
    calls pure `eligibility.js` → renders its own result caption; `main.js` glue separately calls
    `koreaMap.applyResult(result)` for the map. One-directional, ~10 lines of glue, no event bus.
-3. **Persistence** — the result lives in the URL only (`?salaryKrw=&age=&hasFamily=`), not stored
-   client-side: reloading/sharing reproduces it, but region pages don't read or remember a
-   calculator run.
+3. **Persistence** — none. Inputs and result live in the page only (form is `autocomplete="off"`,
+   nothing in the URL or storage), so reload starts empty — matches the card's "Nothing is
+   stored." Region pages don't read or remember a calculator run.
 
 ## 9. Responsive strategy
 
