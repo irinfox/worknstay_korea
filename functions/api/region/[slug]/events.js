@@ -4,6 +4,7 @@
 // is a designed empty state. Falls back to `eventsSnapshot.json` (point-in-time capture) when
 // KTO_API_KEY isn't set. On quota-exceeded, items are dropped rather than served from the
 // snapshot, which could show an ended festival as live; `quotaExceeded` drives the front-end message.
+// `liveFailed` = every slice failed without quota (an empty list would read as a true zero).
 import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
@@ -54,10 +55,20 @@ export async function onRequestGet({ params, env }) {
 
   const byContentId = new Map();
   let quotaExceeded = false;
+  let failedSlices = 0;
   for (const result of pages) {
-    if (result.status !== "fulfilled") continue;
-    if (result.value.quotaExceeded) quotaExceeded = true;
-    if (result.value.degraded) continue;
+    if (result.status !== "fulfilled") {
+      failedSlices += 1;
+      continue;
+    }
+    if (result.value.quotaExceeded) {
+      quotaExceeded = true;
+      continue;
+    }
+    if (result.value.degraded) {
+      failedSlices += 1;
+      continue;
+    }
     for (const raw of result.value.items) {
       const event = normalizeEvent(raw);
       event.regionSlug = slug;
@@ -65,6 +76,8 @@ export async function onRequestGet({ params, env }) {
     }
   }
 
+  // Only when every slice failed does the page say so; a partial failure shows what came back.
+  const liveFailed = !quotaExceeded && codes.length > 0 && failedSlices === codes.length;
   const items = quotaExceeded ? [] : [...byContentId.values()];
-  return Response.json({ items, quotaExceeded }, NO_STORE);
+  return Response.json({ items, quotaExceeded, liveFailed }, NO_STORE);
 }

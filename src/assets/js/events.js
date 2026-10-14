@@ -201,7 +201,7 @@ const eventsProvenanceFallback = (isoDate, liveText) => {
 // strip and the "no events" message only appear when they're actually warranted (see cases).
 export function renderEventsTimeline(container, data) {
   const quotaExceeded = Boolean(data.quotaExceeded);
-  const failed = Boolean(data.failed);
+  const failed = Boolean(data.failed || data.liveFailed);
   // fallback: events came from the saved snapshot (no KTO key), so the list may be out of date.
   const fallback = Boolean(data.fallback);
   // The subtitle is a small-caption "sub" line meant to sit under a live section — misleading

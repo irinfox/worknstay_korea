@@ -84,6 +84,12 @@
     { "label": "Settling-in guides", "url": "https://koreansnextdoor.com/guide/settle", "source": "koreansnextdoor.com · 2026" },
     { "label": "Residence card, step by step", "url": "https://stay.enko.kr/blog/en/how-to-get-your-residence-card-in-korea-2025-guide/", "source": "stay.enko.kr · June 2026 · apply within 90 days of arriving, unless you entered on a tourist visa" }
   ],
+  "typicalRental": {
+    "deposit": "₩5–20M",
+    "depositUsd": "$4–15K",
+    "leaseMonths": "13–24",
+    "goshiwonMonthly": "₩400K"
+  },
   "housingRentalGuideUrl": "https://koreansnextdoor.com/guide/housing",
   "spaceCloudUrl": "https://www.spacecloud.kr/",
   "naverMapUrl": "https://map.naver.com/",

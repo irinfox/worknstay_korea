@@ -11,7 +11,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <h1>Settling in</h1>
   <div class="settling-hero__ko">정착하기</div>
   <p class="settling-hero__intro">A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in.</p>
-  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated | monthYear }}</div>
+  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated | formatDate }}</div>
 </header>
 
 <div class="section-nav">
@@ -29,7 +29,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Renting</h2>
   </div>
-  <p class="settling-body">Korean long-term renting typically involves a large upfront deposit of <span class="settling-nowrap">₩5–20M</span> (~$4–15K), a&#160;<span class="settling-nowrap">13–24-month</span> lease, and a visit to a local realty agency (<span class="settling-ko">부동산</span>).</p>
+  <p class="settling-body">Korean long-term renting typically involves a large upfront deposit of <span class="settling-nowrap">{{ settlingIn.typicalRental.deposit }}</span> (~{{ settlingIn.typicalRental.depositUsd }}), a&#160;<span class="settling-nowrap">{{ settlingIn.typicalRental.leaseMonths }}-month</span> lease, and a visit to a local realty agency (<span class="settling-ko">부동산</span>).</p>
 
   <div class="settling-callout settling-callout--tip">
     <div class="settling-callout__text">Typical rental logic is — the higher the deposit, the lower the rent.</div>
@@ -118,7 +118,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
 
   <div class="settling-panel settling-note">
     <div class="settling-note__title">Goshiwon and goshitel</div>
-    <p class="settling-body settling-body--muted">There are also very cheap stays — around ₩400K/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
+    <p class="settling-body settling-body--muted">There are also very cheap stays — around {{ settlingIn.typicalRental.goshiwonMonthly }}/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
   </div>
 
   <details class="settling-price-table">
@@ -205,7 +205,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
         {% endfor %}
       </div>
 
-      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early {{ rentalMarketScan.scanDate | monthYear }} for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
+      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early {{ rentalMarketScan.scanDate | formatDate }} for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
     </div>
   </details>
 

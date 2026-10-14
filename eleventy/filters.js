@@ -57,10 +57,14 @@ export default function registerFilters(eleventyConfig) {
     );
   });
 
-  // Data files store dates as "YYYY-MM"; format at render time, e.g. "2026-09" -> "September 2026".
-  eleventyConfig.addFilter("monthYear", function (value) {
-    const [y, m] = String(value).split("-").map(Number);
-    return new Date(Date.UTC(y, m - 1, 1)).toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+  // Data files store dates as "YYYY-MM" or "YYYY-MM-DD"; format at render time:
+  // "2026-09" -> "September 2026", "2026-06-30" -> "30 June 2026".
+  eleventyConfig.addFilter("formatDate", function (value) {
+    const [y, m, d] = String(value).split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d || 1));
+    return d
+      ? date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+      : date.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
   });
 
   // Thousand-separator formatting for KRW figures (rent figures in the data are raw integers).

@@ -140,8 +140,9 @@ simulates quota exhaustion.
   ([quota docs](https://developers.kakao.com/docs/en/getting-started/quota)).
 
 **Fallbacks:** when any live KTO attractions call fails (quota exhausted included), attractions serve the region's
-`topAttractions.json` picks and events return empty — the events snapshot is never a production
-fallback, since its dates would be out of date. With no key (local dev), both serve their files
+`topAttractions.json` picks. Events show the failed message when every slice fails (a partial
+failure shows the items that came back) and return empty on quota — the events snapshot is never a
+production fallback, since its dates would be out of date. With no key (local dev), both serve their files
 (`topAttractions.json`, `eventsSnapshot.json`), so the UI can be tested with zero live calls.
 
 **Static exceptions:** region/county **hero photos** and **dish photos** are hand-picked once
