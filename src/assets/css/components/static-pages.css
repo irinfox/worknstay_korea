@@ -177,9 +177,7 @@ ul.about-hero__chips {
    Full redesign, wide site-shell column like the About page above (not the .content-page 70ch
    reading width) — Renting / Places to work / Communities / Useful links, plus a collapsible
    Gangwon-do price-snapshot table (data: rentalMarketScan.js). Colours below map 1:1 onto
-   existing tokens — this design was built against this project's own token set. #4A544E
-   (secondary card copy) has no existing token and stays literal, per the design's own literal
-   values. Outbound/in-site link hover (DESIGN.md palette: Orange ink / Green deep) below. */
+   existing tokens. Outbound/in-site link hover (DESIGN.md palette: Orange ink / Green deep) below. */
 
 .settling-page {
   max-width: var(--content-max-width);
@@ -304,7 +302,7 @@ ul.about-hero__chips {
 
 .settling-body--sm {
   font-size: 14px;
-  color: #4a544e;
+  color: var(--color-text-secondary);
 }
 
 .settling-body--muted {
@@ -547,7 +545,7 @@ ul.about-hero__chips {
 .settling-platform-card__desc {
   font-size: 14px;
   line-height: 1.65;
-  color: #4a544e;
+  color: var(--color-text-secondary);
   margin: 0;
   text-wrap: pretty;
 }
@@ -736,7 +734,7 @@ ul.about-hero__chips {
 .settling-otherresult__desc {
   font-size: 13px;
   line-height: 1.6;
-  color: #4a544e;
+  color: var(--color-text-secondary);
   margin: 0;
   text-wrap: pretty;
 }
@@ -788,7 +786,7 @@ ul.about-hero__chips {
 .settling-community-item__note {
   font-size: 13px;
   line-height: 1.6;
-  color: #4a544e;
+  color: var(--color-text-secondary);
   margin: 0;
   text-wrap: pretty;
 }

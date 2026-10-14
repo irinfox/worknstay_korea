@@ -9,8 +9,8 @@
 // sources it and calls this function; this module never touches the DOM or fetches
 // anything itself.
 //
-// ARCHITECTURE.md: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
-// per-region (today only gyeonggi-do), carried via partialRegionSlugs[] rather than a 4th tier.
+// Tier stays a 3-way `ineligible | nonCapitalOnly | all`; partiality is per-region, carried via
+// partialRegionSlugs[] rather than a 4th tier.
 
 // Precondition, not a runtime edge case this function is expected to handle: callers must
 // validate age >= visaRules.additionalFacts.minApplicantAge (18) before calling
@@ -41,9 +41,8 @@ function thresholdFor(multiplier, rules) {
  * @param {object} userInput
  * @param {number} userInput.salaryKrw - annual salary in KRW
  * @param {number} userInput.age
- * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (ARCHITECTURE.md
- *   visa eligibility rules: overrides the age-based multiplier with a flat family multiplier,
- *   regardless of age)
+ * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (overrides the age-based
+ *   multiplier with a flat family multiplier, regardless of age)
  * @param {object} referenceData
  * @param {object} referenceData.rules - visaRules.json
  * @param {object[]} referenceData.regions - regions.json entries; only `slug`/`isCapitalArea`

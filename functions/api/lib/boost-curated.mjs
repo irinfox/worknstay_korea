@@ -1,7 +1,6 @@
-// Boosts curated attraction picks into live areaBasedList2 results (ARCHITECTURE.md) — pure
-// function, no KTO calls. Runs per-category bucket
-// (nature/culture split independently, then recombined) *before* attractions.js's
-// `attractionPriority` sort; that sort is stable, so the interleave built here survives it.
+// Boosts curated attraction picks into live areaBasedList2 results — pure, no KTO calls. Runs per
+// category bucket (nature/culture) before attractions.js's stable `attractionPriority` sort, so
+// the interleave built here survives it.
 //
 // Priority semantics (confirmed with user):
 // - `hard` — must appear somewhere in the first ~3 scroll-pages. If missing from live results,

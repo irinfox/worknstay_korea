@@ -18,16 +18,10 @@
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/components/header.css">
   <link rel="stylesheet" href="/assets/css/components/footer.css">
-  <link rel="stylesheet" href="/assets/css/components/hero.css">
-  <link rel="stylesheet" href="/assets/css/components/calculator.css">
-  <link rel="stylesheet" href="/assets/css/components/korea-map.css">
-  <link rel="stylesheet" href="/assets/css/components/region-card.css">
-  <link rel="stylesheet" href="/assets/css/components/region-page.css">
-  <link rel="stylesheet" href="/assets/css/components/region-detail-map.css">
-  <link rel="stylesheet" href="/assets/css/components/city-card.css">
-  <link rel="stylesheet" href="/assets/css/components/event-timeline.css">
-  <link rel="stylesheet" href="/assets/css/components/static-pages.css">
-  <link rel="stylesheet" href="/assets/css/components/not-found.css">
+  {#- Page sheets, load order fixed here; each page lists the ones it needs in `styles` front matter. #}
+  {%- for sheet in ["hero", "calculator", "korea-map", "region-card", "region-page", "region-detail-map", "city-card", "event-timeline", "static-pages", "not-found"] %}
+  {% if sheet in (styles or []) %}<link rel="stylesheet" href="/assets/css/components/{{ sheet }}.css">{% endif %}
+  {% endfor %}
   <script type="module" src="/assets/js/main.js"></script>
 </head>
 <body{% if page.url == "/" %} class="has-hero"{% endif %}>

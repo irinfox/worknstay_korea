@@ -1,16 +1,9 @@
-// Live KTO call (ARCHITECTURE.md) — searchFestival2, fanned out across every lDongRegnCd code
-// a region owns (one code failing only drops that code's items), deduped by contentId. No
-// caching in production (ARCHITECTURE.md) — every page view is a live call. `eventStartDate` is
-// set to today's date: live-verified (80 region/reference-date checks spanning a year) that KTO
-// already excludes already-ended festivals when queried this way, so no lookback window or
-// client-side end-date re-check is needed. Some regions (e.g. Jeju) legitimately return zero — a
-// designed empty state, not a bug. Falls back to `eventsSnapshot.json` when KTO_API_KEY isn't
-// set — real festivals captured live on 2026-09-16, a point-in-time example set (unlike
-// topAttractions.json, no ongoing boost/priority logic here). On a real quota-exceeded response,
-// items are dropped entirely rather than falling back to eventsSnapshot — that snapshot is a
-// point-in-time capture, not a maintained curated set, so serving it here risks presenting an
-// already-ended festival as live; `quotaExceeded` lets the front end show an honest "check back
-// tomorrow" message instead.
+// Live KTO call: searchFestival2, fanned out across every lDongRegnCd code a region owns (one code
+// failing drops only its items), deduped by contentId. No caching — every view is a live call.
+// `eventStartDate` = today: KTO already excludes ended festivals that way. Zero results (e.g. Jeju)
+// is a designed empty state. Falls back to `eventsSnapshot.json` (point-in-time capture) when
+// KTO_API_KEY isn't set. On quota-exceeded, items are dropped rather than served from the
+// snapshot, which could show an ended festival as live; `quotaExceeded` drives the front-end message.
 import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";

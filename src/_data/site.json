@@ -10,6 +10,8 @@
     { "label": "About", "href": "/about/" }
   ],
   "footer": {
+    "repoUrl": "https://github.com/irinfox/worknstay_korea",
+    "feedbackUrl": "https://github.com/irinfox/worknstay_korea/issues?q=is%3Aissue",
     "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
   },
   "about": {

@@ -1,8 +1,8 @@
 // "Places to see nearby" filter pills — Area/Type are independent single-select groups that
 // intersect (AND) to filter the already-rendered .attraction-card list. Cards carry their
-// filter values as data-city/data-category attributes, set by region-data.js at render time —
-// this module owns pill state + card visibility, region-data.js owns fetching/rendering the
-// cards themselves. applyFilters() is exported so region-data.js can re-apply the current pill
+// filter values as data-city/data-category attributes, set by attractions.js at render time —
+// this module owns pill state + card visibility, attractions.js owns rendering the
+// cards themselves. applyFilters() is exported so attractions.js can re-apply the current pill
 // selection once live data replaces the loading placeholder (a pill can be clicked before the
 // fetch resolves).
 //
@@ -109,7 +109,7 @@ export function applyFilters(root = document) {
     setTimeout(restoreSnap, 400);
   }
 
-  // Distinct from region-data.js's "no attractions for this region at all" empty state — this
+  // Distinct from attractions.js's "no attractions for this region at all" empty state — this
   // one only appears when data exists but the current filter combination matches none of it.
   let notice = list.querySelector("[data-filter-empty]");
   if (cards.length && visibleCount === 0) {

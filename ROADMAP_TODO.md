@@ -182,6 +182,8 @@ Phase 29's deploy freeze, since it can change calculator output for real regions
 - [ ] **Non-capital decline flag scope.** Decide if non-capital cities that MOIS also lists
       (Gangneung, Gyeongju, Boryeong, Andong, +16 more in `populationDeclineAreasFull.json`)
       deserve their own editorial badge — not needed for the calculator, deliberately deferred.
+- [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last present
+      in commit 7c2f96a. Restore only if KTO approves caching (not a contest-rule matter).
 - [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
       Type1; revisit if a Type3 photo is ever swapped in.
 - [x] attraction cards: `.attraction-card__media` keeps `cover` for Type3 too (35 live entries in

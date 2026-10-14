@@ -5,6 +5,7 @@ pagination:
   alias: region
 permalink: "/regions/{{ region.slug }}/"
 layout: layouts/page.njk
+styles: [region-page, region-detail-map, city-card, event-timeline, static-pages]
 eleventyComputed:
   title: "{{ region.nameEn }}"
   description: "{{ region.shortIntro }}"
@@ -300,21 +301,21 @@ eleventyComputed:
         <span class="region-section__tick" aria-hidden="true"></span>
         <h2>Festivals &amp; events</h2>
       </div>
-      {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+      {# Default subtitle; client-side events.js swaps this text when the live fetch comes back
          quotaExceeded (KTO's daily call quota is gone) — events.js drops items entirely in that
          case (no top-picks-style fallback, see events.js header comment), so the subtitle itself
          carries the honest message instead of a card in the timeline below. Reset on every
          render so a stale message can't survive a state that later succeeds. #}
       <p class="region-section__sub" data-events-subtitle>Ongoing now, and what's coming up</p>
       {# Live per-request data (functions/api/region/[slug]/events.js), fetched and rendered by
-         region-data.js. The <noscript> message is the real no-JS content; JS never lets a
-         browser see it (region-data.js overwrites this container's innerHTML on load). #}
+         events.js. The <noscript> message is the real no-JS content; JS never lets a
+         browser see it (events.js overwrites this container's innerHTML on load). #}
       <div class="event-timeline" data-region-events data-region-slug="{{ region.slug }}">
         <noscript>
           <p class="empty-state">Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></p>
         </noscript>
       </div>
-      {# Hidden by region-data.js when the live fetch comes back quotaExceeded — attributing an
+      {# Hidden by events.js when the live fetch comes back quotaExceeded — attributing an
          empty result to KTO is only honest when KTO was actually reached (a real zero-events
          region, e.g. Jeju, still gets a real answer and keeps the credit). #}
       <p class="data-provenance" data-events-provenance>Source: {{ sources.kto.attribution }}.</p>
@@ -327,7 +328,7 @@ eleventyComputed:
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Places to visit</h2>
   </div>
-  {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+  {# Default subtitle; client-side attractions.js swaps this text when the live fetch comes back
      quotaExceeded (KTO's daily call quota is gone) and falls back to the top-picks list, so
      "today's top picks" doesn't quietly read as the full live set. Reset on every render so a
      stale "top picks" message can't survive a state that later succeeds. #}

@@ -164,7 +164,7 @@ button:focus-visible,
   z-index: var(--z-nav-overlay);
   padding: var(--space-2) var(--space-4);
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-dark);
   border-radius: var(--radius-sm);
 }
 

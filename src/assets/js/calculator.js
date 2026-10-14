@@ -278,9 +278,8 @@ function hasReadableInput(userInput, rawInput) {
   );
 }
 
-// ARCHITECTURE.md: calculator.js owns caption rendering; main.js's glue passes onResult so
-// korea-map.js's applyResult() can react to the same result for map state only — one-directional,
-// no event bus, no separate module.
+// calculator.js owns caption rendering; onResult (passed by main.js) lets the map react to the
+// same result — one-directional, no event bus.
 export function init(onResult = () => {}) {
   const form = document.querySelector("[data-calculator-form]");
   const resultEl = document.querySelector("[data-eligibility-result]");

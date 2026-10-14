@@ -1,7 +1,6 @@
-// Raw KTO EngService2 item -> our Attraction/Event models (ARCHITECTURE.md). Encodes the
-// "known quirks" list in ARCHITECTURE.md, confirmed against live-captured samples: bilingual
-// title split, HTML-entity strip, http->https, license gating (never render an image with a
-// missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset).
+// Raw KTO EngService2 item -> our Attraction/Event models: bilingual title split,
+// HTML-entity strip, http->https, license gating (never render an image with a missing/unknown
+// cpyrhtDivCd, never crop/filter a Type3 asset).
 //
 // `regionSlug` is deliberately NOT set here — these functions normalize one raw item in
 // isolation, but which region it belongs to is a fan-out concern (which lDongRegnCd code the
@@ -61,8 +60,7 @@ function splitTitle(rawTitle) {
   return { titleEn, titleKo };
 }
 
-// Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use"
-// (ARCHITECTURE.md).
+// Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use".
 function licenseOf(raw) {
   return KNOWN_LICENSES.has(raw) ? raw : null;
 }

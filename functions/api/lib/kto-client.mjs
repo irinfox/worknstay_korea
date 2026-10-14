@@ -1,12 +1,7 @@
-// Live KTO OpenAPI transport (ARCHITECTURE.md) — EngService2 only (areaBasedList2,
-// searchFestival2). Owns URL building, paging, timeout, and bounded 429/5xx
-// backoff-retry. Never throws: any failure (missing key, network error, timeout, non-2xx,
-// bad JSON, non-zero resultCode) degrades to { items: [], degraded: true } so callers can
-// always render an empty state instead of a 500.
-//
-// Raw-envelope unwrapping lives here too (not normalize.mjs): KTO's own zero-result shape is
-// "items": "" (empty string, not {}/[]), and a single-result page comes back as an object
-// instead of a 1-length array — both are transport-shape quirks, not per-field normalization.
+// Live KTO OpenAPI transport (EngService2: areaBasedList2, searchFestival2): URL building,
+// paging, timeout, bounded 429/5xx retry. Never throws — any failure degrades to
+// { items: [], degraded: true } so callers render an empty state.
+// Envelope unwrapping lives here: KTO sends "items": "" on zero results and a bare object on one.
 
 const BASE_URL = "https://apis.data.go.kr/B551011/EngService2";
 const MOBILE_OS = "ETC";
@@ -16,25 +11,13 @@ const MAX_RETRIES = 2; // bounded: up to 3 attempts total
 const RETRY_BASE_DELAY_MS = 400;
 
 const DEGRADED = { items: [], degraded: true, totalCount: 0, quotaExceeded: false };
-// data.go.kr's own error body on a 429, distinguishing "daily quota gone" from "per-second burst"
-// — both are HTTP 429, only the JSON body tells them apart:
-//   daily:      { returnReasonCode: "22", errMsg: "LIMITED_NUMBER_OF_SERVICE_REQUESTS_EXCEEDS_ERROR" }
-//   per-second: { returnReasonCode: "23", errMsg: "...PER_SECOND_EXCEEDS_ERROR" }
-// Retrying a per-second hit is worth it (resolves within the retry window); retrying a daily hit
-// never is (only clears at midnight KST) — so it fails fast instead of burning the rest of
-// MAX_RETRIES on a call that cannot succeed, and flags `quotaExceeded` so callers can show an
-// honest "we can't display more today" message instead of a generic empty state.
+// HTTP 429 body code: "22" = daily quota gone (fail fast, flag quotaExceeded), "23" = per-second
+// burst (worth retrying).
 const DAILY_QUOTA_REASON_CODE = "22";
 
-// Local dev-only visibility, not a production safeguard or a real quota tracker: this
-// module-level count only survives for one long-lived `wrangler pages dev` process (resets on
-// every restart) and, in real Cloudflare deployment, isolates recycle so it wouldn't persist
-// there either — it exists purely to make the running total visible in the terminal *during*
-// local testing. Added after burning a full day's 1,000-call dev-key quota in ~4 hours of live
-// verification in one session (repeated full-region endpoint checks, each fanning out to up to
-// 35 KTO calls). Counts every attempt this process actually sends over the network, including
-// retries.
-const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key is 1,000/day — warn well before hitting it
+// Dev-only call counter for local testing (module state resets per process); gated on
+// KTO_DEV_CACHE so it never logs in production.
+const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key is 1,000/day
 let devSessionCallCount = 0;
 let warnedAtThreshold = false;
 
@@ -44,9 +27,8 @@ function logDevSessionCall() {
   if (devSessionCallCount >= DAILY_QUOTA_WARNING_THRESHOLD && !warnedAtThreshold) {
     warnedAtThreshold = true;
     console.warn(
-      `[kto-client] WARNING: ${devSessionCallCount} live KTO calls made this dev session alone — ` +
-        `the dev key is capped at 1,000/day total. Stop live-testing and use the no-key fallback ` +
-        `or KTO_DEV_CACHE=1 or a single targeted query before doing anything else.`
+      `[kto-client] WARNING: ${devSessionCallCount} live KTO calls this dev session — the dev key ` +
+        `is capped at 1,000/day. Use the no-key fallback or KTO_DEV_CACHE=1.`
     );
   }
 }
@@ -55,16 +37,8 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.env` — never
-// in Cloudflare's production env; `wrangler.jsonc` has no `vars` block, so this can never leak
-// into production by any path in this repo). Exists because there is no production caching
-// (ARCHITECTURE.md), which otherwise makes manual QA of live data burn real quota on every
-// reload. Only successful, non-degraded, non-quota results are cached — a quota-exceeded
-// response must keep reflecting real quota state on every check, never a stale cached one.
-// Module-level, no persistence: resets with the dev process, same lifetime as
-// `devSessionCallCount` above. 24h TTL: active development means constantly reloading
-// localhost, and a code change already resets this (a fresh `pages:dev` module instance on file
-// save) well before 24h would elapse on its own.
+// Dev-only in-memory cache (KTO_DEV_CACHE=1 in `.env`, never in Cloudflare env). Only successful
+// results are cached, so quota state is never stale.
 const DEV_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 const devCache = new Map(); // request URL -> { result, expiresAt }
 
@@ -82,9 +56,7 @@ function devCacheSet(url, result) {
   devCache.set(url, { result, expiresAt: Date.now() + DEV_CACHE_TTL_MS });
 }
 
-// data.go.kr issues serviceKeys already percent-encoded; URLSearchParams re-encodes whatever
-// it's given, so passing the raw key through unchanged would double-encode it and break auth.
-// Decoding first (a no-op on an already-plain key) guarantees exactly one encoding pass.
+// data.go.kr keys come percent-encoded; decode first so URLSearchParams doesn't double-encode.
 function normalizeServiceKey(rawKey) {
   try {
     return decodeURIComponent(rawKey);
@@ -107,23 +79,16 @@ function buildUrl(endpoint, params, serviceKey) {
   return url.toString();
 }
 
-// `cacheTtl` is a Cloudflare `fetch()` `cf` directive (edge Cache API, not a browser header) —
-// harmless to pass under plain Node (undici ignores unknown RequestInit keys), so callers don't
-// need an environment check.
-async function fetchWithTimeout(url, cacheTtl) {
+async function fetchWithTimeout(url) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const init = { signal: controller.signal };
-    if (cacheTtl) init.cf = { cacheTtl, cacheEverything: true };
-    return await fetch(url, init);
+    return await fetch(url, { signal: controller.signal });
   } finally {
     clearTimeout(timer);
   }
 }
 
-// KTO's "items" field is "" on zero results, a bare object on a single result, and an array
-// only when there are 2+ results — always normalize to an array.
 function extractItems(body) {
   const raw = body?.response?.body?.items?.item;
   if (Array.isArray(raw)) return raw;
@@ -138,23 +103,14 @@ function extractItems(body) {
  *   (lclsSystm1/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for searchFestival2),
  *   plus numOfRows/pageNo for paging.
  * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string, KTO_DEV_FORCE_QUOTA?: string }} env -
- *   Cloudflare Functions env binding; `KTO_DEV_CACHE: "1"` (dev-only, see devCache above) serves
- *   repeat identical calls from an in-memory cache instead of hitting KTO again.
- *   `KTO_DEV_FORCE_QUOTA: "1"` (dev-only) short-circuits to a quota-exceeded result with no
- *   network call, to QA the fallback UI on demand.
- * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds. Currently
- *   unused: production runs with no caching; kept so caching can be
- *   re-enabled if KTO approves it.
+ *   the two KTO_DEV_* flags are dev-only: in-memory cache, and forced quota-exceeded result.
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
-export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
+export async function fetchKto(endpoint, params, env) {
   const serviceKey = env?.KTO_API_KEY;
   if (!serviceKey) return DEGRADED;
 
-  // Dev-only QA hook (`.env` only — never set in Cloudflare's production env): simulates
-  // the real daily-quota-exceeded response without any network call, so the honest fallback UI
-  // (attractions.js's topAttractions swap, region-data.js's "Top picks for today" subtitle) can
-  // be checked on demand instead of waiting for the real 1,000-call/day dev key to run out.
+  // Dev-only: simulate the daily-quota response to QA the fallback UI.
   if (env?.KTO_DEV_FORCE_QUOTA === "1") return { ...DEGRADED, quotaExceeded: true };
 
   const url = buildUrl(endpoint, params, serviceKey);
@@ -170,8 +126,8 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let response;
     try {
-      logDevSessionCall();
-      response = await fetchWithTimeout(url, cacheTtl);
+      if (devCacheEnabled) logDevSessionCall();
+      response = await fetchWithTimeout(url);
     } catch {
       // network error or timeout (AbortError)
       if (attempt < MAX_RETRIES) {
@@ -231,25 +187,21 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
 }
 
 /**
- * Fetch all pages up to `maxPages`, deduping is the caller's job (contentId can repeat across
- * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md). Stops early once
- * a page returns fewer rows than requested or `totalCount` is covered. One degraded page
- * degrades the whole result (no partial-page merging) — a caller wanting partial-region
- * resilience across *codes* should call fetchKto per code itself (see region-map.mjs), not rely
- * on this helper's own retry to paper over it.
+ * Fetch pages up to `maxPages`; deduping is the caller's job. One degraded page degrades the
+ * whole result — callers wanting per-code resilience call fetchKto per code (see region-map.mjs).
  */
 export async function fetchKtoAllPages(
   endpoint,
   params,
   env,
-  { numOfRows = 20, maxPages = 5, cacheTtl } = {}
+  { numOfRows = 20, maxPages = 5 } = {}
 ) {
   const items = [];
   let pageNo = 1;
   let totalCount = Infinity;
 
   while (pageNo <= maxPages && items.length < totalCount) {
-    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env, { cacheTtl });
+    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env);
     if (page.degraded) return { items: [], degraded: true, totalCount: 0, quotaExceeded: page.quotaExceeded };
 
     items.push(...page.items);

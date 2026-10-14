@@ -91,8 +91,9 @@ map are revealed on hover/tap (`region-detail-map.js`).
 ```
 functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
                     city/[slug]/study-cafes.js              Kakao® proxy
-                    lib/                                    API clients, normalizers, region/city
-                                                            maps
+                    lib/                                    KTO/Kakao clients, normalizers,
+                                                            region/city maps, attraction fan-out
+                                                            + top-picks boost
 src/_data/          editorial data and API fallbacks (§6)
 src/_includes/      layouts/ + partials/ (region-card, city-card, korea-map, hero, …)
 src/assets/         css/ (tokens, base, components/), js/ (one module per behaviour),

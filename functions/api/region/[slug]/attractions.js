@@ -1,16 +1,10 @@
-// Live KTO call (ARCHITECTURE.md) — areaBasedList2, one broad call per lDongRegnCd code per
-// lclsSystm1 top bucket (NA/VE/HS), reclassified server-side (in this Function) into today's curated lclsSystm2/3
-// whitelist (not the retired cat1/2/3 tree, which under-surfaced popular sites). Fanned out
-// across every lDongRegnCd code a region owns (Promise.allSettled: one code/bucket failing only
-// drops that slice), deduped by contentId. No caching in production (ARCHITECTURE.md) —
-// every page view is a live call.
-// Falls back to `topAttractions.json` (real, hand-verified KTO data, also boosted into live
-// results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so
-// callers always see `{ items: Attraction[], quotaExceeded: boolean }`.
-//
-// The fetch/classify/dedupe orchestration itself lives in lib/attraction-fetch.mjs (no JSON imports
-// there, unlike this file) so it's importable from a plain Node investigation script too — see that
-// module's header comment and notes/attraction-gallery-report.md ("Final checks").
+// Live KTO call: areaBasedList2, one call per lDongRegnCd code per lclsSystm1 bucket (NA/VE/HS),
+// reclassified here into the curated lclsSystm2/3 whitelist. Fanned out across a region's codes
+// (Promise.allSettled: a failed slice is dropped), deduped by contentId. No caching — every view
+// is a live call. Falls back to `topAttractions.json` (hand-verified, also boosted into live
+// results — boost-curated.mjs) when KTO_API_KEY isn't set or the quota is gone, so callers always
+// get `{ items: Attraction[], quotaExceeded: boolean }`. Orchestration lives in
+// lib/attraction-fetch.mjs so plain Node scripts can import it.
 import regions from "../../../../src/_data/regions.json";
 import topAttractions from "../../../../src/_data/topAttractions.json";
 import { fetchRegionAttractions } from "../../lib/attraction-fetch.mjs";
@@ -47,11 +41,8 @@ export async function onRequestGet({ params, env }) {
   if (codes.length) {
     ({ items, quotaExceeded } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
 
-    // KTO's daily call quota is gone for the account — the live fetch above can't be trusted (some
-    // calls were quota-blocked), so fall back to the top-picks set
-    // rather than show a partial or empty gallery. `quotaExceeded` stays true so the front end
-    // swaps in "Top picks for today" instead of implying this is the full live list
-    // (region-data.js).
+    // Quota gone: some live calls were blocked, so serve top picks rather than a partial gallery.
+    // `quotaExceeded` stays true so the front end says "Top picks for today".
     if (quotaExceeded) {
       items = regionTopPicks;
     } else {
