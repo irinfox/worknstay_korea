@@ -8,9 +8,9 @@
 // results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so
 // callers always see `{ items: Attraction[], quotaExceeded: boolean }`.
 //
-// The fetch/classify/dedupe orchestration itself lives in lib/attraction-fetch.mjs (no JSON
-// imports there, unlike this file) so it's importable from a plain Node investigation script too
-// — see that module's header comment and notes/attraction-gallery-report.md §7.
+// The fetch/classify/dedupe orchestration itself lives in lib/attraction-fetch.mjs (no JSON imports
+// there, unlike this file) so it's importable from a plain Node investigation script too — see that
+// module's header comment and notes/attraction-gallery-report.md ("Final checks").
 import regions from "../../../../src/_data/regions.json";
 import topAttractions from "../../../../src/_data/topAttractions.json";
 import { fetchRegionAttractions } from "../../lib/attraction-fetch.mjs";

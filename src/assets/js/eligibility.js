@@ -42,7 +42,8 @@ function thresholdFor(multiplier, rules) {
  * @param {number} userInput.salaryKrw - annual salary in KRW
  * @param {number} userInput.age
  * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (ARCHITECTURE.md
- *   §7: overrides the age-based multiplier with a flat family multiplier, regardless of age)
+ *   visa eligibility rules: overrides the age-based multiplier with a flat family multiplier,
+ *   regardless of age)
  * @param {object} referenceData
  * @param {object} referenceData.rules - visaRules.json
  * @param {object[]} referenceData.regions - regions.json entries; only `slug`/`isCapitalArea`

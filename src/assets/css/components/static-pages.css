@@ -1020,8 +1020,8 @@ ul.about-hero__chips {
 /* Structural swap: real table ≥1024px (matches --bp-desktop, the same "wide vs narrow structure"
    threshold as the homepage region-info infographic/carousel swap) — the one exception to this
    page's no-media-query grids, because the phone view isn't a reflowed table, it's a different
-   set of elements entirely. Both markups always render (rule 6: no JS either way); CSS alone
-   picks which one is visible. */
+   set of elements entirely. Both markups always render (progressive enhancement: no JS
+   either way); CSS alone picks which one is visible. */
 @media (min-width: 1024px) {
   .settling-price-table__scroll {
     display: block;

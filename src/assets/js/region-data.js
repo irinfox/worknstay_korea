@@ -540,7 +540,7 @@ function setupPagers(container) {
         li.hidden = Math.floor(i / EVENTS_PAGE_SIZE) !== page - 1;
       });
       status.textContent = `${page} / ${pages}`;
-      // Presentational readout only — pagination math above is unchanged (HANDOFF task 06).
+      // Presentational readout only — pagination math above is unchanged.
       if (range) {
         const from = (page - 1) * EVENTS_PAGE_SIZE + 1;
         const to = Math.min(page * EVENTS_PAGE_SIZE, items.length);

@@ -1,46 +1,45 @@
 // Pure attraction fan-out/classify/dedupe orchestration, split out of attractions.js so it has no
 // JSON imports (unlike city-map.mjs/region-map.mjs, which read _data/*.json without import
-// attributes — fine under Cloudflare's esbuild bundler, but unimportable from a plain Node
-// script). `citySlugFor` is injected rather than imported directly so this module stays JSON-free
-// and callable from both the live endpoint (functions/api/region/[slug]/attractions.js) and
-// one-off investigation scripts (notes/attraction-gallery-report.md §7) without duplicating the
-// fetch/classify logic itself.
+// attributes — fine under Cloudflare's esbuild bundler, but unimportable from a plain Node script).
+// `citySlugFor` is injected rather than imported directly so this module stays JSON-free and
+// callable from both the live endpoint (functions/api/region/[slug]/attractions.js) and one-off
+// investigation scripts (notes/attraction-gallery-report.md, "Final checks") without duplicating
+// the fetch/classify logic itself.
 import { fetchKtoAllPages } from "./kto-client.mjs";
 import { normalizeAttraction } from "./normalize.mjs";
 
 // contentTypeId is deliberately never passed to the KTO call below — see attractions.js's module
-// comment. Currently a no-op (every code in RECLASSIFY_BY_LCLS_SYSTM2 already resolves to 76/78);
-// kept as free insurance against a future whitelist edit adding a mixed-type bucket (e.g. VE05/
+// comment. Redundant today: every code in RECLASSIFY_BY_LCLS_SYSTM2 already resolves to 76/78. Kept
+// as free insurance against a future whitelist edit adding a mixed-type bucket (e.g. VE05/
 // VE10/VE12 — not in the map below, and not all-76/78 like the rest of VE).
 const ALLOWED_CONTENT_TYPE_IDS = new Set([76, 78]);
-// arrange=P: view-count order, representative image required. Undocumented in the EngService2
-// spec (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on
-// every region code. The documented "Q" is *modified-date* order, not view-count — it surfaces
-// whatever was last edited in the CMS (shop branches, recent listings) and buries stable
-// landmark records, so it was the wrong default. See notes/attraction-gallery-report.md §2.
+// arrange=P: view-count order, representative image required. Undocumented in the EngService2 spec
+// (which only lists A/C/D/O/Q/R) but stable in practice and returns resultCode 0000 on every region
+// code. The documented "Q" is *modified-date* order, not view-count — it surfaces whatever was last
+// edited in the CMS (shop branches, recent listings) and buries stable landmark records, so it was
+// the wrong default. See notes/attraction-gallery-report.md, "Historical background".
 export const ARRANGE = "P";
 export const FALLBACK_ARRANGE = "R"; // created-date order, image required — closest documented match to P
-// If KTO ever silently drops support for the undocumented `P`, the realistic failure mode isn't
-// an error or empty groups (per-bucket emptiness is normal — most lclsSystm2/3 sub-codes are
-// legitimately sparse for a given region) — it's `P` reverting to some other order without
-// telling us. `fetchRegionAttractions` below gates on that by treating the first code's VE call
-// as the probe: if it comes back genuinely empty, every other call in the fan-out (and a refetch
-// of that one bucket) switches to FALLBACK_ARRANGE — the only scenario that pays for a bucket
-// twice; the common case (arrange=P working) pays for it once, same as any other bucket. Gate
-// specifically on VE, never NA/HS — both have near-zero catalogs on some codes
-// (notes/attraction-gallery-report.md §4), so an empty result there doesn't reliably mean
-// `arrange=P` broke.
+// If KTO ever silently drops support for the undocumented `P`, the realistic failure mode isn't an
+// error or empty groups (per-bucket emptiness is normal — most lclsSystm2/3 sub-codes are
+// legitimately sparse for a given region) — it's `P` reverting to some other order without telling
+// us. `fetchRegionAttractions` below gates on that by treating the first code's VE call as the
+// probe: if it comes back genuinely empty, every other call in the fan-out (and a refetch of that
+// one bucket) switches to FALLBACK_ARRANGE — the only scenario that pays for a bucket twice; the
+// common case (arrange=P working) pays for it once, same as any other bucket. Gate specifically on
+// VE, never NA/HS — both have near-zero catalogs on some codes (notes/attraction-gallery-report.md,
+// "Real per-code catalog sizes"), so an empty result there doesn't reliably mean `arrange=P` broke.
 export const PROBE_LCLS_SYSTM1 = "VE";
 // The 3 broad top-level buckets a region's attractions live under — collapses what used to be 7
 // narrow, pre-filtered calls per code into 3 unfiltered ones, reclassified below
-// (notes/attraction-gallery-report.md §3-§5: broadening matched or beat narrow's curated-pick
-// presence on both codes tested, for fewer calls).
+// (notes/attraction-gallery-report.md, "Query shape" through "Narrow vs broad": broadening matched
+// or beat narrow's curated-pick presence on both codes tested, for fewer calls).
 export const BROAD_LCLS_SYSTM1 = ["NA", "VE", "HS"];
 // numOfRows costs zero extra API quota — KTO returns min(totalCount, numOfRows) for the same one
 // call regardless of the value requested — so this is set comfortably above the largest catalog
 // observed anywhere (244, VE on lDongRegnCd 11), not tuned per bucket
-// (notes/attraction-gallery-report.md §4). maxPages: 1 is safe at this numOfRows for every bucket
-// seen so far.
+// (notes/attraction-gallery-report.md, "Real per-code catalog sizes"). maxPages: 1 is safe at this
+// numOfRows for every bucket seen so far.
 const ROWS_PER_GROUP = 250;
 
 // --- Curation reference (editorial call, not derived from KTO docs) -------------------------

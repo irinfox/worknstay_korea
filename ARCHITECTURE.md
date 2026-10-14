@@ -53,8 +53,8 @@ region-card partial.
 
 **Eligibility-gated regions:** greyed-out regions aren't clickable — showing them as navigable
 would misrepresent the visa gating, the core value prop. Gating is link-only (href stripped from
-the map shape and the card's "Open <region> →" link); the *why* lives in the calculator caption and map
-legend.
+the map shape and the card's "Open <region> →" link); the *why* lives in the calculator caption
+and map legend.
 
 **Partial state (Gyeonggi-do):** a nominally capital-tier region with population-decline counties
 (§7) gets a distinct fill and a "Partly eligible" note plate; its map and card links are
@@ -91,7 +91,8 @@ map are revealed on hover/tap (`region-detail-map.js`).
 ```
 functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
                     city/[slug]/study-cafes.js              Kakao® proxy
-                    lib/                                    API clients, normalizers, region/city maps
+                    lib/                                    API clients, normalizers, region/city
+                                                            maps
 src/_data/          editorial data and API fallbacks (§6)
 src/_includes/      layouts/ + partials/ (region-card, city-card, korea-map, hero, …)
 src/assets/         css/ (tokens, base, components/), js/ (one module per behaviour),
@@ -159,11 +160,11 @@ a count and level, or a degraded marker. `Cache-Control: no-store`
 `total_count`. The client is all-or-nothing per page and falls back to the editorial
 `otherWorkspaces[].fallbackLevel`; level thresholds live in `studyCafeLevels.json`.
 
-**Attraction ordering:** the server orders per region (`regions.json` `attractionPriority`); a per-city override
-(`cities.json` `attractionPriority`; `regions.json` `elsewhereAttractionPriority` for the
-"Elsewhere" pill) applies client-side only while that city's filter is active, because
-the server emits one array and per-city order would otherwise leak into "All". Attractions
-without a photo are dropped.
+**Attraction ordering:** the server orders per region (`regions.json` `attractionPriority`); a
+per-city override (`cities.json` `attractionPriority`; `regions.json`
+`elsewhereAttractionPriority` for the "Elsewhere" pill) applies client-side only while that
+city's filter is active, because the server emits one array and per-city order would otherwise
+leak into "All". Attractions without a photo are dropped.
 
 **Known KTO quirks** (baked into `kto-client.mjs`/`normalize.mjs`):
 - `areaBasedList2` uses undocumented `arrange=P` (view-count); `Q` (modified-date) buries
@@ -227,7 +228,8 @@ EligibilityResult   tier: 'ineligible' | 'nonCapitalOnly' | 'all'
 ```
 
 Invariants:
-- `Region`/`City` carry both `nameEn` and `nameKo`; attractions and events carry `titleEn`/`titleKo`.
+- `Region`/`City` carry both `nameEn` and `nameKo`; attractions and events carry
+  `titleEn`/`titleKo`.
 - `lDongRegnCd` is the canonical KTO key.
 - `eligibility.js` is a pure function `(userInput, referenceData) → EligibilityResult`
   (`userInput = { salaryKrw, age, hasFamily }`), no DOM, tested via

@@ -22,16 +22,16 @@ function check(label, actual, expected) {
   }
 }
 
-// Sanity check on the source figures themselves (ARCHITECTURE.md / visa_rules.pdf p.3's
-// table), so a silent visaRules.json edit is caught here too. Asserts the actual threshold
-// values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not just the
-// multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't be
-// multiplied against gniPerCapitaKrw to reproduce these (MOJ derived them from the unrounded
-// GNI); a prior version of this check only asserted the multipliers, which is why it didn't
-// catch that bug.
+// Sanity check on the source figures themselves (the Ministry of Justice release's table, see
+// visaRules.json sourceUrl), so a silent visaRules.json edit is caught here too. Asserts the actual
+// threshold values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not
+// just the multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't
+// be multiplied against gniPerCapitaKrw to reproduce these (MOJ derived them from the unrounded
+// GNI); a prior version of this check only asserted the multipliers, which is why it didn't catch
+// that bug.
 const t = (multiplier) => rules.thresholdsByMultiplier[multiplier];
 check(
-  "visaRules.json matches visa_rules.pdf p.3's published thresholds",
+  "visaRules.json matches the Ministry of Justice's published thresholds",
   {
     gniPerCapitaKrw: rules.gniPerCapitaKrw,
     age18to34: [t(rules.ageBands[0].multiplierNonCapitalArea), t(rules.ageBands[0].multiplierCapitalArea)],
