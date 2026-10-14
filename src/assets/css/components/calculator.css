@@ -16,7 +16,7 @@
   border-radius: 12px;
   background: var(--color-bg);
   color: var(--color-text);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 14px 34px rgba(22, 32, 28, 0.22);
 }
 
 .calculator-mount__noscript {
@@ -239,7 +239,7 @@
 }
 
 .eligibility-result--none {
-  background: var(--color-result-amber); /* #FDF0E4 — not eligible yet / under 18 */
+  background: var(--color-accent-tint); /* #F7EAD9 — not eligible yet / under 18 */
 }
 
 .eligibility-result--info {
@@ -249,7 +249,7 @@
 @media (min-width: 768px) {
   .calculator-mount {
     padding: 20px;
-    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 18px 44px rgba(22, 32, 28, 0.24);
   }
 
 

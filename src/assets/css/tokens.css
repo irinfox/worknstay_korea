@@ -22,6 +22,7 @@
   --color-text-secondary: #4a544e; /* Ink soft (lighter): secondary card copy */
   --color-text-muted: #5c6660; /* Muted: captions, addresses, source lines */
   --color-border: #e4e7e4; /* Hairline: card borders */
+  --color-border-strong: #cfd6d2; /* Hairline strong: interactive pill/chip borders */
   --color-border-soft: #edf0ee; /* Hairline (lighter): row dividers, footer/card-footer rule */
   --color-primary: #0f7b54; /* Green: primary accent, in-site links, eligible state */
   --color-primary-dark: #0b5c3f; /* Green deep: vibe-tag text, link hover */
@@ -35,14 +36,12 @@
   /* Slightly deeper mint reserved for the DESIGN.md "Vibe tag" pill (region header + city cards):
      #DCEFE5 bg / #A9D8C2 border / #0B5C3F text. */
   --color-vibe-tag-bg: #dcefe5;
-  --color-accent: #c2531a; /* Orange text: outbound links, festival dates, spicy tag */
+  --color-accent: #c2531a; /* Orange text: outbound links (see DESIGN.md) */
   --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
+  --color-accent-chip: #b04a13; /* Orange chip: status-chip text on amber */
   --color-accent-ink: #a8450f; /* Orange ink: small orange text on tinted plates (dish labels) */
-  /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
-     calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
-  --color-result-amber: #f7ead9;
   --color-link: var(--color-primary);
   --color-focus-ring: #2f6fed;
 
@@ -144,13 +143,13 @@
   --font-size-2xl: clamp(1.625rem, 1.4rem + 1vw, 2.125rem);
   --font-size-3xl: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
   --line-height-tight: 1.2;
-  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65–1.7 */
+  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65 */
 
   /* Radius / shadow / z-index */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --shadow-sm: 0 1px 2px rgba(28, 27, 25, 0.08);
-  --shadow-md: 0 4px 16px rgba(28, 27, 25, 0.12);
+  --shadow-sm: 0 1px 2px rgba(22, 32, 28, 0.08);
+  --shadow-md: 0 4px 16px rgba(22, 32, 28, 0.12);
   --z-header: 100;
   --z-nav-overlay: 200;
 

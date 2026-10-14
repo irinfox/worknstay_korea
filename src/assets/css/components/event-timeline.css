@@ -156,7 +156,7 @@
 }
 
 .event-card__badge--month {
-  color: var(--color-accent);
+  color: var(--color-accent-chip);
   background: var(--color-accent-tint);
 }
 
@@ -197,6 +197,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.event-place__city--ko {
+  font-family: var(--font-family-ko);
 }
 
 .event-place__copy {
@@ -382,9 +386,9 @@
   }
 }
 
-/* --- 900 and below: hover can't be assumed (DESIGN.md § Mobile), so the copy control carries
-   its "Copy full address" label like it does on phone, not just a tooltip, and grows to a 44px
-   tap target with padding pulled back by a negative margin. --- */
+/* --- 900 and below: the copy control carries its "Copy full address" label like it does on
+   phone, not just a tooltip, and grows to a 44px tap target with padding pulled back by a
+   negative margin. --- */
 @media (max-width: 900px) {
   .event-place__copy {
     min-width: 44px;
