@@ -947,6 +947,7 @@ ul.region-seasons {
   font-size: 15px;
   font-weight: 600;
   text-align: right;
+  white-space: nowrap;
 }
 
 .threshold-card__note {

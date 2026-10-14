@@ -78,16 +78,13 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] **28 — Accessibility + robustness.** `aria-live` result caption, keyboard path through the
       map, 44px coarse-pointer hit targets, `<noscript>` fallbacks.
 
-## Phase 29 — Responsive pass
-- [ ] 360/768/1280 + landscape-phone on hero/calculator/caption/map.
-- [ ] Region-page tabs (single-panel switching) and the shared `.content-page` centered layout
-      (region pages, `/visa-info/`, `/settling-in/`) still need a real DevTools-preset pass.
-- Verify: each checkpoint recorded.
+## Phases 29–31 — done (responsive pass, contest write-up, scope decisions)
 
-## Phases 30–31 — done (contest write-up, domain, scope decisions)
-
-- [x] 기능설명서 write-up mapped to Task #4; custom domain.
-- [x] No editorial badge for non-capital decline areas (nationwide list stays reference-only in
+- [x] **29 — Responsive pass.** Home, region, `/visa-info/`, `/settling-in/` and the decline page
+      checked at 360 / 412 / 768 / 900 / desktop and landscape phone (667×375, 844×390): no
+      horizontal overflow. Fixed threshold-range wrap and the coliving divider.
+- [x] **30–31 — Contest write-up + decisions.** 기능설명서 mapped to Task #4; custom domain. No
+      editorial badge for non-capital decline areas (nationwide list stays reference-only in
       `notes/populationDeclineAreasFull.json`); attraction cards keep `cover` for Type3 images.
 
 ## Phase 32 — Public repo release

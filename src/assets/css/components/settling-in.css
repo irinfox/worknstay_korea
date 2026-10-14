@@ -434,6 +434,7 @@
 .settling-coliving-list {
   border: 1px solid var(--color-border);
   border-radius: 12px;
+  overflow: hidden;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(max(280px, 48%), 1fr));
 }
@@ -450,6 +451,21 @@
 
 .settling-coliving-row:first-child {
   border-top: none;
+}
+
+/* A lone last row keeps its cell, but its divider continues across the empty cell beside it
+   (clipped by the list when there is a single column). */
+.settling-coliving-row:last-child:nth-child(odd) {
+  position: relative;
+}
+
+.settling-coliving-row:last-child:nth-child(odd)::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 100%;
+  width: 100%;
+  border-top: 1px solid var(--color-border-soft);
 }
 
 .settling-coliving-row__name {
