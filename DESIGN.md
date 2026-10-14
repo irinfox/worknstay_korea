@@ -177,9 +177,9 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   — inline beside the title, baseline-aligned, wrapping only under width pressure. *Term* (a
   guide page's title — Visa info, Settling in) — own line under the H1, muted ink, every width.
 - **Region prev/next**: the six region pages only — never on the homepage, static pages, or the
-  decline-designated counties page (not a region, not in the cycle). Own band at the end of the
-  page content, prev at the left container edge, next at the right, 32px clear of the footer text.
-  One rule at most — separate it from the footer with space, not a second hairline.
+  decline-designated counties page (not a region, not in the cycle). Sits inside the
+  footer, above its content, prev at the left container edge, next at the right, 28px clear of the
+  footer text. One rule at most — the footer's own top hairline, no second one.
 - **Section nav strip**: pages long enough to need one (roughly 3+ screens of scroll) get a
   sticky sub-nav (`top: 12px`) — section links plus a `Top` link; the main nav itself never
   sticks, only this. Section targets need `scroll-margin-top` matching the strip's height.
@@ -214,7 +214,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   `Website ↗ Instagram ↗ Naver Map ↗` as underlined text links (never buttons).
 - **Study cafés**: 4-cell battery (12–15×9px, `#0F7B54` filled / `#DCE3DF` empty) + count label
   + `Naver Map search ↗` at the right of the same row, 12px orange. No description. The row never
-  wraps at any width — shorten the label to `Naver Map ↗` at 360 rather than wrapping it.
+  wraps at any width — shorten the label to `Naver Map ↗` at 420 rather than wrapping it.
   Unrated: no battery (empty reads as `none`), muted 400 `not rated yet`.
 - **Chains**: grouped under their own "Chains" subtitle (13px/600 muted) below the solo venues,
   non-Korean ones first. Name is plain ink, not a link (orange got loud repeated); a small
@@ -249,6 +249,8 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   track). National map: halo tracks each shape's own current fill —
   `oklch(min(L_fill + 0.10, 0.96) C_fill H_fill)`.
 - **Dishes**: photo, name + Korean name, note, optional `Where to eat it ↗`.
+- **Filter pill**: 13px, Hairline strong border; selected = solid green with white text. 44px tap
+  area on phone.
 - **Dish plate**: 12px/500 lowercase, radius 20px, padding 3px 10px, opaque fill, 9px inset at the
   photo's top-left, `gap:5px` row. Heat plates carry `#E08A2E` border + `#A8450F` ink, fill amber
   `#F7EAD9` if cooked in and panel `#F7F9F8` if removable; all other labels are panel fill, hairline
