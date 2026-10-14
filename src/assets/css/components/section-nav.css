@@ -1,0 +1,208 @@
+/* Shared .page-contents strip (page-contents.js) on region, settling-in and visa-info pages.
+   Per-page spacing overrides live with each page's own sheet. */
+
+/* Sticky contents strip. Phone: a single scrolling row of abbreviated labels with a fixed "Top"
+   button divided off at the right (its own non-scrolling flex sibling, not part of the scroll
+   area). Desktop: the same two elements, but .page-contents__links becomes `display:contents` so
+   its link children rejoin .page-contents' own flex-wrap row and Top is pushed right by
+   margin-left:auto — same DOM, no markup duplication between breakpoints. Section headings stay
+   spelled out (DESIGN.md/reference instruction) — only this strip abbreviates, via paired
+   full/short spans toggled by the same 1024px breakpoint. */
+.page-contents {
+  position: sticky;
+  top: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: stretch;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  font-size: 13.5px;
+  box-shadow: var(--shadow-sm);
+}
+
+.page-contents__links {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  /* Left-aligned at rest — space-evenly only takes over below 400px (see that breakpoint), where
+     the row is tight enough that even spacing actually earns its keep. Above that (Pixel-9-width
+     phones and up, still below the 768px display:contents switch), left-aligned with real gaps
+     reads as the normal, un-stretched row; space-evenly there just pads the row out oddly with
+     room it doesn't need. */
+  justify-content: flex-start;
+  /* All 5 labels + Top fit without scrolling from ~360px up (the narrowest target width) only at
+     this tighter gap — 14px between items pushed "Useful links" past the strip's right edge. */
+  gap: var(--space-2);
+  padding: 0 14px;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.page-contents__links::-webkit-scrollbar {
+  display: none;
+}
+
+.page-contents__links a {
+  color: var(--color-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  flex: 0 0 auto;
+}
+
+/* Gated behind real hover capability (korea-map.css has the fuller note on why): touch has no
+   way to "leave" an element, so tapping a link here would otherwise leave it permanently
+   underlined until some other tap happened to land on it again. */
+@media (hover: hover) {
+  .page-contents__links a:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Scrollspy (page-contents.js): current section's link, underlined in the same orange as the
+   main nav's active-page rule (header.css) but thinner — this strip sits one size down from
+   the primary nav, so its own "you are here" marker follows suit. */
+.page-contents__links a.is-active {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent-rule);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+/* Faded in once page-contents.js reveals it (strip stuck) — without JS this stays visible
+   throughout, which is still a real, always-reachable <a href> (progressive enhancement,
+   CLAUDE.md), just not deferred. Kept in flow at every state (opacity/visibility, not
+   display:none) so it always holds its own width — .page-contents__links (below) would otherwise
+   grow into that space while Top is hidden and reflow the strip the moment it fades in. */
+.page-contents__top {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-left: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  background: var(--color-surface);
+  border-radius: 0 10px 10px 0;
+}
+
+.js-nav-ready .page-contents__top {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.js-nav-ready .page-contents__top.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .page-contents__top:hover {
+    color: var(--color-text-soft);
+    text-decoration: underline;
+  }
+}
+
+.page-contents__top-icon {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-left: 1.5px solid var(--color-text-muted);
+  border-top: 1.5px solid var(--color-text-muted);
+  transform: rotate(45deg);
+  position: relative;
+  top: 1px;
+}
+
+/* Below 400px the word doesn't earn its keep next to 6 short section labels — icon only, with
+   aria-label carrying the accessible name (the template sets it on the <a> unconditionally, so
+   it's already there when this rule hides the visible label from the a11y tree too). Fixed 44px
+   width keeps the tap target square regardless of how narrow the icon itself is. */
+@media (max-width: 399.98px) {
+  .page-contents__top-label {
+    display: none;
+  }
+
+  .page-contents__top {
+    width: 44px;
+    justify-content: center;
+    padding: 0;
+  }
+
+  /* Region page's strip is the tightest case (6 items, vs visa-info's 5 / settling-in's 4) —
+     measured live at 360px, the base 8px gap / 14px padding above overflows by ~17px even with
+     the narrower Top button just above. Switched to space-evenly with gap/padding both zeroed so
+     it owns 100% of the spacing: any non-zero gap or padding just adds a fixed amount on top of
+     what space-evenly computes rather than participating in its split, which is what produced
+     uneven edge-vs-inter-label gaps when they were tried (measured live, both directions — a gap
+     floor made edges wider, padding on top of a zero gap made them wider still). With both at 0,
+     every gap — including the two edges — comes out equal, on every page, with room to spare even
+     on region's own tightest row. Scoped to this one breakpoint (same as the Top icon above) —
+     above it, the row has enough real width that evenly stretching it out looks padded and
+     unmoored rather than proportional; left-aligned (base rule) reads better there. Tightened for
+     every page (not just region), so the strip stays genuinely one component with one behaviour
+     at every width; overflow-x:auto stays as a safety net rather than the primary mechanism. */
+  .page-contents__links {
+    justify-content: space-evenly;
+    gap: 0;
+    padding: 0;
+  }
+}
+
+.page-contents__short {
+  display: inline;
+}
+
+.page-contents__full {
+  display: none;
+}
+
+/* This one component gets its own (lower) breakpoint rather than the page's 1024px: the desktop
+   row (full labels + Top, one line) fits comfortably well under tablet width — holding it to
+   1024 left the phone-style scrolling strip's left-clustered labels stranded with a wide gap of
+   bare row to their right, well short of Top. --bp-tablet (768px) is the nearest already-
+   documented threshold that clears the content's actual fit point, so it's reused here instead
+   of a new magic number. */
+@media (min-width: 768px) {
+  .page-contents {
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 20px;
+    padding: 14px 18px;
+    font-size: 14px;
+  }
+
+  .page-contents__links {
+    display: contents;
+  }
+
+  .page-contents__links a {
+    min-height: auto;
+  }
+
+  .page-contents__top {
+    margin-left: auto;
+    padding: 0;
+    border-left: none;
+    background: transparent;
+    border-radius: 0;
+    min-height: auto;
+  }
+
+  .page-contents__short {
+    display: none;
+  }
+
+  .page-contents__full {
+    display: inline;
+  }
+}

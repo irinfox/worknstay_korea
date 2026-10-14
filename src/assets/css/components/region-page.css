@@ -83,7 +83,7 @@
   margin-bottom: var(--space-6);
 }
 
-/* Shared .page-contents strip (static-pages.css, page-contents.js) — same sticky sub-nav as
+/* Shared .page-contents strip (section-nav.css, page-contents.js) — same sticky sub-nav as
    visa-info/settling-in, and the same 26px/36px gap around it visa-info gets for free from its
    own flex-column `gap`. .content-page is a plain block, not flex, so both edges are stated here
    explicitly instead — scoped with :has() to when a strip actually follows, so
