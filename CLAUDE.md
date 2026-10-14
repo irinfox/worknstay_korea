@@ -36,19 +36,20 @@ the durable, brief set of project-scope agreements.
      the key set, and also add `KTO_DEV_CACHE=1` to `.env`. Repeat identical calls are then
      served from an in-memory cache instead of hitting KTO again. Dev-only — never set this in
      Cloudflare's production environment.
-- `ARCHITECTURE.md` is a decisions record, not a scratchpad. So keep three rules:
-1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as
-   Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is
-   independent of project scheduling.
-2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and
-   a one-line "why" at most.
-3. Code comments don't cite ARCHITECTURE.md section numbers or CLAUDE.md rule numbers — they
-   drift when renumbered. State the decision in the comment; at most name the doc.
-- keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase
-  or marked as undone during current phase.
+- Docs record decisions, not history: keep `ARCHITECTURE.md` and `ROADMAP_TODO.md` concise — state
+  the decision that stands and a one-line "why" at most, no reasoning trail. Follow-up todo's go
+  in a separate phase or are marked undone in the current one.
+- Never point at identifiers that drift: no ROADMAP_TODO.md phase numbers in ARCHITECTURE.md
+  (phases are scheduling; ARCHITECTURE.md is independent of it), and no ARCHITECTURE.md section or
+  CLAUDE.md rule numbers in code comments — name the doc and state the decision instead.
 
 ## Design conventions
 Follow DESIGN.md for all visual decisions (palette, type, spacing, component rules).
+
+## UX decisions
+
+Region map and info panel, carousel, eligibility gating: decisions and reasons live in
+`ARCHITECTURE.md` §3 (map conventions included). Read them before changing any of those.
 
 ## Tech stack (do not add to this list without strong justification)
 
@@ -76,8 +77,8 @@ reasoning for each choice — the reasoning is the guardrail, not just the list.
    - The `MOCK`/`PLACEHOLDER` marker convention was scaffolding-only and is no longer used; no
      such markers remain in `_data`. Don't ship unverified values — if one is unavoidable, mark
      it on its record (`source`/`note`) and say so.
-5. Every KTO-derived UI block shows data provenance and has a designed empty state (some
-   regions currently have zero upcoming festivals — that's expected, not a bug).
+5. Every KTO-derived UI block shows data provenance and has a designed empty state (a
+   region can have zero upcoming festivals — that's expected, not a bug).
 6. Progressive enhancement: links and static content work without JS (every region link is a
    real `<a href>`). The calculator, the live map states and the API-fed blocks (attractions,
    events, study-café counts) need JS.
@@ -88,8 +89,3 @@ reasoning for each choice — the reasoning is the guardrail, not just the list.
 9. Keep both English and Korean names on regions, cities, attractions and events
    (`nameEn`/`nameKo`, `titleEn`/`titleKo`) — don't strip the Korean "for simplicity". Users
    search by Korean name (e.g. in Naver Map), where romanized search is often worse.
-
-## UX decisions
-
-Region map and info panel, carousel, eligibility gating: decisions and reasons live in
-`ARCHITECTURE.md` §3 (map conventions included). Read them before changing any of those.
