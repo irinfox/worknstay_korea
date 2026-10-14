@@ -1,11 +1,12 @@
 ---
 layout: layouts/page.njk
+styles: [hero, calculator, korea-map, region-card]
 ---
 {% include "partials/hero.njk" %}
 
 {#
-  Region-info shell (architecture.md §3): one shared region-card.njk partial feeds two
-  render modes, switched by a width-only CSS breakpoint (1200px, see --bp-region-info-wide in
+  Region-info shell (ARCHITECTURE.md): one shared region-card.njk partial feeds two
+  render modes, switched by a width-only CSS breakpoint (1024px, see --bp-region-info-wide in
   tokens.css) — never both at once, never recomputed on resize.
     - Wide (region-infographic): all 6 regions permanently visible around the map, in two
       fixed-position columns connected to the map by static, hand-positioned SVG leader lines.
@@ -97,8 +98,9 @@ layout: layouts/page.njk
 
   {#
     Narrow-viewport carousel: all 6 region cards as a horizontal scroll-snap row + dot
-    indicators (CLAUDE.md feedback log). Hidden at >=1200px where the infographic takes over.
-    region-card.js keeps the dots in sync with scroll position; first dot stays lit with JS off.
+    indicators (ARCHITECTURE.md). Hidden at the wide breakpoint (--bp-region-info-wide) where
+    the infographic takes over; dot rules: DESIGN.md. region-card.js keeps the dots in sync with
+    scroll position; first dot stays lit with JS off.
   #}
   <div class="region-carousel" aria-label="All six regions">
     <ul class="region-carousel__track">
@@ -120,6 +122,6 @@ layout: layouts/page.njk
     The map is a simplified view of Korea's administrative divisions and groups metropolitan
     cities within their surrounding regions.<br>
     The prices shown on region cards are monthly rent for furnished short-term places,
-    hand-checked from current listings (September 2026).
+    hand-checked from current listings ({{ rentalMarketScan.scanDate | formatDate }}).
   </p>
 </section>

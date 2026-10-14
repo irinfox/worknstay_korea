@@ -1,42 +1,37 @@
-// Live KTO call (architecture.md §5) — searchFestival2, fanned out across every lDongRegnCd code
-// a region owns (one code failing only drops that code's items), deduped by contentId. Edge
-// caching is disabled in production pending KTO's caching-approval form
-// (notes/attraction-gallery-report.md) — every page view is a live call. `eventStartDate` is set
-// to today's date: live-verified (80 region/reference-date checks spanning a year) that KTO
-// already excludes already-ended festivals when queried this way, so no lookback window or
-// client-side end-date re-check is needed. Some regions (e.g. Jeju) legitimately return zero — a
-// designed empty state, not a bug. Falls back to `eventsSnapshot.json` when KTO_API_KEY isn't
-// set — real festivals captured live on 2026-09-16, a point-in-time example set (unlike
-// topAttractions.json, no ongoing boost/priority logic here). On a real quota-exceeded response,
-// items are dropped entirely rather than falling back to eventsSnapshot — that snapshot is a
-// point-in-time capture, not a maintained curated set, so serving it here risks presenting an
-// already-ended festival as live; `quotaExceeded` lets the front end show an honest "check back
-// tomorrow" message instead.
+// Live KTO call: searchFestival2, fanned out across every lDongRegnCd code a region owns (one code
+// failing drops only its items), deduped by contentId. No caching — every view is a live call.
+// `eventStartDate` = today: KTO already excludes ended festivals that way. Zero results (e.g. Jeju)
+// is a designed empty state. Falls back to `eventsSnapshot.json` (point-in-time capture) when
+// KTO_API_KEY isn't set. On quota-exceeded, items are dropped rather than served from the
+// snapshot, which could show an ended festival as live; `quotaExceeded` drives the front-end message.
+// `liveFailed` = every slice failed without quota (an empty list would read as a true zero).
 import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
-const CACHE_TTL_SECONDS = 4 * 60 * 60;
+// Responses are never cached (every view is a live call); the dev cache lives in kto-client.
+const NO_STORE = { headers: { "Cache-Control": "no-store" } };
 
+// Today's date in Korea (YYYYMMDD) — Workers run in UTC, which is a day behind KST until 09:00.
 function queryStartDate() {
-  const d = new Date();
-  return `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}${String(d.getDate()).padStart(2, "0")}`;
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date()).replaceAll("-", "");
 }
 
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
 
   if (!isValidSlug(slug)) {
-    return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
+    return Response.json({ error: "Unknown region" }, { status: 404 });
   }
 
   if (!env?.KTO_API_KEY) {
     return Response.json({
-      items: eventsSnapshot.filter((e) => e.regionSlug === slug),
+      items: eventsSnapshot.items.filter((e) => e.regionSlug === slug),
       quotaExceeded: false,
+      snapshotDate: eventsSnapshot.capturedAt,
       fallback: true, // served from the saved snapshot, not live KTO — the page says so
-    });
+    }, NO_STORE);
   }
 
   const codes = slugToLDongRegnCds(slug);
@@ -52,9 +47,7 @@ export async function onRequestGet({ params, env }) {
           // 59; one call now covers it instead of paging (attraction-fetch.mjs's same reasoning:
           // more rows per call is free, a second page is a whole extra live call).
           numOfRows: 100,
-          maxPages: 1 /*, cacheTtl: CACHE_TTL_SECONDS — disabled 2026-09, KTO requires a separate
-          approval form for any caching (3-5 day review, too slow for the deadline); uncomment
-          once approved (notes/attraction-gallery-report.md) */,
+          maxPages: 1,
         }
       )
     )
@@ -62,10 +55,20 @@ export async function onRequestGet({ params, env }) {
 
   const byContentId = new Map();
   let quotaExceeded = false;
+  let failedSlices = 0;
   for (const result of pages) {
-    if (result.status !== "fulfilled") continue;
-    if (result.value.quotaExceeded) quotaExceeded = true;
-    if (result.value.degraded) continue;
+    if (result.status !== "fulfilled") {
+      failedSlices += 1;
+      continue;
+    }
+    if (result.value.quotaExceeded) {
+      quotaExceeded = true;
+      continue;
+    }
+    if (result.value.degraded) {
+      failedSlices += 1;
+      continue;
+    }
     for (const raw of result.value.items) {
       const event = normalizeEvent(raw);
       event.regionSlug = slug;
@@ -73,6 +76,8 @@ export async function onRequestGet({ params, env }) {
     }
   }
 
+  // Only when every slice failed does the page say so; a partial failure shows what came back.
+  const liveFailed = !quotaExceeded && codes.length > 0 && failedSlices === codes.length;
   const items = quotaExceeded ? [] : [...byContentId.values()];
-  return Response.json({ items, quotaExceeded });
+  return Response.json({ items, quotaExceeded, liveFailed }, NO_STORE);
 }

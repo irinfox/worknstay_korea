@@ -1,7 +1,6 @@
-// Raw KTO EngService2 item -> our Attraction/Event models (architecture.md §6). Encodes the
-// "known quirks" list in architecture.md §5, confirmed against live-captured samples: bilingual
-// title split, HTML-entity strip, http->https, license gating (never render an image with a
-// missing/unknown cpyrhtDivCd, never crop/filter a Type3 asset).
+// Raw KTO EngService2 item -> our Attraction/Event models: bilingual title split,
+// HTML-entity strip, http->https, license gating (never render an image with a missing/unknown
+// cpyrhtDivCd, never crop/filter a Type3 asset).
 //
 // `regionSlug` is deliberately NOT set here — these functions normalize one raw item in
 // isolation, but which region it belongs to is a fan-out concern (which lDongRegnCd code the
@@ -12,8 +11,10 @@
 
 const KNOWN_LICENSES = new Set(["Type1", "Type3"]);
 
+// KTO serves http:// image URLs; upgraded here. Anything that isn't https:// afterwards is dropped.
 function toHttps(url) {
-  return url ? url.replace(/^http:\/\//, "https://") : "";
+  const upgraded = url ? url.replace(/^http:\/\//, "https://") : "";
+  return upgraded.startsWith("https://") ? upgraded : "";
 }
 
 function decodeEntities(text) {
@@ -40,6 +41,8 @@ function decodeEntities(text) {
 // titleEn only reads as redundant ("Southern Section", "(Gwangju)" duplicating the city).
 // Titles with no trailing Korean paren are left untouched and keep titleKo empty rather than
 // guessing.
+// Dropping a nested group from titleKo was weighed against CLAUDE.md's keep-Korean-names
+// requirement (users search by Korean name) and kept: the main Korean name stays searchable.
 function stripBracketedTags(text) {
   return text
     .replace(/\[[^\]]*\]/g, "")
@@ -61,8 +64,7 @@ function splitTitle(rawTitle) {
   return { titleEn, titleKo };
 }
 
-// Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use"
-// (architecture.md §5).
+// Missing/unknown cpyrhtDivCd means "don't render this image," not "assume it's free to use".
 function licenseOf(raw) {
   return KNOWN_LICENSES.has(raw) ? raw : null;
 }

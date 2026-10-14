@@ -1,11 +1,5 @@
-// Home page, narrow viewport: tapping a map region scrolls the region-card carousel to that
-// region's card instead of navigating straight there (wide-viewport hover/focus cross-highlight
-// is pure CSS :has(), already shipped in korea-map.css/region-card.css — nothing to do here for
-// that). Used to also read back an "available to you" badge on region pages from the
-// calculator's sessionStorage write, but region pages deliberately don't remember a calculator
-// run from the home page anymore — a region page reached any other way (direct link, search,
-// nav) had no such run to remember, so the badge only ever showed for one specific navigation
-// path and looked like a stale/broken feature the rest of the time.
+// Home page, narrow viewport: tapping a map region scrolls the region-card carousel to its card.
+// Wide-viewport hover/focus cross-highlight is pure CSS (:has()).
 // Matches --bp-region-info-wide in tokens.css (1024px) — same hardcode-and-comment constraint
 // noted there, since custom properties aren't readable from JS media queries either. Below this
 // the infographic isn't drawn, so a map tap scrolls the carousel instead of navigating (the
@@ -20,11 +14,8 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Narrow viewport shows a carousel of all 6 real region-card links (index.njk / CLAUDE.md
-// feedback log). Tapping a map region scrolls that carousel to the matching card rather than
-// navigating straight there — the card is still a real <a href> the visitor then taps to open
-// the region page. No data is copied anywhere: every card is already rendered from
-// region-card.njk with whatever korea-map.js's applyResult() last wrote onto it.
+// Narrow viewport shows a carousel of real region-card links. Tapping a map region scrolls to the
+// matching card instead of navigating; the card stays a real <a href>.
 // Shared by selectRegion (picks a new one) and deselectRegion (picks none) — both start by
 // clearing whatever's currently marked, so there's never more than one selected region/card pair.
 function clearSelection() {
@@ -69,8 +60,7 @@ function initTapToFill() {
       return;
     }
 
-    // Wide viewport lets the click navigate normally (architecture.md §3) — only narrow
-    // viewport substitutes tap-to-fill-the-single-card for real navigation.
+    // Wide viewport navigates normally; only narrow substitutes scroll-to-card for navigation.
     event.preventDefault();
     selectRegion(link, link.dataset.slug);
   });

@@ -1,3 +1,15 @@
+/* Metric-matched fallback for Instrument Sans (Capsize values from the served v4 latin woff2 vs
+   Arial) so the swap to the web font doesn't re-wrap text. Liberation Sans/Arimo are
+   Arial-metric clones for Linux. */
+@font-face {
+  font-family: "Instrument Sans Fallback";
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Arimo");
+  size-adjust: 102.7365%;
+  ascent-override: 94.4163%;
+  descent-override: 24.3341%;
+  line-gap-override: 0%;
+}
+
 :root {
   /*
    * Color — the DESIGN.md palette. "Reference tool, not a magazine": white ground, quiet type,
@@ -7,6 +19,7 @@
   --color-surface: #f7f9f8; /* Panel: info cards, guides strip, map panel */
   --color-text: #16201c; /* Ink: body text, dark nav bar */
   --color-text-soft: #33443c; /* Ink soft: secondary paragraphs */
+  --color-text-secondary: #4a544e; /* Ink soft (lighter): secondary card copy */
   --color-text-muted: #5c6660; /* Muted: captions, addresses, source lines */
   --color-border: #e4e7e4; /* Hairline: card borders */
   --color-border-soft: #edf0ee; /* Hairline (lighter): row dividers, footer/card-footer rule */
@@ -26,7 +39,6 @@
   --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
-  --color-accent-tint-border: #ecd2ab;
   --color-accent-ink: #a8450f; /* Orange ink: small orange text on tinted plates (dish labels) */
   /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
      calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
@@ -38,6 +50,7 @@
   --color-nav-bg: #16201c;
   --color-nav-link: rgba(255, 255, 255, 0.75);
   --color-nav-link-active: #ffffff;
+  --color-on-dark: #ffffff; /* Text on green / dark fills */
 
   /* Region-eligibility states (map + region cards). Fill-opacity for eligible/partial (set in
      korea-map.css) was lightened from .55/.85 to .45/.53 — same lightness step between the two
@@ -118,12 +131,11 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
   --space-8: 3rem;
-  --space-10: 4rem;
 
   /* Type (DESIGN.md § Type — two families, no others; loaded via the single Google Fonts link
      in base.njk). --font-family-base is the Latin default set once on body; --font-family-ko is
      applied only to elements holding Hangul (region/city/dish names, Korean subheads). */
-  --font-family-base: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-base: "Instrument Sans", "Instrument Sans Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-family-ko: "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-size-sm: clamp(0.8125rem, 0.78rem + 0.15vw, 0.875rem);
   --font-size-base: 0.9375rem; /* DESIGN.md § Type — body 15px */

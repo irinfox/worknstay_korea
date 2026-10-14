@@ -5,31 +5,22 @@ pagination:
   alias: region
 permalink: "/regions/{{ region.slug }}/"
 layout: layouts/page.njk
+styles: [region-page, region-detail-map, city-card, event-timeline, section-nav]
 eleventyComputed:
   title: "{{ region.nameEn }}"
   description: "{{ region.shortIntro }}"
 ---
 {% set regionCities = cities | byRegion(region.slug) %}
-{% set regionFood = food | byRegion(region.slug) %}
-{% set heroPhotos = regionHeroPhotos[region.slug] or [] %}
+{% set regionFood = food | byRegion(region.slug) | credited("food gallery " + region.slug) %}
+{% set heroPhotos = (regionHeroPhotos[region.slug] or []) | credited("region gallery " + region.slug) %}
 {% set slideCount = heroPhotos.length %}
+{% from "partials/photo-credit.njk" import creditText %}
 {% set isGangwon = region.slug == "gangwon-do" %}
 {% set isJeju = region.slug == "jeju-do" %}
 {% set isGyeonggi = region.slug == "gyeonggi-do" %}
 {% set isChungcheong = region.slug == "chungcheong-do" %}
 {% set isGyeongsang = region.slug == "gyeongsang-do" %}
 {% set isJeolla = region.slug == "jeolla-do" %}
-{% set hasDetailMap = isGangwon or isJeju or isGyeonggi or isChungcheong or isGyeongsang or isJeolla %}
-{# Hand-chosen city set/order per region (mirrors Gangwon-do's existing pattern below) —
-   bySlugs lets cities.json keep other records (e.g. Paju/Ganghwa, Andong/Tongyeong, Boryeong,
-   Gongju) for later reuse without surfacing them here. #}
-{% set cityOrder = {
-  "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
-  "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
-  "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
-  "jeju-do": ["jeju-city", "seogwipo"],
-  "chungcheong-do": ["daejeon", "cheongju", "sejong"]
-} %}
 {# Rent summary for the headline recap card and the cost table below — hand-checked market
    research per region (src/_data/rentalMarketScan.js). #}
 {% set rentSummary = rentalMarketScan.regionSummary | findBySlug(region.slug) %}
@@ -50,13 +41,9 @@ eleventyComputed:
       {% endfor %}
     </ul>
     {% endif %}
-    {% if region.longIntro | isArray %}
     {% for para in region.longIntro %}
     <p class="region-header__intro">{{ para | safe }}</p>
     {% endfor %}
-    {% else %}
-    <p class="region-header__intro">{{ region.longIntro | safe }}</p>
-    {% endif %}
     {# Season line (design reference 5b): orange dot → bold season name → its window. The name is
        mapped from the seasonTags emoji key (the data carries emoji + window, no name field). #}
     {% set seasonNames = { "🏄": "Surf season", "⛷️": "Ski season", "🏂": "Snowboard season", "🏔️": "Hiking", "🥾": "Hiking", "🌸": "Flowers" } %}
@@ -81,7 +68,7 @@ eleventyComputed:
       </div>
       <div class="rent-summary__note">
         <div>Based on hand-checked, decent furnished listings available to foreigners.</div>
-        <div style="margin-top:4px">Last updated: September 2026.</div>
+        <div>Last updated: {{ rentalMarketScan.scanDate | formatDate }}.</div>
       </div>
     </div>
     {% endif %}
@@ -99,30 +86,26 @@ eleventyComputed:
   </aside>
 </header>
 
-{# Sticky page-contents strip (DESIGN.md § "Page contents strip") — same shared component as
+{# Sticky section-nav strip (DESIGN.md § "Section nav strip") — same shared component as
    visa-info/settling-in, reused as-is. Labels stay short generic nouns, not "Regional dishes" /
-   "Region map" — the section's own H2 already carries the full wording. Map only exists where
-   hasDetailMap is true (every region now has a hand-authored detail map), Dishes only where
-   regionFood has entries — both
-   real <a href>, so a page without one just doesn't render that link rather than pointing at a
-   missing section. Rent and Events sit in the same tinted band and start at the same height on
-   desktop, so page-contents.js detects the tie by position and highlights both together while
+   "Region map" — the section's own H2 already carries the full wording. Dishes only where
+   regionFood has entries — a real <a href>, so a page without dishes just doesn't render that
+   link rather than pointing at a missing section. Rent and Events sit in the same tinted band and start at the same height on
+   desktop, so section-nav.js detects the tie by position and highlights both together while
    the band is in view — no markup needed here for that, and on phone (where the band stacks)
    the same geometry check naturally activates just one at a time. #}
-<div class="page-contents">
-  <div class="page-contents__links">
-    {% if hasDetailMap %}
-    <a href="#region-map"><span class="page-contents__full">Map</span><span class="page-contents__short">Map</span></a>
-    {% endif %}
-    <a href="#cities"><span class="page-contents__full">Cities</span><span class="page-contents__short">Cities</span></a>
-    <a href="#rent"><span class="page-contents__full">Rent</span><span class="page-contents__short">Rent</span></a>
-    <a href="#events"><span class="page-contents__full">Events</span><span class="page-contents__short">Events</span></a>
-    <a href="#places"><span class="page-contents__full">Places</span><span class="page-contents__short">Places</span></a>
+<div class="section-nav">
+  <div class="section-nav__links">
+    <a href="#region-map"><span class="section-nav__full">Map</span><span class="section-nav__short">Map</span></a>
+    <a href="#cities"><span class="section-nav__full">Cities</span><span class="section-nav__short">Cities</span></a>
+    <a href="#rent"><span class="section-nav__full">Rent</span><span class="section-nav__short">Rent</span></a>
+    <a href="#events"><span class="section-nav__full">Events</span><span class="section-nav__short">Events</span></a>
+    <a href="#places"><span class="section-nav__full">Places</span><span class="section-nav__short">Places</span></a>
     {% if regionFood.length %}
-    <a href="#dishes"><span class="page-contents__full">Dishes</span><span class="page-contents__short">Dishes</span></a>
+    <a href="#dishes"><span class="section-nav__full">Dishes</span><span class="section-nav__short">Dishes</span></a>
     {% endif %}
   </div>
-  <a href="#top" class="page-contents__top" aria-label="Back to top"><span class="page-contents__top-icon" aria-hidden="true"></span><span class="page-contents__top-label">Top</span></a>
+  <a href="#top" class="section-nav__top" aria-label="Back to top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
 </div>
 
 {# "Around the region" cover gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
@@ -150,15 +133,14 @@ eleventyComputed:
   </div>
   <div class="region-hero">
     <div class="region-hero-gallery__track">
-      {% for filename in heroPhotos %}
-      {% set credit = regionHeroCredits.photos[filename] %}
+      {% for photo in heroPhotos %}
       <figure class="region-hero-gallery__slide">
-        <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
-        {% if credit.titleEn %}
+        <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ photo.file }}" alt="{{ photo.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+        {% if photo.titleEn %}
         <figcaption class="region-hero__caption">
-          <span class="region-hero__caption-title">{{ credit.titleEn }}</span>
-          {% if credit.cityEn or credit.titleKo %}
-          <span class="region-hero__caption-sub">{{ credit.cityEn }}{% if credit.cityEn and credit.titleKo %} · {% endif %}{{ credit.titleKo }}</span>
+          <span class="region-hero__caption-title">{{ photo.titleEn }}</span>
+          {% if photo.cityEn or photo.titleKo %}
+          <span class="region-hero__caption-sub">{{ photo.cityEn }}{% if photo.cityEn and photo.titleKo %} · {% endif %}{{ photo.titleKo }}</span>
           {% endif %}
         </figcaption>
         {% endif %}
@@ -166,11 +148,10 @@ eleventyComputed:
       {% endfor %}
     </div>
   </div>
-  <p class="region-hero__credit">Photo source: © Korea Tourism Organization (한국관광공사)</p>
+  <p class="region-hero__credit">Photo source: {{ creditText(heroPhotos | photoCredits) }}</p>
 </section>
 {% endif %}
 
-{% if hasDetailMap %}
 {# Hand-authored detail maps — one per region (src/assets/svg/{slug}-detail-map.svg). Pin
    coordinates are looked up via the KTO OpenAPI (searchKeyword2) where a place is in its
    catalog. Gangwon/Jeju each use their own lat/lng-to-local-xy linear fit (calibrated on their
@@ -220,7 +201,6 @@ eleventyComputed:
     </p>
   </div>
 </section>
-{% endif %}
 
 {% if region.usefulLinks.length %}
 <section class="region-section region-section--guides">
@@ -247,25 +227,19 @@ eleventyComputed:
     <h2>Cities</h2>
   </div>
   <p class="region-section__sub">Where to stay and work in the region</p>
-  {% if isGangwon %}
-  {# The 4 cities with real coworking / study-café options (Yangyang is a surf-village day trip,
-     not somewhere to base a month-long stay, so it's map-only — see its surf-beach pin above). #}
-  {% set cityList = cities | bySlugs(["sokcho", "gangneung", "chuncheon", "wonju"]) %}
-  {% include "partials/city-card-list.njk" %}
-  {% elif cityOrder[region.slug] %}
-  {% set cityList = cities | bySlugs(cityOrder[region.slug]) %}
-  {% include "partials/city-card-list.njk" %}
-  {% elif regionCities.length %}
-  {% set cityList = regionCities %}
+  {# Cards = cities.json records with a cardOrder (ascending); the rest stay map-only. #}
+  {% set cityList = regionCities | cardCities %}
+  {% if cityList.length %}
   {% include "partials/city-card-list.njk" %}
   {% else %}
   {% set message = "No cities listed for this region yet." %}
+  {% set tag = "p" %}
   {% include "partials/empty-state.njk" %}
   {% endif %}
   {% if cityList.length %}
   <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
-  <p class="data-provenance" data-study-cafes-fallback-note hidden></p>
-  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="https://developers.kakao.com/docs/en/kakaomap/common" target="_blank" rel="noopener">Kakao® Local API ↗</a> results.</p>
+  <p class="data-provenance" data-study-cafes-fallback-note hidden>Study-café data is a manual editorial estimate, last updated in {{ site.dataDates.studyCafes | formatDate }}. Live data currently unavailable.</p>
+  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="{{ sources.kakaoLocal.url }}" target="_blank" rel="noopener">{{ sources.kakaoLocal.name }} ↗</a> results.</p>
   {% endif %}
 </section>
 
@@ -292,7 +266,7 @@ eleventyComputed:
         </div>
         {% for row in rentSummary.costRows %}
         <div{% if loop.last %} class="cost-table__row--deposit"{% elif loop.index == loop.length - 1 %} class="cost-table__row--before-deposit"{% endif %}>
-          <dt style="grid-row: span {{ row.tiers.length }}">{{ row.label }}</dt>
+          <dt{% if row.tiers.length > 1 %} class="cost-table__label--span-{{ row.tiers.length }}"{% endif %}>{{ row.label }}</dt>
           {% for tier in row.tiers %}
           <dd class="cost-table__size{% if row.tiers.length > 1 %}{% if loop.first %} cost-table__cell--stacked-first{% else %} cost-table__cell--stacked-last{% endif %}{% endif %}">{{ tier.size }}</dd>
           <dd{% if row.tiers.length > 1 %} class="{% if loop.first %}cost-table__cell--stacked-first{% else %}cost-table__cell--stacked-last{% endif %}"{% endif %}>{{ tier.value }}</dd>
@@ -315,7 +289,9 @@ eleventyComputed:
       {% endfor %}
       <p class="cost-link"><a href="/settling-in/">A short intro into Korean renting →</a></p>
       {% else %}
-      <p class="empty-state">No cost-of-living figures for this region yet.</p>
+      {% set message = "No rental price figures for this region yet." %}
+      {% set tag = "p" %}
+      {% include "partials/empty-state.njk" %}
       {% endif %}
     </div>
 
@@ -324,24 +300,26 @@ eleventyComputed:
         <span class="region-section__tick" aria-hidden="true"></span>
         <h2>Festivals &amp; events</h2>
       </div>
-      {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+      {# Default subtitle; client-side events.js swaps this text when the live fetch comes back
          quotaExceeded (KTO's daily call quota is gone) — events.js drops items entirely in that
          case (no top-picks-style fallback, see events.js header comment), so the subtitle itself
          carries the honest message instead of a card in the timeline below. Reset on every
          render so a stale message can't survive a state that later succeeds. #}
       <p class="region-section__sub" data-events-subtitle>Ongoing now, and what's coming up</p>
       {# Live per-request data (functions/api/region/[slug]/events.js), fetched and rendered by
-         region-data.js. The <noscript> message is the real no-JS content; JS never lets a
-         browser see it (region-data.js overwrites this container's innerHTML on load). #}
+         events.js. The <noscript> message is the real no-JS content; JS never lets a
+         browser see it (events.js overwrites this container's innerHTML on load). #}
       <div class="event-timeline" data-region-events data-region-slug="{{ region.slug }}">
         <noscript>
-          <p class="empty-state">Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></p>
+          {% set message %}Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a>{% endset %}
+          {% set tag = "p" %}
+          {% include "partials/empty-state.njk" %}
         </noscript>
       </div>
-      {# Hidden by region-data.js when the live fetch comes back quotaExceeded — attributing an
+      {# Hidden by events.js when the live fetch comes back quotaExceeded — attributing an
          empty result to KTO is only honest when KTO was actually reached (a real zero-events
          region, e.g. Jeju, still gets a real answer and keeps the credit). #}
-      <p class="data-provenance" data-events-provenance>Source: © Korea Tourism Organization (한국관광공사).</p>
+      <p class="data-provenance" data-events-provenance>Source: {{ sources.kto.attribution }}.</p>
     </div>
   </div>
 </div>
@@ -351,7 +329,7 @@ eleventyComputed:
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Places to visit</h2>
   </div>
-  {# Default subtitle; region-data.js swaps this text when the live fetch comes back
+  {# Default subtitle; client-side attractions.js swaps this text when the live fetch comes back
      quotaExceeded (KTO's daily call quota is gone) and falls back to the top-picks list, so
      "today's top picks" doesn't quietly read as the full live set. Reset on every render so a
      stale "top picks" message can't survive a state that later succeeds. #}
@@ -359,20 +337,20 @@ eleventyComputed:
   {# Filter row — visual + selection state only for now. "Area" reuses the same cityList the
      "Cities" section above already resolved per region, so it only ever offers
      the cities actually shown on this page, not every city.json record. "Elsewhere" covers
-     attractions not tied to one of those cities. Real filtering of the list below is next-step
-     data work, not wired here.
+     attractions not tied to one of those cities. Filtering is done client-side by
+     attraction-filters.js.
      Jeju-do drops the "Elsewhere" pill entirely: lDongRegnCd 50 has exactly two signgu codes in
-     Korea's administrative structure (Jeju-si 110, Seogwipo-si 130 — see cities.json), both
-     already covered by jeju-city/seogwipo above, so nothing can ever land there — live-confirmed
-     empty on both Nature and Culture (notes/attraction-gallery-report.md §7). Every other region
-     keeps the pill; this is a Jeju-specific structural fact, not a general assumption. #}
+     Korea's administrative structure (Jeju-si 110, Seogwipo-si 130 — see cities.json), both already
+     covered by jeju-city/seogwipo above, so nothing can ever land there — live-confirmed empty on
+     both Nature and Culture (notes/attraction-gallery-report.md, "Final checks"). Every other
+     region keeps the pill; this is a Jeju-specific structural fact, not a general assumption. #}
   <div class="attraction-filters" data-attraction-filters>
     <div class="attraction-filters__group" role="group" aria-label="Filter by area">
       <span class="attraction-filters__label">Area</span>
       <div class="attraction-filters__pills">
         <button type="button" class="filter-pill is-selected" aria-pressed="true" data-filter-group="area" data-filter-value="all">All</button>
         {% for city in cityList %}
-        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="{{ city.slug }}">{{ city.nameEn }}</button>
+        <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="{{ city.slug }}"{% if city.attractionPriority %} data-attraction-priority="{{ city.attractionPriority }}"{% endif %}>{{ city.nameEn }}</button>
         {% endfor %}
         {% if region.slug != "jeju-do" %}
         <button type="button" class="filter-pill" aria-pressed="false" data-filter-group="area" data-filter-value="elsewhere">Elsewhere</button>
@@ -389,12 +367,14 @@ eleventyComputed:
     </div>
   </div>
   {# Same live-fetch pattern as the events timeline above. #}
-  <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}">
+  <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}"{% if region.elsewhereAttractionPriority %} data-elsewhere-priority="{{ region.elsewhereAttractionPriority }}"{% endif %}>
     <noscript>
-      <li class="empty-state">Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></li>
+      {% set message %}Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a>{% endset %}
+      {% set tag = "li" %}
+      {% include "partials/empty-state.njk" %}
     </noscript>
   </ul>
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+  <p class="data-provenance">Source: {{ sources.kto.attribution }}.</p>
 </section>
 
 {% if regionFood.length %}
@@ -412,11 +392,7 @@ eleventyComputed:
     {% for dish in regionFood %}
     <li class="dish-card">
       <div class="dish-card__figure">
-        {% if dish.photo %}
         <img class="dish-card__media" src="{{ dish.imagePath }}" alt="{{ dish.nameEn }}" loading="lazy" decoding="async">
-        {% else %}
-        <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
-        {% endif %}
         {% if dish.heat or dish.kind %}
         <div class="dish-card__plates">
           {% if dish.heat == "spicy" %}<span class="dish-plate dish-plate--spicy">spicy</span>{% endif %}
@@ -438,9 +414,7 @@ eleventyComputed:
   {% if (regionFood | dump).indexOf('"kind":"spicy-ingredient"') !== -1 %}
   <p class="dish-legend"><span class="dish-plate dish-plate--spicy-ingredient">spicy ingredient</span> can usually be left out or served separately.</p>
   {% endif %}
-  {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
-  {% endif %}
+  <p class="data-provenance">Source: {{ sources.kto.attribution }}.{% for dish in regionFood %}{% if dish.photo.credit.source != "kto" %} {{ dish.nameEn }}: {{ dish.photo.credit.text }}{% if dish.photo.credit.license %} / <a href="{{ dish.photo.credit.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.credit.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
 </section>
 {% endif %}
 </div>

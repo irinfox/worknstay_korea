@@ -9,7 +9,10 @@
     {% endif %}
     <div class="site-footer__row">
       <p class="site-footer__disclaimer">{{ site.footer.disclaimer }}</p>
-      <a class="site-footer__link" href="/about/">About</a>
+      <nav class="site-footer__links" aria-label="Project links">
+        <a class="site-footer__link site-footer__link--out" href="{{ site.footer.repoUrl }}" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="site-footer__link site-footer__link--out" href="{{ site.footer.feedbackUrl }}" target="_blank" rel="noopener">Feedback ↗</a>
+      </nav>
     </div>
   </div>
 </footer>

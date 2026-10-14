@@ -18,7 +18,7 @@
   <!-- KTO searchKeyword2 coordinates (lng,lat), same shared affine calibration as
        gyeonggi-detail-map.svg. Daejeon (Daejeon O-World) 127.4001,36.2873 · Sejong (Sejong Lake
        Park) 127.2702,36.4990 · Cheongju (Cheongju Early Printing Museum) 127.4715,36.6441.
-       No Gongju pin — its city card is dropped from region.njk's cityOrder (poor rental-market
+       No Gongju pin — it has no cardOrder in cities.json, so no city card (poor rental-market
        coverage); cities.json keeps the record, and Gongsanseong Fortress is still named in the
        region description and Sejong's gettingAround.
        Mongsanpo (126.2875,36.6701) keeps Taean's old anchor point/nudge as its own plain beach

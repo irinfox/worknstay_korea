@@ -203,7 +203,7 @@
 }
 
 /* Wrap, not nowrap: a fixed-width card can't guarantee every region's tag row fits on one line
-   forever (data-driven, CLAUDE.md rule 4 — the layout adapts to _data/regions.json, never the
+   forever (data-driven, CLAUDE.md — the layout adapts to _data/regions.json, never the
    reverse). The tablet-band width below is sized so today's widest set (Gangwon-do's four tags)
    still fits on one line in the common case; wrap is the safety net if that ever changes, same
    principle as the infographic variant's tag row. */
@@ -283,7 +283,7 @@
 }
 
 /*
- * Region-info shell (architecture.md §3/§9): mobile-first — the map (a child of
+ * Region-info shell (ARCHITECTURE.md): mobile-first — the map (a child of
  * .region-infographic) stays visible at every width; the two flanking columns and their leader
  * lines are wide-viewport-only, and below the breakpoint the .region-carousel takes over.
  */
@@ -439,7 +439,7 @@ ol.region-carousel__dots {
     transition: stroke 0.15s ease, stroke-width 0.15s ease, stroke-opacity 0.15s ease;
   }
 
-  /* Cross-hover: hovering/focusing a map region highlights its card too (Phase 18). */
+  /* Cross-hover: hovering/focusing a map region highlights its card too. */
   .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) [data-region-slug="gyeonggi-do"],
   .region-infographic:has(.region[data-slug="gangwon-do"]:hover) [data-region-slug="gangwon-do"],
   .region-infographic:has(.region[data-slug="chungcheong-do"]:hover) [data-region-slug="chungcheong-do"],
@@ -475,7 +475,7 @@ ol.region-carousel__dots {
     border-color: var(--color-text-muted);
   }
 
-  /* Leader-line highlight, triggered from either end (Phase 18). */
+  /* Leader-line highlight, triggered from either end. */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],
   .region-infographic:has([data-region-slug="gyeonggi-do"]:focus-within) .region-infographic__lines line[data-slug="gyeonggi-do"],
   .region-infographic:has(.region[data-slug="gyeonggi-do"]:hover) .region-infographic__lines line[data-slug="gyeonggi-do"],

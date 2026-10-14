@@ -5,8 +5,6 @@
 // note is shown, so live and editorial figures are never mixed on one page.
 const CELLS_SELECTOR = ".study-cafes__cell";
 const RETRY_DELAYS_MS = [300];
-const FALLBACK_NOTE =
-  "Study-café data is a manual editorial estimate, last updated in October 2026. Live data currently unavailable.";
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -67,7 +65,6 @@ export async function init() {
   } else {
     restore.forEach((fn) => fn());
     const note = document.querySelector("[data-study-cafes-fallback-note]");
-    note.textContent = FALLBACK_NOTE;
     note.hidden = false;
   }
 }

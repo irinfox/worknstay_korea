@@ -1,6 +1,6 @@
 /* Gangwon-do's hand-authored region map (region.njk). Static pictogram overlay on a cropped
    copy of korea-regions.svg's province polygon — same hand-positioned-pin approach as the
-   home-page map infographic (CLAUDE.md feedback log), not a projection-computed layer, so a
+   home-page map infographic (ARCHITECTURE.md), not a projection-computed layer, so a
    province shape edit means re-checking every pin by eye, not re-running a formula. */
 .region-detail-map {
   margin-bottom: var(--space-4);

@@ -1,4 +1,4 @@
-// Phase 25 verification — pure fixtures, no live KTO calls needed. Run with:
+// Verification — pure fixtures, no live KTO calls needed. Run with:
 //   node scripts/verify-boost-curated.mjs
 import { boostCuratedPicks } from "../functions/api/lib/boost-curated.mjs";
 

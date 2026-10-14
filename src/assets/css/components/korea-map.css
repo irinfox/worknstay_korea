@@ -8,8 +8,8 @@
   margin-inline: auto;
   /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). Neutral
      Panel ground, not a green tint — #EAF4EF is already the partly-eligible fill, so a green
-     ground would collide with it. Jeju keeps its true geographic sea gap (CLAUDE.md feedback
-     log) — the ground colour change doesn't touch that, it's a fill colour, not an inset. */
+     ground would collide with it. Jeju keeps its true geographic sea gap (ARCHITECTURE.md) —
+     the ground colour change doesn't touch that, it's a fill colour, not an inset. */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
@@ -116,10 +116,9 @@
   outline-offset: 2px;
 }
 
-/* Phase 17: eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for
+/* Eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for
    .region--active — the base .region__shape/.region__city rules above already render that
-   state, since it's also what the map shows before any calculator run (architecture.md §8:
-   "un-gated by default"). */
+   state, since it's also what the map shows before any calculator run. */
 /* Flat "Green light" fill for the partly-eligible state (DESIGN.md palette), not the old hatch —
    the legend swatch below matches. */
 .region--partial .region__shape {
@@ -202,7 +201,7 @@
   fill: var(--color-region-ineligible-metro-hover);
 }
 
-/* Phase 18: narrow-viewport tap selection (region-card.js) — a JS-toggled class, not a :hover
+/* Narrow-viewport tap selection (region-card.js) — a JS-toggled class, not a :hover
    substitute, because the highlight has to survive after the finger lifts, unlike the
    wide-viewport :has() cross-hover above which is inherently transient. */
 .region--selected .region__shape {
@@ -275,8 +274,7 @@
 }
 
 /* Tap-selected labels (narrow viewport, region-card.js) react the same way real hover does below
-   — .region--selected's shape/metro fill already reused the hover fill tokens above (Phase 18
-   comment), the halo needs the same parity so mobile tap and desktop hover read as the same
+   — .region--selected's shape/metro fill already reused the hover fill tokens above (see the tap-selection comment), the halo needs the same parity so mobile tap and desktop hover read as the same
    effect rather than the shape darkening while the label halo stays frozen at its resting tone.
    Placed after the resting partial/ineligible overrides above (equal specificity either way) so
    this wins for a region that's currently both. */
@@ -304,7 +302,7 @@
   stroke: var(--color-halo-ineligible-metro-hover);
 }
 
-/* Always-visible labels: the 6 main region names + Seoul (Phase 13 request — the capital
+/* Always-visible labels: the 6 main region names + Seoul (the capital
    should be identifiable at every width, not just above the wide breakpoint). 2px halo, not 3 —
    matches the region-detail map's own pin-label halo weight (region-detail-map.css). */
 .region__label--core {
@@ -316,7 +314,7 @@
 /* All 17 admin-division names + city carve-outs, at every width — confirmed on a real Pixel 9
    (2026-08-21) that full detail naming reads fine at phone width, so the earlier
    merged-region-summary fallback (Chungcheong-do/Gyeongsang-do/Jeolla-do as one label each)
-   was retired; see architecture.md §9. */
+   was retired. */
 .region__label--detail {
   display: block;
   font-size: 17px;
@@ -324,7 +322,7 @@
   stroke-width: 2px;
 }
 
-/* Hovering/focusing a region (directly, or via its card — Phase 18 cross-hover) enlarges its
+/* Hovering/focusing a region (directly, or via its card — cross-hover) enlarges its
    own labels in place, since there's no other way to read the smaller division names up close
    short of the browser's own zoom. :hover gated to real hover devices, same reasoning as the
    fill/stroke rules above — the label shouldn't grow from a touch tap either. */
@@ -474,7 +472,7 @@
 /* 1024px matches --bp-region-info-wide (tokens.css) / region-card.css's .region-infographic
    activation — the cross-hover pairs the infographic grid with the map shapes. */
 @media (min-width: 1024px) {
-  /* Cross-hover: hovering/focusing a region-card highlights its map shape too (Phase 18). */
+  /* Cross-hover: hovering/focusing a region-card highlights its map shape too. */
   .region-infographic:has([data-region-slug="gyeonggi-do"]:hover) .region[data-slug="gyeonggi-do"] .region__shape,
   .region-infographic:has([data-region-slug="gangwon-do"]:hover) .region[data-slug="gangwon-do"] .region__shape,
   .region-infographic:has([data-region-slug="chungcheong-do"]:hover) .region[data-slug="chungcheong-do"] .region__shape,

@@ -12,7 +12,6 @@
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["480"],
     "population": { "total": 524107, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -28,12 +27,12 @@
     "ktoLDongRegnCd": "28",
     "ktoLDongSignguCds": ["710"],
     "population": { "total": 67210, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
     "slug": "seoul",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 1,
     "nameEn": "Seoul",
     "nameKo": "서울특별시",
     "lat": 37.5665,
@@ -45,7 +44,6 @@
     "ktoLDongRegnCd": "11",
     "ktoLDongSignguCds": [],
     "population": { "total": 9315066, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hoppin",
@@ -168,6 +166,8 @@
   {
     "slug": "incheon",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 2,
+    "attractionPriority": "nature",
     "nameEn": "Incheon",
     "nameKo": "인천광역시",
     "lat": 37.4563,
@@ -182,7 +182,6 @@
       { "label": "Seoul", "value": "1–1.5h", "mode": "subway / express bus" }
     ],
     "population": { "total": 3093590, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Stage9 (Dive9)",
@@ -225,6 +224,7 @@
   {
     "slug": "seongnam",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 4,
     "nameEn": "Seongnam",
     "nameKo": "성남시",
     "lat": 37.3826,
@@ -239,7 +239,6 @@
       { "label": "Seoul", "value": "20–40 min", "mode": "subway" }
     ],
     "population": { "total": 893970, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Five Spot",
@@ -260,6 +259,7 @@
   {
     "slug": "suwon",
     "regionSlug": "gyeonggi-do",
+    "cardOrder": 3,
     "nameEn": "Suwon",
     "nameKo": "수원시",
     "lat": 37.2636,
@@ -274,7 +274,6 @@
       { "label": "Seoul", "value": "1h", "mode": "subway", "alt": [{ "value": "40 min", "mode": "train" }] }
     ],
     "population": { "total": 1221616, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Cospot",
@@ -304,12 +303,12 @@
     "ktoLDongRegnCd": "41",
     "ktoLDongSignguCds": ["285"],
     "population": { "total": 1036961, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "sokcho",
     "regionSlug": "gangwon-do",
+    "cardOrder": 1,
     "nameEn": "Sokcho",
     "nameKo": "속초시",
     "lat": 38.207,
@@ -327,7 +326,6 @@
       { "label": "Seoul", "value": "2.5–3h", "mode": "bus" }
     ],
     "population": { "total": 78972, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Dadoo Coworking",
@@ -360,6 +358,8 @@
   {
     "slug": "gangneung",
     "regionSlug": "gangwon-do",
+    "cardOrder": 2,
+    "attractionPriority": "culture",
     "nameEn": "Gangneung",
     "nameKo": "강릉시",
     "lat": 37.75,
@@ -377,7 +377,6 @@
       { "label": "Seoul", "value": "2.5h", "mode": "train" }
     ],
     "population": { "total": 211628, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Padosalon",
@@ -407,12 +406,12 @@
     "ktoLDongRegnCd": "51",
     "ktoLDongSignguCds": ["830"],
     "population": { "total": 26544, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
     "slug": "chuncheon",
     "regionSlug": "gangwon-do",
+    "cardOrder": 3,
     "nameEn": "Chuncheon",
     "nameKo": "춘천시",
     "lat": 37.88,
@@ -429,12 +428,12 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train", "alt": [{ "value": "2h", "mode": "subway" }] }
     ],
     "population": { "total": 293524, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "wonju",
     "regionSlug": "gangwon-do",
+    "cardOrder": 4,
     "nameEn": "Wonju",
     "nameKo": "원주시",
     "lat": 37.3422,
@@ -453,7 +452,6 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train" }
     ],
     "population": { "total": 367326, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -469,7 +467,6 @@
     "ktoLDongRegnCd": "51",
     "ktoLDongSignguCds": ["820"],
     "population": { "total": 27706, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": [
       {
         "name": "Mangrove (Goseong branch)",
@@ -488,6 +485,7 @@
   {
     "slug": "cheongju",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 2,
     "nameEn": "Cheongju",
     "nameKo": "청주시",
     "lat": 36.64,
@@ -505,7 +503,6 @@
       { "label": "Seoul", "value": "1.5h", "mode": "train+bus" }
     ],
     "population": { "total": 879244, "year": 2025, "note": "KOSIS's English-language export mislabels this row \"Chungju-si\"; its sub-district breakdown (Sangdang-gu/Seowon-gu/Heungdeok-gu/Cheongwon-gu) matches Cheongju-si, not Chungju-si (which has no gu subdivisions and is listed separately at 217,413)." },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hellowork",
@@ -535,12 +532,12 @@
     "ktoLDongRegnCd": "44",
     "ktoLDongSignguCds": ["180"],
     "population": { "total": 94459, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
     "slug": "daejeon",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 1,
     "nameEn": "Daejeon",
     "nameKo": "대전광역시",
     "lat": 36.3504,
@@ -557,7 +554,6 @@
       { "label": "Busan", "value": "1.5h", "mode": "train" }
     ],
     "population": { "total": 1469299, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Worknplay",
@@ -617,6 +613,7 @@
   {
     "slug": "sejong",
     "regionSlug": "chungcheong-do",
+    "cardOrder": 3,
     "nameEn": "Sejong",
     "nameKo": "세종특별자치시",
     "lat": 36.4801,
@@ -634,7 +631,6 @@
       { "label": "Gwangju", "value": "2h", "mode": "express bus" }
     ],
     "population": { "total": 392471, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Hellowork",
@@ -683,12 +679,12 @@
       { "label": "Daejeon", "value": "30–60 min", "mode": "bus" }
     ],
     "population": { "total": 104504, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
     "slug": "gyeongju",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 4,
     "nameEn": "Gyeongju",
     "nameKo": "경주시",
     "lat": 35.86,
@@ -706,7 +702,6 @@
       { "label": "Seoul", "value": "2h", "mode": "train" }
     ],
     "population": { "total": 260108, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
@@ -722,12 +717,12 @@
     "ktoLDongRegnCd": "47",
     "ktoLDongSignguCds": ["170"],
     "population": { "total": 154183, "year": 2025 },
-    "isPopulationDeclineArea": true,
     "workationCenters": []
   },
   {
     "slug": "busan",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 1,
     "nameEn": "Busan",
     "nameKo": "부산광역시",
     "lat": 35.1796,
@@ -742,7 +737,6 @@
       { "label": "Seoul", "value": "2.5–3h", "mode": "train" }
     ],
     "population": { "total": 3235362, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Busaness",
@@ -785,7 +779,6 @@
     "ktoLDongRegnCd": "48",
     "ktoLDongSignguCds": ["220"],
     "population": { "total": 118589, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Local Stitch Tongyeong",
@@ -805,6 +798,7 @@
   {
     "slug": "daegu",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 2,
     "nameEn": "Daegu",
     "nameKo": "대구광역시",
     "lat": 35.8714,
@@ -821,12 +815,12 @@
       { "label": "Busan", "value": "50 min", "mode": "train" }
     ],
     "population": { "total": 2363643, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "ulsan",
     "regionSlug": "gyeongsang-do",
+    "cardOrder": 3,
     "nameEn": "Ulsan",
     "nameKo": "울산광역시",
     "lat": 35.5384,
@@ -843,12 +837,12 @@
       { "label": "Busan", "value": "20 min", "mode": "train" }
     ],
     "population": { "total": 1103509, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "jeonju",
     "regionSlug": "jeolla-do",
+    "cardOrder": 1,
     "nameEn": "Jeonju",
     "nameKo": "전주시",
     "lat": 35.82,
@@ -863,12 +857,12 @@
       { "label": "Seoul", "value": "2h", "mode": "train" }
     ],
     "population": { "total": 641632, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "yeosu",
     "regionSlug": "jeolla-do",
+    "cardOrder": 3,
     "nameEn": "Yeosu",
     "nameKo": "여수시",
     "lat": 34.76,
@@ -885,12 +879,12 @@
       { "label": "Seoul", "value": "3h", "mode": "train" }
     ],
     "population": { "total": 262133, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "gwangju",
     "regionSlug": "jeolla-do",
+    "cardOrder": 2,
     "nameEn": "Gwangju",
     "nameKo": "광주광역시",
     "lat": 35.1595,
@@ -907,7 +901,6 @@
       { "label": "Jirisan", "value": "1.5h", "mode": "car" }
     ],
     "population": { "total": 1431903, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Familia Space",
@@ -940,6 +933,8 @@
   {
     "slug": "suncheon",
     "regionSlug": "jeolla-do",
+    "cardOrder": 4,
+    "attractionPriority": "nature",
     "nameEn": "Suncheon",
     "nameKo": "순천시",
     "lat": 34.9506,
@@ -956,12 +951,12 @@
       { "label": "Naganeupseong Walled Town", "value": "40 min", "mode": "bus" }
     ],
     "population": { "total": 271415, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": []
   },
   {
     "slug": "jeju-city",
     "regionSlug": "jeju-do",
+    "cardOrder": 1,
     "nameEn": "Jeju City",
     "nameKo": "제주시",
     "lat": 33.5,
@@ -978,7 +973,6 @@
       { "label": "Seoul", "value": "1h", "mode": "plane" }
     ],
     "population": { "total": 491186, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "Mangrove",
@@ -1036,6 +1030,7 @@
   {
     "slug": "seogwipo",
     "regionSlug": "jeju-do",
+    "cardOrder": 2,
     "nameEn": "Seogwipo",
     "nameKo": "서귀포시",
     "lat": 33.25,
@@ -1051,7 +1046,6 @@
       { "label": "Jungmun Saekdal Beach", "value": "50 min", "mode": "bus" }
     ],
     "population": { "total": 178168, "year": 2025 },
-    "isPopulationDeclineArea": false,
     "workationCenters": [
       {
         "name": "O-peace",

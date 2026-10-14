@@ -1,13 +1,12 @@
-// ROADMAP_TODO.md Phase 17: applyResult() toggles .region--active/--partial/--ineligible on the
+// applyResult() toggles .region--active/--partial/--ineligible on the
 // map's real <a href> region links and click-gates ineligible ones. Click-gating means the
 // element stops being a link at all (href removed) rather than staying a link with JS-only
-// preventDefault — CLAUDE.md rule 6 already requires every region link to be a real <a href>,
+// preventDefault — CLAUDE.md already requires every region link to be a real <a href>,
 // so "gated" has to mean "not a link right now," not "a link that lies about being clickable."
 //
 // The gate has to cover both entry points to a region page, not just the map shape: each
-// region-card's own "Learn more →" link (region-card.njk) is always-visible in the wide-viewport
-// infographic, so leaving it live would make the map's gating purely decorative — CLAUDE.md's
-// feedback log is explicit that ineligible regions aren't clickable through, full stop.
+// region-card's "Learn more →" link is always visible in the wide infographic, so leaving it
+// live would make the map's gating decorative — ineligible regions are never clickable through.
 const STATE_CLASSES = ["region--active", "region--partial", "region--ineligible"];
 
 function regionLinks() {
@@ -36,8 +35,7 @@ function dimLink(link) {
 
 // Every call restores every region to baseline (active, real href) before applying the new
 // result, rather than layering classes on top of whatever the previous run left — otherwise a
-// region eligible under this result but dimmed by a previous one would stay stuck dimmed
-// (architecture.md §8 "restore path").
+// region eligible under this result but dimmed by a previous one would stay stuck dimmed.
 function restoreMapLink(link) {
   link.classList.remove(...STATE_CLASSES);
   link.classList.add("region--active");

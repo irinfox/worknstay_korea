@@ -1,12 +1,13 @@
 ---
 layout: layouts/page.njk
+styles: [region-page]
 title: "Gyeonggi-do population-decline areas"
 description: "The Gyeonggi-do and Incheon areas that qualify for the F-1-D visa's lower, non-capital income threshold despite sitting inside the capital area."
 permalink: "/regions/gyeonggi-do/population-decline-areas/"
 ---
 {# Not paginated like regions/region.njk — Gyeonggi-do is the only capital-tier region, so it's
-   the only place a population-decline area can change the eligibility outcome (architecture.md
-   §7). Redesign style: same wide .region-page shell + two-column headline as region.njk, with a
+   the only place a population-decline area can change the eligibility outcome (see ARCHITECTURE.md,
+   eligibility gating). Redesign style: same wide .region-page shell + two-column headline as region.njk, with a
    tinted threshold-summary card in place of the rent recap. #}
 {% set declineCounties = [] %}
 {% set watchCounties = [] %}
@@ -14,16 +15,19 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
 {% if c.category == "decline" %}{% set pushed = declineCounties.push(c) %}{% else %}{% set pushed = watchCounties.push(c) %}{% endif %}
 {% endfor %}
 
+{% from "partials/photo-credit.njk" import creditText %}
+{% set countyPhotos = [] %}
+{% for c in populationDeclineAreas %}{% set pushed = countyPhotos.push(countyHeroPhotos[c.countyNameEn]) %}{% endfor %}
+
 {% macro tierCard(c) %}
-{% set photo = countyHeroPhotos[c.countyNameEn] %}
-{% set credit = countyHeroCredits.photos[photo] %}
+{% set photo = [countyHeroPhotos[c.countyNameEn] or { file: c.countyNameEn + ": no photo mapped" }] | credited("county card " + c.countyNameEn) | first %}
 <li class="tier-card">
   <figure class="tier-card__figure">
-    {% if photo %}<img class="tier-card__img" src="/assets/img/hero/gyeonggi-do-population-decline/{{ photo }}" alt="{{ credit.titleEn }}" loading="lazy">{% endif %}
-    {% if credit.titleEn %}
+    {% if photo %}<img class="tier-card__img" src="/assets/img/hero/gyeonggi-do-population-decline/{{ photo.file }}" alt="{{ photo.titleEn }}" loading="lazy">{% endif %}
+    {% if photo.titleEn %}
     <figcaption class="tier-card__spot">
-      <span class="tier-card__spot-en">{{ credit.titleEn }}</span>
-      {% if credit.titleKo %}<span class="tier-card__spot-ko" lang="ko">{{ credit.titleKo }}</span>{% endif %}
+      <span class="tier-card__spot-en">{{ photo.titleEn }}</span>
+      {% if photo.titleKo %}<span class="tier-card__spot-ko" lang="ko">{{ photo.titleKo }}</span>{% endif %}
     </figcaption>
     {% endif %}
   </figure>
@@ -84,7 +88,7 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
     <span class="source-note__head"><span class="source-note__tick" aria-hidden="true"></span>Source:</span>
     <div class="region-guides__item">
       <a class="region-guides__link" href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do" target="_blank" rel="noopener">Population-decline area designation ↗</a>
-      <span class="region-guides__meta">mois.go.kr · Designation cycle: every 5 years · Next expected designation: October 2026</span>
+      <span class="region-guides__meta">mois.go.kr · Designation cycle: {{ populationDeclineDesignation.cycle }} · Next expected designation: {{ populationDeclineDesignation.nextExpected | formatDate }}</span>
     </div>
   </div>
 </section>
@@ -110,7 +114,7 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
     </ul>
   </div>
 
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+  <p class="data-provenance">Source: {{ creditText(countyPhotos | photoCredits) }}.</p>
 </section>
 
 </div>

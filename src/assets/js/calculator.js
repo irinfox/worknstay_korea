@@ -1,9 +1,5 @@
 import { calculateEligibility } from "./eligibility.js";
 
-// architecture.md §7 / eligibility.js precondition: age must be validated >= this before
-// calling calculateEligibility() — this function doesn't handle under-18 itself.
-const MIN_APPLICANT_AGE = 18;
-
 const MILLION = 1_000_000;
 
 // Below ₩1M, a .toFixed(1) figure ("₩0.3M") reads as false precision for a gap this small and
@@ -43,13 +39,14 @@ const CAPTIONS = {
 
 const FULL_RULES_LINK = ' <a href="/visa-info/">Visa info →</a>';
 
-// Plate tint follows the site palette — never red. The calculator gives answers ("not eligible"
-// / "under 18" → amber) and, when the form isn't complete enough to answer, a neutral panel.
+// Plate tint follows the site palette (see calculator.css) — never red. The calculator gives
+// answers ("not eligible" / under the minimum age → amber) and, when the form isn't complete
+// enough to answer, a neutral panel.
 const RESULT_TONE = {
-  all: "eligibility-result--all", // #DCEFE5 — eligible everywhere
-  nonCapitalOnly: "eligibility-result--near", // #EAF4EF — eligible outside the capital area
-  ineligible: "eligibility-result--none", // #FDF0E4 — not eligible yet / under 18
-  incomplete: "eligibility-result--info", // #F7F9F8 — can't answer yet (a field is missing)
+  all: "eligibility-result--all", // eligible everywhere
+  nonCapitalOnly: "eligibility-result--near", // eligible outside the capital area
+  ineligible: "eligibility-result--none", // not eligible yet / under the minimum age
+  incomplete: "eligibility-result--info", // can't answer yet (a field is missing)
 };
 const ALL_RESULT_TONES = Object.values(RESULT_TONE);
 
@@ -127,19 +124,20 @@ function isSalaryInvalid(userInput, rawInput) {
   return !Number.isFinite(userInput.salaryKrw) || userInput.salaryKrw < 0;
 }
 
-// Deliberately NOT "|| userInput.age < MIN_APPLICANT_AGE": being under 18 is a real, validly
-// entered answer that fails the visa's own eligibility rule, not a data-entry mistake — it gets
-// the amber "must be 18+" result caption, but the field itself shouldn't get the invalid-field
-// border mark (that's reserved for missing/malformed input). The raw-string check still matters:
-// Number("") is 0, so a blank age must not read as age 0 (→ "must be 18+") instead of "enter
-// your age".
+// Decides only the red invalid-field border, so it deliberately has no minAge check: being under
+// the minimum age is a real, validly entered answer that fails the visa's eligibility rule, not a
+// data-entry mistake (that gets the amber "must be N+" caption from validate() below, without the
+// border). The raw-string check still matters: Number("") is 0, so a blank age must not read as
+// age 0 (→ "must be N+") instead of "enter your age".
 function isAgeInvalid(userInput, rawInput) {
   if (rawInput.ageRaw.trim() === "") return true;
   return !Number.isFinite(userInput.age);
 }
 
-// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs.
-export function validate(userInput, rawInput) {
+// Pure (no DOM) so it's unit-testable — see scripts/verify-calculator.mjs. `minAge` is
+// visaRules.additionalFacts.minApplicantAge; callers must pass it (eligibility.js precondition:
+// age is validated against it before calculateEligibility(), which doesn't handle under-age itself).
+export function validate(userInput, rawInput, minAge) {
   const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0;
   const ageMissing = rawInput.ageRaw.trim() === "";
 
@@ -148,8 +146,8 @@ export function validate(userInput, rawInput) {
   if (ageMissing) return "Please enter your age.";
 
   if (isSalaryInvalid(userInput, rawInput)) return "Enter an income of 0 or more.";
-  if (!Number.isFinite(userInput.age) || userInput.age < MIN_APPLICANT_AGE) {
-    return `F-1-D applicants must be ${MIN_APPLICANT_AGE} or older.`;
+  if (!Number.isFinite(userInput.age) || userInput.age < minAge) {
+    return `F-1-D applicants must be ${minAge} or older.`;
   }
   return null;
 }
@@ -209,7 +207,7 @@ function buildInvalidInputResult(referenceData) {
   };
 }
 
-// "Show all regions" reset (ROADMAP feedback): a visitor who doesn't know their salary/age yet,
+// "Show all regions" reset: a visitor who doesn't know their salary/age yet,
 // or just wants to browse, had no way to see an un-gated map short of typing throwaway numbers
 // that happen to clear every threshold. Shares eligibility.js's own "all" tier shape — that tier
 // already means nothing dimmed/partial — so this is what a real "all" result looks like, not a
@@ -251,11 +249,10 @@ function renderError(resultEl, message, complete) {
   resultEl.hidden = false;
 }
 
-// Brings the just-rendered result into view after a real submit (not the URL-prefill path on
-// load, which shouldn't move the page). Prefers landing on the whole card (form + result) so the
-// question the visitor just answered stays visible above the answer; falls back to the result
-// itself when the card alone is taller than the viewport, since centering on the card would then
-// push the result off-screen. No-ops if the result is already fully visible.
+// Brings the just-rendered result into view after a submit. Prefers landing on the whole card
+// (form + result) so the question the visitor just answered stays visible above the answer; falls
+// back to the result itself when the card alone is taller than the viewport, since centering on
+// the card would then push the result off-screen. No-ops if the result is already fully visible.
 function scrollResultIntoView(cardEl, resultEl) {
   const resultRect = resultEl.getBoundingClientRect();
   const fullyVisible = resultRect.top >= 0 && resultRect.bottom <= window.innerHeight;
@@ -281,29 +278,8 @@ function hasReadableInput(userInput, rawInput) {
   );
 }
 
-// Permalink covers prefill + caption + map state (via onResult) — nothing is persisted beyond
-// the URL itself (no sessionStorage — region pages deliberately don't remember a calculator run
-// from the home page; see ROADMAP feedback on that ambiguity).
-function userInputFromParams(params) {
-  if (!params.has("salaryKrw") || !params.has("age")) return null;
-  return {
-    salaryKrw: parseSalary(params.get("salaryKrw")),
-    age: Number(params.get("age")),
-    hasFamily: params.get("hasFamily") === "1",
-  };
-}
-
-function paramsFromUserInput(userInput) {
-  const params = new URLSearchParams();
-  params.set("salaryKrw", String(userInput.salaryKrw));
-  params.set("age", String(userInput.age));
-  if (userInput.hasFamily) params.set("hasFamily", "1");
-  return params;
-}
-
-// architecture.md §8: calculator.js owns caption rendering; main.js's glue passes onResult so
-// korea-map.js's applyResult() can react to the same result for map state only — one-directional,
-// no event bus, no separate module.
+// calculator.js owns caption rendering; onResult (passed by main.js) lets the map react to the
+// same result — one-directional, no event bus.
 export function init(onResult = () => {}) {
   const form = document.querySelector("[data-calculator-form]");
   const resultEl = document.querySelector("[data-eligibility-result]");
@@ -314,15 +290,13 @@ export function init(onResult = () => {}) {
   const referenceData = readReferenceData();
   const fieldValidity = bindFieldValidityMarking(form);
 
-  // markInvalid is true only for a real submit — the URL-prefill path below also runs through
-  // here, but a permalink loading on page open isn't a submit attempt, so it shouldn't paint any
-  // field red before the visitor has interacted with the page at all.
+  // markInvalid: true only for a real submit, so no field is painted red before the visitor acts.
   function computeAndRender(userInput, { markInvalid = false } = {}) {
     resultEl.hidden = true;
 
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
     if (markInvalid) fieldValidity.mark(userInput, rawInput);
-    const validationMessage = validate(userInput, rawInput);
+    const validationMessage = validate(userInput, rawInput, referenceData.rules.additionalFacts.minApplicantAge);
     if (validationMessage) {
       const complete = hasReadableInput(userInput, rawInput);
       renderError(resultEl, validationMessage, complete);
@@ -347,20 +321,10 @@ export function init(onResult = () => {}) {
   bindSalaryFormatting(form.elements.salaryKrw);
   bindAgeSanitizing(form.elements.age);
 
-  const prefill = userInputFromParams(new URLSearchParams(window.location.search));
-  if (prefill) {
-    form.elements.salaryKrw.value = formatSalary(prefill.salaryKrw);
-    form.elements.age.value = prefill.age;
-    form.elements.hasFamily.checked = prefill.hasFamily;
-    computeAndRender(prefill);
-  }
-
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const userInput = readUserInput(form);
-    if (computeAndRender(userInput, { markInvalid: true })) {
-      history.replaceState(null, "", `?${paramsFromUserInput(userInput)}`);
-    }
+    computeAndRender(userInput, { markInvalid: true });
     if (cardEl) scrollResultIntoView(cardEl, resultEl);
   });
 
@@ -373,7 +337,6 @@ export function init(onResult = () => {}) {
       fieldValidity.clear();
       resultEl.hidden = true;
       setResultTone(resultEl, null);
-      history.replaceState(null, "", window.location.pathname);
       onResult(buildShowAllResult(), referenceData);
     });
   }

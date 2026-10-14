@@ -1,11 +1,11 @@
-/* Client-side festivals & events timeline (region-data.js), design reference 5b/5d. Lives inside
+/* Client-side festivals & events timeline (events.js), design reference 5b/5d. Lives inside
    the region page's primary-tinted costs+festivals band, so cards are plain hairline-divided
    rows (not filled cards). "Ongoing" / "Upcoming" are pill toggles; "Upcoming" adds month chips.
    Each row: a plain orange date, the name + an optional LONG-TERM / THIS MONTH badge, then the
    address as city + pin + a copy-full-address control. The list area reserves a fixed height so
    switching tabs / paging never shifts the page. */
 
-/* Height is reserved per region by region-data.js (inline min-height = tallest state), so the
+/* Height is reserved per region by events.js (inline min-height = tallest state), so the
    source line below never moves; --event-list-h is the tallest single list page. */
 .event-timeline {
   margin-top: 0;
@@ -39,7 +39,7 @@
 }
 
 .event-tabs__tab[aria-selected="true"] {
-  color: #fff;
+  color: var(--color-on-dark);
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
@@ -76,7 +76,7 @@
 }
 
 .event-months__tab[aria-selected="true"] {
-  color: #fff;
+  color: var(--color-on-dark);
   background: var(--color-primary);
   border-color: var(--color-primary);
 }
@@ -134,7 +134,7 @@
 }
 
 /* LONG-TERM / THIS MONTH badge (Ongoing panel only). Design reference 5b: a solid tinted fill,
-   no border — green wash for LONG-TERM, warm wash for THIS MONTH. Two render slots (region-data.js
+   no border — green wash for LONG-TERM, warm wash for THIS MONTH. Two render slots (events.js
    emits both): inline after the name from 600px up (design-ref placement), and on the date line
    below 600px where the stacked card leaves the name row no spare width. */
 .event-card__badge {
@@ -231,7 +231,7 @@
 }
 
 /* Just-copied cue — green icon plus the visible "Full address copied" confirmation (same string
-   on phone and desktop). region-data.js clears .is-copied after 2s, and only one row at a time. */
+   on phone and desktop). copy.js clears .is-copied after 2s, and only one row at a time. */
 .event-place.is-copied .event-place__copy {
   color: var(--color-primary);
   opacity: 1;
@@ -407,7 +407,7 @@
      own margin-left) is what desktop uses since its label stays permanently hidden — but reusing
      it here, as a second element popping in beside a now icon-only button, landed at a visibly
      different indent than where the label text used to sit. Hide it on phone; the label itself
-     carries the confirmation in place instead (region-data.js writes the same "Full address
+     carries the confirmation in place instead (copy.js writes the same "Full address
      copied" string into both elements, so nothing needs to change here in the future). */
   .event-place__status {
     display: none;

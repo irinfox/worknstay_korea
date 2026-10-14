@@ -1,5 +1,6 @@
 ---
 layout: layouts/page.njk
+styles: [section-nav, settling-in]
 title: "Settling in"
 description: "A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in."
 ---
@@ -10,17 +11,17 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <h1>Settling in</h1>
   <div class="settling-hero__ko">정착하기</div>
   <p class="settling-hero__intro">A brief intro to stays, places to work, and communities in Korea, with useful links for more info on settling in.</p>
-  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated }}</div>
+  <div class="settling-hero__updated">Last updated: {{ settlingIn.lastUpdated | formatDate }}</div>
 </header>
 
-<div class="page-contents">
-  <div class="page-contents__links">
-    <a href="#renting"><span class="page-contents__full">Renting</span><span class="page-contents__short">Renting</span></a>
-    <a href="#work"><span class="page-contents__full">Places to work</span><span class="page-contents__short">Work</span></a>
-    <a href="#communities"><span class="page-contents__full">Communities</span><span class="page-contents__short">Community</span></a>
-    <a href="#links"><span class="page-contents__full">Useful links</span><span class="page-contents__short">Links</span></a>
+<div class="section-nav">
+  <div class="section-nav__links">
+    <a href="#renting"><span class="section-nav__full">Renting</span><span class="section-nav__short">Renting</span></a>
+    <a href="#work"><span class="section-nav__full">Places to work</span><span class="section-nav__short">Work</span></a>
+    <a href="#communities"><span class="section-nav__full">Communities</span><span class="section-nav__short">Community</span></a>
+    <a href="#links"><span class="section-nav__full">Useful links</span><span class="section-nav__short">Links</span></a>
   </div>
-  <a href="#top" class="page-contents__top" aria-label="Back to top"><span class="page-contents__top-icon" aria-hidden="true"></span><span class="page-contents__top-label">Top</span></a>
+  <a href="#top" class="section-nav__top" aria-label="Back to top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
 </div>
 
 <section id="renting" class="settling-section">
@@ -28,7 +29,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Renting</h2>
   </div>
-  <p class="settling-body">Korean long-term renting typically involves a large upfront deposit of <span class="settling-nowrap">₩5–20M</span> (~$4–15K), a&#160;<span class="settling-nowrap">13–24-month</span> lease, and a visit to a local realty agency (<span class="settling-ko">부동산</span>).</p>
+  <p class="settling-body">Korean long-term renting typically involves a large upfront deposit of <span class="settling-nowrap">{{ settlingIn.typicalRental.deposit }}</span> (~{{ settlingIn.typicalRental.depositUsd }}), a&#160;<span class="settling-nowrap">{{ settlingIn.typicalRental.leaseMonths }}-month</span> lease, and a visit to a local realty agency (<span class="settling-ko">부동산</span>).</p>
 
   <div class="settling-callout settling-callout--tip">
     <div class="settling-callout__text">Typical rental logic is — the higher the deposit, the lower the rent.</div>
@@ -95,7 +96,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <div class="settling-coliving-row">
         <a target="_blank" rel="noopener" class="settling-coliving-row__name" href="{{ c.url }}">{{ c.name }} ↗</a>
         <div class="settling-coliving-row__loc">
-          {# Same pin glyph as the festival/attraction/coworking pins (region-data.js pinIcon /
+          {# Same pin glyph as the festival/attraction/coworking pins (html.js pinIcon /
              city-card.njk .work-venue__pin) — fill: currentColor inherits this row's muted colour. #}
           <svg class="settling-coliving-row__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>
           {{ c.location }}
@@ -117,7 +118,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
 
   <div class="settling-panel settling-note">
     <div class="settling-note__title">Goshiwon and goshitel</div>
-    <p class="settling-body settling-body--muted">There are also very cheap stays — around ₩400K/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
+    <p class="settling-body settling-body--muted">There are also very cheap stays — around {{ settlingIn.typicalRental.goshiwonMonthly }}/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
   </div>
 
   <details class="settling-price-table">
@@ -204,7 +205,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
         {% endfor %}
       </div>
 
-      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early September 2026 for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
+      <p class="settling-price-table__footnote">A rough price snapshot based on dozens of live listings hand-checked in early {{ rentalMarketScan.scanDate | formatDate }} for Gangwon-do. Searches were set a few months ahead to avoid last-minute and holiday pricing, and prices were compared on a one-month / four-week basis. Zigbang is listed twice because officetel and one-room listings can differ a lot in price. Enkostay and 33m2 deposits are fixed regardless of city and shown above.</p>
     </div>
   </details>
 

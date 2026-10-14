@@ -2,7 +2,7 @@
 
 Korea's Digital Nomad Visa (F-1-D) has an income threshold that depends on the applicant's age
 and the region a person would like to settle in. Work&Stay Korea is an English-language
-site built to visualize those rules and make it easier to choose the most suirable area to live.
+site built to visualize those rules and make it easier to choose the most suitable area to live.
 
 The site takes income, age, and family-accompaniment status as input and highlights which of
 Korea's six regions the applicant is eligible for. Each region page then surfaces workation-
@@ -20,15 +20,16 @@ long-term residency vs. one-off tourism in population-declining regions.
 - **Eligibility calculator** — walks through the actual F-1-D income rules (which differ by age,
   region, and family status, including Korea's official population-decline county list) and
   greys out regions user doesn't qualify for on an interactive map.
-- **Region pages** — workation cities with rental prices, co-working spaces, study cafés, and local 
+- **Region pages** — workation cities with rental prices, co-working spaces, study cafés, and local
   getting-around info for each of Korea's six regions.
 - **Live attractions & festivals** — fetched from the KTO English Tourism Information OpenAPI on
   every page view (not a cached snapshot — see [Why the API calls are live](#why-the-api-calls-are-live)).
 - **Local food guide** — hand-picked regional dishes with photo credits and sourcing.
 - **Visa info & Settling in pages** — the F-1-D visa's eligibility rules, documents, and FAQ, plus
   a general guide to renting, workspaces, and communities in Korea.
-- Works with JavaScript off: every region, tab, and link is a real anchor. Only the calculator
-  and live map highlighting need JS.
+- Works with JavaScript off: every region link is a real anchor. Only the calculator, live map
+  highlighting and the API-fed blocks (attractions, festivals with their Ongoing/Upcoming tabs,
+  study-café counts) need JS.
 
 ## Tech stack
 
@@ -43,7 +44,7 @@ maintaining this solo:
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting, plus
   a thin serverless proxy for the one thing that needs a backend: live KTO API calls
 
-See [`architecture.md`](./architecture.md) for the full breakdown of this stack, data models, and
+See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full breakdown of this stack, data models, and
 known quirks of the KTO API.
 
 ## Why the API calls are live
@@ -54,9 +55,10 @@ attractions and festivals are fetched live, server-side, on every region-page vi
 Cloudflare Pages Function that holds the API key. The key never reaches the client or the
 repository.
 
-Hero photos and dish photos are the one deliberate exception — they're hand-picked once (via the KTO API)
-and committed as static files, since which photo represents a region or dish is an editorial choice, not 
-something a live query should pick at random on each visit.
+Hero photos and dish photos are the one deliberate exception — they're hand-picked once (mostly via
+the KTO API, a few from Wikimedia Commons) and committed as static files, since which photo
+represents a region or dish is an editorial choice, not something a live query should pick at
+random on each visit.
 
 ## Study-café battery
 
@@ -85,7 +87,7 @@ and the [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5)
 
 ```bash
 npm install
-cp .env.example .dev.vars     # add your KTO API key (optional, see below)
+cp .env.example .env          # add your API keys: KTO, Kakao® (optional, see below)
 npm run pages:dev             # http://localhost:8788
 ```
 
@@ -93,16 +95,19 @@ npm run pages:dev             # http://localhost:8788
 endpoints actually work locally. Plain `npm run serve` only serves static Eleventy output; the
 `/api/**` routes won't exist and attraction/festival sections will render their empty state.
 
-Pages Functions read the key from `.dev.vars`, not `.env` — `.env` is only used by the standalone
-scripts under `scripts/`.
+Both Pages Functions (`wrangler pages dev`) and the standalone scripts under `scripts/` read
+the key from the single gitignored `.env`.
 
 **Don't have a KTO API key yet, just want to work on the UI?** Leave `KTO_API_KEY` unset in
-`.env`/`.dev.vars`. The Functions then skip the live call and serve the committed fallback data
+`.env`. The Functions then skip the live call and serve the committed fallback data
 instead — real cards to test filters against, zero API calls spent.
 
 **Testing against real data without burning quota on every reload?** Keep the key set and add
-`KTO_DEV_CACHE=1` to `.dev.vars`. Repeat requests are served from an in-memory cache instead of
+`KTO_DEV_CACHE=1` to `.env`. Repeat requests are served from an in-memory cache instead of
 re-hitting KTO. Dev-only — never set this in production.
+
+`KTO_DEV_FORCE_QUOTA=1` makes every KTO call report quota-exceeded, to test the degraded UI.
+Dev-only as well.
 
 ## Project layout
 
@@ -112,16 +117,22 @@ src/_data/               Editorial content: visa rules, region/city metadata, re
 src/_includes/           Nunjucks layouts and partials
 src/assets/              CSS, JS, SVG, images
 src/regions/             Per-region pages (paginated from _data/regions.json)
+eleventy/                Eleventy template filters
 scripts/                 Standalone verification scripts (no test framework)
+notes/                   Research notes and raw reference data (not part of the build)
 ```
 
 ## Contributing / project docs
 
-- [`architecture.md`](./architecture.md) — stack, folder structure, data models, and KTO
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind the notable decisions
-- [`DESIGN.md`](./DESIGN.md) — visual/design conventions
+- [`DESIGN.md`](./DESIGN.md) — visual/design conventions (palette, type, spacing, components)
+- [`ROADMAP_TODO.md`](./ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest
   constraints, workflow rules, tech-stack conventions)
+- [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of the
+  optimal KTO calls per region
+- [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and usage
 
 ## License / contest note
 

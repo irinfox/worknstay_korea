@@ -1,10 +1,89 @@
 {
-  "note": "Gyeonggi-do population-decline county cover photo — one per county box on population-decline-areas.njk. All 7 sourced from KTO PhotoGalleryService1 (gallerySearchList1, uniformly KOGL Type1); files live in src/assets/img/hero/gyeonggi-do-population-decline/, credits/captions in countyHeroCredits.json.",
-  "Ganghwa-gun": "seokmodo-glasswort-colony.jpg",
-  "Ongjin-gun": "dumujin-brothers-rock.jpg",
-  "Gapyeong-gun": "cheongpyeong-lakeside.jpg",
-  "Yeoncheon-gun": "yeoncheon-autumn.jpg",
-  "Dong-gu": "baedari-bookstore-alley.jpg",
-  "Dongducheon-si": "jajaam-hermitage-soyosan.jpg",
-  "Pocheon-si": "pocheon-healing-forest.jpg"
+  "note": "Gyeonggi-do population-decline county cover photo — one record per county box on population-decline-areas.njk (file in src/assets/img/hero/gyeonggi-do-population-decline/).",
+  "licenseNote": "All entries sourced via KTO PhotoGalleryService1 (gallerySearchList1) — uniformly 공공누리 (KOGL) Type 1, attribution required, modification/derivative works permitted; the product has no cpyrhtDivCd field since the whole catalog is Type1 by definition. titleKo/cityKo are the county's own name fields (populationDeclineAreas.json) plus a plain transliteration of the photo's KTO gallery title, kept so a user can search the Korean name directly (CLAUDE.md).",
+  "Ganghwa-gun": {
+    "file": "seokmodo-glasswort-colony.jpg",
+    "titleEn": "Seokmodo Glasswort Colony",
+    "titleKo": "석모도 칠면초 군락지",
+    "cityEn": "Ganghwa-gun, Incheon",
+    "cityKo": "강화군, 인천광역시",
+    "source": "PhotoGalleryService1",
+    "galContentId": "4061987",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Ongjin-gun": {
+    "file": "dumujin-brothers-rock.jpg",
+    "titleEn": "Dumujin Brothers Rock",
+    "titleKo": "두무진 형제바위",
+    "cityEn": "Ongjin-gun, Incheon",
+    "cityKo": "옹진군, 인천광역시",
+    "source": "PhotoGalleryService1",
+    "galContentId": "2029243",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Gapyeong-gun": {
+    "file": "cheongpyeong-lakeside.jpg",
+    "titleEn": "Cheongpyeong Lakeside",
+    "titleKo": "청평호반",
+    "cityEn": "Gapyeong-gun, Gyeonggi-do",
+    "cityKo": "가평군, 경기도",
+    "source": "PhotoGalleryService1",
+    "galContentId": "2864000",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Yeoncheon-gun": {
+    "file": "yeoncheon-autumn.jpg",
+    "titleEn": "Autumn in Yeoncheon",
+    "titleKo": "연천의 가을",
+    "cityEn": "Yeoncheon-gun, Gyeonggi-do",
+    "cityKo": "연천군, 경기도",
+    "source": "PhotoGalleryService1",
+    "galContentId": "3415097",
+    "note": "General county scenery, not a single named attraction.",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Dong-gu": {
+    "file": "baedari-bookstore-alley.jpg",
+    "titleEn": "Baedari Secondhand Bookstore Alley",
+    "titleKo": "배다리 헌책방 골목",
+    "cityEn": "Dong-gu, Incheon",
+    "cityKo": "동구, 인천광역시",
+    "source": "PhotoGalleryService1",
+    "galContentId": "2599313",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Dongducheon-si": {
+    "file": "jajaam-hermitage-soyosan.jpg",
+    "titleEn": "Jajaam Hermitage, Mt. Soyosan",
+    "titleKo": "소요산 자재암",
+    "cityEn": "Dongducheon-si, Gyeonggi-do",
+    "cityKo": "동두천시, 경기도",
+    "source": "PhotoGalleryService1",
+    "galContentId": "1047839",
+    "credit": {
+      "source": "kto"
+    }
+  },
+  "Pocheon-si": {
+    "file": "pocheon-healing-forest.jpg",
+    "titleEn": "Pocheon \"Under the Sky\" Healing Forest",
+    "titleKo": "포천 하늘아래 치유의 숲",
+    "cityEn": "Pocheon-si, Gyeonggi-do",
+    "cityKo": "포천시, 경기도",
+    "source": "PhotoGalleryService1",
+    "galContentId": "2738300",
+    "credit": {
+      "source": "kto"
+    }
+  }
 }

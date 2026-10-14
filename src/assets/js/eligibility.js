@@ -1,22 +1,22 @@
-// ROADMAP_TODO.md Phase 15 — pure function, no DOM access, trivially testable.
+// Pure function, no DOM access, trivially testable.
 // Two-object signature, deliberately not flat positional args: `userInput` (what the visitor
 // typed) vs `referenceData` (what the site already knows — visa thresholds + region/decline
-// data from _data/*.json, per CLAUDE.md rule 4). Splitting it this way also removes a real bug
+// data from _data/*.json, per CLAUDE.md). Splitting it this way also removes a real bug
 // risk flat args have here — two same-shaped values sitting next to each other positionally
 // (two arrays: regions/populationDeclineAreas; two numbers: salaryKrw/age) are easy to
 // transpose by accident with nothing to catch it. Named fields can't be silently swapped.
 // referenceData is passed in rather than imported so this stays pure — calculator.js
-// (Phase 16) sources it and calls this function; this module never touches the DOM or fetches
+// sources it and calls this function; this module never touches the DOM or fetches
 // anything itself.
 //
-// architecture.md §6/§8: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
-// per-region (today only gyeonggi-do), carried via partialRegionSlugs[] rather than a 4th tier.
+// Tier stays a 3-way `ineligible | nonCapitalOnly | all`; partiality is per-region, carried via
+// partialRegionSlugs[] rather than a 4th tier.
 
 // Precondition, not a runtime edge case this function is expected to handle: callers must
 // validate age >= visaRules.additionalFacts.minApplicantAge (18) before calling
 // calculateEligibility(). A 17-year-old typing their age is routine input, but the right
 // response ("F-1-D applicants must be 18 or older") is a form-validation message, not a tier —
-// Phase 16's inline validation is what's meant to catch this, not a try/catch here.
+// calculator.js's inline validation is what's meant to catch this, not a try/catch here.
 function ageBandFor(age, rules) {
   const band = rules.ageBands.find(
     (b) => age >= b.minAge && (b.maxAge === null || age <= b.maxAge)
@@ -41,8 +41,8 @@ function thresholdFor(multiplier, rules) {
  * @param {object} userInput
  * @param {number} userInput.salaryKrw - annual salary in KRW
  * @param {number} userInput.age
- * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (architecture.md
- *   §7: overrides the age-based multiplier with a flat family multiplier, regardless of age)
+ * @param {boolean} userInput.hasFamily - accompanying spouse/minor children (overrides the age-based
+ *   multiplier with a flat family multiplier, regardless of age)
  * @param {object} referenceData
  * @param {object} referenceData.rules - visaRules.json
  * @param {object[]} referenceData.regions - regions.json entries; only `slug`/`isCapitalArea`

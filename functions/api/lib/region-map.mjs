@@ -1,4 +1,4 @@
-// lDongRegnCd <-> region-slug mapping (architecture.md §5/§6). Derived directly from
+// lDongRegnCd <-> region-slug mapping. Derived directly from
 // regions.json (the hand-authored editorial source of truth for region codes) rather than
 // duplicating the code lists here, so the two can never drift out of sync.
 import regions from "../../../src/_data/regions.json";
@@ -20,8 +20,7 @@ export function slugToLDongRegnCds(slug) {
   return regions.find((r) => r.slug === slug)?.ktoLDongRegnCds ?? [];
 }
 
-// areacode is empty on festival records (architecture.md §5) — this is why lDongRegnCd is the
-// canonical lookup key, never areacode.
+// areacode is empty on festival records, so lDongRegnCd is the canonical key.
 export function lDongRegnCdToSlug(code) {
   return lDongToSlug.get(code) ?? null;
 }

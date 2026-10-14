@@ -1,4 +1,4 @@
-// ROADMAP_TODO.md Phase 15 verify step: one hand-computed case per eligibility tier, run against
+// Verification — one hand-computed case per eligibility tier, run against
 // the real data files (not fixtures) so this also catches drift if visaRules.json or
 // populationDeclineAreas.json change. Run with: node scripts/verify-eligibility.mjs
 import { calculateEligibility } from "../src/assets/js/eligibility.js";
@@ -22,16 +22,16 @@ function check(label, actual, expected) {
   }
 }
 
-// Sanity check on the source figures themselves (architecture.md §7 / visa_rules.pdf p.3's
-// table), so a silent visaRules.json edit is caught here too. Asserts the actual threshold
-// values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not just the
-// multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't be
-// multiplied against gniPerCapitaKrw to reproduce these (MOJ derived them from the unrounded
-// GNI); a prior version of this check only asserted the multipliers, which is why it didn't
-// catch that bug.
+// Sanity check on the source figures themselves (the Ministry of Justice release's table, see
+// visaRules.json sourceUrl), so a silent visaRules.json edit is caught here too. Asserts the actual
+// threshold values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not
+// just the multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't
+// be multiplied against gniPerCapitaKrw to reproduce these (MOJ derived them from the unrounded
+// GNI); a prior version of this check only asserted the multipliers, which is why it didn't catch
+// that bug.
 const t = (multiplier) => rules.thresholdsByMultiplier[multiplier];
 check(
-  "visaRules.json matches visa_rules.pdf p.3's published thresholds",
+  "visaRules.json matches the Ministry of Justice's published thresholds",
   {
     gniPerCapitaKrw: rules.gniPerCapitaKrw,
     age18to34: [t(rules.ageBands[0].multiplierNonCapitalArea), t(rules.ageBands[0].multiplierCapitalArea)],
@@ -78,7 +78,7 @@ check(
   { tier: "all", dimmed: [], partial: [] }
 );
 
-// Case 4: family flag overrides the age band regardless of age (architecture.md §7)
+// Case 4: family flag overrides the age band regardless of age (ARCHITECTURE.md)
 // — a 22-year-old with family meets the ₩78,620,000 non-capital family threshold but not the
 // ₩104,830,000 capital family threshold.
 check(

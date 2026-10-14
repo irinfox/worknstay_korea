@@ -83,7 +83,7 @@
   margin-bottom: var(--space-6);
 }
 
-/* Shared .page-contents strip (static-pages.css, page-contents.js) — same sticky sub-nav as
+/* Shared .section-nav strip (section-nav.css, section-nav.js) — same sticky sub-nav as
    visa-info/settling-in, and the same 26px/36px gap around it visa-info gets for free from its
    own flex-column `gap`. .content-page is a plain block, not flex, so both edges are stated here
    explicitly instead — scoped with :has() to when a strip actually follows, so
@@ -91,20 +91,20 @@
    Needs the .region-page ancestor in the selector, not just :has() alone — .region-page
    .region-header further down (the split-layout rule) sets its own margin-bottom at equal
    (class+class) specificity, and being later in the file would otherwise win the tie. */
-.region-page .region-header:has(+ .page-contents) {
+.region-page .region-header:has(+ .section-nav) {
   margin-bottom: 26px;
 }
 
-.region-page > .page-contents {
+.region-page > .section-nav {
   margin-bottom: 26px;
 }
 
 @media (min-width: 1024px) {
-  .region-page .region-header:has(+ .page-contents) {
+  .region-page .region-header:has(+ .section-nav) {
     margin-bottom: 36px;
   }
 
-  .region-page > .page-contents {
+  .region-page > .section-nav {
     margin-bottom: 36px;
   }
 }
@@ -292,6 +292,10 @@ ul.region-seasons {
   white-space: nowrap;
 }
 
+.rent-summary__note > div + div {
+  margin-top: 4px;
+}
+
 .rent-summary__note {
   margin: 12px 0 0;
   padding-top: 12px;
@@ -369,8 +373,8 @@ ul.region-seasons {
    next), a "1 / N" counter and prev/next arrows, then the KTO provenance line below. The strip
    scrolls/swipes with zero JS (same pattern as .attraction-list); region-hero-gallery.js layers
    the counter, arrows and autoplay loop on top. Region-page-exclusive markup — safe to own these
-   selectors outright (static-pages.css reuses .region-header/.region-section, not .region-hero). */
-/* Top margin matches .page-contents' own margin-bottom above (26px/36px) — block-flow margin
+   selectors outright (visa-info.css reuses .region-header/.region-section, not .region-hero). */
+/* Top margin matches .section-nav' own margin-bottom above (26px/36px) — block-flow margin
    collapsing takes the larger of two adjoining margins, so both sides need to actually agree on
    the target value rather than leaving this at the page's general --space-6 rhythm. */
 .region-gallery {
@@ -471,7 +475,7 @@ ul.region-seasons {
 
 /* Per-slide caption: full-width gradient overlay along the bottom edge (design 5b). Title line
    is the KTO photo title; the sub line carries the city plus the Korean name as a plain
-   cross-reference aid (CLAUDE.md rule 9), not a 1:1 translation. */
+   cross-reference aid (CLAUDE.md), not a 1:1 translation. */
 .region-hero__caption {
   position: absolute;
   left: 0;
@@ -483,7 +487,7 @@ ul.region-seasons {
   gap: 3px;
   margin: 0;
   padding: 32px 20px 16px;
-  color: #fff;
+  color: var(--color-on-dark);
   background: linear-gradient(rgba(22, 32, 28, 0), rgba(22, 32, 28, 0.9));
 }
 
@@ -575,7 +579,7 @@ ul.region-seasons {
 }
 
 /* One-line intro under a section H2 (design reference 5b). Tightens the H2 gap when present —
-   `:not([hidden])` so a JS-hidden subtitle (e.g. events.js's quotaExceeded state, region-data.js)
+   `:not([hidden])` so a JS-hidden subtitle (e.g. events.js's quotaExceeded state)
    falls back to the normal H2 margin instead of leaving the tight gap with nothing to fill it. */
 .region-page .region-section > .region-section__head:has(+ .region-section__sub:not([hidden])),
 .region-band__col > .region-section__head:has(+ .region-section__sub:not([hidden])) {
@@ -590,7 +594,7 @@ ul.region-seasons {
 }
 
 /* ── Guides strip (Gangwon-do only; design reference 5b) ──────────────────────────────────────
-   Same inline-label row as settling-in's Reviews/Guides panels (static-pages.css
+   Same inline-label row as settling-in's Reviews/Guides panels (settling-in.css
    .settling-reviews/.settling-inline-label): the orange tick + "Guides:" label sit on the same
    row as the link(s) whenever there's room, dropping to its own line only below 600px. */
 .region-guides {
@@ -605,7 +609,7 @@ ul.region-seasons {
   border-radius: 10px;
 }
 
-/* Not flex, same reason as .settling-inline-label (static-pages.css): a flex container's
+/* Not flex, same reason as .settling-inline-label (settling-in.css): a flex container's
    exported baseline is its first flex item's baseline, and the decorative tick (no text) would
    export its own bottom edge instead of "Guides:"'s actual text baseline, misaligning the whole
    row. Tick as inline-block + plain inline text reports the text's own baseline instead. */
@@ -752,8 +756,18 @@ ul.region-seasons {
 }
 
 .cost-table dt {
+  grid-row: span 1;
   font-size: 14px;
   color: var(--color-text-soft);
+}
+
+/* Label spanning a city's stacked size tiers. */
+.cost-table dt.cost-table__label--span-2 {
+  grid-row: span 2;
+}
+
+.cost-table dt.cost-table__label--span-3 {
+  grid-row: span 3;
 }
 
 .cost-table dd {
@@ -866,12 +880,6 @@ ul.region-seasons {
   color: var(--color-text-soft);
 }
 
-/* Keeps a ₩ range from breaking at its dash on narrow viewports (same fix as
-   .settling-nowrap in static-pages.css). */
-.cost-nowrap {
-  white-space: nowrap;
-}
-
 .cost-note + .cost-note {
   margin-top: 10px;
 }
@@ -912,15 +920,6 @@ ul.region-seasons {
   border-radius: 12px;
 }
 
-.threshold-card__lead {
-  margin: 0;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--color-primary-tint-border-soft);
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--color-text-soft);
-}
-
 .threshold-card__table {
   margin: 0;
 }
@@ -948,6 +947,7 @@ ul.region-seasons {
   font-size: 15px;
   font-weight: 600;
   text-align: right;
+  white-space: nowrap;
 }
 
 .threshold-card__note {
@@ -977,7 +977,7 @@ ul.region-seasons {
 
 /* Source note — panel with an orange tick, "Source:" and the link sitting on the same row
    whenever there's room (design ref 6c; same inline-label pattern as .region-guides and
-   settling-in's Reviews/Guides rows — static-pages.css .settling-reviews). */
+   settling-in's Reviews/Guides rows — settling-in.css .settling-reviews). */
 .source-note {
   display: flex;
   flex-direction: row;
@@ -1106,7 +1106,7 @@ ul.region-seasons {
     rgba(22, 32, 28, 0.4) 45%,
     rgba(22, 32, 28, 0.9)
   );
-  color: #fff;
+  color: var(--color-on-dark);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
 }
 
@@ -1197,7 +1197,7 @@ ul.region-seasons {
   padding: 7px 13px;
   border-radius: 20px;
   cursor: pointer;
-  background: #fff;
+  background: var(--color-bg);
   color: var(--color-text);
   /* Neutral pill border — no matching token elsewhere in tokens.css. */
   border: 1px solid #cfd6d2;
@@ -1205,7 +1205,7 @@ ul.region-seasons {
 
 .filter-pill.is-selected {
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-on-dark);
   border-color: var(--color-primary);
 }
 
@@ -1216,7 +1216,7 @@ ul.region-seasons {
   }
 
   .filter-pill.is-selected:hover {
-    color: #fff;
+    color: var(--color-on-dark);
   }
 }
 
@@ -1352,7 +1352,7 @@ ul.region-seasons {
   line-height: 1.2;
   padding: 3px 9px;
   border-radius: 20px;
-  background: #fff;
+  background: var(--color-bg);
   color: var(--color-text);
 }
 
@@ -1364,7 +1364,7 @@ ul.region-seasons {
   }
 }
 
-/* region-data.js renders the attraction title as an <h4> — bring it down to the design's
+/* attractions.js renders the attraction title as an <h4> — bring it down to the design's
    card-title size (15px / 500), not base.css's page-scale h4. Titles mix an English name with a
    Korean name in .attraction-card__ko/.dish-card__ko (inherits word-break/overflow-wrap from
    here): keep-all stops a Korean word splitting mid-character (e.g. "미술관" hanging a lone "관"
@@ -1505,7 +1505,7 @@ ul.region-seasons {
   align-items: flex-end;
   border-radius: 0 0 10px 10px;
   background: linear-gradient(rgba(22, 32, 28, 0), rgba(22, 32, 28, 0.72));
-  color: #fff;
+  color: var(--color-on-dark);
   font-size: 13px;
   font-weight: 500;
   pointer-events: none;
@@ -1536,27 +1536,3 @@ ul.region-seasons {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-6);
 }
-
-.mock-note {
-  font-size: var(--font-size-sm);
-  font-weight: 400;
-  color: var(--color-text-muted);
-}
-
-.cost-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--space-3);
-  margin: 0;
-}
-
-.cost-summary dt {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.cost-summary dd {
-  margin: 0;
-  font-weight: 600;
-}
-

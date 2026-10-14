@@ -1,6 +1,6 @@
 // Per-city short-term rental market research: what a listing actually costs, broken down by
 // platform (Zigbang, Enkostay, "33m2", Airbnb). This is the raw price scan behind the region
-// page's "Cost of living" summary paragraph.
+// page's "Rental prices" section.
 //
 // `scans` is one flat array across all regions (same convention as cities.json/food.json —
 // filter by regionSlug) — add more regions here as they get scanned.
@@ -10,7 +10,7 @@
 //
 // Each unit only carries `type` (for the byName lookups in settling-in.njk), `sizeM2` and
 // `label` — the reviewed, hand-finalized display strings for the settling-in page's
-// price-snapshot table (Settling in.dc.html). There used to be separate depositMin/depositMax/
+// price-snapshot table. There used to be separate depositMin/depositMax/
 // rentMin/rentMax numeric fields alongside `label`, but they were never read anywhere (the page
 // only ever renders `label.*`) and didn't actually hold a real observed min/max — they were the
 // same single eyeballed figure as `label`, just reformatted, which made the file look like it had
@@ -21,11 +21,11 @@
 // comparison for Jeolla/Gyeongsang). Only Gangwon-do's scan included a deposit-charging
 // platform, so elsewhere deposit is a flat "none". Gyeonggi-do's rows break down by city instead.
 export default {
+  scanDate: "2026-09",
   regionSummary: [
     {
       regionSlug: "gyeonggi-do",
       furnishedShortTermMonthly: "₩1.4–2M+",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Seoul", tiers: [
             { size: "12–21 m²", value: "₩1–1.4M" },
@@ -45,7 +45,6 @@ export default {
     {
       regionSlug: "gangwon-do",
       furnishedShortTermMonthly: "₩1–1.4M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1–1.4M" },
         { label: "Typical size", value: "23–30 m² and up" },
@@ -60,7 +59,6 @@ export default {
     {
       regionSlug: "chungcheong-do",
       furnishedShortTermMonthly: "₩1–1.4M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1–1.4M" },
         { label: "Typical size", value: "20–40 m²" },
@@ -75,7 +73,6 @@ export default {
     {
       regionSlug: "gyeongsang-do",
       furnishedShortTermMonthly: "₩1.1–1.5M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1.1–1.5M" },
         { label: "Typical size", value: "24–33 m²" },
@@ -89,7 +86,6 @@ export default {
     {
       regionSlug: "jeolla-do",
       furnishedShortTermMonthly: "₩800K–1.2M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩800K–1.2M" },
         { label: "Typical size", value: "20–40 m²" },
@@ -103,7 +99,6 @@ export default {
     {
       regionSlug: "jeju-do",
       furnishedShortTermMonthly: "₩1.1–1.6M",
-      source: "Hand-checked from current furnished short-term listings, September 2026",
       costRows: [
         { label: "Short-term stay, per month", value: "₩1.1–1.6M" },
         { label: "Typical size", value: "23–30 m² and up" },

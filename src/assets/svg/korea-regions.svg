@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="99.0 11.7 616.3 1170.0" role="img" aria-label="South Korea — regions">
   <defs>
-    <!-- Phase 17: .region--partial's hatched fill (architecture.md §7 — Gyeonggi-do's
+    <!-- .region--partial's hatched fill (ARCHITECTURE.md — Gyeonggi-do's
          population-decline areas qualifying at the lower threshold). Colors are literal
          hex, not var(--color-region-partial)/var(--color-primary-dark) — CSS custom properties
          on the referencing element aren't visible inside a pattern's own content, so these

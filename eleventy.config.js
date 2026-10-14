@@ -1,12 +1,14 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import registerFilters from "./eleventy/filters.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.addPassthroughCopy("src/robots.txt");
+  eleventyConfig.addPassthroughCopy("src/_headers");
 
   // Markdown files living under src/assets/ (e.g. brand/README.md) are docs, not pages —
   // they're passed through as-is above, don't also render them as templates.
@@ -31,92 +33,7 @@ export default function (eleventyConfig) {
     return readFileSync(filePath, "utf8").replace(/<\?xml[^>]*\?>\s*/, "");
   });
 
-  // Thousand-separator formatting for KRW figures (costOfLiving.json values are raw integers).
-  eleventyConfig.addFilter("krw", function (value) {
-    return new Intl.NumberFormat("en-US").format(value);
-  });
-
-  // City-card population line: cities.json stores the raw KOSIS total, rounded here to 2
-  // significant figures (K below a million, M above), e.g. 211628 -> "210K", 1221616 -> "1.2M".
-  eleventyConfig.addFilter("popRound", function (value) {
-    if (!value) return "";
-    const exp = Math.floor(Math.log10(Math.abs(value)));
-    const factor = 10 ** (exp - 1);
-    const rounded = Math.round(value / factor) * factor;
-    if (rounded >= 1000000) return (rounded / 1000000).toFixed(1) + "M";
-    const k = rounded / 1000;
-    return (Number.isInteger(k) ? k : k.toFixed(1)) + "K";
-  });
-
-  // Looks up a record by `slug` or `regionSlug` — regions.json uses the former,
-  // costOfLiving.json (and other per-region data files) use the latter.
-  eleventyConfig.addFilter("findBySlug", function (arr, slug) {
-    return (arr || []).find((item) => item.slug === slug || item.regionSlug === slug);
-  });
-
-  // Filters a per-region data array (cities, food, mock KTO content) down to one region —
-  // Nunjucks has no built-in selectattr/rejectattr (that's Jinja2-only).
-  eleventyConfig.addFilter("byRegion", function (arr, slug) {
-    return (arr || []).filter((item) => item.regionSlug === slug);
-  });
-
-  // Looks up a record by `name` or `type` within a small array — settling-in.njk's Gangwon-do
-  // price table uses this to pull a named platform out of a city's `platforms` array, and a typed
-  // unit (Officetel/One-room) out of a platform's `units` array, without a Jinja2-only selectattr.
-  eleventyConfig.addFilter("byName", function (arr, name) {
-    return (arr || []).find((item) => item.name === name || item.type === name);
-  });
-
-  // Picks records by an explicit ordered list of slugs (Gangwon-do's city section names four
-  // specific cities in a hand-chosen order — byRegion would return all six in data order).
-  eleventyConfig.addFilter("bySlugs", function (arr, slugs) {
-    return (slugs || [])
-      .map((slug) => (arr || []).find((item) => item.slug === slug))
-      .filter(Boolean);
-  });
-
-  // region.longIntro is a single string for most regions, an array of paragraphs where a
-  // region needs more than one (region.njk renders each form differently).
-  eleventyConfig.addFilter("isArray", function (value) {
-    return Array.isArray(value);
-  });
-
-  // Splits a period-delimited string (e.g. site.tagline) into its sentences, period kept, so a
-  // template can lay each one on its own line without duplicating the copy in the template.
-  eleventyConfig.addFilter("splitSentences", function (value) {
-    return (value || "").match(/[^.]+\.?/g)?.map((s) => s.trim()).filter(Boolean) || [];
-  });
-
-  // Prev/next region for the shared footer's between-regions nav. Needed here because the footer
-  // partial only has `page.url` to work from, and no existing filter maps a URL back to its
-  // position in `regions`. Returns null on any page that isn't a region page.
-  eleventyConfig.addFilter("regionFooterNav", function (regions, url) {
-    const list = regions || [];
-    const i = list.findIndex((r) => `/regions/${r.slug}/` === url);
-    if (i === -1) return null;
-    return {
-      prev: i > 0 ? list[i - 1] : null,
-      next: i < list.length - 1 ? list[i + 1] : null,
-    };
-  });
-
-  // Wraps each hyphenated word (Gangnam-daero, 2-gil) in a no-wrap span so a line can only break at
-  // spaces; the text keeps its plain hyphen-minus. Escapes first, so use with `| safe`.
-  eleventyConfig.addFilter("keepHyphenated", function (text) {
-    const esc = String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return esc.replace(/\S*\S-\S*/g, '<span class="nowrap">$&</span>');
-  });
-
-  // Splits workationCenters into solo venues vs. chains (DESIGN.md § "Chains"), dropping CLOSED
-  // entries; chains sort non-Korean-first, solo venues keep cities.json's order.
-  eleventyConfig.addFilter("activeVenues", function (centers, wantChains) {
-    const active = (centers || []).filter((wc) => {
-      const closed = (wc.note || "").indexOf("CLOSED") !== -1;
-      return !closed && Boolean(wc.isChain) === Boolean(wantChains);
-    });
-    if (!wantChains) return active;
-    return active.sort((a, b) => Number(Boolean(a.korOnly)) - Number(Boolean(b.korOnly)));
-  });
+  registerFilters(eleventyConfig);
 
   return {
     dir: {

@@ -1,16 +1,15 @@
-// One-off investigation for ROADMAP_TODO.md Phase 25's "final checks" item /
-// notes/attraction-gallery-report.md §7. Runs the shipped broad-collapse
-// `fetchRegionAttractions` (functions/api/lib/attraction-fetch.mjs) once per region — the exact
-// production fetch/classify/dedupe path, just with a script-local `citySlugFor` standing in for
-// city-map.mjs (which reads cities.json without an import attribute — fine for Cloudflare's
-// esbuild bundler, not importable from plain Node; see attraction-fetch.mjs's header comment for
-// why citySlugFor is injected instead of imported there).
+// One-off investigation for notes/attraction-gallery-report.md ("Final checks"). Runs the shipped
+// broad-collapse `fetchRegionAttractions` (functions/api/lib/attraction-fetch.mjs) once per region
+// — the exact production fetch/classify/dedupe path, just with a script-local `citySlugFor`
+// standing in for city-map.mjs (which reads cities.json without an import attribute — fine for
+// Cloudflare's esbuild bundler, not importable from plain Node; see attraction-fetch.mjs's header
+// comment for why citySlugFor is injected instead of imported there).
 //
 // One live pass across all 6 regions is 3 calls × 16 lDongRegnCd codes = 48 (+1 only if some
 // region's arrange=P probe ever comes back broken) — the same "one full site exploration" cost
-// notes/attraction-gallery-report.md §6 already budgeted as safe (1000/day dev quota supports 20
-// of these). Not re-run speculatively: rerun only if attraction-fetch.mjs's classify/fetch logic
-// changes again.
+// notes/attraction-gallery-report.md ("Visitor-cost estimate") already budgeted as safe (1000/day
+// dev quota supports 20 of these). Not re-run speculatively: rerun only if attraction-fetch.mjs's
+// classify/fetch logic changes again.
 //
 // Run with: node --env-file=.env scripts/investigate-final-checks.mjs
 import { fetchRegionAttractions, classify } from "../functions/api/lib/attraction-fetch.mjs";
@@ -38,18 +37,12 @@ function citySlugFor(lDongRegnCd, lDongSignguCd) {
   return whole ? whole.slug : null;
 }
 
-// Mirrors region.njk's hand-chosen cityOrder — the exact city pills real pages render (and
-// therefore the exact "Elsewhere" definition: any citySlug not in this list, per
-// attraction-filters.js's knownAreaSlugs). Gangwon-do isn't in that map there either — it gets
-// its own isGangwon branch with this same 4-city list.
-const CITY_PILLS = {
-  "gyeonggi-do": ["seoul", "incheon", "suwon", "seongnam"],
-  "gyeongsang-do": ["busan", "daegu", "ulsan", "gyeongju"],
-  "jeolla-do": ["jeonju", "gwangju", "yeosu", "suncheon"],
-  "jeju-do": ["jeju-city", "seogwipo"],
-  "chungcheong-do": ["daejeon", "sejong", "cheongju", "gongju"],
-  "gangwon-do": ["sokcho", "gangneung", "chuncheon", "wonju"],
-};
+// The city pills real pages render: cities.json records with a cardOrder, which is also the exact
+// "Elsewhere" definition (any citySlug not in this list, per attraction-filters.js's knownAreaSlugs).
+const CITY_PILLS = {};
+for (const c of [...cities].filter((c) => c.cardOrder != null).sort((a, b) => a.cardOrder - b.cardOrder)) {
+  (CITY_PILLS[c.regionSlug] ||= []).push(c.slug);
+}
 
 // contentTypeId/classify mirror attraction-fetch.mjs's own filters exactly (kept in sync by
 // hand — small, stable, and duplicating them here is cheaper than exporting internals solely for

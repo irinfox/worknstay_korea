@@ -1,0 +1,161 @@
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import path from "node:path";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+export default function registerFilters(eleventyConfig) {
+  // Photo credit lines come from data, never template text. A credit is `{ source }` (a key of
+  // sources.json, e.g. "kto") or `{ text, license?, licenseUrl? }`.
+  const sources = JSON.parse(readFileSync(path.join(__dirname, "../src/_data/sources.json"), "utf8"));
+  function groupCredits(entries) {
+    const groups = new Map();
+    for (const { label, credit } of entries) {
+      const text = credit.source ? sources[credit.source].attribution : credit.text;
+      const key = `${text}|${credit.license || ""}`;
+      if (!groups.has(key)) {
+        const { license, licenseUrl } = credit;
+        groups.set(key, { text, license, licenseUrl, labels: [] });
+      }
+      groups.get(key).labels.push(label);
+    }
+    return [...groups.values()];
+  }
+
+  // A record is either a photo (credit on it) or content with a photo (credit on its `photo`).
+  const creditOf = (item) => item.credit || item.photo?.credit;
+
+  // Missing-credit rule: a photo record (hero photo, county photo, dish)
+  // without a credit is skipped and listed as a build warning; the build fails only when that
+  // leaves a slot empty (`where` names it). Records flagged `standby` are kept in the data but
+  // never shown.
+  const warned = new Set();
+  eleventyConfig.addFilter("credited", function (items, where, failIfEmpty = true) {
+    const active = (items || []).filter((item) => item && !item.standby);
+    const kept = active.filter((item) => {
+      if (creditOf(item)) return true;
+      const message = `[credits] skipped ${item.file || item.nameEn} (${where}): no credit`;
+      if (!warned.has(message)) {
+        warned.add(message);
+        console.warn(message);
+      }
+      return false;
+    });
+    if (failIfEmpty && active.length && !kept.length) {
+      throw new Error(`[credits] ${where}: every photo lacks a credit, nothing left to show`);
+    }
+    return kept;
+  });
+
+  // Distinct credits for a list of credited records, with the titles each covers.
+  eleventyConfig.addFilter("photoCredits", function (items) {
+    return groupCredits(
+      (items || []).filter(Boolean).map((item) => ({
+        label: item.titleEn || item.nameEn,
+        credit: creditOf(item),
+      }))
+    );
+  });
+
+  // Data files store dates as "YYYY-MM" or "YYYY-MM-DD"; format at render time:
+  // "2026-09" -> "September 2026", "2026-06-30" -> "30 June 2026".
+  eleventyConfig.addFilter("formatDate", function (value) {
+    const [y, m, d] = String(value).split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d || 1));
+    return d
+      ? date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+      : date.toLocaleDateString("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+  });
+
+  // Thousand-separator formatting for KRW figures (rent figures in the data are raw integers).
+  eleventyConfig.addFilter("krw", function (value) {
+    return new Intl.NumberFormat("en-US").format(value);
+  });
+
+  // Compact KRW for prose, exact (no rounding): 100000000 -> "₩100M", 500000 -> "₩500K".
+  eleventyConfig.addFilter("krwShort", function (value) {
+    return value >= 1_000_000 ? `₩${value / 1_000_000}M` : `₩${value / 1_000}K`;
+  });
+
+  // City-card population line: cities.json stores the raw KOSIS total, rounded here to 2
+  // significant figures (K below a million, M above), e.g. 211628 -> "210K", 1221616 -> "1.2M".
+  eleventyConfig.addFilter("popRound", function (value) {
+    if (!value) return "";
+    const exp = Math.floor(Math.log10(Math.abs(value)));
+    const factor = 10 ** (exp - 1);
+    const rounded = Math.round(value / factor) * factor;
+    if (rounded >= 1000000) return (rounded / 1000000).toFixed(1) + "M";
+    const k = rounded / 1000;
+    return (Number.isInteger(k) ? k : k.toFixed(1)) + "K";
+  });
+
+  // Looks up a record by `slug` or `regionSlug` — regions.json uses the former,
+  // rentalMarketScan.js regionSummary (and other per-region data files) use the latter.
+  eleventyConfig.addFilter("findBySlug", function (arr, slug) {
+    return (arr || []).find((item) => item.slug === slug || item.regionSlug === slug);
+  });
+
+  // Filters a per-region data array (cities, food, rental scans) down to one region —
+  // Nunjucks has no built-in selectattr/rejectattr (that's Jinja2-only).
+  eleventyConfig.addFilter("byRegion", function (arr, slug) {
+    return (arr || []).filter((item) => item.regionSlug === slug);
+  });
+
+  // City cards: only cities.json records that carry a `cardOrder`, sorted by it. A record
+  // without it silently gets no card, by design.
+  eleventyConfig.addFilter("cardCities", function (arr) {
+    return (arr || []).filter((c) => c.cardOrder != null).sort((a, b) => a.cardOrder - b.cardOrder);
+  });
+
+  // Looks up a record by `name` or `type` within a small array — settling-in.njk's Gangwon-do
+  // price table uses this to pull a named platform out of a city's `platforms` array, and a typed
+  // unit (Officetel/One-room) out of a platform's `units` array, without a Jinja2-only selectattr.
+  eleventyConfig.addFilter("byName", function (arr, name) {
+    return (arr || []).find((item) => item.name === name || item.type === name);
+  });
+
+  // Picks records by an explicit ordered list of slugs (Gangwon-do's city section names four
+  // specific cities in a hand-chosen order — byRegion would return all six in data order).
+  eleventyConfig.addFilter("bySlugs", function (arr, slugs) {
+    return (slugs || [])
+      .map((slug) => (arr || []).find((item) => item.slug === slug))
+      .filter(Boolean);
+  });
+
+  // Splits a period-delimited string (e.g. site.tagline) into its sentences, period kept, so a
+  // template can lay each one on its own line without duplicating the copy in the template.
+  eleventyConfig.addFilter("splitSentences", function (value) {
+    return (value || "").match(/[^.]+\.?/g)?.map((s) => s.trim()).filter(Boolean) || [];
+  });
+
+  // Prev/next region for the shared footer's between-regions nav. Needed here because the footer
+  // partial only has `page.url` to work from, and no existing filter maps a URL back to its
+  // position in `regions`. Returns null on any page that isn't a region page.
+  eleventyConfig.addFilter("regionFooterNav", function (regions, url) {
+    const list = regions || [];
+    const i = list.findIndex((r) => `/regions/${r.slug}/` === url);
+    if (i === -1) return null;
+    return {
+      prev: i > 0 ? list[i - 1] : null,
+      next: i < list.length - 1 ? list[i + 1] : null,
+    };
+  });
+
+  // Wraps each hyphenated word (Gangnam-daero, 2-gil) in a no-wrap span so a line can only break at
+  // spaces; the text keeps its plain hyphen-minus. Escapes first, so use with `| safe`.
+  eleventyConfig.addFilter("keepHyphenated", function (text) {
+    const esc = String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    return esc.replace(/\S*\S-\S*/g, '<span class="nowrap">$&</span>');
+  });
+
+  // Splits workationCenters into solo venues vs. chains (DESIGN.md § "Chains"), dropping CLOSED
+  // entries; chains sort non-Korean-first, solo venues keep cities.json's order.
+  eleventyConfig.addFilter("activeVenues", function (centers, wantChains) {
+    const active = (centers || []).filter((wc) => {
+      const closed = (wc.note || "").indexOf("CLOSED") !== -1;
+      return !closed && Boolean(wc.isChain) === Boolean(wantChains);
+    });
+    if (!wantChains) return active;
+    return active.sort((a, b) => Number(Boolean(a.korOnly)) - Number(Boolean(b.korOnly)));
+  });
+}

@@ -2,9 +2,10 @@
 // (.region-hero-gallery__track, region-page.css) already lets a mouse-wheel/trackpad/touch swipe
 // move between slides with zero JS (same no-JS-required pattern as .attraction-list); this module
 // adds prev/next buttons, a "1 / N" counter, and an infinite autoplay loop on top. Nothing here
-// gates content behind JS (rule 6) — with JS disabled it's a normal swipeable strip, just without
-// looping or autoplay. (The dots container is optional: still supported if present, absent on the
-// "Around the region" region-page gallery, which uses the counter instead.)
+// gates content behind JS (progressive enhancement) — with JS disabled it's a normal swipeable
+// strip, just without looping or autoplay. (The dots container is optional: still supported if
+// present, absent on the "Around the region" region-page gallery, which uses the counter
+// instead.)
 const AUTOPLAY_INTERVAL_MS = 4500;
 
 export function init() {

@@ -1,3 +1,4 @@
-{# Generic reusable empty state (rule 5: every KTO-derived block needs a designed empty state,
-   not a blank gap). Param: message (string, required) #}
-<p class="empty-state">{{ message }}</p>
+{# Generic reusable empty state (every KTO-derived block needs a designed empty state, not a
+   blank gap). Params: message (trusted markup, required), tag ("p" or "li" for list mounts,
+   required) #}
+<{{ tag }} class="empty-state">{{ message | safe }}</{{ tag }}>

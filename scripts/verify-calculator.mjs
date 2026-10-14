@@ -2,6 +2,7 @@
 // way scripts/verify-eligibility.mjs checks eligibility.js. Run with:
 //   node scripts/verify-calculator.mjs
 import { validate, captionFor } from "../src/assets/js/calculator.js";
+import visaRules from "../src/_data/visaRules.json" with { type: "json" };
 
 let failures = 0;
 
@@ -17,7 +18,7 @@ function check(label, actual, expected) {
 
 function messageFor(salaryRaw, ageRaw) {
   const userInput = { salaryKrw: Number(salaryRaw), age: Number(ageRaw), hasFamily: false };
-  return validate(userInput, { salaryRaw, ageRaw });
+  return validate(userInput, { salaryRaw, ageRaw }, visaRules.additionalFacts.minApplicantAge);
 }
 
 check("empty salary, valid age -> flags salary only", messageFor("", "30"), "Please enter your annual income.");

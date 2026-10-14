@@ -1,4 +1,4 @@
-// Phase 21 verification — real live-captured raw samples (via kto-client.mjs, 2026-08-25)
+// Verification — real live-captured raw samples (via kto-client.mjs, 2026-08-25)
 // plus constructed edge cases for the quirks that don't show up in every sample. Run with:
 //   node scripts/verify-normalize.mjs
 import {
@@ -84,7 +84,7 @@ const rawFestival = {
   });
   check(
     "nested-paren Korean title still yields a clean titleEn",
-    e.titleEn === "APAP Artwork Tour" && e.titleKo === "APAP 작품투어 (안양공공예술프로젝트)",
+    e.titleEn === "APAP Artwork Tour" && e.titleKo === "APAP 작품투어",
     JSON.stringify(e.titleEn) + " / " + e.titleKo
   );
 }

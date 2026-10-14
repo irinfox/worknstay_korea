@@ -1,6 +1,7 @@
 {
   "name": "worknstay korea",
   "tagline": "Work from Korea. Stay where it suits you.",
+  "dataDates": { "studyCafes": "2026-10" },
   "noindex": true,
   "nav": [
     { "label": "Regions", "href": "/#map" },
@@ -9,6 +10,8 @@
     { "label": "About", "href": "/about/" }
   ],
   "footer": {
+    "repoUrl": "https://github.com/irinfox/worknstay_korea",
+    "feedbackUrl": "https://tally.so/r/0Q2zrP",
     "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
   },
   "about": {
