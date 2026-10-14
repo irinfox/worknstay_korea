@@ -75,8 +75,8 @@ One Google Fonts request, exactly this:
 - Instrument Sans is the page default, set once on `body`. Never repeat it per element.
 - The Korean stack applies **only** to elements holding Hangul — region and city names, dish
   names, place names, the Korean subhead under an H1. Everything else inherits Latin.
-- Korean sits at 400 (500 only in the festival cards), always one step smaller than the Latin it
-  accompanies, in `#5C6660`, baseline-aligned to it (`align-items:baseline`, never centred).
+- Korean sits at 400, always one step smaller than the Latin it accompanies, in `#5C6660`,
+  baseline-aligned to it (`align-items:baseline`, never centred).
 - No 800 weights, no condensed display faces, no mono uppercase eyebrows, no italics — the one
   exception is map context labels (neighbouring regions, North Korea), where italic is the
   cartographic convention for "not the subject of this map".
@@ -171,7 +171,7 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   article, or notice/press release; domain-only (no date) for an evergreen service or portal
   with no publish date to report.
 - **Section tick**: 3×15px orange bar before a small heading (Guides, Where to work).
-- **Korean name / term**: 400 weight outside festival cards. *Name* (region, city, place, dish)
+- **Korean name / term**: 400 weight. *Name* (region, city, place, dish)
   — inline beside the title, baseline-aligned, wrapping only under width pressure. *Term* (a
   guide page's title — Visa info, Settling in) — own line under the H1, muted ink, every width.
 - **Region prev/next**: the six region pages only — never on the homepage, static pages, or the
