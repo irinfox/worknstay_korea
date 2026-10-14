@@ -38,12 +38,15 @@ export async function onRequestGet({ params, env }) {
   const codes = slugToLDongRegnCds(slug);
   let items = regionTopPicks;
   let quotaExceeded = false;
+  let liveFailed = false;
   if (codes.length) {
-    ({ items, quotaExceeded } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
+    let failed;
+    ({ items, quotaExceeded, failed } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
+    liveFailed = failed && !quotaExceeded;
 
-    // Quota gone: some live calls were blocked, so serve top picks rather than a partial gallery.
-    // `quotaExceeded` stays true so the front end says "Top picks for today".
-    if (quotaExceeded) {
+    // Any live call failed (quota included): serve top picks rather than a partial gallery. The
+    // front end says "Top picks for today" for both `quotaExceeded` and `liveFailed`.
+    if (failed) {
       items = regionTopPicks;
     } else {
       // Boosting against itself (the fallback branch above) would be pointless — that's already
@@ -60,5 +63,5 @@ export async function onRequestGet({ params, env }) {
   // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
   sortByRegionPriority(items, slug);
 
-  return Response.json({ items, quotaExceeded });
+  return Response.json({ items, quotaExceeded, liveFailed });
 }

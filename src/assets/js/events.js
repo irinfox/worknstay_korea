@@ -221,8 +221,12 @@ export function renderEventsTimeline(container, data) {
   const liveText = provenance?.dataset.liveText || provenance?.textContent || "";
   const fallbackText = fallback ? eventsProvenanceFallback(data.snapshotDate, liveText) : "";
   setProvenance(provenance, fallbackText, fallback);
-  if (quotaExceeded || failed) {
-    container.innerHTML = `<p class="empty-state">${failed ? EVENTS_FAILED_TEXT : EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
+  if (failed) {
+    container.innerHTML = `<p class="event-empty">${EVENTS_FAILED_TEXT}</p>`;
+    return;
+  }
+  if (quotaExceeded) {
+    container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
     return;
   }
 

@@ -147,10 +147,17 @@ export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRa
 
   const byContentId = new Map();
   let quotaExceeded = false;
+  let failed = false; // any slice failed for any reason, quota included
   settled.forEach((result, i) => {
-    if (result.status !== "fulfilled") return;
+    if (result.status !== "fulfilled") {
+      failed = true;
+      return;
+    }
     if (result.value.quotaExceeded) quotaExceeded = true;
-    if (result.value.degraded) return;
+    if (result.value.degraded) {
+      failed = true;
+      return;
+    }
     const { lclsSystm1 } = orderedGroups[i];
     for (const raw of result.value.items) {
       onRawItem(raw, lclsSystm1);
@@ -168,5 +175,5 @@ export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRa
     }
   });
 
-  return { items: [...byContentId.values()], quotaExceeded };
+  return { items: [...byContentId.values()], quotaExceeded, failed };
 }

@@ -756,6 +756,7 @@ ul.region-seasons {
 }
 
 .cost-table dt {
+  grid-row: span 1;
   font-size: 14px;
   color: var(--color-text-soft);
 }

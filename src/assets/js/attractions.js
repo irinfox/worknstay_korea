@@ -10,7 +10,7 @@ export function renderAttractions(container, data) {
   // Reset the subtitle on every render so a later re-fetch doesn't keep a stale message.
   const subtitle = document.querySelector("[data-attractions-subtitle]");
   if (subtitle) {
-    subtitle.textContent = data.quotaExceeded
+    subtitle.textContent = data.quotaExceeded || data.liveFailed
       ? SUBTITLE_QUOTA_EXCEEDED
       : data.fallback
         ? SUBTITLE_FALLBACK
