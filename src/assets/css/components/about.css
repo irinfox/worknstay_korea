@@ -1,0 +1,174 @@
+/* ── About page (about.njk; design reference 6a/6b) ───────────────────────────────────────────
+   Wide site-shell column like the homepage, not the .content-page reading width. Headline block
+   on white (orange rule → H1 → credibility chips → intro paragraphs), then a primary-tinted
+   "Why this site?" band whose tint + hairlines bleed 16px past the page column on each side
+   (same ::before technique as region-page.css's .region-band), holding a three-card grid. */
+.about-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+.about-hero {
+  max-width: 760px;
+  margin-bottom: var(--space-6);
+}
+
+.about-hero__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 18px;
+}
+
+.about-hero h1 {
+  max-width: none;
+  font-size: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.1;
+}
+
+/* ul.* — base.css's `ul[class] { margin: 0 }` reset outranks a bare `.about-hero__chips` and
+   would zero these margins (same gotcha noted in region-page.css). */
+ul.about-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 560px;
+  margin: 18px 0 24px;
+}
+
+/* Deliberately quieter than the DESIGN.md vibe-tag pill (which is a loud, load-bearing filter
+   control): these are just background credentials — pale fill, soft border, 500 — but the text
+   stays green, same family as the vibe tags. */
+.about-hero__chips li {
+  padding: 5px 12px;
+  border: 1px solid var(--color-primary-tint-border-soft);
+  background: var(--color-primary-tint);
+  color: var(--color-primary-dark);
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* 66ch matches .region-page .region-header__intro so the About text column lines up with the
+   region pages. Paragraph sizes track region.njk too: first paragraph one notch up, the rest
+   at 0.9375rem — a small step, not a lede blow-up. */
+.about-hero__body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 66ch;
+}
+
+.about-hero__body > p {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+}
+
+.about-hero__body > .about-hero__lead {
+  font-size: 17px;
+}
+
+.about-hero__body > .about-hero__closing {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.about-hero__body > .about-hero__disclaimer {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+
+.about-why {
+  position: relative;
+  padding-block: var(--space-8);
+}
+
+.about-why::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  margin-inline: calc(-1 * var(--space-4));
+  background: var(--color-primary-tint);
+  border-block: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.about-why h2 {
+  margin-bottom: 4px;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.about-why__sub {
+  margin-bottom: 18px;
+  font-size: 15px;
+  color: var(--color-text-soft);
+}
+
+.about-why__grid {
+  display: grid;
+  gap: 16px;
+}
+
+.about-why__card {
+  padding: 20px 22px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.about-why__card-rule {
+  display: block;
+  width: 34px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--color-accent-rule);
+  margin-bottom: 14px;
+}
+
+.about-why__card h3 {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.about-why__card p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--color-text-soft);
+}
+
+.about-why__card-link {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Two up on a small tablet; all three on one row from 900px, where they fit without the third
+   dropping to a second row with slack. */
+@media (min-width: 768px) {
+  .about-why__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .about-why__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

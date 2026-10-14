@@ -373,7 +373,7 @@ ul.region-seasons {
    next), a "1 / N" counter and prev/next arrows, then the KTO provenance line below. The strip
    scrolls/swipes with zero JS (same pattern as .attraction-list); region-hero-gallery.js layers
    the counter, arrows and autoplay loop on top. Region-page-exclusive markup — safe to own these
-   selectors outright (static-pages.css reuses .region-header/.region-section, not .region-hero). */
+   selectors outright (visa-info.css reuses .region-header/.region-section, not .region-hero). */
 /* Top margin matches .section-nav' own margin-bottom above (26px/36px) — block-flow margin
    collapsing takes the larger of two adjoining margins, so both sides need to actually agree on
    the target value rather than leaving this at the page's general --space-6 rhythm. */
@@ -594,7 +594,7 @@ ul.region-seasons {
 }
 
 /* ── Guides strip (Gangwon-do only; design reference 5b) ──────────────────────────────────────
-   Same inline-label row as settling-in's Reviews/Guides panels (static-pages.css
+   Same inline-label row as settling-in's Reviews/Guides panels (settling-in.css
    .settling-reviews/.settling-inline-label): the orange tick + "Guides:" label sit on the same
    row as the link(s) whenever there's room, dropping to its own line only below 600px. */
 .region-guides {
@@ -609,7 +609,7 @@ ul.region-seasons {
   border-radius: 10px;
 }
 
-/* Not flex, same reason as .settling-inline-label (static-pages.css): a flex container's
+/* Not flex, same reason as .settling-inline-label (settling-in.css): a flex container's
    exported baseline is its first flex item's baseline, and the decorative tick (no text) would
    export its own bottom edge instead of "Guides:"'s actual text baseline, misaligning the whole
    row. Tick as inline-block + plain inline text reports the text's own baseline instead. */
@@ -880,7 +880,7 @@ ul.region-seasons {
 }
 
 /* Keeps a ₩ range from breaking at its dash on narrow viewports (same fix as
-   .settling-nowrap in static-pages.css). */
+   .settling-nowrap in settling-in.css). */
 .cost-nowrap {
   white-space: nowrap;
 }
@@ -990,7 +990,7 @@ ul.region-seasons {
 
 /* Source note — panel with an orange tick, "Source:" and the link sitting on the same row
    whenever there's room (design ref 6c; same inline-label pattern as .region-guides and
-   settling-in's Reviews/Guides rows — static-pages.css .settling-reviews). */
+   settling-in's Reviews/Guides rows — settling-in.css .settling-reviews). */
 .source-note {
   display: flex;
   flex-direction: row;

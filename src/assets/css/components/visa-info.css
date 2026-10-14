@@ -1,0 +1,800 @@
+/* ── Visa info (visa-info.njk; design reference "Visa info") ──────────────────────────────────
+   Full redesign, wide site-shell column like About/Settling in above (not the old narrow
+   .content-page reading width visa-info.njk used to share with the region-header/-section
+   classes — that legacy block was removed above). Headline + tinted facts panel → sticky
+   contents strip → Eligibility (+ income table/cards) → Documents → Important notes →
+   Questions (FAQ) → Useful links. Single breakpoint at 1024px (--bp-desktop): base rules below
+   are the phone frame, overridden for desktop at min-width:1024px. The design reference used
+   900px throughout; moved to 1024 to match DESIGN.md's documented structural threshold ("multi-
+   column layouts hold to 1024, then collapse") — the reference value collapsed the notes grid's
+   fixed 3-column layout before 1024, which DESIGN.md doesn't allow. */
+
+.visa-page {
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+@media (min-width: 1024px) {
+  .visa-page {
+    gap: 36px;
+  }
+}
+
+/* Headline + facts panel — same split as region pages' .region-header--split (region-page.css):
+   single column below 900px, 1.35fr:1fr above it, 40px gap. Copied exactly rather than
+   approximated, so .visa-facts renders at the same width as .threshold-card/.rent-summary at any
+   given viewport. */
+.visa-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .visa-hero {
+    grid-template-columns: 1.35fr 1fr;
+    gap: 40px;
+  }
+}
+
+.visa-hero__main {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.visa-hero__rule {
+  display: block;
+  width: 56px;
+  height: 3px;
+  background: var(--color-accent-rule);
+}
+
+/* Fluid clamp (30–42px), same formula as settling-hero h1 — matches its DESIGN.md target range
+   exactly, so this page scales continuously instead of jumping at the 1024px breakpoint. */
+.visa-hero__main h1 {
+  font-size: clamp(1.875rem, 1.52rem + 1.75vw, 2.625rem);
+  font-weight: 600;
+  letter-spacing: -0.028em;
+  line-height: 1.12;
+  margin: 7px 0 0;
+  max-width: 22ch;
+}
+
+.visa-hero__ko {
+  font-family: var(--font-family-ko);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.visa-hero__intro {
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin: 12px 0 0;
+  text-wrap: pretty;
+}
+
+.visa-hero__note {
+  font-size: 14.5px;
+  line-height: 1.65;
+  margin: 0;
+  color: var(--color-text-soft);
+  text-wrap: pretty;
+}
+
+.visa-hero__updated {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+}
+
+@media (min-width: 1024px) {
+  .visa-hero__main {
+    gap: 8px;
+  }
+
+  .visa-hero__ko {
+    font-size: 17px;
+  }
+
+  .visa-hero__intro {
+    font-size: 16px;
+    line-height: 1.7;
+    margin: 14px 0 0;
+    max-width: 62ch;
+  }
+
+  .visa-hero__note {
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 62ch;
+  }
+
+  .visa-hero__updated {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+}
+
+/* Tinted facts panel — DESIGN.md palette Green tint (#EAF4EF bg / #C9E3D6 border). Label left,
+   value right, baseline-aligned, at every width — no stacked/mobile mode. Matches the sitewide
+   precedent for this exact shape: .threshold-card__table (population-decline-areas.njk) and
+   the rent-summary card (region.njk) are both unconditional flex rows, label wrapping to a second
+   line at the very narrowest widths rather than switching to a stacked layout. */
+.visa-facts {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--color-primary-tint);
+  border: 1px solid var(--color-primary-tint-border-soft);
+  border-radius: 10px;
+}
+
+.visa-facts__row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--color-primary-tint-border-soft);
+}
+
+.visa-facts__row:first-child {
+  padding-top: 0;
+  border-top: none;
+}
+
+.visa-facts__row:last-child {
+  padding-bottom: 0;
+}
+
+.visa-facts__label {
+  font-size: 13px;
+  color: var(--color-text-soft);
+}
+
+.visa-facts__value,
+.visa-facts__value-main {
+  font-size: 15px;
+  font-weight: 600;
+  text-align: right;
+}
+
+.visa-facts__value-note {
+  font-size: 12.5px;
+  color: var(--color-text-muted);
+}
+
+.visa-facts__value--tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section shell — 3×15 orange tick → H2, same recurring part as Settling in's own section head,
+   visa-prefixed so the two pages' rules don't collide. */
+.visa-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.visa-section__head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.visa-section__tick {
+  width: 3px;
+  height: 15px;
+  background: var(--color-accent-rule);
+}
+
+.visa-section h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.visa-body {
+  font-size: 15px;
+  line-height: 1.7;
+  margin: 0;
+  color: var(--color-text-soft);
+  max-width: 66ch;
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .visa-section {
+    gap: 20px;
+  }
+}
+
+/* Income sub-heading (nested inside #who, its own smaller tick+h3). */
+.visa-subhead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.visa-subhead__tick {
+  width: 3px;
+  height: 13px;
+  background: var(--color-accent-rule);
+  flex-shrink: 0;
+}
+
+.visa-subhead h3 {
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+@media (min-width: 1024px) {
+  .visa-subhead {
+    margin-top: 12px;
+    padding-bottom: 10px;
+  }
+
+  .visa-subhead__tick {
+    height: 14px;
+  }
+
+  .visa-subhead h3 {
+    font-size: 15px;
+  }
+}
+
+/* Eligibility checklist — bordered card, each row a check glyph + title (+ optional detail). */
+.visa-checklist {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+}
+
+.visa-checklist__item {
+  display: flex;
+  gap: 11px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.visa-checklist__item:last-child {
+  border-bottom: none;
+}
+
+.visa-checklist__icon {
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
+.visa-checklist__text {
+  min-width: 0;
+}
+
+.visa-checklist__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.visa-checklist__detail {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--color-text-soft);
+}
+
+@media (min-width: 1024px) {
+  .visa-checklist__item {
+    gap: 12px;
+    padding: 14px 20px;
+  }
+
+  .visa-checklist__icon {
+    margin-top: 4px;
+  }
+
+  .visa-checklist__title {
+    line-height: 1.4;
+  }
+
+  .visa-checklist__detail {
+    line-height: 1.6;
+  }
+}
+
+/* Income table — structural swap, own breakpoint like .section-nav above (768px, --bp-tablet):
+   a muted one-line region definition + three stacked cards on phone, a real table with a two-line
+   column header on desktop. Both markups always render; CSS alone picks which is visible, same
+   technique as settling-in.njk's price-snapshot table — but that one holds to 1024 because its
+   table needs min-width:900px; this table only needs 660px (660+32px page padding ≈ 692px), so
+   pinning it to 1024 was borrowing settling-in's fit point rather than checking its own. */
+.visa-income-note {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.visa-income-table-wrap {
+  display: none;
+}
+
+.visa-income-table {
+  width: 100%;
+  min-width: 660px;
+  font-size: 15px;
+  border-collapse: collapse;
+}
+
+.visa-income-table thead tr {
+  background: var(--color-surface);
+}
+
+.visa-income-table th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-soft);
+  padding: 13px 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.visa-income-table th:first-child {
+  width: 26%;
+}
+
+.visa-income-table__subhead {
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.visa-income-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.visa-income-table td:first-child {
+  font-weight: 500;
+  font-variant-numeric: normal;
+}
+
+.visa-income-table__mult {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+
+.visa-income-table__submeta {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+
+.visa-income-table__family {
+  background: var(--color-surface);
+}
+
+.visa-income-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.visa-income-card {
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.visa-income-card__head {
+  background: var(--color-surface);
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.visa-income-card__head-note {
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.visa-income-card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.visa-income-card__row:last-child {
+  border-bottom: none;
+}
+
+.visa-income-card__region {
+  font-size: 14px;
+  color: var(--color-text-soft);
+  min-width: 0;
+}
+
+.visa-income-card__amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.visa-income-card__amount .visa-income-table__mult {
+  font-weight: 400;
+}
+
+.visa-income-footnotes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+.visa-inline-link {
+  align-self: flex-start;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.visa-inline-link:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .visa-income-note {
+    display: none;
+  }
+
+  .visa-income-table-wrap {
+    display: block;
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+  }
+
+  .visa-income-cards {
+    display: none;
+  }
+
+  .visa-income-footnotes {
+    font-size: 14px;
+    gap: 9px;
+    max-width: 70ch;
+  }
+
+  .visa-inline-link {
+    font-size: 15px;
+  }
+}
+
+/* Documents — 3-card grid, each a title + bullet list with a green dot marker. */
+.visa-doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+}
+
+.visa-doc-card {
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 17px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 0;
+}
+
+.visa-doc-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.visa-doc-card__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--color-text-soft);
+}
+
+.visa-doc-card__item {
+  display: flex;
+  gap: 9px;
+}
+
+.visa-doc-card__dot {
+  color: var(--color-primary);
+}
+
+@media (min-width: 1024px) {
+  .visa-doc-card {
+    padding: 20px 22px;
+    gap: 12px;
+  }
+
+  .visa-doc-card__list {
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .visa-doc-card__item {
+    gap: 10px;
+  }
+}
+
+/* Important notes — amber/orange "open question" cards (DESIGN.md palette: Amber tint + Orange
+   rule border for "stricter"/unresolved states). Tag pill reuses --color-accent-tint/-accent,
+   the same tokens as the region-page "stricter" note plate. */
+.visa-notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Left un-tinted (border only) rather than the note-plate's usual accent-tint fill: this card
+   nests a --color-accent-tint status chip (below), and filling the whole card the same amber
+   would wash the chip out against its own background. Panel fill was also considered and
+   rejected — five simultaneous amber cards read as one loud "warning" band rather than five
+   distinct open questions, heavier than the note-plate's usual single-instance use. The rule
+   border still carries the "stricter/unresolved" signal; the chip carries the amber accent. */
+.visa-note-card {
+  border: 1px solid var(--color-accent-rule);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.visa-note-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Same chip as the festival "THIS MONTH" badge (event-timeline.css .event-card__badge--month) —
+   same size/weight/tracking/case/padding/radius, same accent-tint/accent colour pair. */
+.visa-note-card__tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: var(--color-accent-tint);
+  color: var(--color-accent);
+  border-radius: 20px;
+  padding: 3px 9px;
+}
+
+.visa-note-card__status {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.visa-note-card__title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.visa-note-card__body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+  border-top: 1px solid var(--color-border-soft);
+  padding-top: 10px;
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  /* Fixed 3 columns (not auto-fit) so 5 cards read as 3+2 — auto-fit's 280px min let a 1200px
+     container fit 4-up, splitting the last row to a lone orphan card instead. */
+  .visa-notes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .visa-note-card {
+    padding: 18px 20px;
+    gap: 11px;
+  }
+
+  .visa-note-card__body {
+    padding-top: 11px;
+  }
+}
+
+/* Questions — FAQ accordion. Chevron pattern matches settling-in.njk's .settling-chevron
+   (price-table fold), visa-prefixed. Capped to the same 70ch measure as .visa-faq__a below —
+   the reference only capped the answer text, leaving the question/chevron row and every hairline
+   stretch the full container width, with the chevron stranded far right of a short question. */
+.visa-faq {
+  max-width: 70ch;
+  border-top: 1px solid var(--color-border);
+}
+
+.visa-faq__item {
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.visa-faq__item summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.visa-faq__item summary::-webkit-details-marker,
+.visa-faq__item summary::marker {
+  display: none;
+}
+
+.visa-faq__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 2px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+.visa-faq__q {
+  flex: 1 1 auto;
+  font-size: 15.5px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.visa-faq__chevron {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid var(--color-primary);
+  border-bottom: 1.5px solid var(--color-primary);
+  transform: rotate(45deg);
+  transform-origin: 60% 60%;
+  transition: transform 140ms ease;
+}
+
+.visa-faq__item[open] .visa-faq__chevron {
+  transform: rotate(225deg);
+}
+
+.visa-faq__a {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--color-text-soft);
+  padding: 0 2px 17px;
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .visa-faq__summary {
+    gap: 14px;
+    padding: 17px 2px;
+    min-height: auto;
+  }
+
+  .visa-faq__q {
+    font-size: 17px;
+  }
+
+  .visa-faq__chevron {
+    width: 11px;
+    height: 11px;
+  }
+
+  .visa-faq__a {
+    font-size: 15px;
+    padding: 0 2px 20px;
+  }
+}
+
+/* Useful links — grouped panel, same link+source stack as settling-in.njk's
+   .settling-link-block, visa-prefixed. */
+/* One-line intro under the H2 (same idea as region-page.css .region-section__sub) — but
+   .visa-section is a flex column with its own 16/20px gap, which a small negative margin can't
+   pull back to subtitle-tight, so it lands at nearly the same distance as a full .visa-body
+   paragraph instead. Pull it in to ~4px, matching .region-section__sub's actual gap. */
+.visa-links-intro {
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+  margin-top: -12px;
+}
+
+/* Auto-fit grid, same technique as .visa-notes-grid/.visa-doc-grid: 1-up on phone, 2-up (or more,
+   container permitting) as soon as two 260px columns + gap fit — fractional columns "need no
+   checking" (DESIGN.md Geometry), so this doesn't need its own breakpoint at all. */
+.visa-links-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 20px 40px;
+}
+
+.visa-links-group {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  min-width: 0;
+}
+
+.visa-links-group__title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-soft);
+}
+
+.visa-link-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.visa-link-block a {
+  font-size: 14.5px;
+  font-weight: 500;
+  text-wrap: pretty;
+}
+
+.visa-source {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+@media (min-width: 1024px) {
+  .visa-links-intro {
+    font-size: 14px;
+    margin-top: -16px;
+  }
+
+  .visa-links-panel {
+    padding: 18px 20px;
+  }
+
+  .visa-links-group {
+    gap: 12px;
+  }
+
+  .visa-link-block a {
+    font-size: 15px;
+  }
+}

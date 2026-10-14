@@ -12,7 +12,7 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Matches .section-nav' own `top: 12px` (static-pages.css) — the offset position:sticky pins
+// Matches .section-nav' own `top: 12px` (section-nav.css) — the offset position:sticky pins
 // it to once stuck. Custom properties aren't readable from JS, so this is a hardcoded mirror of
 // that value, same tradeoff as region-card.js's NARROW_QUERY.
 const STICKY_TOP = 12;
@@ -47,7 +47,7 @@ export function init() {
   // straight onto a #hash) lands the target's top flush with the viewport top — right under the
   // sticky strip, which then sits on top of the heading instead of above it. scroll-margin-top on
   // each target pushes the landing spot down to clear the strip; recomputed on resize since the
-  // strip's own height changes across the 768px breakpoint (static-pages.css).
+  // strip's own height changes across the 768px breakpoint (section-nav.css).
   const syncScrollMargin = () => {
     const offset = `${Math.ceil(nav.getBoundingClientRect().height) + STICKY_TOP + SCROLL_MARGIN_GAP}px`;
     sections.forEach(({ section }) => {

@@ -74,7 +74,7 @@ body {
 
 /* Site-shell width (DESIGN.md "One container width site-wide") — the same --content-max-width
    cap as the header/footer/hero/region pages, not a page-specific narrower column. Text-heavy
-   content inside caps itself further (static-pages.css, region-page.css's region-header__intro)
+   content inside caps itself further (the page sheets, region-page.css's region-header__intro)
    rather than the whole page running narrow. */
 .content-page {
   max-width: var(--content-max-width);

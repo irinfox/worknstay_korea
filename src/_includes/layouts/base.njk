@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="/assets/css/components/header.css">
   <link rel="stylesheet" href="/assets/css/components/footer.css">
   {#- Page sheets, load order fixed here; each page lists the ones it needs in `styles` front matter. #}
-  {%- for sheet in ["hero", "calculator", "korea-map", "region-card", "region-page", "region-detail-map", "city-card", "event-timeline", "section-nav", "static-pages", "not-found"] %}
+  {%- for sheet in ["hero", "calculator", "korea-map", "region-card", "region-page", "region-detail-map", "city-card", "event-timeline", "section-nav", "about", "settling-in", "visa-info", "not-found"] %}
   {% if sheet in (styles or []) %}<link rel="stylesheet" href="/assets/css/components/{{ sheet }}.css">{% endif %}
   {% endfor %}
   <script type="module" src="/assets/js/main.js"></script>
