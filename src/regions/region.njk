@@ -233,6 +233,7 @@ eleventyComputed:
   {% include "partials/city-card-list.njk" %}
   {% else %}
   {% set message = "No cities listed for this region yet." %}
+  {% set tag = "p" %}
   {% include "partials/empty-state.njk" %}
   {% endif %}
   {% if cityList.length %}
@@ -288,7 +289,9 @@ eleventyComputed:
       {% endfor %}
       <p class="cost-link"><a href="/settling-in/">A short intro into Korean renting →</a></p>
       {% else %}
-      <p class="empty-state">No rental price figures for this region yet.</p>
+      {% set message = "No rental price figures for this region yet." %}
+      {% set tag = "p" %}
+      {% include "partials/empty-state.njk" %}
       {% endif %}
     </div>
 
@@ -308,7 +311,9 @@ eleventyComputed:
          browser see it (events.js overwrites this container's innerHTML on load). #}
       <div class="event-timeline" data-region-events data-region-slug="{{ region.slug }}">
         <noscript>
-          <p class="empty-state">Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></p>
+          {% set message %}Live festival &amp; event data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a>{% endset %}
+          {% set tag = "p" %}
+          {% include "partials/empty-state.njk" %}
         </noscript>
       </div>
       {# Hidden by events.js when the live fetch comes back quotaExceeded — attributing an
@@ -364,7 +369,9 @@ eleventyComputed:
   {# Same live-fetch pattern as the events timeline above. #}
   <ul class="attraction-list" data-region-attractions data-region-slug="{{ region.slug }}"{% if region.elsewhereAttractionPriority %} data-elsewhere-priority="{{ region.elsewhereAttractionPriority }}"{% endif %}>
     <noscript>
-      <li class="empty-state">Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></li>
+      {% set message %}Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a>{% endset %}
+      {% set tag = "li" %}
+      {% include "partials/empty-state.njk" %}
     </noscript>
   </ul>
   <p class="data-provenance">Source: {{ sources.kto.attribution }}.</p>

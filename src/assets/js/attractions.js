@@ -1,5 +1,5 @@
 import { applyFilters as applyAttractionFilters } from "./attraction-filters.js";
-import { escapeHtml, pinIcon } from "./html.js";
+import { emptyState, escapeHtml, pinIcon } from "./html.js";
 
 const SUBTITLE_DEFAULT = "What to explore in the region";
 const SUBTITLE_QUOTA_EXCEEDED = "Top picks for today, the full list will be back tomorrow";
@@ -10,19 +10,19 @@ export function renderAttractions(container, data) {
   // Reset the subtitle on every render so a later re-fetch doesn't keep a stale message.
   const subtitle = document.querySelector("[data-attractions-subtitle]");
   if (subtitle) {
-    subtitle.textContent = data.quotaExceeded || data.liveFailed
+    subtitle.textContent = data.quotaExceeded
       ? SUBTITLE_QUOTA_EXCEEDED
-      : data.fallback
+      : data.fallback || data.liveFailed
         ? SUBTITLE_FALLBACK
         : SUBTITLE_DEFAULT;
   }
   if (data.failed) {
-    container.innerHTML = `<li class="empty-state">${FAILED_TEXT}</li>`;
+    container.innerHTML = emptyState(FAILED_TEXT, "li");
     return;
   }
   const attractions = data.items || [];
   if (!attractions.length) {
-    container.innerHTML = `<li class="empty-state">No attractions listed for this region right now.</li>`;
+    container.innerHTML = emptyState("No attractions listed for this region right now.", "li");
     return;
   }
   container.innerHTML = attractions

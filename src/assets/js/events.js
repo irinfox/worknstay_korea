@@ -1,4 +1,4 @@
-import { escapeHtml, pinIcon } from "./html.js";
+import { emptyState, escapeHtml, pinIcon } from "./html.js";
 import { setupAddressCopy } from "./copy.js";
 
 const EVENTS_PAGE_SIZE = 5;
@@ -226,7 +226,7 @@ export function renderEventsTimeline(container, data) {
     return;
   }
   if (quotaExceeded) {
-    container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
+    container.innerHTML = emptyState(EVENTS_QUOTA_EXCEEDED_TEXT);
     return;
   }
 
