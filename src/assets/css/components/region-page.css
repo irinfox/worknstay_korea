@@ -83,7 +83,7 @@
   margin-bottom: var(--space-6);
 }
 
-/* Shared .page-contents strip (section-nav.css, page-contents.js) — same sticky sub-nav as
+/* Shared .section-nav strip (section-nav.css, section-nav.js) — same sticky sub-nav as
    visa-info/settling-in, and the same 26px/36px gap around it visa-info gets for free from its
    own flex-column `gap`. .content-page is a plain block, not flex, so both edges are stated here
    explicitly instead — scoped with :has() to when a strip actually follows, so
@@ -91,20 +91,20 @@
    Needs the .region-page ancestor in the selector, not just :has() alone — .region-page
    .region-header further down (the split-layout rule) sets its own margin-bottom at equal
    (class+class) specificity, and being later in the file would otherwise win the tie. */
-.region-page .region-header:has(+ .page-contents) {
+.region-page .region-header:has(+ .section-nav) {
   margin-bottom: 26px;
 }
 
-.region-page > .page-contents {
+.region-page > .section-nav {
   margin-bottom: 26px;
 }
 
 @media (min-width: 1024px) {
-  .region-page .region-header:has(+ .page-contents) {
+  .region-page .region-header:has(+ .section-nav) {
     margin-bottom: 36px;
   }
 
-  .region-page > .page-contents {
+  .region-page > .section-nav {
     margin-bottom: 36px;
   }
 }
@@ -374,7 +374,7 @@ ul.region-seasons {
    scrolls/swipes with zero JS (same pattern as .attraction-list); region-hero-gallery.js layers
    the counter, arrows and autoplay loop on top. Region-page-exclusive markup — safe to own these
    selectors outright (static-pages.css reuses .region-header/.region-section, not .region-hero). */
-/* Top margin matches .page-contents' own margin-bottom above (26px/36px) — block-flow margin
+/* Top margin matches .section-nav' own margin-bottom above (26px/36px) — block-flow margin
    collapsing takes the larger of two adjoining margins, so both sides need to actually agree on
    the target value rather than leaving this at the page's general --space-6 rhythm. */
 .region-gallery {

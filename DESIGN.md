@@ -175,7 +175,7 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   decline-designated counties page (not a region, not in the cycle). Own band at the end of the
   page content, prev at the left container edge, next at the right, 32px clear of the footer text.
   One rule at most — separate it from the footer with space, not a second hairline.
-- **Page contents strip**: pages long enough to need one (roughly 3+ screens of scroll) get a
+- **Section nav strip**: pages long enough to need one (roughly 3+ screens of scroll) get a
   sticky sub-nav (`top: 12px`) — section links plus a `Top` link; the main nav itself never
   sticks, only this. Section targets need `scroll-margin-top` matching the strip's height.
   Highlights the current section while scrolling (a click pins it); sections sharing one visual

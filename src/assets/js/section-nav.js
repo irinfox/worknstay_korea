@@ -1,9 +1,9 @@
-// Shared sticky page-contents strip (.page-contents), used on visa-info, settling-in and every
+// Shared sticky section-nav strip (.section-nav), used on visa-info, settling-in and every
 // region page: highlights whichever section is current, and reveals the "Top" link — both gated
 // on the strip having actually stuck to the top of the viewport (not just "scrolled some").
 // Without this module the strip is still fully usable — real <a href> section links, and "Top"
 // jumps to #top via native anchor behaviour (progressive enhancement, CLAUDE.md).
-// Behaviour is documented in DESIGN.md ("Page contents strip"). Sections that sit at the same
+// Behaviour is documented in DESIGN.md ("Section nav strip"). Sections that sit at the same
 // vertical position (the region page's Rent/Events band, side by side on desktop) light up
 // together — detected by actual layout, not markup, so it also self-corrects on phone once the
 // same band stacks and the tie no longer holds.
@@ -12,7 +12,7 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Matches .page-contents' own `top: 12px` (static-pages.css) — the offset position:sticky pins
+// Matches .section-nav' own `top: 12px` (static-pages.css) — the offset position:sticky pins
 // it to once stuck. Custom properties aren't readable from JS, so this is a hardcoded mirror of
 // that value, same tradeoff as region-card.js's NARROW_QUERY.
 const STICKY_TOP = 12;
@@ -32,16 +32,16 @@ const BOTTOM_EPSILON = 4;
 const SCROLL_MARGIN_GAP = 16;
 
 export function init() {
-  const nav = document.querySelector(".page-contents");
+  const nav = document.querySelector(".section-nav");
   if (!nav) return;
 
-  const links = [...nav.querySelectorAll(".page-contents__links a[href^='#']")];
+  const links = [...nav.querySelectorAll(".section-nav__links a[href^='#']")];
   const sections = links
     .map((link) => ({ link, section: document.getElementById(link.getAttribute("href").slice(1)) }))
     .filter((entry) => entry.section);
   if (!sections.length) return;
 
-  const topLink = nav.querySelector(".page-contents__top");
+  const topLink = nav.querySelector(".section-nav__top");
 
   // A plain anchor jump (clicking a section link, including via keyboard, or loading the page
   // straight onto a #hash) lands the target's top flush with the viewport top — right under the

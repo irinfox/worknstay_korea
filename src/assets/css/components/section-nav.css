@@ -1,14 +1,14 @@
-/* Shared .page-contents strip (page-contents.js) on region, settling-in and visa-info pages.
+/* Shared .section-nav strip (section-nav.js) on region, settling-in and visa-info pages.
    Per-page spacing overrides live with each page's own sheet. */
 
 /* Sticky contents strip. Phone: a single scrolling row of abbreviated labels with a fixed "Top"
    button divided off at the right (its own non-scrolling flex sibling, not part of the scroll
-   area). Desktop: the same two elements, but .page-contents__links becomes `display:contents` so
-   its link children rejoin .page-contents' own flex-wrap row and Top is pushed right by
+   area). Desktop: the same two elements, but .section-nav__links becomes `display:contents` so
+   its link children rejoin .section-nav' own flex-wrap row and Top is pushed right by
    margin-left:auto — same DOM, no markup duplication between breakpoints. Section headings stay
    spelled out (DESIGN.md/reference instruction) — only this strip abbreviates, via paired
    full/short spans toggled by the same 1024px breakpoint. */
-.page-contents {
+.section-nav {
   position: sticky;
   top: 12px;
   z-index: 5;
@@ -21,7 +21,7 @@
   box-shadow: var(--shadow-sm);
 }
 
-.page-contents__links {
+.section-nav__links {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
@@ -41,11 +41,11 @@
   scrollbar-width: none;
 }
 
-.page-contents__links::-webkit-scrollbar {
+.section-nav__links::-webkit-scrollbar {
   display: none;
 }
 
-.page-contents__links a {
+.section-nav__links a {
   color: var(--color-primary);
   text-decoration: none;
   display: inline-flex;
@@ -58,15 +58,15 @@
    way to "leave" an element, so tapping a link here would otherwise leave it permanently
    underlined until some other tap happened to land on it again. */
 @media (hover: hover) {
-  .page-contents__links a:hover {
+  .section-nav__links a:hover {
     text-decoration: underline;
   }
 }
 
-/* Scrollspy (page-contents.js): current section's link, underlined in the same orange as the
+/* Scrollspy (section-nav.js): current section's link, underlined in the same orange as the
    main nav's active-page rule (header.css) but thinner — this strip sits one size down from
    the primary nav, so its own "you are here" marker follows suit. */
-.page-contents__links a.is-active {
+.section-nav__links a.is-active {
   font-weight: 600;
   text-decoration: underline;
   text-decoration-color: var(--color-accent-rule);
@@ -74,12 +74,12 @@
   text-underline-offset: 5px;
 }
 
-/* Faded in once page-contents.js reveals it (strip stuck) — without JS this stays visible
+/* Faded in once section-nav.js reveals it (strip stuck) — without JS this stays visible
    throughout, which is still a real, always-reachable <a href> (progressive enhancement,
    CLAUDE.md), just not deferred. Kept in flow at every state (opacity/visibility, not
-   display:none) so it always holds its own width — .page-contents__links (below) would otherwise
+   display:none) so it always holds its own width — .section-nav__links (below) would otherwise
    grow into that space while Top is hidden and reflow the strip the moment it fades in. */
-.page-contents__top {
+.section-nav__top {
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
@@ -93,26 +93,26 @@
   border-radius: 0 10px 10px 0;
 }
 
-.js-nav-ready .page-contents__top {
+.js-nav-ready .section-nav__top {
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0s linear 0.2s;
 }
 
-.js-nav-ready .page-contents__top.is-visible {
+.js-nav-ready .section-nav__top.is-visible {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.2s ease;
 }
 
 @media (hover: hover) {
-  .page-contents__top:hover {
+  .section-nav__top:hover {
     color: var(--color-text-soft);
     text-decoration: underline;
   }
 }
 
-.page-contents__top-icon {
+.section-nav__top-icon {
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -128,11 +128,11 @@
    it's already there when this rule hides the visible label from the a11y tree too). Fixed 44px
    width keeps the tap target square regardless of how narrow the icon itself is. */
 @media (max-width: 399.98px) {
-  .page-contents__top-label {
+  .section-nav__top-label {
     display: none;
   }
 
-  .page-contents__top {
+  .section-nav__top {
     width: 44px;
     justify-content: center;
     padding: 0;
@@ -151,18 +151,18 @@
      unmoored rather than proportional; left-aligned (base rule) reads better there. Tightened for
      every page (not just region), so the strip stays genuinely one component with one behaviour
      at every width; overflow-x:auto stays as a safety net rather than the primary mechanism. */
-  .page-contents__links {
+  .section-nav__links {
     justify-content: space-evenly;
     gap: 0;
     padding: 0;
   }
 }
 
-.page-contents__short {
+.section-nav__short {
   display: inline;
 }
 
-.page-contents__full {
+.section-nav__full {
   display: none;
 }
 
@@ -173,7 +173,7 @@
    documented threshold that clears the content's actual fit point, so it's reused here instead
    of a new magic number. */
 @media (min-width: 768px) {
-  .page-contents {
+  .section-nav {
     flex-wrap: wrap;
     align-items: center;
     gap: 8px 20px;
@@ -181,15 +181,15 @@
     font-size: 14px;
   }
 
-  .page-contents__links {
+  .section-nav__links {
     display: contents;
   }
 
-  .page-contents__links a {
+  .section-nav__links a {
     min-height: auto;
   }
 
-  .page-contents__top {
+  .section-nav__top {
     margin-left: auto;
     padding: 0;
     border-left: none;
@@ -198,11 +198,11 @@
     min-height: auto;
   }
 
-  .page-contents__short {
+  .section-nav__short {
     display: none;
   }
 
-  .page-contents__full {
+  .section-nav__full {
     display: inline;
   }
 }

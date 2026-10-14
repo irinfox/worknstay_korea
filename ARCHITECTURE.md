@@ -251,7 +251,7 @@ Thresholds and visa facts live in `visaRules.json` (rendered by `visa-info.njk`)
 
 No library, no store. Three tiers:
 
-1. **Local UI state** — burger open/closed, page-contents strip. Lives in the DOM (classes and
+1. **Local UI state** — burger open/closed, section-nav strip. Lives in the DOM (classes and
    attributes set by the module that owns it), not in a JS variable or store.
 2. **Shared state — exactly one piece:** `EligibilityResult`. `calculator.js` reads inputs →
    calls pure `eligibility.js` → renders its own result caption; `main.js` passes

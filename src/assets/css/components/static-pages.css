@@ -252,13 +252,13 @@ ul.about-hero__chips {
   margin-top: 10px;
 }
 
-/* Page-contents strip: shared .page-contents component (section-nav.css, page-contents.js) — same sticky sub-nav as visa-info, same 26px gap around
+/* Section-nav strip: shared .section-nav component (section-nav.css, section-nav.js) — same sticky sub-nav as visa-info, same 26px gap around
    it below 1024px (36px from 1024px, matching .visa-page's own gap breakpoint). .settling-page's
    own flex gap is a flat 36px at every width (its section-to-section rhythm, unrelated to this),
    so these two edges pull in below 1024px; flex-item margins add directly to the row gap rather
    than collapsing with it, unlike region-page.css's block-flow version of this same fix. */
 @media (max-width: 1023.98px) {
-  .settling-page > .page-contents {
+  .settling-page > .section-nav {
     margin-top: -10px;
     margin-bottom: -10px;
   }
@@ -461,7 +461,7 @@ ul.about-hero__chips {
 
 /* font-weight 500 to match region-page.css .region-guides__link — same outbound-link style,
    Gangwon-do's Guides panel and this page's Reviews/Guides links should read identically.
-   min-height/inline-flex/center — same 44px tap-target treatment as .page-contents__links a: at
+   min-height/inline-flex/center — same 44px tap-target treatment as .section-nav__links a: at
    14px/1.65 these were rendering ~23px tall, stacked close together, well under DESIGN.md's
    44px control minimum and easy to mis-tap on phone. */
 .settling-reviews__plain {
@@ -1372,7 +1372,7 @@ ul.about-hero__chips {
   }
 }
 
-/* Income table — structural swap, own breakpoint like .page-contents above (768px, --bp-tablet):
+/* Income table — structural swap, own breakpoint like .section-nav above (768px, --bp-tablet):
    a muted one-line region definition + three stacked cards on phone, a real table with a two-line
    column header on desktop. Both markups always render; CSS alone picks which is visible, same
    technique as settling-in.njk's price-snapshot table — but that one holds to 1024 because its

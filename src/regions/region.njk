@@ -86,26 +86,26 @@ eleventyComputed:
   </aside>
 </header>
 
-{# Sticky page-contents strip (DESIGN.md § "Page contents strip") — same shared component as
+{# Sticky section-nav strip (DESIGN.md § "Section nav strip") — same shared component as
    visa-info/settling-in, reused as-is. Labels stay short generic nouns, not "Regional dishes" /
    "Region map" — the section's own H2 already carries the full wording. Dishes only where
    regionFood has entries — a real <a href>, so a page without dishes just doesn't render that
    link rather than pointing at a missing section. Rent and Events sit in the same tinted band and start at the same height on
-   desktop, so page-contents.js detects the tie by position and highlights both together while
+   desktop, so section-nav.js detects the tie by position and highlights both together while
    the band is in view — no markup needed here for that, and on phone (where the band stacks)
    the same geometry check naturally activates just one at a time. #}
-<div class="page-contents">
-  <div class="page-contents__links">
-    <a href="#region-map"><span class="page-contents__full">Map</span><span class="page-contents__short">Map</span></a>
-    <a href="#cities"><span class="page-contents__full">Cities</span><span class="page-contents__short">Cities</span></a>
-    <a href="#rent"><span class="page-contents__full">Rent</span><span class="page-contents__short">Rent</span></a>
-    <a href="#events"><span class="page-contents__full">Events</span><span class="page-contents__short">Events</span></a>
-    <a href="#places"><span class="page-contents__full">Places</span><span class="page-contents__short">Places</span></a>
+<div class="section-nav">
+  <div class="section-nav__links">
+    <a href="#region-map"><span class="section-nav__full">Map</span><span class="section-nav__short">Map</span></a>
+    <a href="#cities"><span class="section-nav__full">Cities</span><span class="section-nav__short">Cities</span></a>
+    <a href="#rent"><span class="section-nav__full">Rent</span><span class="section-nav__short">Rent</span></a>
+    <a href="#events"><span class="section-nav__full">Events</span><span class="section-nav__short">Events</span></a>
+    <a href="#places"><span class="section-nav__full">Places</span><span class="section-nav__short">Places</span></a>
     {% if regionFood.length %}
-    <a href="#dishes"><span class="page-contents__full">Dishes</span><span class="page-contents__short">Dishes</span></a>
+    <a href="#dishes"><span class="section-nav__full">Dishes</span><span class="section-nav__short">Dishes</span></a>
     {% endif %}
   </div>
-  <a href="#top" class="page-contents__top" aria-label="Back to top"><span class="page-contents__top-icon" aria-hidden="true"></span><span class="page-contents__top-label">Top</span></a>
+  <a href="#top" class="section-nav__top" aria-label="Back to top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
 </div>
 
 {# "Around the region" cover gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
