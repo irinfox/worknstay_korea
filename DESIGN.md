@@ -83,10 +83,11 @@ One Google Fonts request, exactly this:
 
 ## Type scale
 
-- Page H1: 40–44px / 600 / `-0.028em` (phone 30–32px)
+- Page H1: 30–44px fluid / 600 / `-0.028em`
 - Section H2: 20–22px / 600 / `-0.015em`
-- Card title: 16–18px / 600
-- Body: 15px / 1.65–1.7
+- Card title: 16–18px / 600; 15px for compact cards (dish, festival, workspace)
+- Body: 15px / 1.65; compact component text 1.5–1.6
+- Small text: 14px
 - Form label: 13px / 500 / `#33443C`, 7px above its input
 - Form input: ≥16px (below that iOS Safari zooms on focus)
 - Caption, source, address: 12–13px, `#5C6660`
@@ -278,7 +279,7 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   at just under half the distance to its nearest neighbour instead — don't enlarge past that to
   "fix" it. Reference example: the region map's ski/surf pins, region-detail-map.css.
 - Reserve height for anything that changes length (paginated lists, carousels) — no reflow jumps.
-- Nothing below 12px, except the 11px uppercase status chip.
+- Nothing below 12px, except the 11px uppercase status chip and map SVG labels.
 
 ## Never
 

@@ -109,9 +109,10 @@ function cityFromAddress(addr) {
 
 function renderEventCard(ev, { badge = false } = {}) {
   const addr = escapeHtml(ev.address || "");
+  const city = cityFromAddress(ev.address || "");
   const place = ev.address
     ? `<span class="event-place" title="${addr}">
-         ${PIN_ICON}<span class="event-place__city">${escapeHtml(cityFromAddress(ev.address))}</span>
+         ${PIN_ICON}<span class="event-place__city${/[가-힣]/.test(city) ? " event-place__city--ko" : ""}">${escapeHtml(city)}</span>
          <button type="button" class="event-place__copy" data-address="${addr}"
            aria-label="Copy full address" title="Copy full address">${COPY_ICON}<span class="event-place__copy-label" data-default="Copy full address">Copy full address</span></button>
          <span class="event-place__status" role="status" aria-live="polite"></span>
