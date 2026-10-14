@@ -92,7 +92,8 @@ One Google Fonts request, exactly this:
   (all-caps at 11px reads larger than its size). Used for festival THIS MONTH/LONG-TERM and
   note-card category tags (visa-info Important notes).
 - Sentence case everywhere. All-caps only in the 11px status chip above. Lowercase is fine in
-  tags, pills (`spicy`, `surf`), and short value labels — table cells (`none`, `varies`) and the study-café count (`a few`, `lots`, `not rated yet`) — they're labels, not sentences.
+  tags, pills (`spicy`, `surf`), and short value labels — table cells (`none`, `varies`) and the
+  study-café count (`a few`, `lots`, `not rated yet`) — they're labels, not sentences.
 
 ## Geometry
 
@@ -148,7 +149,8 @@ same treatment — they are ordinary states, not errors. Wording says what is mi
   item white with a 2px `#E08A2E` underline. Nav-item hover: brightens to white, no underline (its
   border already marks "current"). Wordmark is the home link, clickable on the homepage; no hover
   state — unchanged from rest, not treated as a link.
-- **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" → `/#map`.
+- **Breadcrumb** row under the nav, 13px, `Regions / <span ink>Gangwon-do</span>`. "Regions" →
+  `/#map`.
 - **Headline block**: orange 56×3 rule → H1 → Korean name → vibe tags → intro paragraphs.
 - **Vibe tag**: `#DCEFE5` bg, `#A9D8C2` border, `#0B5C3F` text, radius 22px. 14–15px/500
   (fluid), padding 7px 15px on region-page headers; 13px/500, padding 4px 10px on city cards and
@@ -198,7 +200,9 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   panel links use the site link rule — `Visa info →`, same label as the region panels.
   (Input types and number parsing are implementation, not design — keep those notes with the code.)
 - **Region card** ends with an `Open <region> →` row on a hairline. Hover highlights the matching
-  map area; click opens the page. Phone: tapping the map jumps to a card. Hover/selected border: green   (`#0F7B54`) for an open region, Muted `#5C6660` for an ineligible one (map shape too, hovered the
+  map area; click opens the page. Phone: tapping the map jumps to a card. Hover/selected border:
+  green   (`#0F7B54`) for an open region, Muted `#5C6660` for an ineligible one (map shape too,
+  hovered the
    other way). Hover effects (map and card) only apply on real hover-capable devices, not touch.
 - **City card**: name + Korean name, vibe tags, blurb, then a `#F7F9F8` "Where to work" panel —
   venue name 16–17px/600 with its kind as 12px grey at the right, address below, then
@@ -217,7 +221,8 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   status chip (THIS MONTH / LONG-TERM), location pin + city in muted, and a clipboard icon that
   copies the full address — icon + tooltip on desktop, icon + "Copy full address" label on phone
   (44px tap target). The icon turns green on hover so it reads as an action, unlike the static pin.
-- **National map** (homepage): below the wide breakpoint (1024px), tapping a region scrolls to its card and selects
+- **National map** (homepage): below the wide breakpoint (1024px), tapping a region scrolls to its
+  card and selects
   it; tapping the card itself does nothing. Real Korea outline on a Panel `#F7F9F8` ground, not a
   green tint (collides with the partly-eligible fill). Regions filled by eligibility; legend
   swatches render the *composited* colour, never the raw token. Metropolitan cities: an explicit
@@ -228,8 +233,10 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
   not-eligible included (its own grey step, not the green default). Labels: ink `#16201C`, one
   opacity at every state. No pins.
 - **Region map** (region pages): the region outline on white with a pale green fill, 13–15px line
-  pictograms placed by coordinate, and a pictogram legend. Pin labels that would crowd the map appear
-  on hover on desktop and on tap on phone; the rest are always shown. Context labels for neighbouring areas are muted italic. No eligibility
+  pictograms placed by coordinate, and a pictogram legend. Pin labels that would crowd the map
+  appear
+  on hover on desktop and on tap on phone; the rest are always shown. Context labels for
+  neighbouring areas are muted italic. No eligibility
   states, so no ground tint.
 - **Map labels** (both maps): ink `#16201C`, `paint-order: stroke` with a tinted halo, 2px —
   never white or plain green/grey chrome; masks the boundary stroke/hatching under the text.
@@ -247,8 +254,10 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 
 ## Copy rules
 
-- Honest labels with their basis: "Furnished short-term, decent and available" — the figure is what a
-  decent, actually available furnished place lists for anywhere in the region, not a 1BR city-centre median.
+- Honest labels with their basis: "Furnished short-term, decent and available" — the figure is what
+  a
+  decent, actually available furnished place lists for anywhere in the region, not a 1BR city-centre
+  median.
 - Every figure dated and sourced ("Hand-checked from current listings, September 2026").
 - No marketing slogans, no unsupported comparisons.
 - Consistent names: one term per concept ("Partly eligible", "About", "worknstay korea").
