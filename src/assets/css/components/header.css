@@ -81,7 +81,7 @@
   text-decoration: none;
 }
 
-/* DESIGN.md: "no hover state — unchanged from rest, not treated as a link." Without this, the
+/* DESIGN.md: the wordmark has no hover state, unchanged from rest. Without this, the
    global html a:hover (base.css) would still darken it toward in-site-link green on hover, since
    that rule outranks a plain .site-header__logo on specificity alone. */
 .site-header__logo:hover {

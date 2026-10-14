@@ -4,10 +4,8 @@
    classes — that legacy block was removed above). Headline + tinted facts panel → sticky
    contents strip → Eligibility (+ income table/cards) → Documents → Important notes →
    Questions (FAQ) → Useful links. Single breakpoint at 1024px (--bp-desktop): base rules below
-   are the phone frame, overridden for desktop at min-width:1024px. The design reference used
-   900px throughout; moved to 1024 to match DESIGN.md's documented structural threshold ("multi-
-   column layouts hold to 1024, then collapse") — the reference value collapsed the notes grid's
-   fixed 3-column layout before 1024, which DESIGN.md doesn't allow. */
+   are the phone frame, overridden for desktop at min-width:1024px (DESIGN.md § Geometry lists
+   this page at 1024). */
 
 .visa-page {
   max-width: var(--content-max-width);
@@ -55,8 +53,8 @@
   background: var(--color-accent-rule);
 }
 
-/* Fluid clamp (30–42px), same formula as settling-hero h1 — matches its DESIGN.md target range
-   exactly, so this page scales continuously instead of jumping at the 1024px breakpoint. */
+/* Fluid clamp (30–42px), same formula as settling-hero h1 — stays within DESIGN.md's H1 range,
+   so this page scales continuously instead of jumping at the 1024px breakpoint. */
 .visa-hero__main h1 {
   font-size: clamp(1.875rem, 1.52rem + 1.75vw, 2.625rem);
   font-weight: 600;

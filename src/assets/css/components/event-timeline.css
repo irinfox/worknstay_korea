@@ -386,9 +386,9 @@
   }
 }
 
-/* --- 900 and below: hover can't be assumed (DESIGN.md § Mobile), so the copy control carries
-   its "Copy full address" label like it does on phone, not just a tooltip, and grows to a 44px
-   tap target with padding pulled back by a negative margin. --- */
+/* --- 900 and below: the copy control carries its "Copy full address" label like it does on
+   phone, not just a tooltip, and grows to a 44px tap target with padding pulled back by a
+   negative margin. --- */
 @media (max-width: 900px) {
   .event-place__copy {
     min-width: 44px;

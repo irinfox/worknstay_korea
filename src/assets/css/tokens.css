@@ -143,7 +143,7 @@
   --font-size-2xl: clamp(1.625rem, 1.4rem + 1vw, 2.125rem);
   --font-size-3xl: clamp(2rem, 1.6rem + 1.8vw, 2.75rem);
   --line-height-tight: 1.2;
-  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65–1.7 */
+  --line-height-base: 1.65; /* DESIGN.md § Type — body 1.65 */
 
   /* Radius / shadow / z-index */
   --radius-sm: 4px;
