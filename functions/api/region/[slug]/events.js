@@ -9,6 +9,9 @@ import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 
+// Responses are never cached (every view is a live call); the dev cache lives in kto-client.
+const NO_STORE = { headers: { "Cache-Control": "no-store" } };
+
 // Today's date in Korea (YYYYMMDD) — Workers run in UTC, which is a day behind KST until 09:00.
 function queryStartDate() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date()).replaceAll("-", "");
@@ -27,7 +30,7 @@ export async function onRequestGet({ params, env }) {
       quotaExceeded: false,
       snapshotDate: eventsSnapshot.capturedAt,
       fallback: true, // served from the saved snapshot, not live KTO — the page says so
-    });
+    }, NO_STORE);
   }
 
   const codes = slugToLDongRegnCds(slug);
@@ -63,5 +66,5 @@ export async function onRequestGet({ params, env }) {
   }
 
   const items = quotaExceeded ? [] : [...byContentId.values()];
-  return Response.json({ items, quotaExceeded });
+  return Response.json({ items, quotaExceeded }, NO_STORE);
 }

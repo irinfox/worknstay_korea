@@ -39,7 +39,6 @@
   --color-accent-rule: #e08a2e; /* Orange rule: 56×3px headline rule, 3×15px section ticks */
   /* Pale accent wash — the "stricter" note plate on capital-area region pages (region-page.css). */
   --color-accent-tint: #f7ead9;
-  --color-accent-tint-border: #ecd2ab;
   --color-accent-ink: #a8450f; /* Orange ink: small orange text on tinted plates (dish labels) */
   /* Amber wash for the calculator's "not eligible yet" / "under 18" result plate (no red — the
      calculator only gives answers; an incomplete form uses the neutral --color-surface instead). */
@@ -132,7 +131,6 @@
   --space-5: 1.5rem;
   --space-6: 2rem;
   --space-8: 3rem;
-  --space-10: 4rem;
 
   /* Type (DESIGN.md § Type — two families, no others; loaded via the single Google Fonts link
      in base.njk). --font-family-base is the Latin default set once on body; --font-family-ko is

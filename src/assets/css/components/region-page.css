@@ -880,12 +880,6 @@ ul.region-seasons {
   color: var(--color-text-soft);
 }
 
-/* Keeps a ₩ range from breaking at its dash on narrow viewports (same fix as
-   .settling-nowrap in settling-in.css). */
-.cost-nowrap {
-  white-space: nowrap;
-}
-
 .cost-note + .cost-note {
   margin-top: 10px;
 }
@@ -924,15 +918,6 @@ ul.region-seasons {
   background: var(--color-primary-tint);
   border: 1px solid var(--color-primary-tint-border-soft);
   border-radius: 12px;
-}
-
-.threshold-card__lead {
-  margin: 0;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--color-primary-tint-border-soft);
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--color-text-soft);
 }
 
 .threshold-card__table {
@@ -1550,27 +1535,3 @@ ul.region-seasons {
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-6);
 }
-
-.mock-note {
-  font-size: var(--font-size-sm);
-  font-weight: 400;
-  color: var(--color-text-muted);
-}
-
-.cost-summary {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: var(--space-3);
-  margin: 0;
-}
-
-.cost-summary dt {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.cost-summary dd {
-  margin: 0;
-  font-weight: 600;
-}
-

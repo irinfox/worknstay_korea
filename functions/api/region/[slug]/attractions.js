@@ -12,6 +12,9 @@ import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 import { citySlugFor } from "../../lib/city-map.mjs";
 import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
 
+// Responses are never cached (every view is a live call); the dev cache lives in kto-client.
+const NO_STORE = { headers: { "Cache-Control": "no-store" } };
+
 // Display order per region (not a filter): regions.json attractionPriority. Applied on every path
 // (live, quota fallback, no-key fallback) so local no-key testing shows production's order.
 function sortByRegionPriority(items, slug) {
@@ -32,7 +35,7 @@ export async function onRequestGet({ params, env }) {
 
   if (!env?.KTO_API_KEY) {
     sortByRegionPriority(regionTopPicks, slug);
-    return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true });
+    return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true }, NO_STORE);
   }
 
   const codes = slugToLDongRegnCds(slug);
@@ -45,7 +48,7 @@ export async function onRequestGet({ params, env }) {
     liveFailed = failed && !quotaExceeded;
 
     // Any live call failed (quota included): serve top picks rather than a partial gallery. The
-    // front end says "Top picks for today" for both `quotaExceeded` and `liveFailed`.
+    // front end words `quotaExceeded` ("back tomorrow") and `liveFailed` ("unavailable") apart.
     if (failed) {
       items = regionTopPicks;
     } else {
@@ -63,5 +66,5 @@ export async function onRequestGet({ params, env }) {
   // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
   sortByRegionPriority(items, slug);
 
-  return Response.json({ items, quotaExceeded, liveFailed });
+  return Response.json({ items, quotaExceeded, liveFailed }, NO_STORE);
 }
