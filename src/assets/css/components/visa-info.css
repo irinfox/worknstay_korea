@@ -597,7 +597,7 @@
   letter-spacing: 0.03em;
   text-transform: uppercase;
   background: var(--color-accent-tint);
-  color: var(--color-accent);
+  color: var(--color-accent-chip);
   border-radius: 20px;
   padding: 3px 9px;
 }

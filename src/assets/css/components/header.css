@@ -14,11 +14,11 @@
   z-index: var(--z-header);
   /* Not a bar — a short dark fade at the very top of the photo so the white wordmark and nav
      links keep contrast over bright/light parts of the cover image. */
-  background: linear-gradient(to bottom, rgba(10, 10, 10, 0.5), rgba(10, 10, 10, 0));
+  background: linear-gradient(to bottom, rgba(22, 32, 28, 0.5), rgba(22, 32, 28, 0));
 }
 
 .has-hero.js-nav-ready .nav-toggle {
-  background: rgba(28, 27, 25, 0.35);
+  background: rgba(22, 32, 28, 0.35);
 }
 
 .has-hero.js-nav-ready .nav-toggle__bar,
@@ -264,7 +264,7 @@
      the bar dropping down. */
   padding: 64px var(--space-4) var(--space-4);
   background: var(--color-nav-bg);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 24px rgba(22, 32, 28, 0.35);
   z-index: calc(var(--z-header) + 1);
   overflow-y: auto;
   transform: translateY(-100%);
@@ -310,7 +310,7 @@
 .nav-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(22, 32, 28, 0.45);
   z-index: var(--z-header);
   opacity: 0;
   visibility: hidden;

@@ -40,7 +40,7 @@
      gap between shapes and read as two regions reacting to one tap. Same fix, same reasoning, as
      region-detail-map.css's map-pin tap-highlight suppression: the state classes
      (korea-map.js/region-card.js) are the real feedback, this rectangle is just a flash on top of
-     it, and :focus-visible's outline below is unrelated (a separate mechanism) and unaffected. */
+     it, and the :focus-visible highlight below is unrelated (a separate mechanism) and unaffected. */
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -111,9 +111,9 @@
   stroke-width: 3.5;
 }
 
+/* Focus is shown by the hover-equivalent highlight above, not the blue ring. */
 .region:focus-visible {
-  outline: 3px solid var(--color-focus-ring);
-  outline-offset: 2px;
+  outline: none;
 }
 
 /* Eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for

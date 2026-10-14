@@ -156,7 +156,7 @@
 }
 
 .event-card__badge--month {
-  color: var(--color-accent);
+  color: var(--color-accent-chip);
   background: var(--color-accent-tint);
 }
 

@@ -8,21 +8,23 @@ in the repo and is not maintained.
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| Ink | `#16201C` | Body text, dark nav bar, wordmark dot ring |
-| Ink soft | `#23342C` / `#33443C` / `#4A544E` | Secondary paragraphs, form labels |
+| Ink | `#16201C` | Body text, dark nav bar |
+| Ink soft | `#33443C` / `#4A544E` | Secondary paragraphs, form labels |
 | Muted | `#5C6660` | Captions, addresses, source lines, festival dates, metadata |
 | Hairline | `#E4E7E4` / `#EDF0EE` | Card borders, row dividers |
+| Hairline strong | `#CFD6D2` | Interactive pill/chip borders (filter pills) |
 | Panel | `#F7F9F8` | Info cards, guides strip, un-evaluated calculator state |
 | Green | `#0F7B54` | Primary accent, in-site links, eligible state |
 | Green tint | `#EAF4EF` / `#DCEFE5`, border `#A9D8C2` / `#C9E3D6` | Tinted bands, vibe tags, note plates |
 | Green deep | `#0B5C3F` | Vibe-tag text, in-site link hover |
-| Green light | `#A8D8C2` | "Partly eligible" map fill and calculator state |
+| Green light | `#A8D8C2` | "Partly eligible" map fill |
 | Map grey | `#B7B2A7` | "Not eligible" map fill — data colour, never chrome |
 | Focus ring | `#2F6FED` | Keyboard focus only. Deliberately outside the palette: a focus
   indicator must be unmistakable and blue is what users recognise. Never for anything else. |
 | Amber | `#F7EAD9` | "Stricter" note plates, not-eligible calculator state |
 | Orange rule | `#E08A2E` | 56×3px rule above every page headline, 3×15px section ticks |
 | Orange text | `#C2531A` | Outbound links, spicy tag |
+| Orange chip | `#B04A13` | Status-chip text on amber (11–12px; 4.6:1) |
 | Orange ink | `#A8450F` | Small orange text on tinted plates (dish labels), outbound link hover.
   Deeper than Orange text so 12px passes 4.5:1 on amber and panel grounds. |
 
@@ -280,7 +282,8 @@ Homepage: cover photo behind header + headline + calculator (card overlaps its l
 
 ## Never
 
-Emoji · new fonts or weights · dashed or dotted borders · decorative gradients or shadows beyond
-the card shadow · colour outside the palette · orange text that is not a link.
+Emoji · new fonts or weights · dashed or dotted borders · decorative gradients · shadows on
+anything but cards and floating elements · colour outside the palette · orange text that is not a
+link or a status chip on amber.
 
 Where a section above documents an exception, that exception wins — don't "fix" it.

@@ -62,7 +62,7 @@
 }
 
 .hero__media--placeholder {
-  background: linear-gradient(160deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  background: var(--color-primary-dark);
 }
 
 /* Keeps the heading/intro legible over the photo. A light dip in the middle looks fine with a
