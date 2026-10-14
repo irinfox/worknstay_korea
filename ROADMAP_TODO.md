@@ -30,7 +30,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] **16 — `calculator.js` + caption + persistence.** Real `<form>` with inline validation
       (empty ≠ 0); renders the 3 tier captions + partial note; `?salaryKrw=&age=&hasFamily=`
       permalink prefills + auto-computes; reference data as a build-time JSON island
-      (`_data/eligibilityReferenceData.js`), no client fetch. Verify: `scripts/verify-calculator.mjs`.
+      (`_data/eligibilityReferenceData.js`), no client fetch.
+      Verify: `scripts/verify-calculator.mjs`.
 - [x] **17 — Map eligibility wiring.** `korea-map.js applyResult()` →
       `.region--active/--partial/--ineligible`; partial gets a hatched `<pattern>` + tooltip.
       Click-gating strips `href` from the map shape *and* the card's "Learn more →". `main.js`
@@ -50,7 +51,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] **20 — `kto-client.mjs`.** Paging, timeout, bounded 429/5xx retry; hard failure returns
       `{ items: [], degraded: true }`, never throws. Verify: `scripts/verify-kto-client.mjs`.
 - [x] **21 — `normalize.mjs`.** Upcoming/ongoing filter, unknown-`cpyrhtDivCd` images dropped,
-      En/Ko title split, http→https. KTO quirks → ARCHITECTURE.md §5. Verify: `scripts/verify-normalize.mjs`.
+      En/Ko title split, http→https. KTO quirks → ARCHITECTURE.md §5.
+      Verify: `scripts/verify-normalize.mjs`.
 - [x] **22 — Endpoint wiring + fan-out.** Both endpoints live; fallback JSON when `KTO_API_KEY`
       is absent. Multi-code regions fan out via `Promise.allSettled`, dedupe by `contentid`.
 
@@ -94,7 +96,7 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [ ] refactor pass: DESIGN.md
 - [ ] refactor pass: README.md
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19)
-- [ ] Publish: сhange repository visibility to public.
+- [ ] Publish: change repository visibility to public.
 
 
 ---
@@ -102,17 +104,17 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 ## Pending checks & maintenance
 
 - [ ] Real iOS Safari pass, both orientations
-- [ ] 관심지역 eligibility. Confirm with MOJ (출입국·외국인정책본부 체류관리과
-      whether the 18 「관심지역」 watch counties
-      qualify for the lower threshold, or only the 89 official 「인구감소지역」 do — see
-      ARCHITECTURE.md §7. If narrow: drop the 3 `category: 'watch'` rows from
-      `populationDeclineAreas.json` (and from the full backup).
-      Sources: [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
+- [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과) whether the
+      18 「관심지역」 watch counties qualify for the lower threshold, or only the 89 official
+      「인구감소지역」 do — see ARCHITECTURE.md §7. If narrow: drop the 3 `category: 'watch'`
+      rows from `populationDeclineAreas.json` (and from the full backup).
+      Sources:
+      [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
       [MOJ press release](https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do).
-- [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last present
-      in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
-- [ ] Hero image licesing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
-      Type1; revisit if a Type3 photo is ever swapped in.
+- [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last
+      present in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
+- [ ] Hero image licensing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero
+      photo is Type1; revisit if a Type3 photo is ever swapped in.
 
 
 ## Possible site extensions
@@ -129,4 +131,4 @@ Site enhancement ideas, not scheduled.
   through community verification.
 - **Interactive event calendar.** Month-to-month navigation and hover detail on event days, on
   top of the current timeline list.
-- **UX testing & validation.** perform UX test with several respondents
+- **UX testing & validation.** Perform a UX test with several respondents.
