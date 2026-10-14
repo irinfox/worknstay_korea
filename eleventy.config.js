@@ -31,6 +31,77 @@ export default function (eleventyConfig) {
     return readFileSync(filePath, "utf8").replace(/<\?xml[^>]*\?>\s*/, "");
   });
 
+  // Photo credit lines come from data, never template text. A credit is `{ source }` (a key of
+  // sources.json, e.g. "kto") or `{ text, license?, licenseUrl? }` (ARCHITECTURE.md §5).
+  const sources = JSON.parse(readFileSync(path.join(__dirname, "src/_data/sources.json"), "utf8"));
+  function groupCredits(entries) {
+    const groups = new Map();
+    for (const { label, credit } of entries) {
+      const text = credit.source ? sources[credit.source].attribution : credit.text;
+      const key = `${text}|${credit.license || ""}`;
+      if (!groups.has(key)) {
+        const { license, licenseUrl } = credit;
+        groups.set(key, { text, license, licenseUrl, labels: [] });
+      }
+      groups.get(key).labels.push(label);
+    }
+    return [...groups.values()];
+  }
+
+  // Missing-credit rule (ARCHITECTURE.md §5): a photo without a credit is skipped and listed as a
+  // build warning; the build fails only when that leaves a slot empty (`where` names it).
+  const warned = new Set();
+  function skipUncredited(items, hasCredit, nameOf, where, failIfEmpty) {
+    const kept = items.filter((item) => {
+      if (hasCredit(item)) return true;
+      const message = `[credits] skipped ${nameOf(item)} (${where}): no credit`;
+      if (!warned.has(message)) {
+        warned.add(message);
+        console.warn(message);
+      }
+      return false;
+    });
+    if (failIfEmpty && items.length && !kept.length) {
+      throw new Error(`[credits] ${where}: every photo lacks a credit, nothing left to show`);
+    }
+    return kept;
+  }
+
+  // Hero-style photos: `photos` is a list of filenames, `credits` a *Credits.json with a
+  // file-level `credit` and optional per-photo `credit`.
+  const photoCredit = (credits, filename) => {
+    const entry = credits.photos[filename];
+    return entry && (entry.credit || credits.credit);
+  };
+  eleventyConfig.addFilter("creditedPhotos", function (photos, credits, where, failIfEmpty = true) {
+    return skipUncredited(
+      (photos || []).filter(Boolean),
+      (filename) => photoCredit(credits, filename),
+      (filename) => filename,
+      where,
+      failIfEmpty
+    );
+  });
+  eleventyConfig.addFilter("photoCredits", function (photos, credits) {
+    return groupCredits(
+      (photos || []).filter(Boolean).map((filename) => ({
+        label: credits.photos[filename].titleEn || credits.photos[filename].title,
+        credit: photoCredit(credits, filename),
+      }))
+    );
+  });
+
+  // Dish photos: each food.json record carries its own `photo.credit`.
+  eleventyConfig.addFilter("creditedDishes", function (dishes, where) {
+    return skipUncredited(
+      dishes || [],
+      (dish) => dish.photo?.credit,
+      (dish) => dish.nameEn,
+      where,
+      true
+    );
+  });
+
   // Data files store dates as "YYYY-MM"; format at render time, e.g. "2026-09" -> "September 2026".
   eleventyConfig.addFilter("monthYear", function (value) {
     const [y, m] = String(value).split("-").map(Number);
@@ -71,8 +142,8 @@ export default function (eleventyConfig) {
     return (arr || []).filter((item) => item.regionSlug === slug);
   });
 
-  // City cards: only cities.json records that carry a `cardOrder`, sorted by it. The rest stay
-  // map-only (pin without a card).
+  // City cards: only cities.json records that carry a `cardOrder`, sorted by it. A record
+  // without it silently gets no card, by design (ARCHITECTURE.md §6).
   eleventyConfig.addFilter("cardCities", function (arr) {
     return (arr || []).filter((c) => c.cardOrder != null).sort((a, b) => a.cardOrder - b.cardOrder);
   });

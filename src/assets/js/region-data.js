@@ -311,11 +311,13 @@ function buildUpcomingPanel(later) {
 }
 
 const EVENTS_QUOTA_EXCEEDED_TEXT = "Events are temporarily unavailable, check back tomorrow.";
-const eventsProvenanceFallback = (isoDate) => {
+// `liveText`: the server-rendered "Source: …." line (from sources.json); the fallback reuses it.
+const eventsProvenanceFallback = (isoDate, liveText) => {
   const when = new Date(`${isoDate}T00:00:00Z`).toLocaleDateString("en-GB", {
     day: "numeric", month: "long", year: "numeric", timeZone: "UTC",
   });
-  return `Source: © Korea Tourism Organization (한국관광공사), saved sample from ${when}. Live data currently unavailable.`;
+  const source = liveText.replace(/\.$/, "");
+  return `${source}, saved sample from ${when}. Live data currently unavailable.`;
 };
 
 // Ongoing tab = "what's on around now": festivals currently running (often multi-month) plus
@@ -342,7 +344,9 @@ function renderEventsTimeline(container, data) {
   // that isn't there.
   const provenance = document.querySelector("[data-events-provenance]");
   if (provenance) provenance.hidden = quotaExceeded;
-  setProvenance(provenance, fallback ? eventsProvenanceFallback(data.snapshotDate) : "", fallback);
+  const liveText = provenance?.dataset.liveText || provenance?.textContent || "";
+  const fallbackText = fallback ? eventsProvenanceFallback(data.snapshotDate, liveText) : "";
+  setProvenance(provenance, fallbackText, fallback);
   if (quotaExceeded) {
     container.innerHTML = `<p class="empty-state">${EVENTS_QUOTA_EXCEEDED_TEXT}</p>`;
     return;

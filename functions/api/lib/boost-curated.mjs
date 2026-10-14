@@ -15,10 +15,9 @@
 // the first two picks well inside the mobile budget and keep spreading through the desktop one.
 const BOOST_STEP = [2, 3];
 
-// Order categories are recombined in — matches the order attractions.js's own fan-out emits them
-// (NATURE_GROUPS before CULTURE_GROUPS). Not load-bearing for the final response (attractions.js
-// re-sorts by the region's attractionPriority right after this runs), kept only for a stable, predictable
-// intermediate order.
+// Order categories are recombined in — nature before culture. Not load-bearing for the final
+// response (attractions.js re-sorts by the region's attractionPriority right after this runs),
+// kept only for a stable, predictable intermediate order.
 const CATEGORY_ORDER = ["nature", "culture"];
 
 function boostPositions(count) {

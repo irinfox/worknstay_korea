@@ -42,14 +42,14 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
 
 **Region info panel:** two modes swapped by a **width-only** breakpoint (`--bp-region-info-wide`
 in `tokens.css`, mirrored in `region-card.js`/`region-card.css`) — never a hover-triggered popup
-(bug-prone: edge clipping, z-index, mobile focus-trap). Width-only so wide landscape phones get
-the infographic too. Both modes render from the same region-card partial.
+(bug-prone: edge clipping, z-index, mobile focus-trap). Both modes render from the same
+region-card partial.
 - **Wide:** all 6 callouts at once around the map, each joined to its region by a static
   hand-positioned SVG leader line (fixed viewBox coords, never computed at runtime). Regions are
   assigned to a west or east column, ordered north to south (`index.njk`); the Jeju leader line
   is hidden in the narrow part of the range, where it would collide with the callouts.
-- **Narrow:** map above a scroll-snap carousel of all 6 cards + dots; tapping a region scrolls
-  to its card. Every card is a real link, so it works without JS.
+- **Narrow:** map above a scroll-snap carousel of all 6 cards (dots: see DESIGN.md "Mobile");
+  tapping a region scrolls to its card. Every card is a real link, so it works without JS.
 
 **Eligibility-gated regions:** greyed-out regions aren't clickable — showing them as navigable
 would misrepresent the visa gating, the core value prop. Gating is link-only (href stripped from
@@ -80,9 +80,11 @@ filename and `korea-map.js applyResult()` keys off `data-slug`:
   <g id=…>  .region__shape | .region__city (metro shapes) | .region__label
 ```
 Jeju keeps its true geographic distance (sea-tinted background, not an inset) — deliberate.
-Size budget ≤65KB (it's inlined into the homepage). **Region detail maps** (`src/assets/svg/*-detail-map.svg`, cut from the
-national map) are inlined per region page with pins for cities and some attractions; labels that
-would crowd the map are revealed on hover/tap (`region-detail-map.js`).
+Size budget ≤65KB (it's inlined into the homepage).
+
+**Region detail maps** (`src/assets/svg/*-detail-map.svg`, cut from the national map) are
+inlined per region page with pins for cities and some attractions; labels that would crowd the
+map are revealed on hover/tap (`region-detail-map.js`).
 
 ## 4. Folder structure
 
@@ -103,8 +105,8 @@ Conventions: kebab-case files, `camelCase` JSON keys; component CSS lives in `cs
 usually named after its partial; one JS module per interactive behaviour. SVGs inline via the
 `inlineSvg` shortcode so CSS can target their elements. `functions/**` imports JSON bare —
 Cloudflare's Functions bundler rejects `with { type: "json" }`; Eleventy-side `_data/*.js` may
-still use it. Dev secrets (`KTO_API_KEY`, `KAKAO_REST_API_KEY`) live in `.dev.vars`; `.env` is
-for `scripts/*` (`node --env-file=.env`).
+still use it. Dev secrets (`KTO_API_KEY`, `KAKAO_REST_API_KEY`) live in one gitignored `.env`,
+read by `wrangler pages dev` and by `scripts/*` (`node --env-file=.env`).
 
 ## 5. External-API data flow (the compliance-critical part)
 
@@ -123,15 +125,15 @@ for `scripts/*` (`node --env-file=.env`).
 
 **Caching: none in production.** KTO's compliance check is the key's call-history log, and
 caching needs a separate approval; an edge-cache hit would show as a gap in that log. A dev-only
-in-memory cache (`KTO_DEV_CACHE=1` in `.dev.vars`) covers manual QA; `KTO_DEV_FORCE_QUOTA`
+in-memory cache (`KTO_DEV_CACHE=1` in `.env`) covers manual QA; `KTO_DEV_FORCE_QUOTA`
 simulates quota exhaustion.
 
 **Quotas:**
 - **KTO:** per endpoint, not total — `areaBasedList2` (attractions) and `searchFestival2`
-  (festivals) are counted separately. Dev key 1,000 calls/day per endpoint; an operating account
-  with 100,000/day per endpoint is requested. The worst region (gyeongsang-do, 5 `lDongRegnCd`
-  codes) costs ~15 attractions calls (3 per code) plus 5 festival calls per page view; the
-  average across the 6 regions is ~8 attractions plus ~3 festival calls (16 codes in total).
+  (festivals) are counted separately. Dev key 1,000 calls/day per endpoint. The worst region
+  (gyeongsang-do, 5 `lDongRegnCd` region codes) costs ~15 attractions calls (3 per region code)
+  and 5 festival calls per page view; the average region is ~8 attractions and ~3 festival
+  calls.
 - **Kakao®:** 100,000 calls/day free for a first app
   ([quota docs](https://developers.kakao.com/docs/en/getting-started/quota)).
 
@@ -145,6 +147,11 @@ fallback, since its dates would be out of date. With no key (local dev), both se
 `assets/img/` — an editorial choice, not something an API should pick per request. Editorial
 `_data` bypasses the pipeline entirely.
 
+**Credits and source lines** come from data, never template text: static content carries its own
+in its `_data` file, live-API sources live in `sources.json`. A photo without a credit is skipped
+with a build warning; the build fails only if that leaves a slot empty (home hero, county card,
+region hero or food gallery).
+
 **Kakao® study cafés:** `GET /api/city/[slug]/study-cafes` →
 a count and level, or a degraded marker. `Cache-Control: no-store`
 (Kakao® terms forbid caching or storing results). Results are filtered by address rules from
@@ -153,8 +160,8 @@ a count and level, or a degraded marker. `Cache-Control: no-store`
 `otherWorkspaces[].fallbackLevel`; level thresholds live in `studyCafeLevels.json`.
 
 **Attraction ordering:** the server orders per region (`regions.json` `attractionPriority`); a per-city override
-(`cities.json` `attractionPriority`, and `elsewhereAttractionPriority` for the "Elsewhere" pill)
-applies client-side only while that city's filter is active, because
+(`cities.json` `attractionPriority`; `regions.json` `elsewhereAttractionPriority` for the
+"Elsewhere" pill) applies client-side only while that city's filter is active, because
 the server emits one array and per-city order would otherwise leak into "All". Attractions
 without a photo are dropped.
 
@@ -192,12 +199,16 @@ regions; `topAttractions.json` already covers it.
 ## 6. Data models
 
 **Editorial data** (`src/_data/`; the files are the schema):
-- `site.json`, `regions.json` — site settings; the 6 regions; `cities.json` — workation cities (KTO codes, workspaces,
-  study-café search rules, getting around), joined to regions via `regionSlug`.
+- `site.json`, `regions.json` — site settings; the 6 regions; `cities.json` — workation cities
+  (KTO codes, workspaces, study-café search rules, getting around), joined to regions via
+  `regionSlug`. A city gets a card only if it has `cardOrder` (which also sets card order);
+  records without it are kept but render no card.
 - `visaRules.json` — visa thresholds; `populationDeclineAreas.json` — the Gyeonggi-do region's
-  decline counties (§7). The nationwide MOIS list is reference only, kept outside the build in
+  decline counties (§7); `populationDeclineDesignation.json` — MOIS designation cycle and dates.
+  The nationwide MOIS list is reference only, kept outside the build in
   `notes/populationDeclineAreasFull.json`.
-- `populationSource.json` — KOSIS source for city populations.
+- `populationSource.json` — KOSIS source for city populations; `sources.json` — source lines
+  for live APIs.
 - `rentalMarketScan.js`, `settlingIn.json`, `food.json` — rent research, settling-in guide, dishes.
 - `studyCafeLevels.json` — level thresholds for Kakao® counts; `*Hero{Photos,Credits}.json` —
   cover photos and credits; `topAttractions.json` / `eventsSnapshot.json` — fallbacks (§5).

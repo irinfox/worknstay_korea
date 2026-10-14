@@ -1,4 +1,5 @@
 {
+  "credit": { "source": "kto" },
   "licenseNote": "All entries sourced via KTO PhotoGalleryService1 (gallerySearchList1) — uniformly 공공누리 (KOGL) Type 1, attribution required, modification/derivative works permitted; the product has no cpyrhtDivCd field since the whole catalog is Type1 by definition. titleKo/cityKo are the county's own name fields (populationDeclineAreas.json) plus a plain transliteration of the photo's KTO gallery title, kept so a user can search the Korean name directly (CLAUDE.md rule 9).",
   "photos": {
     "seokmodo-glasswort-colony.jpg": {

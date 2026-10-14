@@ -97,8 +97,9 @@ layout: layouts/page.njk
 
   {#
     Narrow-viewport carousel: all 6 region cards as a horizontal scroll-snap row + dot
-    indicators (CLAUDE.md feedback log). Hidden at >=1200px where the infographic takes over.
-    region-card.js keeps the dots in sync with scroll position; first dot stays lit with JS off.
+    indicators (ARCHITECTURE.md §3). Hidden at the wide breakpoint (--bp-region-info-wide) where
+    the infographic takes over; dot rules: DESIGN.md. region-card.js keeps the dots in sync with
+    scroll position; first dot stays lit with JS off.
   #}
   <div class="region-carousel" aria-label="All six regions">
     <ul class="region-carousel__track">

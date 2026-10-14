@@ -85,7 +85,7 @@ and the [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5)
 
 ```bash
 npm install
-cp .env.example .dev.vars     # add your KTO API key (optional, see below)
+cp .env.example .env          # add your API keys: KTO, Kakao® (optional, see below)
 npm run pages:dev             # http://localhost:8788
 ```
 
@@ -93,15 +93,15 @@ npm run pages:dev             # http://localhost:8788
 endpoints actually work locally. Plain `npm run serve` only serves static Eleventy output; the
 `/api/**` routes won't exist and attraction/festival sections will render their empty state.
 
-Pages Functions read the key from `.dev.vars`, not `.env` — `.env` is only used by the standalone
-scripts under `scripts/`.
+Both Pages Functions (`wrangler pages dev`) and the standalone scripts under `scripts/` read
+the key from the single gitignored `.env`.
 
 **Don't have a KTO API key yet, just want to work on the UI?** Leave `KTO_API_KEY` unset in
-`.env`/`.dev.vars`. The Functions then skip the live call and serve the committed fallback data
+`.env`. The Functions then skip the live call and serve the committed fallback data
 instead — real cards to test filters against, zero API calls spent.
 
 **Testing against real data without burning quota on every reload?** Keep the key set and add
-`KTO_DEV_CACHE=1` to `.dev.vars`. Repeat requests are served from an in-memory cache instead of
+`KTO_DEV_CACHE=1` to `.env`. Repeat requests are served from an in-memory cache instead of
 re-hitting KTO. Dev-only — never set this in production.
 
 ## Project layout

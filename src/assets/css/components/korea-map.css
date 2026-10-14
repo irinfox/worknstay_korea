@@ -8,8 +8,8 @@
   margin-inline: auto;
   /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). Neutral
      Panel ground, not a green tint — #EAF4EF is already the partly-eligible fill, so a green
-     ground would collide with it. Jeju keeps its true geographic sea gap (CLAUDE.md feedback
-     log) — the ground colour change doesn't touch that, it's a fill colour, not an inset. */
+     ground would collide with it. Jeju keeps its true geographic sea gap (ARCHITECTURE.md §3) —
+     the ground colour change doesn't touch that, it's a fill colour, not an inset. */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
@@ -118,8 +118,7 @@
 
 /* Eligibility-gated states, toggled by korea-map.js's applyResult(). No rule for
    .region--active — the base .region__shape/.region__city rules above already render that
-   state, since it's also what the map shows before any calculator run (ARCHITECTURE.md §8:
-   "un-gated by default"). */
+   state, since it's also what the map shows before any calculator run. */
 /* Flat "Green light" fill for the partly-eligible state (DESIGN.md palette), not the old hatch —
    the legend swatch below matches. */
 .region--partial .region__shape {
@@ -315,7 +314,7 @@
 /* All 17 admin-division names + city carve-outs, at every width — confirmed on a real Pixel 9
    (2026-08-21) that full detail naming reads fine at phone width, so the earlier
    merged-region-summary fallback (Chungcheong-do/Gyeongsang-do/Jeolla-do as one label each)
-   was retired; see ARCHITECTURE.md §9. */
+   was retired. */
 .region__label--detail {
   display: block;
   font-size: 17px;

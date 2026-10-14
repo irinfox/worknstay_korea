@@ -18,6 +18,15 @@ import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 import { citySlugFor } from "../../lib/city-map.mjs";
 import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
 
+// Display order per region (not a filter): regions.json attractionPriority. Applied on every path
+// (live, quota fallback, no-key fallback) so local no-key testing shows production's order.
+function sortByRegionPriority(items, slug) {
+  const priority = regions.find((r) => r.slug === slug)?.attractionPriority;
+  if (!priority) return;
+  const rank = (category) => (category === priority ? 0 : 1);
+  items.sort((a, b) => rank(a.category) - rank(b.category));
+}
+
 export async function onRequestGet({ params, env }) {
   const { slug } = params;
 
@@ -28,6 +37,7 @@ export async function onRequestGet({ params, env }) {
   const regionTopPicks = topAttractions.filter((a) => a.regionSlug === slug);
 
   if (!env?.KTO_API_KEY) {
+    sortByRegionPriority(regionTopPicks, slug);
     return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true });
   }
 
@@ -57,12 +67,7 @@ export async function onRequestGet({ params, env }) {
   // before culture) belongs client-side instead, applied only while that city's own pill is
   // active (cities.json attractionPriority, applied in attraction-filters.js) — an earlier server-side attempt at
   // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
-  // Display order per region (not a filter): regions.json attractionPriority.
-  const priority = regions.find((r) => r.slug === slug)?.attractionPriority;
-  if (priority) {
-    const rank = (category) => (category === priority ? 0 : 1);
-    items.sort((a, b) => rank(a.category) - rank(b.category));
-  }
+  sortByRegionPriority(items, slug);
 
   return Response.json({ items, quotaExceeded });
 }

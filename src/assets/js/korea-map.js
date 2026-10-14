@@ -6,8 +6,8 @@
 //
 // The gate has to cover both entry points to a region page, not just the map shape: each
 // region-card's own "Learn more →" link (region-card.njk) is always-visible in the wide-viewport
-// infographic, so leaving it live would make the map's gating purely decorative — CLAUDE.md's
-// feedback log is explicit that ineligible regions aren't clickable through, full stop.
+// infographic, so leaving it live would make the map's gating purely decorative —
+// ARCHITECTURE.md §3 is explicit that ineligible regions aren't clickable through, full stop.
 const STATE_CLASSES = ["region--active", "region--partial", "region--ineligible"];
 
 function regionLinks() {
@@ -36,8 +36,7 @@ function dimLink(link) {
 
 // Every call restores every region to baseline (active, real href) before applying the new
 // result, rather than layering classes on top of whatever the previous run left — otherwise a
-// region eligible under this result but dimmed by a previous one would stay stuck dimmed
-// (ARCHITECTURE.md §8 "restore path").
+// region eligible under this result but dimmed by a previous one would stay stuck dimmed.
 function restoreMapLink(link) {
   link.classList.remove(...STATE_CLASSES);
   link.classList.add("region--active");

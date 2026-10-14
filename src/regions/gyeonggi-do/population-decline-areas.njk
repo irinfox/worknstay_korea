@@ -14,8 +14,12 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
 {% if c.category == "decline" %}{% set pushed = declineCounties.push(c) %}{% else %}{% set pushed = watchCounties.push(c) %}{% endif %}
 {% endfor %}
 
+{% from "partials/photo-credit.njk" import creditText %}
+{% set countyPhotos = [] %}
+{% for c in populationDeclineAreas %}{% set pushed = countyPhotos.push(countyHeroPhotos[c.countyNameEn]) %}{% endfor %}
+
 {% macro tierCard(c) %}
-{% set photo = countyHeroPhotos[c.countyNameEn] %}
+{% set photo = [countyHeroPhotos[c.countyNameEn] or (c.countyNameEn + ": no photo mapped")] | creditedPhotos(countyHeroCredits, "county card " + c.countyNameEn) | first %}
 {% set credit = countyHeroCredits.photos[photo] %}
 <li class="tier-card">
   <figure class="tier-card__figure">
@@ -84,7 +88,7 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
     <span class="source-note__head"><span class="source-note__tick" aria-hidden="true"></span>Source:</span>
     <div class="region-guides__item">
       <a class="region-guides__link" href="https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do" target="_blank" rel="noopener">Population-decline area designation ↗</a>
-      <span class="region-guides__meta">mois.go.kr · Designation cycle: every 5 years · Next expected designation: October 2026</span>
+      <span class="region-guides__meta">mois.go.kr · Designation cycle: {{ populationDeclineDesignation.cycle }} · Next expected designation: {{ populationDeclineDesignation.nextExpected | monthYear }}</span>
     </div>
   </div>
 </section>
@@ -110,7 +114,7 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
     </ul>
   </div>
 
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+  <p class="data-provenance">Source: {{ creditText(countyPhotos | photoCredits(countyHeroCredits)) }}.</p>
 </section>
 
 </div>

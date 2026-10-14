@@ -10,9 +10,10 @@ eleventyComputed:
   description: "{{ region.shortIntro }}"
 ---
 {% set regionCities = cities | byRegion(region.slug) %}
-{% set regionFood = food | byRegion(region.slug) %}
-{% set heroPhotos = regionHeroPhotos[region.slug] or [] %}
+{% set regionFood = food | byRegion(region.slug) | creditedDishes("food gallery " + region.slug) %}
+{% set heroPhotos = (regionHeroPhotos[region.slug] or []) | creditedPhotos(regionHeroCredits, "region gallery " + region.slug) %}
 {% set slideCount = heroPhotos.length %}
+{% from "partials/photo-credit.njk" import creditText %}
 {% set isGangwon = region.slug == "gangwon-do" %}
 {% set isJeju = region.slug == "jeju-do" %}
 {% set isGyeonggi = region.slug == "gyeonggi-do" %}
@@ -151,7 +152,7 @@ eleventyComputed:
       {% endfor %}
     </div>
   </div>
-  <p class="region-hero__credit">Photo source: © Korea Tourism Organization (한국관광공사)</p>
+  <p class="region-hero__credit">Photo source: {{ creditText(heroPhotos | photoCredits(regionHeroCredits)) }}</p>
 </section>
 {% endif %}
 
@@ -241,7 +242,7 @@ eleventyComputed:
   {% if cityList.length %}
   <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
   <p class="data-provenance" data-study-cafes-fallback-note hidden>Study-café data is a manual editorial estimate, last updated in {{ site.dataDates.studyCafes | monthYear }}. Live data currently unavailable.</p>
-  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="https://developers.kakao.com/docs/en/kakaomap/common" target="_blank" rel="noopener">Kakao® Local API ↗</a> results.</p>
+  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="{{ sources.kakaoLocal.url }}" target="_blank" rel="noopener">{{ sources.kakaoLocal.name }} ↗</a> results.</p>
   {% endif %}
 </section>
 
@@ -317,7 +318,7 @@ eleventyComputed:
       {# Hidden by region-data.js when the live fetch comes back quotaExceeded — attributing an
          empty result to KTO is only honest when KTO was actually reached (a real zero-events
          region, e.g. Jeju, still gets a real answer and keeps the credit). #}
-      <p class="data-provenance" data-events-provenance>Source: © Korea Tourism Organization (한국관광공사).</p>
+      <p class="data-provenance" data-events-provenance>Source: {{ sources.kto.attribution }}.</p>
     </div>
   </div>
 </div>
@@ -370,7 +371,7 @@ eleventyComputed:
       <li class="empty-state">Live attraction data needs JavaScript — <a href="https://english.visitkorea.or.kr/" target="_blank" rel="noopener">browse the Korea Tourism Organization's English site instead ↗</a></li>
     </noscript>
   </ul>
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).</p>
+  <p class="data-provenance">Source: {{ sources.kto.attribution }}.</p>
 </section>
 
 {% if regionFood.length %}
@@ -388,11 +389,7 @@ eleventyComputed:
     {% for dish in regionFood %}
     <li class="dish-card">
       <div class="dish-card__figure">
-        {% if dish.photo %}
         <img class="dish-card__media" src="{{ dish.imagePath }}" alt="{{ dish.nameEn }}" loading="lazy" decoding="async">
-        {% else %}
-        <div class="media-placeholder dish-card__media" aria-hidden="true"></div>
-        {% endif %}
         {% if dish.heat or dish.kind %}
         <div class="dish-card__plates">
           {% if dish.heat == "spicy" %}<span class="dish-plate dish-plate--spicy">spicy</span>{% endif %}
@@ -414,9 +411,7 @@ eleventyComputed:
   {% if (regionFood | dump).indexOf('"kind":"spicy-ingredient"') !== -1 %}
   <p class="dish-legend"><span class="dish-plate dish-plate--spicy-ingredient">spicy ingredient</span> can usually be left out or served separately.</p>
   {% endif %}
-  {% if (regionFood | dump).indexOf('"photo"') !== -1 %}
-  <p class="data-provenance">Source: © Korea Tourism Organization (한국관광공사).{% for dish in regionFood %}{% if dish.photo and dish.photo.src != "Korea Tourism Organization" %} {{ dish.nameEn }}: {{ dish.photo.author }}{% if dish.photo.license %} / <a href="{{ dish.photo.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
-  {% endif %}
+  <p class="data-provenance">Source: {{ sources.kto.attribution }}.{% for dish in regionFood %}{% if dish.photo.credit.source != "kto" %} {{ dish.nameEn }}: {{ dish.photo.credit.text }}{% if dish.photo.credit.license %} / <a href="{{ dish.photo.credit.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.credit.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
 </section>
 {% endif %}
 </div>

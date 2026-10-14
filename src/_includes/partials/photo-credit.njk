@@ -1,0 +1,7 @@
+{# Credit text for the output of the `photoCredits` filter (eleventy.config.js). One credit
+   renders as-is; with several, each is followed by the photo titles it covers. Callers supply the surrounding <p> and prefix. #}
+{% macro creditText(groups) -%}
+{%- for g in groups -%}
+{{ g.text }}{% if g.license %} / <a href="{{ g.licenseUrl }}" target="_blank" rel="noopener">{{ g.license }} ↗</a>{% endif %}{% if groups.length > 1 %} ({{ g.labels | join(", ") }}){% endif %}{% if not loop.last %}; {% endif %}
+{%- endfor -%}
+{%- endmacro %}

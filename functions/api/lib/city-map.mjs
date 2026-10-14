@@ -1,8 +1,7 @@
 // (lDongRegnCd, lDongSignguCd) -> city slug (ARCHITECTURE.md §5's confirmed city-level KTO
 // filter pair), derived from cities.json's ktoLDongRegnCd/ktoLDongSignguCds[] rather than
-// duplicating the code lists here. A handful of cities (currently 7 — paju, ganghwa, yangyang,
-// goseong-gangwon, boryeong, andong, tongyeong) don't carry KTO codes yet and are skipped, so
-// their attractions resolve to no city match until those codes are sourced.
+// duplicating the code lists here. Cities without KTO codes are skipped, so their attractions
+// resolve to no city match.
 import cities from "../../../src/_data/cities.json";
 
 const byRegnCd = new Map();

@@ -20,8 +20,8 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-// Narrow viewport shows a carousel of all 6 real region-card links (index.njk / CLAUDE.md
-// feedback log). Tapping a map region scrolls that carousel to the matching card rather than
+// Narrow viewport shows a carousel of all 6 real region-card links (index.njk /
+// ARCHITECTURE.md §3). Tapping a map region scrolls that carousel to the matching card rather than
 // navigating straight there — the card is still a real <a href> the visitor then taps to open
 // the region page. No data is copied anywhere: every card is already rendered from
 // region-card.njk with whatever korea-map.js's applyResult() last wrote onto it.

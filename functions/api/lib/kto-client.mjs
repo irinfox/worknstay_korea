@@ -45,8 +45,8 @@ function logDevSessionCall() {
     warnedAtThreshold = true;
     console.warn(
       `[kto-client] WARNING: ${devSessionCallCount} live KTO calls made this dev session alone — ` +
-        `the dev key is capped at 1,000/day total. Stop live-testing and switch to the mock ` +
-        `fixture or a single targeted query before doing anything else.`
+        `the dev key is capped at 1,000/day total. Stop live-testing and use the no-key fallback ` +
+        `or KTO_DEV_CACHE=1 or a single targeted query before doing anything else.`
     );
   }
 }
@@ -55,7 +55,7 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.dev.vars` — never
+// Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.env` — never
 // in Cloudflare's production env; `wrangler.jsonc` has no `vars` block, so this can never leak
 // into production by any path in this repo). Exists because there is no production caching
 // (ARCHITECTURE.md §5), which otherwise makes manual QA of live data burn real quota on every
@@ -135,22 +135,23 @@ function extractItems(body) {
  * Fetch one page from a live EngService2 endpoint.
  * @param {"areaBasedList2"|"searchFestival2"} endpoint
  * @param {Record<string, string|number>} params - endpoint-specific query params
- *   (contentTypeId/areaCode/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for
- *   searchFestival2), plus numOfRows/pageNo for paging.
+ *   (lclsSystm1/lDongRegnCd for areaBasedList2, eventStartDate/lDongRegnCd for searchFestival2),
+ *   plus numOfRows/pageNo for paging.
  * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string, KTO_DEV_FORCE_QUOTA?: string }} env -
  *   Cloudflare Functions env binding; `KTO_DEV_CACHE: "1"` (dev-only, see devCache above) serves
  *   repeat identical calls from an in-memory cache instead of hitting KTO again.
  *   `KTO_DEV_FORCE_QUOTA: "1"` (dev-only) short-circuits to a quota-exceeded result with no
  *   network call, to QA the fallback UI on demand.
- * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds (ARCHITECTURE.md §5); omit
- *   to bypass the edge cache (used for verify scripts and other one-off calls).
+ * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds. Currently
+ *   unused: production runs with no caching (ARCHITECTURE.md §5); kept so caching can be
+ *   re-enabled if KTO approves it.
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
 export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
   const serviceKey = env?.KTO_API_KEY;
   if (!serviceKey) return DEGRADED;
 
-  // Dev-only QA hook (`.dev.vars` only — never set in Cloudflare's production env): simulates
+  // Dev-only QA hook (`.env` only — never set in Cloudflare's production env): simulates
   // the real daily-quota-exceeded response without any network call, so the honest fallback UI
   // (attractions.js's topAttractions swap, region-data.js's "Top picks for today" subtitle) can
   // be checked on demand instead of waiting for the real 1,000-call/day dev key to run out.
