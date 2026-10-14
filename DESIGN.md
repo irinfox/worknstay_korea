@@ -101,22 +101,24 @@ One Google Fonts request, exactly this:
 ## Geometry
 
 Radius 10–12px cards, 20–22px pills, 8px inputs. Hairlines 1px. Designed at a 1280px desktop
-viewport and a 390px phone; the container inside it is 1200px. Page padding 32px desktop /
-16px phone. Section gaps 26–36px.
+viewport and a 390px phone; the container inside it is 1200px, centred, with 16px page padding
+at every width. Section gaps 26–36px.
 Flex/grid with `gap` — never margin-spaced inline siblings.
 
 One container width site-wide. Body text caps at ~70ch (~640px) inside it; tinted bands and card
 grids use the full container. Text never fills the container. A tinted panel may bleed past the
 text column — what must align is the panel's *content*, not its edge.
 
-The container is a maximum, not a fixed width: between 1024 and 1199 it shrinks and nothing
-reflows. Multi-column layouts hold to 1024, then collapse. Where a grid's columns are fractional
+The container is a maximum, not a fixed width: below 1200 it shrinks and nothing reflows until
+the layout's collapse width. Three widths: **768** (burger nav), **900** (region-page grids, About,
+city cards), **1024** (homepage, Visa info, Settling in). Where a grid's columns are fractional
 it narrows proportionally and needs no checking; where any column is a fixed width, the remaining
-column absorbs the whole reduction — check those at 1024, not only at 1200.
+column absorbs the whole reduction — check those at their collapse width, not only at 1200.
 
 ## Mobile
 
-At 900px and below, hover cannot be assumed: every hover behaviour has a tap equivalent.
+Hover effects apply only on devices with a mouse or trackpad (`@media (hover: hover)`), at any
+screen width. Touch devices get a tap equivalent for every hover behaviour.
 Horizontal swipe for galleries and card sets; carousel cards are equal height. Repeated stepping
 groups its arrows in one corner; page-level prev/next splits them to the container edges.
 
