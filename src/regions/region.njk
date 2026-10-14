@@ -41,13 +41,9 @@ eleventyComputed:
       {% endfor %}
     </ul>
     {% endif %}
-    {% if region.longIntro | isArray %}
     {% for para in region.longIntro %}
     <p class="region-header__intro">{{ para | safe }}</p>
     {% endfor %}
-    {% else %}
-    <p class="region-header__intro">{{ region.longIntro | safe }}</p>
-    {% endif %}
     {# Season line (design reference 5b): orange dot → bold season name → its window. The name is
        mapped from the seasonTags emoji key (the data carries emoji + window, no name field). #}
     {% set seasonNames = { "🏄": "Surf season", "⛷️": "Ski season", "🏂": "Snowboard season", "🏔️": "Hiking", "🥾": "Hiking", "🌸": "Flowers" } %}
@@ -72,7 +68,7 @@ eleventyComputed:
       </div>
       <div class="rent-summary__note">
         <div>Based on hand-checked, decent furnished listings available to foreigners.</div>
-        <div style="margin-top:4px">Last updated: {{ rentalMarketScan.scanDate | monthYear }}.</div>
+        <div>Last updated: {{ rentalMarketScan.scanDate | monthYear }}.</div>
       </div>
     </div>
     {% endif %}
@@ -269,7 +265,7 @@ eleventyComputed:
         </div>
         {% for row in rentSummary.costRows %}
         <div{% if loop.last %} class="cost-table__row--deposit"{% elif loop.index == loop.length - 1 %} class="cost-table__row--before-deposit"{% endif %}>
-          <dt style="grid-row: span {{ row.tiers.length }}">{{ row.label }}</dt>
+          <dt{% if row.tiers.length > 1 %} class="cost-table__label--span-{{ row.tiers.length }}"{% endif %}>{{ row.label }}</dt>
           {% for tier in row.tiers %}
           <dd class="cost-table__size{% if row.tiers.length > 1 %}{% if loop.first %} cost-table__cell--stacked-first{% else %} cost-table__cell--stacked-last{% endif %}{% endif %}">{{ tier.size }}</dd>
           <dd{% if row.tiers.length > 1 %} class="{% if loop.first %}cost-table__cell--stacked-first{% else %}cost-table__cell--stacked-last{% endif %}"{% endif %}>{{ tier.value }}</dd>
@@ -336,8 +332,8 @@ eleventyComputed:
   {# Filter row — visual + selection state only for now. "Area" reuses the same cityList the
      "Cities" section above already resolved per region, so it only ever offers
      the cities actually shown on this page, not every city.json record. "Elsewhere" covers
-     attractions not tied to one of those cities. Real filtering of the list below is next-step
-     data work, not wired here.
+     attractions not tied to one of those cities. Filtering is done client-side by
+     attraction-filters.js.
      Jeju-do drops the "Elsewhere" pill entirely: lDongRegnCd 50 has exactly two signgu codes in
      Korea's administrative structure (Jeju-si 110, Seogwipo-si 130 — see cities.json), both already
      covered by jeju-city/seogwipo above, so nothing can ever land there — live-confirmed empty on

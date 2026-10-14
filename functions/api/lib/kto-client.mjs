@@ -17,7 +17,7 @@ const DAILY_QUOTA_REASON_CODE = "22";
 
 // Dev-only call counter for local testing (module state resets per process); gated on
 // KTO_DEV_CACHE so it never logs in production.
-const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key is 1,000/day
+const DAILY_QUOTA_WARNING_THRESHOLD = 700; // dev key: 1,000/day per endpoint
 let devSessionCallCount = 0;
 let warnedAtThreshold = false;
 
@@ -28,7 +28,7 @@ function logDevSessionCall() {
     warnedAtThreshold = true;
     console.warn(
       `[kto-client] WARNING: ${devSessionCallCount} live KTO calls this dev session — the dev key ` +
-        `is capped at 1,000/day. Use the no-key fallback or KTO_DEV_CACHE=1.`
+        `is capped at 1,000/day per endpoint. Use the no-key fallback or KTO_DEV_CACHE=1.`
     );
   }
 }

@@ -118,12 +118,6 @@ export default function registerFilters(eleventyConfig) {
       .filter(Boolean);
   });
 
-  // region.longIntro is a single string for most regions, an array of paragraphs where a
-  // region needs more than one (region.njk renders each form differently).
-  eleventyConfig.addFilter("isArray", function (value) {
-    return Array.isArray(value);
-  });
-
   // Splits a period-delimited string (e.g. site.tagline) into its sentences, period kept, so a
   // template can lay each one on its own line without duplicating the copy in the template.
   eleventyConfig.addFilter("splitSentences", function (value) {

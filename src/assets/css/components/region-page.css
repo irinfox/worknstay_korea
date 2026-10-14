@@ -292,6 +292,10 @@ ul.region-seasons {
   white-space: nowrap;
 }
 
+.rent-summary__note > div + div {
+  margin-top: 4px;
+}
+
 .rent-summary__note {
   margin: 12px 0 0;
   padding-top: 12px;
@@ -754,6 +758,15 @@ ul.region-seasons {
 .cost-table dt {
   font-size: 14px;
   color: var(--color-text-soft);
+}
+
+/* Label spanning a city's stacked size tiers. */
+.cost-table dt.cost-table__label--span-2 {
+  grid-row: span 2;
+}
+
+.cost-table dt.cost-table__label--span-3 {
+  grid-row: span 3;
 }
 
 .cost-table dd {
