@@ -1,11 +1,10 @@
 # Work&Stay Korea — Feature Roadmap TODO
 
-Each phase = one day, one branch, one PR to main. Continues `SCAFFOLDING_TODO.md`'s numbering
-(ends at Phase 10). Complete one phase, verify it, mark `[x]`, then start the next — don't batch
-approval across phases. Hard deadline 2026-09-21 16:00 KST (see CLAUDE.md).
+Each phase = one day, one branch, one PR to main. Complete one phase, verify it, mark `[x]`,
+then start the next — don't batch approval across phases.
 
-Order: data → real map → calculator → map wiring → deploy → KTO live → content. No public URL
-until Phase 19.
+Numbering starts at 11 because Phases 1–10 lived in `SCAFFOLDING_TODO.md`, deleted once the
+scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (see CLAUDE.md).
 
 ---
 
@@ -43,169 +42,91 @@ until Phase 19.
       `/regions/gyeonggi-do/population-decline-areas/` page.
 - [x] **19 — Deploy.** Cloudflare Pages project, `KTO_API_KEY`/`KTO_GALLERY_API_KEY` secrets,
       native Web Analytics, custom `src/404.njk`, `robots.txt` disallow-all + `noindex` (both
-      come off in Phase 29). Secret-leak check clean. `functions/**` JSON-import constraint →
+      come off in Phase 32). Secret-leak check clean. `functions/**` JSON-import constraint →
       ARCHITECTURE.md §4.
 
 ## Phases 20–22 — done (KTO client → normalize → live endpoints)
 
-- [x] **20 — `kto-client.mjs`.** URL building for `areaBasedList2`/`searchFestival2`, paging,
-      timeout, bounded 429/5xx retry. Hard-failure mode `{ items: [], degraded: true }`, never
-      throws. Verify: `scripts/verify-kto-client.mjs`.
-- [x] **21 — `normalize.mjs`.** `isUpcomingOrOngoing` (guards `eventStartDate` start-only
-      filtering), unknown-`cpyrhtDivCd` images dropped, title En/Ko split, entity strip,
-      http→https. KTO quirks list is ARCHITECTURE.md §5. Verify: `scripts/verify-normalize.mjs`.
-- [x] **22 — Endpoint wiring + fan-out + caching.** Both endpoints live; mock JSON is the
-      `KTO_API_KEY`-absent dev fallback. Multi-code regions fan out via `Promise.allSettled`,
-      dedupe by `contentid`, one code failing drops only its items. Cache via `cf.cacheTtl` —
-      attractions 24h, festivals 4h.
+- [x] **20 — `kto-client.mjs`.** Paging, timeout, bounded 429/5xx retry; hard failure returns
+      `{ items: [], degraded: true }`, never throws. Verify: `scripts/verify-kto-client.mjs`.
+- [x] **21 — `normalize.mjs`.** Upcoming/ongoing filter, unknown-`cpyrhtDivCd` images dropped,
+      En/Ko title split, http→https. KTO quirks → ARCHITECTURE.md §5. Verify: `scripts/verify-normalize.mjs`.
+- [x] **22 — Endpoint wiring + fan-out.** Both endpoints live; fallback JSON when `KTO_API_KEY`
+      is absent. Multi-code regions fan out via `Promise.allSettled`, dedupe by `contentid`.
 
-## Phase 23 — done (front end renders live data)
+## Phases 23–28 — done (live front end → content → compliance → a11y)
 
-- [x] Region pages fetch live KTO client-side (`assets/js/region-data.js`); build-time mock loop
-      and `eleventy/event-calendar.mjs` removed.
-- [x] Event timeline: Ongoing/Upcoming segmented-slider tabs, primary-tinted cards throughout.
-      Ongoing is one list with an inline "Long-term" / "This month" sticky-note badge per card;
-      Upcoming = later months as short-name "Mon (n)" sub-tabs. Fixed-size two-row calendar chip
-      holds the full date range at one font size, semibold titles, address as city +
-      copy-full-address icon, per-month pager past 5.
-- [x] Attraction `<img>` gated on `imageLicense` (null → `.media-placeholder`).
-- [x] `.data-provenance` per section; `<noscript>` fallback in every mount, verified in raw HTML.
-- [x] Region + county hero galleries: `regionHeroPhotos.json` / `countyHeroPhotos.json` →
-      ordered filename lists (`assets/img/hero/<slug>/`); `*HeroCredits.json` → per-file KTO
-      Type1 credit + caption (attraction + short city EN/KO, full address in `addressEn`/Ko).
-      Scroll-snap track + `region-hero-gallery.js` (prev/next/dots/autoplay), `.region-hero`
-      `16/9`. Yeosu entry's Type1 rests on a manual classification, noted inline.
-        on any region page (region-data.js — live data has neither right now; jeju-do at 1 event
-        exercises the no-tabs single-month path).
+- [x] **23 — Front end renders live data.** Region pages fetch KTO client-side
+      (`region-data.js`); Ongoing/Upcoming event timeline; attraction `<img>` gated on
+      `imageLicense`; `.data-provenance` + `<noscript>` per mount; region + county hero galleries
+      (`*HeroPhotos.json` / `*HeroCredits.json`, scroll-snap `region-hero-gallery.js`).
+- [x] **24 — Editorial + attraction curation.** `arrange=P` feed with Nature/Culture `lclsSystm`
+      whitelist; Area/Type filter pills incl. "Elsewhere"; region descriptions, vibe-tags, food
+      gallery and real money figures on home cards.
+- [x] **25 — Compliance.** Production caching dropped (KTO needs a separate approval); dev-only
+      `KTO_DEV_CACHE=1`. Broad collapse to 3 calls/code (`numOfRows: 250`, client-side
+      reclassification), top-picks boost (`boost-curated.mjs`), `eventsSnapshot.json` fallback.
+      `locationBasedList2` fallback rejected (ARCHITECTURE.md §5); comma-joined `lDongRegnCd`
+      rejected (returns `totalCount: 0`).
+      Report: `notes/attraction-gallery-report.md`.
+- [x] **26 — Workation-city expansion.** ~4–6 cities/region, ≥1 verified center each where one
+      exists; all center URLs resolve.
+- [x] **27 — De-MOCK + Task #4 copy.** Food, communities, `/visa-info/` and cost-of-living are
+      real and sourced; `MOCK`/`PLACEHOLDER` grep clean.
+- [x] **28 — Accessibility + robustness.** `aria-live` result caption, keyboard path through the
+      map, 44px coarse-pointer hit targets, `<noscript>` fallbacks.
 
-## Phase 24 — Region editorial + attraction curation
-Iterative editorial/research work, mostly hand-curation — do one region at a time.
-
-- [x] Attraction feed: `areaBasedList2` with `arrange=P` (view-count order); Nature/Culture
-      whitelist of curated `lclsSystm1`/`lclsSystm2`/`lclsSystm3` codes (replaces the earlier
-      `cat1`/`cat2`/`cat3` whitelist, which under-surfaced popular sites), one `contentTypeId`-free
-      call per group (spans 76 + 78 on its own), city tagged via `lDongSignguCd`.
-- [x] Category display-order priority reviewed against live results — region defaults held up;
-      city/Elsewhere mismatches got their own override instead (`attraction-filters.js`).
-- [x] Area/Type filter pills filter `.attraction-list` by `category`/`citySlug`; "Elsewhere" now
-      has real behavior (own category order, reorder-bug fix, dropped on jeju-do).
-- [x] VE07 stays whitelisted to VE070100/070500/070600 — live checks found no thin culture list
-      anywhere, so no widening needed.
-- [x] Region description rewrite (all 6).
-- [x] Home region cards: vibe-tags.
-- [x] Home region cards: food gallery.
-- [x] Home region cards: real money figures (replace MOCK).
-
-## Phase 25 — Compliance: drop caching, top-picks boost, Elsewhere tab
-KTO confirmed any caching needs a separate approval form (3-5 day review, won't clear before the
-deadline) — real-time calls only in production. Full report: `notes/attraction-gallery-report.md`.
-
-- [x] Drop production caching in `attractions.js`/`events.js`; dev-only cache via
-      `KTO_DEV_CACHE=1` instead. ARCHITECTURE.md §5 updated.
-- [x] Pre-flight `arrange` probe replaces the reactive whole-fan-out retry — never double-pays.
-- [x] Real "Elsewhere" filter tab — closes the open item from Phase 24.
-- [x] Boost top picks into live results (`boost-curated.mjs`, new); `src/_data/mock/attractions.json`
-      → `src/_data/topAttractions.json` with a restored `priority` field.
-- [x] `src/_data/mock/events.json` re-sourced with real festivals (`eventsSnapshot.json`), used
-      whenever `KTO_API_KEY` is absent — a point-in-time capture, not an ongoing boosted set
-      (unlike attractions); Jeju deliberately left empty to show the real empty-state design.
-- [x] Investigate broad-vs-narrow `areaBasedList2` query volume — real per-item numbers gathered
-      (not just `totalCount`), findings in `notes/attraction-gallery-report.md` §3-§5. Broadening
-      matched or beat narrow's curated-pick presence on both codes tested, for fewer calls.
-- [x] Broad collapse (7→3 calls/code) shipped: client-side lclsSystm reclassification, flat
-      `numOfRows: 250`. Pre-flight probe folded into the first (VE) broad call instead of a
-      separate call — saves 1 call/load in the common (arrange=P working) case.
-- [x] Final checks on all attractions work (this phase + broad collapse) before merging
-      `feature/attractions` to main — curated-pick presence/injection stats and an
-      empty-filter-combination sweep, see `notes/attraction-gallery-report.md` §7. Broad collapse
-      resolved the Seongnam/Cheongju empty-combo cases as a side effect.
-- [x] `locationBasedList2` as a second-tier fallback — rejected, logged in
-      ARCHITECTURE.md §11.
-- [x] Combining multiple `lDongRegnCd` codes into one call — tested live, unsupported
-      (KTO returns `totalCount: 0` for a comma-joined value). Dropping codes from a region's
-      fan-out — rejected, every code is load-bearing (region or its metro city).
-
-## Phase 26 — done (workation-city expansion)
-Depends on 12.
-
-- [x] ~4–6 cities/region, ≥1 verified workation center each where one exists.
-- [x] Verify: every region has ≥1 center; all center URLs resolve.
-
-## Phase 27 — Remaining de-MOCK + Task #4 copy pass
-- [x] Food gallery, communities, `/visa-info/` copy: real and sourced.
-- [x] Cost-of-living: all six regions carry real figures + source in `rentalMarketScan.js`.
-- [x] `MOCK`/`PLACEHOLDER` grep clean across `_data`.
-
-## Phase 28 — Accessibility + robustness (scriptable)
-- [x] `aria-live` on result caption and keyboard path through map already in place (real `<a href>`, `:focus-visible` styles).
-- [x] 44px hit targets: `pointer: coarse` hit-slop for standalone links/buttons (`base.css`).
-- [x] No-JS: map + card links are real hrefs; `<noscript>` fallbacks on calculator, events, attractions.
-- [x] `.empty-state` double-duty already gone (single use).
-
-## Phase 29 — Responsive + real-device pass
+## Phase 29 — Responsive pass
 - [ ] 360/768/1280 + landscape-phone on hero/calculator/caption/map.
-- [ ] Real iOS Safari, both orientations.
 - [ ] Region-page tabs (single-panel switching) and the shared `.content-page` centered layout
       (region pages, `/visa-info/`, `/settling-in/`) still need a real DevTools-preset pass.
 - Verify: each checkpoint recorded.
 
-## Phase 30 — Contest deliverables (Sept 8–21)
-Milestone bucket, not a day/branch phase.
+## Phases 30–31 — done (contest write-up, domain, scope decisions)
 
-- [x] 기능설명서 write-up mapped to Task #4 hashtags.
-- [ ] Final KTO call-history screenshot.
-- [ ] User testing, final link audit, deploy freeze before the deadline.
-- [x] Get a separate/custom domain for the site before the deploy freeze.
-- [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19) — do this
-      right before submission.
-- [x] beautify pages: check all the homepage, regional pages and be sure, that they look satisfactory. Make map wider?
-- [ ] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP / SCAFFOLDING) — drop anything stale
-      or excessive
-- [decide] Real interactive event calendar (month-to-month navigation, hover detail on event
-      days) on top of Phase 23's timeline list — worth building given remaining time?
-- [UX check] is it understandable that the map is reacting to calc on all surfaces?
-- [UX check] perform UX test with several respondents
+- [x] 기능설명서 write-up mapped to Task #4; custom domain.
+- [x] No editorial badge for non-capital decline areas (nationwide list stays reference-only in
+      `notes/populationDeclineAreasFull.json`); attraction cards keep `cover` for Type3 images.
 
-## Phase 31 — Verification: confirm eligibility-rule ambiguities with MOJ
-Milestone bucket, not a day/branch phase. Not a hard blocker for earlier phases — the site can
-be built and demoed with the current best-guess interpretations — but should close out before
-Phase 29's deploy freeze, since it can change calculator output for real regions/cities.
+## Phase 32 — Public repo release
+- [x] UI audit: check all the homepage, regional pages and be sure, that they look satisfactory
+- [x] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP) — drop anything stale
+- [ ] refactor pass: DESIGN.md
+- [ ] refactor pass: README.md
+- [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19)
+- [ ] Publish: сhange repository visibility to public.
 
-- [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과, contact in
-      `visa_rules.pdf` p.2, or immigration.go.kr) whether the 18 「관심지역」 watch counties
+
+---
+
+## Pending checks & maintenance
+
+- [ ] Real iOS Safari pass, both orientations
+- [ ] 관심지역 eligibility. Confirm with MOJ (출입국·외국인정책본부 체류관리과
+      whether the 18 「관심지역」 watch counties
       qualify for the lower threshold, or only the 89 official 「인구감소지역」 do — see
       ARCHITECTURE.md §7. If narrow: drop the 3 `category: 'watch'` rows from
       `populationDeclineAreas.json` (and from the full backup).
       Sources: [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
-      [official mirror PDF](https://www.kla.kr/api/boards/6/posts/25311/files/4305/download),
       [MOJ press release](https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do).
-- [ ] **Non-capital decline flag scope.** Decide if non-capital cities that MOIS also lists
-      (Gangneung, Gyeongju, Boryeong, Andong, +16 more in `populationDeclineAreasFull.json`)
-      deserve their own editorial badge — not needed for the calculator, deliberately deferred.
 - [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last present
-      in commit 7c2f96a. Restore only if KTO approves caching (not a contest-rule matter).
-- [decide] homepage: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
+      in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
+- [ ] Hero image licesing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero photo is
       Type1; revisit if a Type3 photo is ever swapped in.
-- [x] attraction cards: `.attraction-card__media` keeps `cover` for Type3 too (35 live entries in
-      `topAttractions.json`) — decided acceptable, not worth the layout cost of `contain`.
-- Verify: each item has either a confirmed answer + a data update, or an explicit "still open,
-  shipping with the default interpretation" note before Phase 29's deploy freeze.
 
----
 
-## Cut / descoped
+## Possible site extensions
+Site enhancement ideas, not scheduled.
 
-**Decided cuts:** `/regions/` index page — regions are navigable from the interactive map only.
-Nomad score stays a static editorial int (ARCHITECTURE.md §6).
-
-**Proposed cuts, not yet confirmed:** nature activities / Go Camping API integration (leaning
-cut); tax-info page content — currently one disclaimer line instead of real guidance.
-
-## If time runs short — protect in this order
-1. **Phase 30 deliverables** (기능설명서, KTO call-history evidence, deploy freeze) — non-negotiable.
-2. **Phase 25** (caching removal) — required for KTO compliance, not optional polish.
-3. **Phases 24, 26–27** (real content) — the hashtags need real data behind them.
-4. **Phase 29** (real-device pass), then **Phase 28** (a11y).
-
-Cut first if behind: interactive event calendar (Phase 30 `[decide]`) → nature activities →
-landscape-phone tuning.
+- **Personalized stay-recommendation quiz.** Interactive quiz surveying the user's lifestyle
+  (leisure, budget, etc.) to match them to the best region and simplify information search.
+- **Quantitative "livability index".** Objective rather than subjective: co-working density,
+  foreign-patient-friendly hospitals, local delivery infrastructure and similar factors turned
+  into indicators, giving an intuitive comparison standard.
+- **More dynamic leisure options.** Link in KTO leisure-sports and experience-tourism data
+  (and the Go Camping API, formerly "nature activities").
+- **"Expectation vs. reality" feedback.** Simple form collecting a match rate, to build trust
+  through community verification.
+- **Interactive event calendar.** Month-to-month navigation and hover detail on event days, on
+  top of the current timeline list.
+- **UX testing & validation.** perform UX test with several respondents
