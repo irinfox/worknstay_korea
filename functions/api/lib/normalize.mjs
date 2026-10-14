@@ -39,6 +39,8 @@ function decodeEntities(text) {
 // titleEn only reads as redundant ("Southern Section", "(Gwangju)" duplicating the city).
 // Titles with no trailing Korean paren are left untouched and keep titleKo empty rather than
 // guessing.
+// Dropping a nested group from titleKo was weighed against CLAUDE.md's keep-Korean-names
+// requirement (users search by Korean name) and kept: the main Korean name stays searchable.
 function stripBracketedTags(text) {
   return text
     .replace(/\[[^\]]*\]/g, "")

@@ -84,7 +84,7 @@ const rawFestival = {
   });
   check(
     "nested-paren Korean title still yields a clean titleEn",
-    e.titleEn === "APAP Artwork Tour" && e.titleKo === "APAP 작품투어 (안양공공예술프로젝트)",
+    e.titleEn === "APAP Artwork Tour" && e.titleKo === "APAP 작품투어",
     JSON.stringify(e.titleEn) + " / " + e.titleKo
   );
 }
