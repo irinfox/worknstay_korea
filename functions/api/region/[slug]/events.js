@@ -22,7 +22,7 @@ export async function onRequestGet({ params, env }) {
   const { slug } = params;
 
   if (!isValidSlug(slug)) {
-    return Response.json({ error: `Unknown region slug: ${slug}` }, { status: 404 });
+    return Response.json({ error: "Unknown region" }, { status: 404 });
   }
 
   if (!env?.KTO_API_KEY) {

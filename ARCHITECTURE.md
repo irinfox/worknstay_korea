@@ -38,6 +38,10 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
 
 **Rejected:** Astro (heavier tree, faster breaking-change cadence).
 
+**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon; no
+user input shown to other visitors. Framing and permissions are set in `src/_headers`, HSTS in the
+Cloudflare dashboard. Revisit if third-party scripts, accounts or URL state are added.
+
 ## 3. UX decisions locked in
 
 **Region info panel:** two modes swapped by a **width-only** breakpoint (`--bp-region-info-wide`

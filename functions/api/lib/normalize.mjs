@@ -11,8 +11,10 @@
 
 const KNOWN_LICENSES = new Set(["Type1", "Type3"]);
 
+// KTO serves http:// image URLs; upgraded here. Anything that isn't https:// afterwards is dropped.
 function toHttps(url) {
-  return url ? url.replace(/^http:\/\//, "https://") : "";
+  const upgraded = url ? url.replace(/^http:\/\//, "https://") : "";
+  return upgraded.startsWith("https://") ? upgraded : "";
 }
 
 function decodeEntities(text) {

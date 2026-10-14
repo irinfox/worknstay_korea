@@ -32,7 +32,7 @@ export function renderAttractions(container, data) {
       const primary = a.imageThumbUrl || a.imageUrl;
       const fallback = a.imageThumbUrl && a.imageUrl && a.imageUrl !== a.imageThumbUrl ? a.imageUrl : "";
       const media = a.imageLicense
-        ? `<img class="attraction-card__media" src="${primary}"${fallback ? ` data-fallback="${fallback}"` : ""} alt="${escapeHtml(a.titleEn)}" loading="lazy">`
+        ? `<img class="attraction-card__media" src="${escapeHtml(primary)}"${fallback ? ` data-fallback="${escapeHtml(fallback)}"` : ""} alt="${escapeHtml(a.titleEn)}" loading="lazy">`
         : `<div class="media-placeholder attraction-card__media" aria-hidden="true"></div>`;
       // data-category/data-city let attraction-filters.js filter without a refetch.
       const category = a.category === "nature" ? "Nature" : "Culture";

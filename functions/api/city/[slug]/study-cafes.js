@@ -7,7 +7,7 @@ import { countStudyCafes } from "../../lib/kakao-client.mjs";
 export async function onRequestGet({ params, env }) {
   const city = cities.find((c) => c.slug === params.slug);
   if (!city) {
-    return Response.json({ error: `Unknown city slug: ${params.slug}` }, { status: 404 });
+    return Response.json({ error: "Unknown city" }, { status: 404 });
   }
   const result = await countStudyCafes(city, env);
   return Response.json(result, { headers: { "Cache-Control": "no-store" } });
