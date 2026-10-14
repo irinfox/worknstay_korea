@@ -2,7 +2,7 @@
 // region page: highlights whichever section is current, and reveals the "Top" link — both gated
 // on the strip having actually stuck to the top of the viewport (not just "scrolled some").
 // Without this module the strip is still fully usable — real <a href> section links, and "Top"
-// jumps to #top via native anchor behaviour (progressive enhancement, CLAUDE.md rule 6).
+// jumps to #top via native anchor behaviour (progressive enhancement, CLAUDE.md).
 // Behaviour is documented in DESIGN.md ("Page contents strip"). Sections that sit at the same
 // vertical position (the region page's Rent/Events band, side by side on desktop) light up
 // together — detected by actual layout, not markup, so it also self-corrects on phone once the

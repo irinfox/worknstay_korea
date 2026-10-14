@@ -1,13 +1,13 @@
 // applyResult() toggles .region--active/--partial/--ineligible on the
 // map's real <a href> region links and click-gates ineligible ones. Click-gating means the
 // element stops being a link at all (href removed) rather than staying a link with JS-only
-// preventDefault — CLAUDE.md rule 6 already requires every region link to be a real <a href>,
+// preventDefault — CLAUDE.md already requires every region link to be a real <a href>,
 // so "gated" has to mean "not a link right now," not "a link that lies about being clickable."
 //
 // The gate has to cover both entry points to a region page, not just the map shape: each
 // region-card's own "Learn more →" link (region-card.njk) is always-visible in the wide-viewport
 // infographic, so leaving it live would make the map's gating purely decorative —
-// ARCHITECTURE.md §3 is explicit that ineligible regions aren't clickable through, full stop.
+// ARCHITECTURE.md is explicit that ineligible regions aren't clickable through, full stop.
 const STATE_CLASSES = ["region--active", "region--partial", "region--ineligible"];
 
 function regionLinks() {

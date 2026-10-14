@@ -1,7 +1,7 @@
 // Pure function, no DOM access, trivially testable.
 // Two-object signature, deliberately not flat positional args: `userInput` (what the visitor
 // typed) vs `referenceData` (what the site already knows — visa thresholds + region/decline
-// data from _data/*.json, per CLAUDE.md rule 4). Splitting it this way also removes a real bug
+// data from _data/*.json, per CLAUDE.md). Splitting it this way also removes a real bug
 // risk flat args have here — two same-shaped values sitting next to each other positionally
 // (two arrays: regions/populationDeclineAreas; two numbers: salaryKrw/age) are easy to
 // transpose by accident with nothing to catch it. Named fields can't be silently swapped.
@@ -9,7 +9,7 @@
 // sources it and calls this function; this module never touches the DOM or fetches
 // anything itself.
 //
-// ARCHITECTURE.md §6/§8: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
+// ARCHITECTURE.md: tier stays a 3-way `ineligible | nonCapitalOnly | all` — partiality is
 // per-region (today only gyeonggi-do), carried via partialRegionSlugs[] rather than a 4th tier.
 
 // Precondition, not a runtime edge case this function is expected to handle: callers must

@@ -36,10 +36,16 @@ the durable, brief set of project-scope agreements.
      the key set, and also add `KTO_DEV_CACHE=1` to `.env`. Repeat identical calls are then
      served from an in-memory cache instead of hitting KTO again. Dev-only — never set this in
      Cloudflare's production environment.
-- `ARCHITECTURE.md` is a decisions record, not a scratchpad. So keep two rules:
-1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is independent of project scheduling.
-2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and a one-line "why" at most.
-- keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase or marked as undone during current phase.
+- `ARCHITECTURE.md` is a decisions record, not a scratchpad. So keep three rules:
+1. Never reference ROADMAP_TODO.md phase numbers inside ARCHITECTURE.md (e.g. "tracked as
+   Phase 29", "open item, see Phase 15"). Phases are scheduling/process; ARCHITECTURE.md is
+   independent of project scheduling.
+2. Keep entries concise. Don't narrate the reasoning trail — state the decision that stands and
+   a one-line "why" at most.
+3. Code comments don't cite ARCHITECTURE.md section numbers or CLAUDE.md rule numbers — they
+   drift when renumbered. State the decision in the comment; at most name the doc.
+- keep `ROADMAP_TODO.md` records concise as well. Follow-up todo's should be in a separate phase
+  or marked as undone during current phase.
 
 ## Design conventions
 Follow DESIGN.md for all visual decisions (palette, type, spacing, component rules).

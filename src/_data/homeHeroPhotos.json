@@ -1,30 +1,44 @@
 {
-  "credit": { "source": "kto" },
+  "note": "Home hero photos in src/assets/img/hero/home/. The first record not flagged standby is shown; to swap, reorder or move the standby flag.",
   "licenseNote": "All entries are 공공누리 (KOGL) Type 1 — attribution required, modification/derivative works permitted (unlike Type 3, which forbids editing). Source: KTO TourAPI (EngService2), cpyrhtDivCd confirmed per-photo at fetch time.",
-  "photos": {
-    "mungyeong-saejae-open-set.jpg": {
+  "photos": [
+    {
+      "file": "mungyeong-saejae-open-set.jpg",
       "title": "Mungyeongsaejae Open Set",
       "addr1": "932 Saejae-ro, Mungyeong-si, Gyeongsangbuk-do",
       "contentid": "2996555",
       "cpyrhtDivCd": "Type1",
-      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/10/2947510_image2_1.jpg"
+      "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/10/2947510_image2_1.jpg",
+      "credit": {
+        "source": "kto"
+      }
     },
-    "woljeongsa-temple-needle-fir-forest.jpg": {
+    {
+      "file": "woljeongsa-temple-needle-fir-forest.jpg",
       "title": "Woljeongsa Temple & Needle Fir Forest",
       "addr1": "374-8 Odaesan-ro, Jinbu-myeon, Pyeongchang-gun, Gangwon-do",
       "contentid": "264189",
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/52/3034152_image2_1.jpg",
-      "note": "Backup hero photo (real KTO photo) — not currently live; kept as a candidate for a cherry-blossom/spring rotation if a matching photo turns up."
+      "note": "Backup hero photo (real KTO photo) — not currently live; kept as a candidate for a cherry-blossom/spring rotation if a matching photo turns up.",
+      "credit": {
+        "source": "kto"
+      },
+      "standby": true
     },
-    "pyeongchang-yukbaekmajigi.jpg": {
+    {
+      "file": "pyeongchang-yukbaekmajigi.jpg",
       "title": "Pyeongchang Yukbaekmajigi",
       "addr1": "583-76 Cheongoksan-gil, Pyeongchang-gun, Gangwon-do",
       "contentid": "2818731",
       "cpyrhtDivCd": "Type1",
       "sourceImageUrl": "https://tong.visitkorea.or.kr/cms/resource/30/3331630_image2_1.jpg",
       "needsDarkerScrim": true,
-      "note": "Backup hero photo (real KTO photo) — not currently live; a favourite. needsDarkerScrim: bright sky/field made hero text hard to read in testing, applies .hero__scrim--dark when this photo is selected."
+      "note": "Backup hero photo (real KTO photo) — not currently live; a favourite. needsDarkerScrim: bright sky/field made hero text hard to read in testing, applies .hero__scrim--dark when this photo is selected.",
+      "credit": {
+        "source": "kto"
+      },
+      "standby": true
     }
-  }
+  ]
 }

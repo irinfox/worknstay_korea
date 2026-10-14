@@ -1,6 +1,6 @@
-// Live KTO call (ARCHITECTURE.md §5) — searchFestival2, fanned out across every lDongRegnCd code
+// Live KTO call (ARCHITECTURE.md) — searchFestival2, fanned out across every lDongRegnCd code
 // a region owns (one code failing only drops that code's items), deduped by contentId. No
-// caching in production (ARCHITECTURE.md §5) — every page view is a live call. `eventStartDate` is
+// caching in production (ARCHITECTURE.md) — every page view is a live call. `eventStartDate` is
 // set to today's date: live-verified (80 region/reference-date checks spanning a year) that KTO
 // already excludes already-ended festivals when queried this way, so no lookback window or
 // client-side end-date re-check is needed. Some regions (e.g. Jeju) legitimately return zero — a

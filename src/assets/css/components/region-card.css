@@ -203,7 +203,7 @@
 }
 
 /* Wrap, not nowrap: a fixed-width card can't guarantee every region's tag row fits on one line
-   forever (data-driven, CLAUDE.md rule 4 — the layout adapts to _data/regions.json, never the
+   forever (data-driven, CLAUDE.md — the layout adapts to _data/regions.json, never the
    reverse). The tablet-band width below is sized so today's widest set (Gangwon-do's four tags)
    still fits on one line in the common case; wrap is the safety net if that ever changes, same
    principle as the infographic variant's tag row. */
@@ -283,7 +283,7 @@
 }
 
 /*
- * Region-info shell (ARCHITECTURE.md §3): mobile-first — the map (a child of
+ * Region-info shell (ARCHITECTURE.md): mobile-first — the map (a child of
  * .region-infographic) stays visible at every width; the two flanking columns and their leader
  * lines are wide-viewport-only, and below the breakpoint the .region-carousel takes over.
  */

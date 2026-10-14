@@ -1,8 +1,8 @@
-// Live KTO call (ARCHITECTURE.md §5) — areaBasedList2, one broad call per lDongRegnCd code per
+// Live KTO call (ARCHITECTURE.md) — areaBasedList2, one broad call per lDongRegnCd code per
 // lclsSystm1 top bucket (NA/VE/HS), reclassified server-side (in this Function) into today's curated lclsSystm2/3
 // whitelist (not the retired cat1/2/3 tree, which under-surfaced popular sites). Fanned out
 // across every lDongRegnCd code a region owns (Promise.allSettled: one code/bucket failing only
-// drops that slice), deduped by contentId. No caching in production (ARCHITECTURE.md §5) —
+// drops that slice), deduped by contentId. No caching in production (ARCHITECTURE.md) —
 // every page view is a live call.
 // Falls back to `topAttractions.json` (real, hand-verified KTO data, also boosted into live
 // results — boost-curated.mjs) when KTO_API_KEY isn't set or the daily quota is exhausted, so

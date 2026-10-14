@@ -471,7 +471,7 @@ ul.region-seasons {
 
 /* Per-slide caption: full-width gradient overlay along the bottom edge (design 5b). Title line
    is the KTO photo title; the sub line carries the city plus the Korean name as a plain
-   cross-reference aid (CLAUDE.md rule 9), not a 1:1 translation. */
+   cross-reference aid (CLAUDE.md), not a 1:1 translation. */
 .region-hero__caption {
   position: absolute;
   left: 0;

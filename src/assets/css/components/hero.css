@@ -79,7 +79,7 @@
   );
 }
 
-/* Per-photo override (see heroCredits.json's needsDarkerScrim) for bright/high-key shots. */
+/* Per-photo override (see homeHeroPhotos.json's needsDarkerScrim) for bright/high-key shots. */
 .hero__scrim--dark {
   background: linear-gradient(
     to bottom,

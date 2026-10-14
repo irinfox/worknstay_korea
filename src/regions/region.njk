@@ -10,8 +10,8 @@ eleventyComputed:
   description: "{{ region.shortIntro }}"
 ---
 {% set regionCities = cities | byRegion(region.slug) %}
-{% set regionFood = food | byRegion(region.slug) | creditedDishes("food gallery " + region.slug) %}
-{% set heroPhotos = (regionHeroPhotos[region.slug] or []) | creditedPhotos(regionHeroCredits, "region gallery " + region.slug) %}
+{% set regionFood = food | byRegion(region.slug) | credited("food gallery " + region.slug) %}
+{% set heroPhotos = (regionHeroPhotos[region.slug] or []) | credited("region gallery " + region.slug) %}
 {% set slideCount = heroPhotos.length %}
 {% from "partials/photo-credit.njk" import creditText %}
 {% set isGangwon = region.slug == "gangwon-do" %}
@@ -136,15 +136,14 @@ eleventyComputed:
   </div>
   <div class="region-hero">
     <div class="region-hero-gallery__track">
-      {% for filename in heroPhotos %}
-      {% set credit = regionHeroCredits.photos[filename] %}
+      {% for photo in heroPhotos %}
       <figure class="region-hero-gallery__slide">
-        <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ filename }}" alt="{{ credit.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
-        {% if credit.titleEn %}
+        <img class="region-hero__img" src="/assets/img/hero/{{ region.slug }}/{{ photo.file }}" alt="{{ photo.titleEn }}" loading="{{ 'eager' if loop.first else 'lazy' }}">
+        {% if photo.titleEn %}
         <figcaption class="region-hero__caption">
-          <span class="region-hero__caption-title">{{ credit.titleEn }}</span>
-          {% if credit.cityEn or credit.titleKo %}
-          <span class="region-hero__caption-sub">{{ credit.cityEn }}{% if credit.cityEn and credit.titleKo %} · {% endif %}{{ credit.titleKo }}</span>
+          <span class="region-hero__caption-title">{{ photo.titleEn }}</span>
+          {% if photo.cityEn or photo.titleKo %}
+          <span class="region-hero__caption-sub">{{ photo.cityEn }}{% if photo.cityEn and photo.titleKo %} · {% endif %}{{ photo.titleKo }}</span>
           {% endif %}
         </figcaption>
         {% endif %}
@@ -152,7 +151,7 @@ eleventyComputed:
       {% endfor %}
     </div>
   </div>
-  <p class="region-hero__credit">Photo source: {{ creditText(heroPhotos | photoCredits(regionHeroCredits)) }}</p>
+  <p class="region-hero__credit">Photo source: {{ creditText(heroPhotos | photoCredits) }}</p>
 </section>
 {% endif %}
 

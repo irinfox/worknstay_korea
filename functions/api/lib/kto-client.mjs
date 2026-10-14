@@ -1,4 +1,4 @@
-// Live KTO OpenAPI transport (ARCHITECTURE.md §5) — EngService2 only (areaBasedList2,
+// Live KTO OpenAPI transport (ARCHITECTURE.md) — EngService2 only (areaBasedList2,
 // searchFestival2). Owns URL building, paging, timeout, and bounded 429/5xx
 // backoff-retry. Never throws: any failure (missing key, network error, timeout, non-2xx,
 // bad JSON, non-zero resultCode) degrades to { items: [], degraded: true } so callers can
@@ -58,7 +58,7 @@ function sleep(ms) {
 // Dev-only in-memory cache, gated on `env.KTO_DEV_CACHE === "1"` (set only in `.env` — never
 // in Cloudflare's production env; `wrangler.jsonc` has no `vars` block, so this can never leak
 // into production by any path in this repo). Exists because there is no production caching
-// (ARCHITECTURE.md §5), which otherwise makes manual QA of live data burn real quota on every
+// (ARCHITECTURE.md), which otherwise makes manual QA of live data burn real quota on every
 // reload. Only successful, non-degraded, non-quota results are cached — a quota-exceeded
 // response must keep reflecting real quota state on every check, never a stale cached one.
 // Module-level, no persistence: resets with the dev process, same lifetime as
@@ -143,7 +143,7 @@ function extractItems(body) {
  *   `KTO_DEV_FORCE_QUOTA: "1"` (dev-only) short-circuits to a quota-exceeded result with no
  *   network call, to QA the fallback UI on demand.
  * @param {{ cacheTtl?: number }} [options] - edge cache TTL in seconds. Currently
- *   unused: production runs with no caching (ARCHITECTURE.md §5); kept so caching can be
+ *   unused: production runs with no caching; kept so caching can be
  *   re-enabled if KTO approves it.
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
@@ -232,7 +232,7 @@ export async function fetchKto(endpoint, params, env, { cacheTtl } = {}) {
 
 /**
  * Fetch all pages up to `maxPages`, deduping is the caller's job (contentId can repeat across
- * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md §5). Stops early once
+ * a fan-out of multiple lDongRegnCd codes — see ARCHITECTURE.md). Stops early once
  * a page returns fewer rows than requested or `totalCount` is covered. One degraded page
  * degrades the whole result (no partial-page merging) — a caller wanting partial-region
  * resilience across *codes* should call fetchKto per code itself (see region-map.mjs), not rely

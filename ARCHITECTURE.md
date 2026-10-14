@@ -210,8 +210,9 @@ regions; `topAttractions.json` already covers it.
 - `populationSource.json` — KOSIS source for city populations; `sources.json` — source lines
   for live APIs.
 - `rentalMarketScan.js`, `settlingIn.json`, `food.json` — rent research, settling-in guide, dishes.
-- `studyCafeLevels.json` — level thresholds for Kakao® counts; `*Hero{Photos,Credits}.json` —
-  cover photos and credits; `topAttractions.json` / `eventsSnapshot.json` — fallbacks (§5).
+- `studyCafeLevels.json` — level thresholds for Kakao® counts; `*HeroPhotos.json` —
+  cover photos with captions and credits; `topAttractions.json` / `eventsSnapshot.json` —
+  fallbacks (§5).
 
 **Computed shapes** (built in the Functions and `eligibility.js`; no data file):
 ```

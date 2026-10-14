@@ -1312,7 +1312,7 @@ ul.about-hero__chips {
 
 /* Faded in once page-contents.js reveals it (strip stuck) — without JS this stays visible
    throughout, which is still a real, always-reachable <a href> (progressive enhancement,
-   CLAUDE.md rule 6), just not deferred. Kept in flow at every state (opacity/visibility, not
+   CLAUDE.md), just not deferred. Kept in flow at every state (opacity/visibility, not
    display:none) so it always holds its own width — .page-contents__links (below) would otherwise
    grow into that space while Top is hidden and reflow the strip the moment it fades in. */
 .page-contents__top {

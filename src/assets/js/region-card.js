@@ -21,7 +21,7 @@ function prefersReducedMotion() {
 }
 
 // Narrow viewport shows a carousel of all 6 real region-card links (index.njk /
-// ARCHITECTURE.md §3). Tapping a map region scrolls that carousel to the matching card rather than
+// ARCHITECTURE.md). Tapping a map region scrolls that carousel to the matching card rather than
 // navigating straight there — the card is still a real <a href> the visitor then taps to open
 // the region page. No data is copied anywhere: every card is already rendered from
 // region-card.njk with whatever korea-map.js's applyResult() last wrote onto it.
@@ -69,7 +69,7 @@ function initTapToFill() {
       return;
     }
 
-    // Wide viewport lets the click navigate normally (ARCHITECTURE.md §3) — only narrow
+    // Wide viewport lets the click navigate normally (ARCHITECTURE.md) — only narrow
     // viewport substitutes tap-to-fill-the-single-card for real navigation.
     event.preventDefault();
     selectRegion(link, link.dataset.slug);

@@ -19,15 +19,14 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
 {% for c in populationDeclineAreas %}{% set pushed = countyPhotos.push(countyHeroPhotos[c.countyNameEn]) %}{% endfor %}
 
 {% macro tierCard(c) %}
-{% set photo = [countyHeroPhotos[c.countyNameEn] or (c.countyNameEn + ": no photo mapped")] | creditedPhotos(countyHeroCredits, "county card " + c.countyNameEn) | first %}
-{% set credit = countyHeroCredits.photos[photo] %}
+{% set photo = [countyHeroPhotos[c.countyNameEn] or { file: c.countyNameEn + ": no photo mapped" }] | credited("county card " + c.countyNameEn) | first %}
 <li class="tier-card">
   <figure class="tier-card__figure">
-    {% if photo %}<img class="tier-card__img" src="/assets/img/hero/gyeonggi-do-population-decline/{{ photo }}" alt="{{ credit.titleEn }}" loading="lazy">{% endif %}
-    {% if credit.titleEn %}
+    {% if photo %}<img class="tier-card__img" src="/assets/img/hero/gyeonggi-do-population-decline/{{ photo.file }}" alt="{{ photo.titleEn }}" loading="lazy">{% endif %}
+    {% if photo.titleEn %}
     <figcaption class="tier-card__spot">
-      <span class="tier-card__spot-en">{{ credit.titleEn }}</span>
-      {% if credit.titleKo %}<span class="tier-card__spot-ko" lang="ko">{{ credit.titleKo }}</span>{% endif %}
+      <span class="tier-card__spot-en">{{ photo.titleEn }}</span>
+      {% if photo.titleKo %}<span class="tier-card__spot-ko" lang="ko">{{ photo.titleKo }}</span>{% endif %}
     </figcaption>
     {% endif %}
   </figure>
@@ -114,7 +113,7 @@ permalink: "/regions/gyeonggi-do/population-decline-areas/"
     </ul>
   </div>
 
-  <p class="data-provenance">Source: {{ creditText(countyPhotos | photoCredits(countyHeroCredits)) }}.</p>
+  <p class="data-provenance">Source: {{ creditText(countyPhotos | photoCredits) }}.</p>
 </section>
 
 </div>

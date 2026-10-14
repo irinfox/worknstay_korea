@@ -22,7 +22,7 @@ function check(label, actual, expected) {
   }
 }
 
-// Sanity check on the source figures themselves (ARCHITECTURE.md §7 / visa_rules.pdf p.3's
+// Sanity check on the source figures themselves (ARCHITECTURE.md / visa_rules.pdf p.3's
 // table), so a silent visaRules.json edit is caught here too. Asserts the actual threshold
 // values (looked up via thresholdsByMultiplier, the same as eligibility.js does), not just the
 // multipliers — multiplierCapitalArea/multiplierNonCapitalArea are display-only and can't be
@@ -78,7 +78,7 @@ check(
   { tier: "all", dimmed: [], partial: [] }
 );
 
-// Case 4: family flag overrides the age band regardless of age (ARCHITECTURE.md §7)
+// Case 4: family flag overrides the age band regardless of age (ARCHITECTURE.md)
 // — a 22-year-old with family meets the ₩78,620,000 non-capital family threshold but not the
 // ₩104,830,000 capital family threshold.
 check(

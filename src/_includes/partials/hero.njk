@@ -8,13 +8,11 @@
    layer). Phone: .hero__frame is a real box sized by the headline block, so the photo keeps a
    ~1:1 crop instead of being stretched to viewport height.
 
-   src/assets/img/hero/home/ holds the chosen photo plus a couple of standby favorites (see
-   _data/heroCredits.json for source/license per file — all Type1 KOGL, attribution required).
-   TO SWAP: change heroPhoto below to another filename from that folder (dev server hot-reloads).
-   Leave it "" to see the gradient placeholder. #}
-{% set heroPhoto = "mungyeong-saejae-open-set.jpg" %}
-{% set heroPhoto = ([heroPhoto] | creditedPhotos(heroCredits, "home hero") | first) or "" %}
-{% set heroCredit = heroCredits.photos[heroPhoto] %}
+   src/assets/img/hero/home/ holds the chosen photo plus a couple of standby favorites; their
+   records (source, license, credit) are in _data/homeHeroPhotos.json.
+   TO SWAP: in that file, move the wanted record first and flag the others standby (dev server
+   hot-reloads). #}
+{% set heroPhoto = homeHeroPhotos.photos | credited("home hero") | first %}
 {% from "partials/photo-credit.njk" import creditText %}
 
 <section class="hero" aria-labelledby="hero-heading">
@@ -31,9 +29,9 @@
           class="hero__media{% if not heroPhoto %} hero__media--placeholder{% endif %}"
           data-hero-media
           aria-hidden="true"
-          {% if heroPhoto %}style="background-image: url('/assets/img/hero/home/{{ heroPhoto }}')"{% endif %}
+          {% if heroPhoto %}style="background-image: url('/assets/img/hero/home/{{ heroPhoto.file }}')"{% endif %}
         ></div>
-        <div class="hero__scrim{% if heroCredit.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
+        <div class="hero__scrim{% if heroPhoto.needsDarkerScrim %} hero__scrim--dark{% endif %}" aria-hidden="true"></div>
         <div class="hero__content">
           <span class="hero__rule" aria-hidden="true"></span>
           <h1 id="hero-heading" class="hero__heading">{% for line in site.tagline | splitSentences %}<span class="hero__heading-line">{{ line }}</span>{% endfor %}</h1>
@@ -43,17 +41,17 @@
           </p>
         </div>
         {% if heroPhoto %}
-          {# Photo credit, rendered from heroCredits.json (ARCHITECTURE.md §5). Absolute (photo
+          {# Photo credit, rendered from the photo record's credit. Absolute (photo
              bottom-right) on desktop; in flow at the foot of the photo on phone, clear of the
              overlapping calculator. #}
           <p class="hero__credit">
-            Photo source: {{ creditText([heroPhoto] | photoCredits(heroCredits)) }}
+            Photo source: {{ creditText([heroPhoto] | photoCredits) }}
           </p>
         {% endif %}
       </div>
 
       {# Calculator: real <form>, calculator.js calls eligibility.js and renders the
-       caption itself into #calc-msg below. JS-only per CLAUDE.md rule 6 — the
+       caption itself into #calc-msg below. JS-only per CLAUDE.md — the
        <noscript> fallback sends no-JS visitors to the static thresholds table instead.
        Markup order here is free to change (calculator.js keys off data-* / element names, not
        DOM order); the comparison logic and its messages are frozen. #}
@@ -135,7 +133,7 @@
     <div class="hero__spacer hero__spacer--bottom" aria-hidden="true"></div>
 
     {# Desktop only — the cover photo is full-viewport there, so a foot-of-photo nudge toward the
-       map earns its place. A real anchor (CLAUDE.md rule 6), hidden on phone where the photo is
+       map earns its place. A real anchor (CLAUDE.md), hidden on phone where the photo is
        a short crop and the map is already the next thing down. #}
     <a class="hero__scroll-cue" href="#map">Scroll down to explore Korean regions ↓</a>
   </div>
