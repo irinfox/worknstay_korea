@@ -59,7 +59,7 @@
       "links": [
         { "label": "Digital nomad (workation) visa notice (KR)", "url": "https://www.immigration.go.kr/immigration/1502/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaW1taWdyYXRpb24lMkYyMTQlMkY2MDgyOTQlMkZhcnRjbFZpZXcuZG8lM0Y%3D", "source": "immigration.go.kr", "date": "July 2026" },
         { "label": "Population-decline area designation (KR)", "url": "https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do", "source": "mois.go.kr" },
-        { "label": "Official Ministry of Justice clarification (KR)", "url": "/assets/docs/moj-clarification-1aa-2608-1171435.pdf", "internal": true, "nowrap": "1AA-2608-1171435", "source": "e-People inquiry 1AA-2608-1171435", "date": "Oct 2026" },
+        { "label": "Ministry of Justice clarification (KR, PDF)", "url": "/assets/docs/moj-clarification-1aa-2608-1171435.pdf", "nowrap": ["worknstay-korea.com", "e-People inquiry 1AA-2608-1171435"], "source": "worknstay-korea.com · e-People inquiry 1AA-2608-1171435", "date": "Oct 2026" },
         { "label": "Full visa and status list (KR)", "url": "https://www.hikorea.go.kr/board/BoardNtcDetailR.pt?BBS_SEQ=1&BBS_GB_CD=BS10&NTCCTT_SEQ=1062&page=1", "source": "hikorea.go.kr" }
       ]
     },

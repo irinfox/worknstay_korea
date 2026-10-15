@@ -299,8 +299,8 @@ description: "F-1-D Digital Nomad Visa eligibility, income thresholds, documents
         <div class="visa-links-group__title">{{ group.title }}</div>
         {% for link in group.links %}
         <div class="visa-link-block">
-          {% if link.internal %}<a class="visa-link-block__internal" href="{{ link.url }}">{{ link.label }} →</a>{% else %}<a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>{% endif %}
-          <span class="visa-source">{% if link.nowrap %}{{ link.source | replace(link.nowrap, '<span class="visa-nowrap">' + link.nowrap + '</span>') | safe }}{% else %}{{ link.source }}{% endif %}{% if link.date %} · {{ link.date }}{% endif %}</span>
+          <a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
+          <span class="visa-source">{% set src = link.source %}{% for t in link.nowrap %}{% set src = src | replace(t, '<span class="visa-nowrap">' + t + '</span>') %}{% endfor %}{{ src | safe }}{% if link.date %} · {{ link.date }}{% endif %}</span>
         </div>
         {% endfor %}
       </div>
