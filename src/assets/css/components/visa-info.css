@@ -772,10 +772,24 @@
   text-wrap: pretty;
 }
 
+.visa-nowrap {
+  white-space: nowrap;
+}
+
+/* overflow-wrap is ignored under nowrap, so below any realistic phone width the unbreakable
+   runs release and may break anywhere instead of forcing a horizontal scroll. */
+@media (max-width: 280px) {
+  .visa-nowrap {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+
 .visa-source {
   font-size: 12px;
   color: var(--color-text-muted);
   text-wrap: pretty;
+  overflow-wrap: anywhere;
 }
 
 @media (min-width: 1024px) {

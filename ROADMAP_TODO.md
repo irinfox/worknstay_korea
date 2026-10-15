@@ -101,13 +101,7 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 ## Pending checks & maintenance
 
 - [ ] Real iOS Safari pass, both orientations
-- [ ] **관심지역 eligibility.** Confirm with MOJ (출입국·외국인정책본부 체류관리과) whether the
-      18 「관심지역」 watch counties qualify for the lower threshold, or only the 89 official
-      「인구감소지역」 do — see ARCHITECTURE.md §7. If narrow: drop the 3 `category: 'watch'`
-      rows from `populationDeclineAreas.json` (and from the full backup).
-      Sources:
-      [MOIS designation page](https://www.mois.go.kr/frt/sub/a06/b06/populationDecline/screen.do),
-      [MOJ press release](https://www.moj.go.kr/bbs/immigration/214/608294/artclView.do).
+- [x] 관심지역 eligibility confirmed by MOJ: watch counties qualify; gross income, FX at application date.
 - [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last
       present in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
 - [ ] Hero image licensing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero
