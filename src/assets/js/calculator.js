@@ -147,7 +147,7 @@ export function validate(userInput, rawInput, minAge) {
 
   if (isSalaryInvalid(userInput, rawInput)) return "Enter an income of 0 or more.";
   if (!Number.isFinite(userInput.age) || userInput.age < minAge) {
-    return `F-1-D applicants must be ${minAge} or older.`;
+    return `F‑1‑D applicants must be ${minAge} or older.`;
   }
   return null;
 }
