@@ -772,6 +772,18 @@
   text-wrap: pretty;
 }
 
+.visa-link-block a.visa-link-block__internal {
+  text-decoration: none;
+}
+
+.visa-link-block a.visa-link-block__internal:hover {
+  text-decoration: underline;
+}
+
+.visa-nowrap {
+  white-space: nowrap;
+}
+
 .visa-source {
   font-size: 12px;
   color: var(--color-text-muted);

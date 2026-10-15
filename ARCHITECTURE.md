@@ -248,8 +248,8 @@ Invariants:
 Thresholds and visa facts live in `visaRules.json` (rendered by `visa-info.njk`). Decisions:
 - Published thresholds are stored, not derived — multiplying the rounded GNI is off by ₩5–10k.
 - Population-decline counties are modelled at county level (`populationDeclineAreas.json`,
-  Gyeonggi-do only — the one capital-tier region); `'watch'` counties count as qualifying, since
-  MOJ's wording is ambiguous (disclosed on the visa page).
+  Gyeonggi-do only — the one capital-tier region); `'watch'` counties count as qualifying, as
+  confirmed by MOJ (e-People reply, linked from the visa page's Useful links).
 - Partiality is per-region (`partialRegionSlugs`), not a 4th tier. UI in §3.
 
 ## 8. State management
