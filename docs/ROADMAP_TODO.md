@@ -29,8 +29,9 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
       figures via `thresholdsByMultiplier`. Verify: `scripts/verify-eligibility.mjs`.
 - [x] **16 — `calculator.js` + caption + persistence.** Real `<form>` with inline validation
       (empty ≠ 0); renders the 3 tier captions + partial note; `?salaryKrw=&age=&hasFamily=`
-      permalink prefills + auto-computes; reference data as a build-time JSON island
-      (`_data/eligibilityReferenceData.js`), no client fetch.
+      permalink prefills + auto-computes (permalink/persistence removed later: no state kept);
+      reference data as a build-time JSON island (`_data/eligibilityReferenceData.js`), no
+      client fetch.
       Verify: `scripts/verify-calculator.mjs`.
 - [x] **17 — Map eligibility wiring.** `korea-map.js applyResult()` →
       `.region--active/--partial/--ineligible`; partial gets a hatched `<pattern>` + tooltip.
@@ -91,9 +92,9 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] UI audit: check all the homepage, regional pages and be sure, that they look satisfactory
 - [x] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP) — drop anything stale
 - [x] refactor pass: DESIGN.md (design audit)
-- [ ] refactor pass: README.md
+- [x] refactor pass: README.md
 - [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19)
-- [ ] Publish: change repository visibility to public.
+- [x] Publish: change repository visibility to public.
 
 
 ---
@@ -101,7 +102,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 ## Pending checks & maintenance
 
 - [ ] Real iOS Safari pass, both orientations
-- [x] 관심지역 eligibility confirmed by MOJ: watch counties qualify; gross income, FX at application date.
+- [x] 관심지역 eligibility confirmed by MOJ: watch counties qualify; gross income, FX at
+      application date.
 - [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last
       present in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
 - [ ] Hero image licensing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero
