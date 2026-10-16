@@ -1,26 +1,28 @@
 # Work&Stay Korea
 
-Work&Stay Korea is an English-language site built to visualize Korea's Digital Nomad Visa (F-1-D) 
-rules — effective from June 30, 2026 — and make it easier to choose the most suitable area to live in.
+Work&Stay Korea is an English-language site built to visualize Korea's Digital Nomad Visa (F-1-D)
+rules — effective from June 30, 2026 — and make it easier to choose the most suitable area to live
+in.
 
 **Live site: <https://worknstay-korea.com/>**
 
 ![Homepage: eligibility calculator over the hero photo](./docs/homepage-hero.png)
 ![Homepage: interactive region map with the six region cards](./docs/homepage-regions.png)
 
-Built solo for the 2026 [관광데이터 활용 공모전](https://api.visitkorea.or.kr/#/cntSearchDetail?no=3)
-(Tourism Data Utilization Contest), ②-2 웹·앱 구현 부문, Designated Task #4 — sustainable
-long-term residency vs. one-off tourism in population-declining regions.
+Built solo for the 2026
+[관광데이터 활용 공모전](https://api.visitkorea.or.kr/#/cntSearchDetail?no=3) (Tourism Data
+Utilization Contest), ②-2 웹·앱 구현 부문, Designated Task #4 — sustainable long-term residency
+vs. one-off tourism in population-declining regions.
 
 ## What it does
 
-- **Eligibility calculator** — applies the actual F-1-D income rules (by age, family status and capital
-  vs. non-capital area) and shows the result on an interactive map: eligible in every region, eligible
-  in the regions outside the capital area plus partly eligible in Gyeonggi-do, or not eligible, with
-  every region greyed out.
-- **Region pages** — Korea region profiles with vibe tags, estimated rental price ranges, workation
-  cities with work-friendly places (coworking spaces, study cafés), and leisure info — local food,
-  attractions and events.
+- **Eligibility calculator** — applies the actual F-1-D income rules (by age, family status and
+  capital vs. non-capital area) and shows the result on an interactive map: eligible in every
+  region, eligible in the regions outside the capital area plus partly eligible in Gyeonggi-do, or
+  not eligible, with every region greyed out.
+- **Region pages** — Korea region profiles with vibe tags, estimated rental price ranges,
+  workation cities with work-friendly places (coworking spaces, study cafés), and leisure info —
+  local food, attractions and events.
 - **Visa info, Settling in and About pages** — the F-1-D eligibility rules, documents and FAQ; a
   general guide to renting, workspaces and communities in Korea; and a note on who made the
   site and why.
@@ -34,25 +36,26 @@ The stack is kept deliberately simple and stable — designed to last and be eas
 - **Hand-written CSS** — pure CSS using Grid/Flexbox and custom properties
 - **Vanilla ES modules & progressive enhancement** — lightweight client JS; the site remains fully
   functional with static fallbacks if JavaScript is disabled
-- **Inline SVG** for the region map — <=65KB Korea map built directly into the DOM without external
-  map services
+- **Inline SVG** for the region map — <=65KB Korea map built directly into the DOM without
+  external map services
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting with
   serverless functions for the live KTO and Kakao® Local API calls
-- **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — local development and deployment
-  CLI, the only dev dependency
+- **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — local development and
+  deployment CLI, the only dev dependency
 
 Versions are pinned (`package-lock.json`, `.nvmrc`, `engines`), with no automated dependency bumps.
 See [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the full breakdown of the stack and data models.
 
 ### API calls
-The site uses [Korean Tourism Organization (KTO) OpenAPI](https://api.visitkorea.or.kr/?loginFlag=sso#/useLanguageGuide)
-and [Kakao® Maps API](https://developers.kakao.com/docs/en/kakaomap/common) to fetch information for 
-region pages.
+The site uses
+[Korean Tourism Organization (KTO) OpenAPI](https://api.visitkorea.or.kr/?loginFlag=sso#/useLanguageGuide)
+and [Kakao® Maps API](https://developers.kakao.com/docs/en/kakaomap/common) to fetch information
+for region pages.
 Both use live server-side calls on every region-page visit, with nothing cached.
 
-- **KTO OpenAPI:** the English Tourism Information service is used to fetch information on attractions
-  and events for each region. Live calls are a contest requirement, which can be re-checked with the API
-  policy once the contest evaluation is finished.
+- **KTO OpenAPI:** the English Tourism Information service is used to fetch information on
+  attractions and events for each region. Live calls are a contest requirement, which can be
+  re-checked with the API policy once the contest evaluation is finished.
 - **Kakao® Maps API:** used to retrieve study cafés density estimate shown as a battery in every
   workation city card. Kakao®'s terms don't allow caching or storing Local API results in any form.
   See [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5) on permitted use.
@@ -116,17 +119,17 @@ Both KTO flags are dev-only — never set them in production.
 
 Hosted on Cloudflare Pages: build command `npm run build`, output directory `_site`. Set
 `KTO_API_KEY` and `KAKAO_REST_API_KEY` as Pages environment variables — they are per environment,
-so Production and Preview each need their own. Per this project's Pages settings, every push to main 
-deploys automatically; other branches get preview deployments.
+so Production and Preview each need their own. Per this project's Pages settings, every push to
+main deploys automatically; other branches get preview deployments.
 
 ## Project layout
 
 ```
-docs/                   Project docs (architecture, design, roadmap), README screenshots, contest spec
+docs/                   Project docs (architecture, design, roadmap), screenshots, contest spec
 eleventy/               Eleventy template filters
-functions/api/          Cloudflare Pages Functions — live KTO and Kakao® proxies (server-side only)
+functions/api/          Cloudflare Pages Functions — live KTO and Kakao® proxies (server-side)
 notes/                  Research notes and raw reference data (not part of the build)
-scripts/                Standalone verification scripts (no test framework)
+scripts/                Standalone verification and investigation scripts (no test framework)
 src/_data/              Editorial content: visa rules, region/city metadata, rental data, fallbacks
 src/_includes/          Nunjucks layouts and partials
 src/assets/             CSS, JS, SVG, images
@@ -141,9 +144,10 @@ src/regions/            Per-region pages (paginated from _data/regions.json)
 - [`ROADMAP_TODO.md`](./docs/ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest
   constraints, workflow rules, tech-stack conventions)
-- [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of the
-  optimal KTO calls per region
-- [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and usage
+- [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of
+  the optimal KTO calls per region
+- [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and
+  usage
 - [`docs/contest-functional-spec.pdf`](./docs/contest-functional-spec.pdf) — the functional
   specification submitted to the contest, in Korean
 
