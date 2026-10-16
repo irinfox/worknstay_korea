@@ -83,7 +83,7 @@ filename and `korea-map.js applyResult()` keys off `data-slug`:
 <a class="region" data-slug="<slug>" href="/regions/<slug>/">
   <g id=…>  .region__shape | .region__city (metro shapes) | .region__label
 ```
-Jeju keeps its true geographic distance (sea-tinted background, not an inset) — deliberate.
+Jeju sits nearer the mainland than in reality (same frame, no inset) so the map fits a laptop.
 Size budget ≤65KB (it's inlined into the homepage).
 
 **Region detail maps** (`src/assets/svg/*-detail-map.svg`, cut from the national map) are
