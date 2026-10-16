@@ -2,6 +2,9 @@ node_modules/
 _site/
 .env
 .dev.vars
-.DS_Store
 .wrangler/
+wrangler*.log
+.DS_Store
 *.swp
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
