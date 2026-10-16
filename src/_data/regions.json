@@ -207,7 +207,7 @@
     "nameEn": "Jeju-do",
     "nameKo": "제주도",
     "svgGroupId": "region-jeju",
-    "centroid": { "x": 181, "y": 1134 },
+    "centroid": { "x": 181, "y": 1024 },
     "isCapitalArea": false,
     "ktoLDongRegnCds": ["50"],
     "vibeTags": ["hiking", "surfing", "island"],

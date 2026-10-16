@@ -8,8 +8,7 @@
   margin-inline: auto;
   /* Panel treatment (DESIGN.md § "Homepage" — the map sits in a bordered, rounded panel). Neutral
      Panel ground, not a green tint — #EAF4EF is already the partly-eligible fill, so a green
-     ground would collide with it. Jeju keeps its true geographic sea gap (ARCHITECTURE.md) —
-     the ground colour change doesn't touch that, it's a fill colour, not an inset. */
+     ground would collide with it. */
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
