@@ -29,8 +29,9 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
       figures via `thresholdsByMultiplier`. Verify: `scripts/verify-eligibility.mjs`.
 - [x] **16 — `calculator.js` + caption + persistence.** Real `<form>` with inline validation
       (empty ≠ 0); renders the 3 tier captions + partial note; `?salaryKrw=&age=&hasFamily=`
-      permalink prefills + auto-computes; reference data as a build-time JSON island
-      (`_data/eligibilityReferenceData.js`), no client fetch.
+      permalink prefills + auto-computes (permalink/persistence removed later: no state kept);
+      reference data as a build-time JSON island (`_data/eligibilityReferenceData.js`), no
+      client fetch.
       Verify: `scripts/verify-calculator.mjs`.
 - [x] **17 — Map eligibility wiring.** `korea-map.js applyResult()` →
       `.region--active/--partial/--ineligible`; partial gets a hatched `<pattern>` + tooltip.

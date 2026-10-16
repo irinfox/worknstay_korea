@@ -6,8 +6,9 @@ site built to visualize those rules and make it easier to choose the most suitab
 
 The site takes income, age, and family-accompaniment status as input and highlights which of
 Korea's six regions the applicant is eligible for. Each region page then surfaces workation-
-friendly co-working spaces, curated local food, and — pulled live from the Korea Tourism
-Organization's public API — nearby attractions and festivals.
+friendly co-working spaces, curated local food, and live data from two public APIs: nearby
+attractions and festivals from the Korea Tourism Organization (KTO), and study-café density from
+Kakao® Local.
 
 **Live site: <https://worknstay-korea.com/>**
 
@@ -18,18 +19,21 @@ long-term residency vs. one-off tourism in population-declining regions.
 ## What it does
 
 - **Eligibility calculator** — walks through the actual F-1-D income rules (which differ by age,
-  region, and family status, including Korea's official population-decline county list) and
-  greys out regions user doesn't qualify for on an interactive map.
-- **Region pages** — workation cities with rental prices, co-working spaces, study cafés, and local
+  region, and family status) and greys out regions the user doesn't qualify for on an interactive
+  map. Gyeonggi-do's officially designated population-decline counties are counted as qualifying
+  for the lower, non-capital threshold, so the region shows as partly eligible.
+- **Region pages** — workation cities with rental prices, co-working spaces, study cafés, and
   getting-around info for each of Korea's six regions.
 - **Live attractions & festivals** — fetched from the KTO English Tourism Information OpenAPI on
-  every page view (not a cached snapshot — see [Why the API calls are live](#why-the-api-calls-are-live)).
+  every page view, not from a cached snapshot (see [Why the API calls are live](#why-the-api-calls-are-live)).
 - **Local food guide** — hand-picked regional dishes with photo credits and sourcing.
-- **Visa info & Settling in pages** — the F-1-D visa's eligibility rules, documents, and FAQ, plus
-  a general guide to renting, workspaces, and communities in Korea.
-- Works with JavaScript off: every region link is a real anchor. Only the calculator, live map
-  highlighting and the API-fed blocks (attractions, festivals with their Ongoing/Upcoming tabs,
-  study-café counts) need JS.
+- **Visa info, Settling in and About pages** — the F-1-D eligibility rules, documents and FAQ; a
+  general guide to renting, workspaces and communities in Korea; and a note on who makes the
+  site and why.
+- **Works without JavaScript, up to a point** — every region link is a real anchor, and static
+  content renders as is. The calculator, live map highlighting and the API-fed blocks
+  (attractions, festivals with their Ongoing/Upcoming tabs, study-café counts) need JS and show a
+  `<noscript>` message or empty state instead.
 
 ## Tech stack
 
@@ -37,92 +41,110 @@ Kept deliberately simple and stable — no build chain or dependency churn to ba
 maintaining this solo:
 
 - **[Eleventy (11ty) v3](https://www.11ty.dev/)** + Nunjucks templates — static site generation,
-  one npm dependency
+  the only runtime dependency
 - **Hand-written CSS** — custom properties, Grid/Flexbox, no Tailwind or build step
 - **Vanilla ES modules** — no client-side framework
-- **Inline SVG** for the region map — no Leaflet/Mapbox, no second API key
+- **Inline SVG** for the region map — no Leaflet/Mapbox, no map-tile API key
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting, plus
-  a thin serverless proxy for the one thing that needs a backend: live KTO API calls
+  a thin serverless proxy for the live KTO and Kakao® Local calls
+- **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — the one dev dependency;
+  runs Pages Functions locally and deploys
 
-See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full breakdown of this stack, data models, and
+Versions are pinned (`package-lock.json`, `.nvmrc`, `engines`), with no automated dependency bumps.
+See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full breakdown of the stack, data models, and
 known quirks of the KTO API.
 
 ## Why the API calls are live
 
-Contest rules require *checkable* use of the KTO OpenAPI — judges inspect the actual call-history
-log on the submitted key. A build-time scrape baked into committed JSON wouldn't satisfy that, so
-attractions and festivals are fetched live, server-side, on every region-page visit, through a
-Cloudflare Pages Function that holds the API key. The key never reaches the client or the
-repository.
+- **KTO (attractions, festivals):** the contest requires *checkable* use of the OpenAPI — judges
+  inspect the call history on the submitted key — so a build-time scrape committed as JSON
+  wouldn't count. These calls are made server-side on every region-page visit, with nothing cached.
+  This is a contest-driven choice; KTO's terms should be re-checked before changing it after the
+  contest.
+- **Kakao® (study cafés):** Kakao®'s terms don't allow caching or storing Local API results in any
+  form, so counts are fetched in real time and responses are `no-store`. Sources:
+  [Kakao® Maps API docs](https://developers.kakao.com/docs/en/kakaomap/common) and the
+  [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5) on permitted use.
 
-Hero photos and dish photos are the one deliberate exception — they're hand-picked once (mostly via
-the KTO API, a few from Wikimedia Commons) and committed as static files, since which photo
-represents a region or dish is an editorial choice, not something a live query should pick at
-random on each visit.
+In both cases the key lives only in the Cloudflare environment (or your local `.env`) and never
+reaches the client or the repository. Everything else is static: editorial data, plus hero and
+dish photos hand-picked once (KTO APIs, Wikimedia Commons, own photos) and committed with their
+credits, since which photo represents a region or dish is an editorial choice.
 
 ## Study-café battery
 
-The study-café levels shown on the website are based on real-time Kakao® Map REST API
-(Search place by keyword) results. Sources: [Kakao® Maps API docs](https://developers.kakao.com/docs/en/kakaomap/common)
-and the [Kakao® DevTalk thread](https://devtalk.kakao.com/t/local-api/151745/5) on permitted use.
+Each city card shows a 4-cell battery for study-café density.
 
-- **Live:** on each region-page view, a Pages Function searches `<city> 스터디카페` via the Kakao®
-  Local API, keeps results whose category/name match and whose address is in that city (Kakao®'s
-  search spills into neighbouring cities), and maps the count to a 4-cell battery. Kakao® caps
-  any query at 45 retrievable results; past that, the count is estimated by scaling Kakao®'s
-  `total_count` by the share of retrieved results that passed the filter. While the calls are in
-  flight, cards show an empty battery with "loading…". Transient errors (network, 5xx) are
-  retried once; quota (429) and other 4xx errors are not.
+- **Live:** a Pages Function searches `<city> 스터디카페` via the Kakao® Local keyword search,
+  keeps results whose category/name match and whose address is in that city (the search spills
+  into neighbouring cities), and maps the count to a level. Kakao® caps any query at 45
+  retrievable results; past that, the count is estimated by scaling Kakao®'s `total_count` by the
+  share of retrieved results that passed the filter. Cards show "loading…" while calls are in
+  flight; network and 5xx errors are retried once, quota (429) and other 4xx errors are not.
 - **Thresholds** (`src/_data/studyCafeLevels.json`): 0 → none (0 cells), 1–9 → a few (1),
   10–29 → good (2), 30–99 → lots (3), 100+ → plenty (4).
-- **No caching or storage** of Kakao® results, per its terms — responses are `no-store`.
-- **Fallback:** each city carries an editorial `fallbackLevel` in `src/_data/cities.json`. These
-  were first estimated by hand on Naver Map, zooming in and out around each city to gauge
-  study-café density. That pass also set the initial thresholds and served to sanity-check the
-  live Kakao® levels. All-or-nothing per region page: if any city's live call still
-  fails, every card on that page shows its fallback level plus a note saying the data is a
-  manual editorial estimate.
+- **Fallback:** each city carries an editorial `fallbackLevel` in `src/_data/cities.json`,
+  estimated by hand on Naver Map. It is all-or-nothing per region page: if any city's live call
+  fails (or no Kakao® key is set), every card on that page shows its fallback level plus a note
+  that the data is a manual editorial estimate.
 
 ## Getting started
 
+To run a local copy for review or development:
+
+Requires Node 24.19.0 (see `.nvmrc`).
+
 ```bash
 npm install
-cp .env.example .env          # add your API keys: KTO, Kakao® (optional, see below)
+cp .env.example .env          # then fill in KTO_API_KEY and KAKAO_REST_API_KEY
 npm run pages:dev             # http://localhost:8788
 ```
 
-`pages:dev` runs the full stack — Eleventy build + Cloudflare Pages Functions — so the live KTO
-endpoints actually work locally. Plain `npm run serve` only serves static Eleventy output; the
-`/api/**` routes won't exist and attraction/festival sections will render their empty state.
+`pages:dev` runs the full stack — Eleventy build + Cloudflare Pages Functions — so the live
+endpoints work locally. It doesn't watch files; rerun `npm run build` after an edit. Plain
+`npm run serve` only serves static Eleventy output: the `/api/**` routes won't exist and the
+attraction/festival sections render their empty state.
 
-Both Pages Functions (`wrangler pages dev`) and the standalone scripts under `scripts/` read
-the key from the single gitignored `.env`.
+Both `wrangler pages dev` and the scripts under `scripts/` read keys from the single gitignored
+`.env`.
 
-**Don't have a KTO API key yet, just want to work on the UI?** Leave `KTO_API_KEY` unset in
-`.env`. The Functions then skip the live call and serve the committed fallback data
-instead — real cards to test filters against, zero API calls spent.
+**No keys yet, just want to work on the UI?** Both keys are optional locally.
+- Without `KTO_API_KEY`, the attractions and festivals Functions skip the live call and serve the
+  committed fallback files — real cards to test filters against, zero API calls spent.
+- Without `KAKAO_REST_API_KEY`, study-café cards show their editorial fallback levels.
 
-**Testing against real data without burning quota on every reload?** Keep the key set and add
+**Testing against real data without burning quota on every reload?** Keep the KTO key set and add
 `KTO_DEV_CACHE=1` to `.env`. Repeat requests are served from an in-memory cache instead of
-re-hitting KTO. Dev-only — never set this in production.
+re-hitting KTO.
 
 `KTO_DEV_FORCE_QUOTA=1` makes every KTO call report quota-exceeded, to test the degraded UI.
-Dev-only as well.
+
+Both flags are dev-only — never set them in production.
+
+**Scripts:** `scripts/verify-*.mjs` are plain Node checks (no test framework), run with
+`node --env-file=.env scripts/<name>.mjs`; the ones that call KTO need the key and spend quota.
+
+## Deploying
+
+Hosted on Cloudflare Pages: build command `npm run build`, output directory `_site`. Set
+`KTO_API_KEY` and `KAKAO_REST_API_KEY` as Pages environment variables — they are per environment,
+so Production and Preview each need their own. Don't set the `KTO_DEV_*` flags there.
+`npm run pages:deploy` deploys from the command line via Wrangler.
 
 ## Project layout
 
 ```
-functions/api/          Cloudflare Pages Functions — live KTO proxy (server-side only)
-src/_data/               Editorial content: visa rules, region/city metadata, rental data
-src/_includes/           Nunjucks layouts and partials
-src/assets/              CSS, JS, SVG, images
-src/regions/             Per-region pages (paginated from _data/regions.json)
-eleventy/                Eleventy template filters
-scripts/                 Standalone verification scripts (no test framework)
-notes/                   Research notes and raw reference data (not part of the build)
+functions/api/          Cloudflare Pages Functions — live KTO and Kakao® proxies (server-side only)
+src/_data/              Editorial content: visa rules, region/city metadata, rental data, fallbacks
+src/_includes/          Nunjucks layouts and partials
+src/assets/             CSS, JS, SVG, images
+src/regions/            Per-region pages (paginated from _data/regions.json)
+eleventy/               Eleventy template filters
+scripts/                Standalone verification scripts (no test framework)
+notes/                  Research notes and raw reference data (not part of the build)
 ```
 
-## Contributing / project docs
+## Project docs
 
 - [`ARCHITECTURE.md`](./ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind the notable decisions
@@ -134,13 +156,17 @@ notes/                   Research notes and raw reference data (not part of the 
   optimal KTO calls per region
 - [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and usage
 
-## License / contest note
+## License / credits
+
+Source is public for review; all rights reserved. Contributions and forks are welcome by
+arrangement — open an issue and we'll sort out the license you need.
 
 Solo submission for the 2026 관광데이터 활용 공모전, built with [Claude Code](https://claude.com/claude-code)
 as a development assistant.
 
 Data and assets are drawn from several sources, each credited in place on the site:
 - **Korea Tourism Organization** (© 한국관광공사) — attractions, festivals, and most hero/dish
-  photos, via its OpenAPI, per its terms.
+  photos, via its OpenAPIs, per its terms.
+- **Kakao®** — study-café counts, via the Kakao® Local API.
 - **KOSIS** (Korean Statistical Information Service) — city population figures.
 - **Wikimedia Commons** — the base province-boundary map, and a handful of dish photos.
