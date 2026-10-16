@@ -93,7 +93,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP) — drop anything stale
 - [x] refactor pass: DESIGN.md (design audit)
 - [x] refactor pass: README.md
-- [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19)
+- [x] Allow indexing: `robots.txt` disallows only `/api/`, sitemap + canonical URLs, `noindex`
+      header on API responses
 - [x] Publish: change repository visibility to public.
 
 
