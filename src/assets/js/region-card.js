@@ -79,6 +79,11 @@ function initTapToFill() {
     if (event.target.closest(".region-card")) return;
     clearSelection();
   });
+
+  // Wide viewport has no tap selection; drop a leftover one when the viewport widens.
+  window.matchMedia(NARROW_QUERY).addEventListener("change", (event) => {
+    if (!event.matches) clearSelection();
+  });
 }
 
 // Carousel dot indicators (homepage region carousel + region-page city carousel) track the
