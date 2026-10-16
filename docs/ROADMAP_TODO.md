@@ -102,7 +102,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 ## Pending checks & maintenance
 
 - [ ] Real iOS Safari pass, both orientations
-- [x] 관심지역 eligibility confirmed by MOJ: watch counties qualify; gross income, FX at application date.
+- [x] 관심지역 eligibility confirmed by MOJ: watch counties qualify; gross income, FX at
+      application date.
 - [ ] Edge-cache option (`cacheTtl` via `cf` in `kto-client.mjs`) deleted as dead code; last
       present in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
 - [ ] Hero image licensing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero

@@ -143,11 +143,12 @@ simulates quota exhaustion.
 - **Kakao®:** 100,000 calls/day free for a first app
   ([quota docs](https://developers.kakao.com/docs/en/getting-started/quota)).
 
-**Fallbacks:** when any live KTO attractions call fails (quota exhausted included), attractions serve the region's
-`topAttractions.json` picks. Events show the failed message when every slice fails (a partial
-failure shows the items that came back) and return empty on quota — the events snapshot is never a
-production fallback, since its dates would be out of date. With no key (local dev), both serve their files
-(`topAttractions.json`, `eventsSnapshot.json`), so the UI can be tested with zero live calls.
+**Fallbacks:** when any live KTO attractions call fails (quota exhausted included), attractions
+serve the region's `topAttractions.json` picks. Events show the failed message when every slice
+fails (a partial failure shows the items that came back) and return empty on quota — the events
+snapshot is never a production fallback, since its dates would be out of date. With no key (local
+dev), both serve their files (`topAttractions.json`, `eventsSnapshot.json`), so the UI can be
+tested with zero live calls.
 
 **Static exceptions:** region/county **hero photos** and **dish photos** are hand-picked once
 (KTO PhotoGalleryService1/EngService2, Wikimedia Commons, own photos), then committed under
@@ -176,7 +177,8 @@ leak into "All". Attractions without a photo are dropped.
 **Known KTO quirks** (baked into `kto-client.mjs`/`normalize.mjs`):
 - `areaBasedList2` uses undocumented `arrange=P` (view-count); `Q` (modified-date) buries
   landmarks. If the first fan-out call comes back genuinely empty (not 429 code 22), the fan-out
-  switches to `arrange=R`. `{ items, quotaExceeded, liveFailed }` distinguishes quota or a failed call from a true empty.
+  switches to `arrange=R`. `{ items, quotaExceeded, liveFailed }` distinguishes quota or a failed
+  call from a true empty.
 - `topAttractions.json` (hand-verified, per region) is boosted into live results
   (`boost-curated.mjs`): `hard` picks are injected if missing, `soft` picks only repositioned.
 - Attractions: 3 broad calls per `lDongRegnCd` (`lclsSystm1=NA/VE/HS`, `numOfRows: 250`),

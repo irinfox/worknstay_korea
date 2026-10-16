@@ -20,7 +20,7 @@ Two related rejections, logged here since they inform the numbers below:
 
 ## 2. Historical background: why `arrange=P` and a curated whitelist
 
-- The feed originally used `arrange=Q` (KTO's documented code, modified-date) — this surfaces 
+- The feed originally used `arrange=Q` (KTO's documented code, modified-date) — this surfaces
   whatever a KTO editor last touched, not popular landmarks. Switched to the undocumented but stable
  `arrange=P` (real view-count order).
 - Even under the correct sort, a live measurement on Seoul (`lDongRegnCd 11`, `contentTypeId 76`)
