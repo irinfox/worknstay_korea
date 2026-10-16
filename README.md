@@ -21,10 +21,10 @@ long-term residency vs. one-off tourism in population-declining regions.
 
 ## What it does
 
-- **Eligibility calculator** — walks through the actual F-1-D income rules (which differ by age,
-  region, and family status) and greys out regions the user doesn't qualify for on an interactive
-  map. Gyeonggi-do's officially designated population-decline counties are counted as qualifying
-  for the lower, non-capital threshold, so the region shows as partly eligible.
+- **Eligibility calculator** — applies the actual F-1-D income rules (by age, family status and
+  capital vs. non-capital area) and shows the result on an interactive map: eligible in
+  every region, eligible in the regions outside the capital area plus partly eligible in
+  Gyeonggi-do, or not eligible, with every region greyed out.
 - **Region pages** — workation cities with rental prices, co-working spaces, study cafés, and
   getting-around info for each of Korea's six regions.
 - **Live attractions & festivals** — fetched from the KTO English Tourism Information OpenAPI on
