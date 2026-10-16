@@ -163,7 +163,8 @@ region hero or food gallery).
 a count and level, or a degraded marker. `Cache-Control: no-store`
 (Kakao® terms forbid caching or storing results). Results are filtered by address rules from
 `cities.json` `studyCafeSearch`; above Kakao®'s 45-result cap the count is scaled from
-`total_count`. The client is all-or-nothing per page and falls back to the editorial
+`total_count`. The client retries network and 5xx errors once, but not quota (429) or other 4xx
+errors. It is all-or-nothing per page and falls back to the editorial
 `otherWorkspaces[].fallbackLevel`; level thresholds live in `studyCafeLevels.json`.
 
 **Attraction ordering:** the server orders per region (`regions.json` `attractionPriority`); a

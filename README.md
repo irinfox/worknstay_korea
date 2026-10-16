@@ -67,17 +67,16 @@ In both cases, the keys live only in the Cloudflare environment or local `.env`.
 Each city card shows a 4-cell battery for study-café density.
 
 - **Live:** a Pages Function searches `<city> 스터디카페` via the Kakao® Local keyword search,
-  keeps results whose category/name match and whose address is in that city (the search spills
+  filters results whose category/name match and whose address is in that city (the search spills
   into neighbouring cities), and maps the count to a level. Kakao® caps any query at 45
   retrievable results; past that, the count is estimated by scaling Kakao®'s `total_count` by the
   share of retrieved results that passed the filter. Cards show "loading…" while calls are in
-  flight; network and 5xx errors are retried once, quota (429) and other 4xx errors are not.
+  flight.
 - **Thresholds** (`src/_data/studyCafeLevels.json`): 0 → none (0 cells), 1–9 → a few (1),
   10–29 → good (2), 30–99 → lots (3), 100+ → plenty (4).
-- **Fallback:** each city carries an editorial `fallbackLevel` in `src/_data/cities.json`,
-  estimated by hand on Naver Map. It is all-or-nothing per region page: if any city's live call
-  fails (or no Kakao® key is set), every card on that page shows its fallback level plus a note
-  that the data is a manual editorial estimate.
+- **Fallback:** all-or-nothing per region page. If any city's live call fails (or no Kakao® key
+  is set), every card on that page shows its fallback level plus a note that the data is a manual
+  editorial estimate. Editorial levels are estimated by hand on Naver Map.
 
 ## Getting started
 
