@@ -54,7 +54,7 @@ maintaining this solo:
   runs Pages Functions locally and deploys
 
 Versions are pinned (`package-lock.json`, `.nvmrc`, `engines`), with no automated dependency bumps.
-See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the full breakdown of the stack, data models, and
+See [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the full breakdown of the stack, data models, and
 known quirks of the KTO API.
 
 ## Why the API calls are live
@@ -149,10 +149,10 @@ notes/                  Research notes and raw reference data (not part of the b
 
 ## Project docs
 
-- [`ARCHITECTURE.md`](./ARCHITECTURE.md) — stack, folder structure, data models, and KTO
+- [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind the notable decisions
-- [`DESIGN.md`](./DESIGN.md) — visual/design conventions (palette, type, spacing, components)
-- [`ROADMAP_TODO.md`](./ROADMAP_TODO.md) — phase-by-phase feature checklist
+- [`DESIGN.md`](./docs/DESIGN.md) — visual/design conventions (palette, type, spacing, components)
+- [`ROADMAP_TODO.md`](./docs/ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest
   constraints, workflow rules, tech-stack conventions)
 - [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of the

@@ -3,8 +3,8 @@
 English-language web service helping Digital Nomad Visa (F-1-D) applicants find and settle in a
 non-capital Korean region. Solo-developer MVP for the 2026 관광데이터 활용 공모전
 (②-2 웹·앱 구현 부문), Designated Task #4 (sustainable long-term residency vs. one-off tourism
-in population-declining regions). See `ARCHITECTURE.md` for full technical detail — this file is
-the durable, brief set of project-scope agreements.
+in population-declining regions). See `docs/ARCHITECTURE.md` for full technical detail — this
+file is the durable, brief set of project-scope agreements.
 
 ## Contest constraints (do not violate)
 
@@ -44,7 +44,7 @@ the durable, brief set of project-scope agreements.
   CLAUDE.md rule numbers in code comments — name the doc and state the decision instead.
 
 ## Design conventions
-Follow DESIGN.md for all visual decisions (palette, type, spacing, component rules).
+Follow docs/DESIGN.md for all visual decisions (palette, type, spacing, component rules).
 
 ## UX decisions
 
