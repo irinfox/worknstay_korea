@@ -121,8 +121,9 @@ Site enhancement ideas, not scheduled.
   into indicators, giving an intuitive comparison standard.
 - **More dynamic leisure options.** Link in KTO leisure-sports and experience-tourism data
   (and the Go Camping API, formerly "nature activities").
-- **"Expectation vs. reality" feedback.** Simple form collecting a match rate, to build trust
-  through community verification.
+- ~~**"Expectation vs. reality" feedback.** Simple form collecting a match rate, to build trust
+  through community verification.~~ Done: Tally feedback form in the footer (error reports, city
+  and workspace reviews with star ratings, general feedback).
 - **Interactive event calendar.** Month-to-month navigation and hover detail on event days, on
   top of the current timeline list.
 - **UX testing & validation.** Perform a UX test with several respondents.
