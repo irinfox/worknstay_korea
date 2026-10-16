@@ -95,6 +95,7 @@ map are revealed on hover/tap (`region-detail-map.js`).
 ```
 functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
                     city/[slug]/study-cafes.js              Kakao® proxy
+                    _middleware.js                          X-Robots-Tag: noindex on /api/*
                     lib/                                    KTO/Kakao clients, normalizers,
                                                             region/city maps, attraction fan-out
                                                             + top-picks boost

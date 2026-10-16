@@ -149,6 +149,8 @@ src/regions/            Per-region pages (paginated from _data/regions.json)
   usage
 - [`docs/contest-functional-spec.pdf`](./docs/contest-functional-spec.pdf) — the functional
   specification submitted to the contest, in Korean
+- [`.claude/agents/website-architect.md`](./.claude/agents/website-architect.md) — the Claude Code
+  subagent used for planning the site's architecture
 
 ## License / credits
 

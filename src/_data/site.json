@@ -2,7 +2,7 @@
   "name": "worknstay korea",
   "tagline": "Work from Korea. Stay where it suits you.",
   "dataDates": { "studyCafes": "2026-10" },
-  "noindex": true,
+  "url": "https://worknstay-korea.com",
   "nav": [
     { "label": "Regions", "href": "/#map" },
     { "label": "Visa info", "href": "/visa-info/" },

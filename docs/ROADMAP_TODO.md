@@ -93,7 +93,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [x] refactor pass: code + docs (ARCHITECTURE.md / ROADMAP) — drop anything stale
 - [x] refactor pass: DESIGN.md (design audit)
 - [x] refactor pass: README.md
-- [ ] Remove `robots.txt` + flip `site.json`'s `noindex` to `false` (added Phase 19)
+- [x] Allow indexing: `robots.txt` disallows only `/api/`, sitemap + canonical URLs, `noindex`
+      header on API responses
 - [x] Publish: change repository visibility to public.
 
 
@@ -120,8 +121,9 @@ Site enhancement ideas, not scheduled.
   into indicators, giving an intuitive comparison standard.
 - **More dynamic leisure options.** Link in KTO leisure-sports and experience-tourism data
   (and the Go Camping API, formerly "nature activities").
-- **"Expectation vs. reality" feedback.** Simple form collecting a match rate, to build trust
-  through community verification.
+- ~~**"Expectation vs. reality" feedback.** Simple form collecting a match rate, to build trust
+  through community verification.~~ Done: Tally feedback form in the footer (error reports, city
+  and workspace reviews with star ratings, general feedback).
 - **Interactive event calendar.** Month-to-month navigation and hover detail on event days, on
   top of the current timeline list.
 - **UX testing & validation.** Perform a UX test with several respondents.

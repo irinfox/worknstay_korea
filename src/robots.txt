@@ -1,2 +1,4 @@
 User-agent: *
-Disallow: /
+Allow: /
+Disallow: /api/
+Sitemap: https://worknstay-korea.com/sitemap.xml
