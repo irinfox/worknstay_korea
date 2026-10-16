@@ -12,6 +12,9 @@ Kakao® Local.
 
 **Live site: <https://worknstay-korea.com/>**
 
+![Homepage: eligibility calculator over the hero photo](./docs/homepage-hero.png)
+![Homepage: interactive region map with the six region cards](./docs/homepage-regions.png)
+
 Built solo for the 2026 [관광데이터 활용 공모전](https://api.visitkorea.or.kr/#/cntSearchDetail?no=3)
 (Tourism Data Utilization Contest), ②-2 웹·앱 구현 부문, Designated Task #4 — sustainable
 long-term residency vs. one-off tourism in population-declining regions.
@@ -155,6 +158,8 @@ notes/                  Research notes and raw reference data (not part of the b
 - [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of the
   optimal KTO calls per region
 - [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and usage
+- [`docs/contest-functional-spec.pdf`](./docs/contest-functional-spec.pdf) — the functional
+  specification submitted to the contest, in Korean
 
 ## License / credits
 
