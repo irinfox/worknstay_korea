@@ -2,55 +2,39 @@
 
 Status: **draft v0.4** · Owner: Irina
 
-This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen (§10). Any new or renamed event is added here before it is added to code.
+This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
 ---
 
 ## 1. Questions
 
-### Calculator
-| # | Question |
-|---|---|
-| Q1 | How are calculator outcomes distributed (`all_regions` / `non_capital_plus_decline` / `none`), and how does that vary by age, income, family and country? |
-| Q2 | What do people do after getting a result — open a region, the population-decline page, Visa info, an official source? (Is the calculator useful?) |
-| Q3 | Do people try many scenarios with the calculator? |
-| Q4 | Do people notice that the map reacted to the result and scroll to it? |
-
-### Navigation
-| # | Question |
-|---|---|
-| Q5 | Is the sticky section nav used, and which sections? |
-| Q6 | Main nav "Regions" leads to `/#map`, not the top of the home page — do people scroll up right after landing (expecting the top)? |
-| Q7 | Do people go beyond region pages (Visa info, Settling in, About)? How do they reach the population-decline page? |
-| Q8 | Do people view more than one region page in a row? |
-
-### Map UX
-| # | Question |
-|---|---|
-| Q9 | Desktop: do people hover over the map (some pins appear only on hover)? |
-| Q10 | Touch devices: tapping a region scrolls to its card instead of opening it — do people understand this (repeated taps vs. opening the card)? |
-| Q11 | Do people click the non-interactive vibe tags (expecting filters or search)? |
-
-### Content usefulness
-| # | Question |
-|---|---|
-| Q12 | Which outbound content is used: guides, coworkings, study-café search, colivings, rental platforms, communities, food, official sources? Clicks on official sources are the **main conversion proxy**. |
-| Q13 | Do people scroll through the city cards on region pages? Which cities are seen? |
-| Q14 | Are festival tabs and paging, place filters, the highlights carousel and the price-snapshot table used? |
-| Q15 | Which FAQ questions on Visa info are opened most? |
-| Q16 | How interested are people in the creator and the source: About, GitHub, Feedback? |
-| Q16a | Do people read the long pages (Visa info, Settling in, region pages) to the end, or drop off early? |
-
-### Acquisition
-| # | Question |
-|---|---|
-| Q17 | Where does traffic come from (search, Reddit, contest page, direct)? |
-
-### Infrastructure & quality
-| # | Question |
-|---|---|
-| Q18 | How often do KTO / Kakao calls fail or hit the quota (per day, per region), how often is fallback shown, and how slow are the calls? |
-| Q19 | Are there device- or browser-specific bugs (JS errors, 404s)? |
+| # | Question | Type |
+|---|---|---|
+| Q1 | Do people use the calculator at all? Or go directly to map / visa / settling in page? Do they drop-off without checking eligibility? | Product |
+| Q2 | How are calculator outcomes distributed (`all_regions` / `non_capital_plus_decline` / `none`), and how does that vary by age, income, family and country? (user profile) | Product |
+| Q3 | What do people do after getting a result — open a region, Visa info, leave site? (Is the calculator useful?)  **Main site metric: calc -> region**. | Product |
+| Q4 | Do people go beyond region pages (Visa info, Settling in, About)? | Product |
+| Q5 | Which sections on region pages get the most engagement (manual stay data - rents, cities - vs automated leisure data - events, attractions)? | Content |
+| Q6 | Which outbound content is used: guides, coworkings, study-café search, rental platforms, communities, colivings, food, official sources? | Content |
+| Q7 | Which FAQ questions on Visa info are opened most? | Content |
+| Q8 | Do people read the long pages (Visa info, Settling in, region pages) to the end, or drop off early? | Content |
+| Q9 | Do people try many scenarios ("play") with the calculator? | Behaviour |
+| Q10 | Do people view more than one region page in a row? | Behaviour |
+| Q11 | How interested are people in the creator and the source: About, GitHub, Feedback? | Brand |
+| Q12 | Do people notice that the map reacted to the result and scroll to it? | UX |
+| Q13 | Is the sticky section nav used, and which sections? | UX |
+| Q14 | Main nav "Regions" leads to `/#map`, not the top of the home page — do people scroll up right after landing (expecting the top)? | UX |
+| Q15 | How do people reach the population-decline page? (Gyeonggi-do breadcrumb, calc notice, region notice, partial map results) | UX |
+| Q16 | Desktop: do people hover over the regional map (some pins appear only on hover)? | UX |
+| Q17 | Desktop: do people hover over the national map (hovering it highlights region area and region card)? | UX |
+| Q18 | Desktop: how do people reach region page (click on map region, click on region card)? | UX |
+| Q19 | Touch devices: tapping a region scrolls to its card instead of opening it — do people understand this (repeated taps vs. opening the card)? | UX |
+| Q20 | Do people click non-interactive elements (vibe tags, attractions, events) expecting links, filters, or search? | UX |
+| Q21 | Do people scroll through galleries (highlights, cities, attractions, food)? | UX |
+| Q22 | Are festival tabs and paging, place filters, the highlights carousel and the price-snapshot table on Settling in used? | UX |
+| Q23 | Where does traffic come from (search, Reddit, instagram, direct)? | Acquisition |
+| Q24 | How often do KTO / Kakao calls fail or hit the quota (per day, per region), how often is fallback shown, and how slow are the calls? | Infra |
+| Q25 | Are there device- or browser-specific bugs (JS errors)? | Infra |
 
 ---
 
@@ -63,9 +47,9 @@ This document is the single source of truth for analytics on the site. It is too
 - Region-to-region journeys (Q8) are measured **without IDs**, from the same-origin `document.referrer` → `prev_page_type` (§3).
 - Country is derived by Cloudflare at the edge (`request.cf.country`). The IP address is used by Cloudflare to determine the country but never reaches our data.
 - Device category and bot flag are derived server-side from the User-Agent; only the derived value is stored.
-- The calculator copy "Nothing is stored" must be replaced with an accurate statement before tracking ships.
+- The calculator copy should inform the user that inputs are used anonymously for site analytics.
 
-**Why no session ID:** anonymous events with no identifier and nothing written to the device are not linkable to a person and need no consent banner. A session ID stored on the device (even in sessionStorage) is device storage for a non-essential purpose and makes events linkable, which in the EU generally requires consent. Both options require an honest privacy note; only the ID option is likely to require a banner.
+**Why no session / user ID:** anonymous events with no identifier and nothing written to the device are not linkable to a person and need no consent banner. A session ID stored on the device (even in sessionStorage) is device storage for a non-essential purpose and makes events linkable, which in the EU (GDPR) and RK (PIPA) generally requires prior user consent.
 
 ---
 
@@ -83,7 +67,6 @@ This document is the single source of truth for analytics on the site. It is too
 | `prev_page_type` | text | `region` / `home` / … / `external` / `none` | from same-origin `document.referrer` |
 | `page_load_id` | text (UUID) | — | in memory only |
 | `device_category` | text | `mobile` / `tablet` / `desktop` | server-side |
-| `viewport_bucket` | text | `<480` / `480–767` / `768–1023` / `1024–1439` / `1440+` | |
 | `country` | text | `US` | Cloudflare |
 | `browser_lang` | text | `en` | primary subtag only |
 | `is_likely_bot` | bool | `false` | simple server-side heuristic |
@@ -95,10 +78,10 @@ All "click" events also fire on tap: browsers emit `click` for taps. `device_cat
 
 ## 4. Buckets
 
-**Age** — split exactly at the visa boundary (35):
+**Age** — the visa boundary is 35, so it makes sense to use smaller buckets first:
 `<18` · `18–24` · `25–29` · `30–34` · `35–39` · `40–49` · `50+` · `invalid`
 
-**Income** — stored as a **share of the GNI reference value**, never in won.
+**Income** — stored as a **share of the GNI reference value**, never as an exact amount.
 `share = income_krw / gni_krw`, computed with the same GNI value the calculator uses, with **no rounding before bucketing**.
 Buckets are lower-inclusive, upper-exclusive `[a, b)`:
 `<0.02` · `0.02–0.5` · `0.5–1` · `1–1.25` · `1.25–1.5` · `1.5–2` · `2–2.5` · `2.5+` · `invalid`
@@ -109,6 +92,10 @@ Each event also stores `gni_year` (§9), so buckets stay comparable when GNI cha
 ---
 
 ## 5. Events — calculator & home map
+
+### calculator_interaction_started — Q1
+Fired exactly once per page load when the user focuses on any calculator input field or clicks a checkbox. Used as the top of the calculator funnel.
+No params.
 
 ### `calculator_submitted` — Q1, Q3
 | Param | Type | Values / example |
@@ -122,7 +109,7 @@ Each event also stores `gni_year` (§9), so buckets stay comparable when GNI cha
 
 `under_18`: a valid age below the visa minimum — the calculator shows the "must be 18 or older" notice instead of a map result.
 
-Analysis rule: `attempt_no = 1` for outcome statistics (Q1); `max(attempt_no)` per page load for Q3.
+Analysis rule: `attempt_no = 1` for outcome statistics (Q1); `max(attempt_no)` per page load for Q9.
 
 ### `calculator_input_error` — Q1, Q19
 Fired when the calculator asks the user to complete the form instead of showing a result. (Letters cannot be typed; a negative income is ignored; a negative age is converted to its absolute value — none of these produce an error.)
@@ -155,7 +142,7 @@ Fired once per region per page load, after ≥300 ms of hover.
 | `region` | text | `gangwon-do` |
 | `tap_no` | int | taps on this region in this page load; repeated taps signal confusion |
 
-Interpretation: a `map_region_tap` followed by `region_link_click` with `source = home_card` for the same region means the behaviour was understood.
+Interpretation: a `map_region_tap` followed by `region_link_click` with `source = home_card` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
 
 ---
 
