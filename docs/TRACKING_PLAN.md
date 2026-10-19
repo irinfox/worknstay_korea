@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.2** · Owner: Irina
+Status: **draft v0.4** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen (§10). Any new or renamed event is added here before it is added to code.
 
@@ -39,6 +39,7 @@ This document is the single source of truth for analytics on the site. It is too
 | Q14 | Are festival tabs and paging, place filters, the highlights carousel and the price-snapshot table used? |
 | Q15 | Which FAQ questions on Visa info are opened most? |
 | Q16 | How interested are people in the creator and the source: About, GitHub, Feedback? |
+| Q16a | Do people read the long pages (Visa info, Settling in, region pages) to the end, or drop off early? |
 
 ### Acquisition
 | # | Question |
@@ -100,7 +101,8 @@ All "click" events also fire on tap: browsers emit `click` for taps. `device_cat
 **Income** — stored as a **share of the GNI reference value**, never in won.
 `share = income_krw / gni_krw`, computed with the same GNI value the calculator uses, with **no rounding before bucketing**.
 Buckets are lower-inclusive, upper-exclusive `[a, b)`:
-`<0.5` · `0.5–1` · `1–1.25` · `1.25–1.5` · `1.5–2` · `2–2.5` · `2.5+` · `invalid`
+`<0.02` · `0.02–0.5` · `0.5–1` · `1–1.25` · `1.25–1.5` · `1.5–2` · `2–2.5` · `2.5+` · `invalid`
+`<0.02` (under ~1M KRW a year) is implausible and flags likely input mistakes, e.g. an amount typed in USD or in thousands. A high share here is a UX signal (input mask, currency hint).
 Example: income exactly equal to 1 × GNI → `1–1.25`.
 Each event also stores `gni_year` (§9), so buckets stay comparable when GNI changes.
 
@@ -213,6 +215,13 @@ Fired once per city per page load when ≥50% of the card is visible. Works on d
 | `region` | text | `gangwon-do` |
 | `city` | text | `sokcho` |
 | `position` | int | order of the card on the page (1-based) |
+
+### `section_seen` — Q16a
+Fired once per section per page load when the section heading enters the viewport. Sections (not scroll percentages) are used because percentages depend on screen size.
+| Param | Type | Values |
+|---|---|---|
+| `section` | text | Region pages: `highlights` / `map` / `cities` / `rent` / `events` / `places` / `dishes` / `prev_next` · Visa info: `eligibility` / `income_table` / `documents` / `notes` / `questions` / `links` · Settling in: `renting` / `short_term` / `colivings` / `places_to_work` / `search_notes` / `communities` / `links` |
+| `seconds_since_load_bucket` | text | `<10` / `10–30` / `30–120` / `120+` |
 
 ### `vibe_tag_click` — Q11
 Clicks on non-interactive tags (dead-click detector).
@@ -378,5 +387,6 @@ Test checklist before merging:
 | Date | Version | Change |
 |---|---|---|
 | 2026-10-17 | 0.1 | First draft |
+| 2026-10-17 | 0.4 | `<0.02` income bucket for implausible inputs; `section_seen` on Visa info, Settling in and region pages |
 | 2026-10-17 | 0.3 | Calculator validation matched to actual behaviour (`under_18` result, `empty` / `zero` errors); region → map → region path; data retention wording clarified |
 | 2026-10-17 | 0.2 | Questions rewritten around actual calculator logic (ternary result); nav questions split; added map hover/tap, city cards, guides, About/GitHub/Feedback, price snapshot; region entry sources corrected; source tracked at click time instead of `?from=`; `with_family`; param types; bucket boundaries defined; Q8 via referrer instead of session ID; single release; implementation options A/B |
