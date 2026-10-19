@@ -9,6 +9,7 @@ import eventsSnapshot from "../../../../src/_data/eventsSnapshot.json";
 import { fetchKtoAllPages } from "../../lib/kto-client.mjs";
 import { normalizeEvent } from "../../lib/normalize.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
+import { latencyBucket, logApiCall } from "../../lib/tracking.mjs";
 
 // Responses are never cached (every view is a live call); the dev cache lives in kto-client.
 const NO_STORE = { headers: { "Cache-Control": "no-store" } };
@@ -18,14 +19,21 @@ function queryStartDate() {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Seoul" }).format(new Date()).replaceAll("-", "");
 }
 
-export async function onRequestGet({ params, env }) {
+export async function onRequestGet(context) {
+  const { params, env } = context;
   const { slug } = params;
+  const startedAt = Date.now();
+  const trace = { retried: false };
 
   if (!isValidSlug(slug)) {
     return Response.json({ error: "Unknown region" }, { status: 404 });
   }
 
   if (!env?.KTO_API_KEY) {
+    logApiCall(context, {
+      endpoint: "kto_festivals", region: slug, status: "skipped_no_key", retried: false,
+      fallback_served: true, latency_ms_bucket: latencyBucket(0),
+    });
     return Response.json({
       items: eventsSnapshot.items.filter((e) => e.regionSlug === slug),
       quotaExceeded: false,
@@ -48,6 +56,7 @@ export async function onRequestGet({ params, env }) {
           // more rows per call is free, a second page is a whole extra live call).
           numOfRows: 100,
           maxPages: 1,
+          trace,
         }
       )
     )
@@ -79,5 +88,13 @@ export async function onRequestGet({ params, env }) {
   // Only when every slice failed does the page say so; a partial failure shows what came back.
   const liveFailed = !quotaExceeded && codes.length > 0 && failedSlices === codes.length;
   const items = quotaExceeded ? [] : [...byContentId.values()];
+  logApiCall(context, {
+    endpoint: "kto_festivals",
+    region: slug,
+    status: quotaExceeded ? "quota" : liveFailed ? "error" : items.length ? "ok" : "empty",
+    retried: trace.retried,
+    fallback_served: false, // failures serve an empty list + notice, never the snapshot
+    latency_ms_bucket: latencyBucket(Date.now() - startedAt),
+  });
   return Response.json({ items, quotaExceeded, liveFailed }, NO_STORE);
 }

@@ -1,4 +1,8 @@
 import { calculateEligibility } from "./eligibility.js";
+import { ageBucket, incomeGniBucket, resultName } from "./tracking-buckets.js";
+import {
+  attemptCount, nextAttemptNo, setCalcResult, track, watchMapAfterSubmit,
+} from "./tracker.js";
 
 const MILLION = 1_000_000;
 
@@ -290,8 +294,38 @@ export function init(onResult = () => {}) {
   const referenceData = readReferenceData();
   const fieldValidity = bindFieldValidityMarking(form);
 
+  // Analytics only ever sees buckets (tracking-buckets.js), never the typed age or income.
+  function trackSubmission(userInput, result) {
+    setCalcResult(result);
+    track("calculator_submitted", {
+      attempt_no: nextAttemptNo(),
+      age_bucket: ageBucket(userInput.age),
+      income_gni_bucket: incomeGniBucket(userInput.salaryKrw, referenceData.rules.gniPerCapitaKrw),
+      with_family: userInput.hasFamily,
+      gni_year: referenceData.rules.gniReferenceYear,
+      result,
+    });
+    watchMapAfterSubmit(result);
+  }
+
+  // A complete form that fails (under the minimum age) is a real answer; anything else is an input error.
+  function trackFailure(userInput, rawInput, complete) {
+    if (complete) {
+      trackSubmission(userInput, "under_18");
+      return;
+    }
+    setCalcResult("none_calculated");
+    const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0 || !Number.isFinite(userInput.salaryKrw);
+    const ageMissing = rawInput.ageRaw.trim() === "";
+    const zero = userInput.salaryKrw === 0 || (salaryMissing && rawInput.salaryRaw.trim() !== "");
+    track("calculator_input_error", {
+      field: salaryMissing && ageMissing ? "both" : salaryMissing ? "income" : "age",
+      reason: salaryMissing && zero ? "zero" : "empty",
+    });
+  }
+
   // markInvalid: true only for a real submit, so no field is painted red before the visitor acts.
-  function computeAndRender(userInput, { markInvalid = false } = {}) {
+  function computeAndRender(userInput, { markInvalid = false, trackSubmit = false } = {}) {
     resultEl.hidden = true;
 
     const rawInput = { salaryRaw: form.elements.salaryKrw.value, ageRaw: form.elements.age.value };
@@ -299,6 +333,7 @@ export function init(onResult = () => {}) {
     const validationMessage = validate(userInput, rawInput, referenceData.rules.additionalFacts.minApplicantAge);
     if (validationMessage) {
       const complete = hasReadableInput(userInput, rawInput);
+      if (trackSubmit) trackFailure(userInput, rawInput, complete);
       renderError(resultEl, validationMessage, complete);
       // An incomplete form (nothing typed yet, or cleared back to blank) isn't a real "not
       // eligible" answer — it's "no check has run," which is the same un-gated map the site
@@ -309,6 +344,7 @@ export function init(onResult = () => {}) {
     }
 
     const result = calculateEligibility(userInput, referenceData);
+    if (trackSubmit) trackSubmission(userInput, resultName(result.tier));
     renderCaption(resultEl, result);
     onResult(result, referenceData);
     return true;
@@ -324,7 +360,7 @@ export function init(onResult = () => {}) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const userInput = readUserInput(form);
-    computeAndRender(userInput, { markInvalid: true });
+    computeAndRender(userInput, { markInvalid: true, trackSubmit: true });
     if (cardEl) scrollResultIntoView(cardEl, resultEl);
   });
 
@@ -333,6 +369,8 @@ export function init(onResult = () => {}) {
       // Clearing the map without clearing the form was worse than doing nothing — the age/salary
       // fields stayed filled with e.g. "17", so every region reading as open now looked like the
       // site was claiming a 17-year-old is eligible everywhere, rather than "no check is active."
+      track("calculator_cleared", { attempts_before_clear: attemptCount() });
+      setCalcResult("none_calculated");
       form.reset();
       fieldValidity.clear();
       resultEl.hidden = true;

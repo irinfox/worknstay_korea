@@ -67,7 +67,9 @@
       "title": "Forms and tools",
       "links": [
         { "label": "Official application forms", "url": "https://www.hikorea.go.kr/board/BoardApplicationListR.pt?page=1", "source": "hikorea.go.kr" },
-        { "label": "Official office for Korean HWP/HWPX files", "url": "https://www.hancomdocs.com/", "source": "hancomdocs.com" }
+        { "label": "Official office for Korean HWP/HWPX files", "url": "https://www.hancomdocs.com/", "source": "hancomdocs.com",
+          "linkCategory": "other"
+        }
       ]
     },
     {

@@ -33,7 +33,7 @@ permalink: "/about/"
         <h3>{{ card.title }}</h3>
         <p>{{ card.body }}</p>
         {% if card.link %}
-        <a class="about-why__card-link" href="{{ card.link.url }}" target="_blank" rel="noopener">{{ card.link.label }} ↗</a>
+        <a class="about-why__card-link" href="{{ card.link.url }}" data-link-category="other" data-link-id="{{ card.link.label | linkId }}" data-link-section="about_why" target="_blank" rel="noopener">{{ card.link.label }} ↗</a>
         {% endif %}
       </article>
       {% endfor %}

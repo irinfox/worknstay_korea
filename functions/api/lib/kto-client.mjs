@@ -104,9 +104,11 @@ function extractItems(body) {
  *   plus numOfRows/pageNo for paging.
  * @param {{ KTO_API_KEY?: string, KTO_DEV_CACHE?: string, KTO_DEV_FORCE_QUOTA?: string }} env -
  *   the two KTO_DEV_* flags are dev-only: in-memory cache, and forced quota-exceeded result.
+ * @param {{ retried?: boolean }} [trace] - optional out-param; `retried` is set when any attempt was repeated
+ *   (used by analytics api_call logging, never read here).
  * @returns {Promise<{ items: object[], degraded: boolean, totalCount: number, quotaExceeded: boolean }>}
  */
-export async function fetchKto(endpoint, params, env) {
+export async function fetchKto(endpoint, params, env, trace) {
   const serviceKey = env?.KTO_API_KEY;
   if (!serviceKey) return DEGRADED;
 
@@ -124,6 +126,7 @@ export async function fetchKto(endpoint, params, env) {
   }
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    if (attempt > 0 && trace) trace.retried = true;
     let response;
     try {
       if (devCacheEnabled) logDevSessionCall();
@@ -194,14 +197,14 @@ export async function fetchKtoAllPages(
   endpoint,
   params,
   env,
-  { numOfRows = 20, maxPages = 5 } = {}
+  { numOfRows = 20, maxPages = 5, trace } = {}
 ) {
   const items = [];
   let pageNo = 1;
   let totalCount = Infinity;
 
   while (pageNo <= maxPages && items.length < totalCount) {
-    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env);
+    const page = await fetchKto(endpoint, { ...params, numOfRows, pageNo }, env, trace);
     if (page.degraded) return { items: [], degraded: true, totalCount: 0, quotaExceeded: page.quotaExceeded };
 
     items.push(...page.items);

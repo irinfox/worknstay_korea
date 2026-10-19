@@ -4,10 +4,10 @@
   "dataDates": { "studyCafes": "2026-10" },
   "url": "https://worknstay-korea.com",
   "nav": [
-    { "label": "Regions", "href": "/#map" },
-    { "label": "Visa info", "href": "/visa-info/" },
-    { "label": "Settling in", "href": "/settling-in/" },
-    { "label": "About", "href": "/about/" }
+    { "id": "regions", "label": "Regions", "href": "/#map" },
+    { "id": "visa", "label": "Visa info", "href": "/visa-info/" },
+    { "id": "settling", "label": "Settling in", "href": "/settling-in/" },
+    { "id": "about", "label": "About", "href": "/about/" }
   ],
   "footer": {
     "repoUrl": "https://github.com/irinfox/worknstay_korea",

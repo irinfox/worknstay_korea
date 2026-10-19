@@ -11,6 +11,7 @@ import { fetchRegionAttractions } from "../../lib/attraction-fetch.mjs";
 import { isValidSlug, slugToLDongRegnCds } from "../../lib/region-map.mjs";
 import { citySlugFor } from "../../lib/city-map.mjs";
 import { boostCuratedPicks } from "../../lib/boost-curated.mjs";
+import { latencyBucket, logApiCall } from "../../lib/tracking.mjs";
 
 // Responses are never cached (every view is a live call); the dev cache lives in kto-client.
 const NO_STORE = { headers: { "Cache-Control": "no-store" } };
@@ -24,8 +25,11 @@ function sortByRegionPriority(items, slug) {
   items.sort((a, b) => rank(a.category) - rank(b.category));
 }
 
-export async function onRequestGet({ params, env }) {
+export async function onRequestGet(context) {
+  const { params, env } = context;
   const { slug } = params;
+  const startedAt = Date.now();
+  const trace = { retried: false };
 
   if (!isValidSlug(slug)) {
     return Response.json({ error: "Unknown region" }, { status: 404 });
@@ -35,6 +39,10 @@ export async function onRequestGet({ params, env }) {
 
   if (!env?.KTO_API_KEY) {
     sortByRegionPriority(regionTopPicks, slug);
+    logApiCall(context, {
+      endpoint: "kto_attractions", region: slug, status: "skipped_no_key", retried: false,
+      fallback_served: true, latency_ms_bucket: latencyBucket(0),
+    });
     return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true }, NO_STORE);
   }
 
@@ -44,7 +52,7 @@ export async function onRequestGet({ params, env }) {
   let liveFailed = false;
   if (codes.length) {
     let failed;
-    ({ items, quotaExceeded, failed } = await fetchRegionAttractions(slug, codes, env, citySlugFor));
+    ({ items, quotaExceeded, failed } = await fetchRegionAttractions(slug, codes, env, citySlugFor, undefined, trace));
     liveFailed = failed && !quotaExceeded;
 
     // Any live call failed (quota included): serve top picks rather than a partial gallery. The
@@ -66,5 +74,13 @@ export async function onRequestGet({ params, env }) {
   // this leaked into "All" no matter how it was implemented, since there's only one array to sort.
   sortByRegionPriority(items, slug);
 
+  logApiCall(context, {
+    endpoint: "kto_attractions",
+    region: slug,
+    status: quotaExceeded ? "quota" : liveFailed ? "error" : items.length ? "ok" : "empty",
+    retried: trace.retried,
+    fallback_served: quotaExceeded || liveFailed,
+    latency_ms_bucket: latencyBucket(Date.now() - startedAt),
+  });
   return Response.json({ items, quotaExceeded, liveFailed }, NO_STORE);
 }
