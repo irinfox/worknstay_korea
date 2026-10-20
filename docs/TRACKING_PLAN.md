@@ -12,7 +12,7 @@ This document is the single source of truth for analytics on the site. It is too
 |---|---|---|
 | Q1 | Do people use the calculator at all? Or go directly to map / visa / settling in page? Do they drop-off without checking eligibility? | Product |
 | Q2 | How are calculator outcomes distributed (`all_regions` / `non_capital_plus_decline` / `none`), and how does that vary by age, income, family and country? (user profile) | Product |
-| Q3 | What do people do after getting a result — open a region, Visa info, leave site? (Is the calculator useful?)  **Main site metric: calc -> region**. | Product |
+| Q3 | What do people do after getting a result — open a region, Visa info, leave site? **Main site metric: calc -> region**. | Product |
 | Q4 | Do people go beyond region pages (Visa info, Settling in, About)? | Product |
 | Q5 | Which sections on region pages get the most engagement (manual stay data - rents, cities - vs automated leisure data - events, attractions)? | Content |
 | Q6 | Which outbound content is used: guides, coworkings, study-café search, rental platforms, communities, colivings, food, official sources? | Content |
@@ -34,7 +34,7 @@ This document is the single source of truth for analytics on the site. It is too
 | Q22 | Are festival tabs and paging, place filters, the highlights carousel and the price-snapshot table on Settling in used? | UX |
 | Q23 | Where does traffic come from (search, Reddit, instagram, direct)? | Acquisition |
 | Q24 | How often do KTO / Kakao calls fail or hit the quota (per day, per region), how often is fallback shown, and how slow are the calls? | Infra |
-| Q25 | Are there device- or browser-specific bugs (JS errors)? | Infra |
+| Q25 | Are there device- or browser-specific bugs (JS errors, not found page)? | Infra |
 
 ---
 
@@ -67,6 +67,7 @@ This document is the single source of truth for analytics on the site. It is too
 | `prev_page_type` | text | `region` / `home` / … / `external` / `none` | from same-origin `document.referrer` |
 | `page_load_id` | text (UUID) | — | in memory only |
 | `device_category` | text | `mobile` / `tablet` / `desktop` | server-side |
+| `viewport_bucket` | text | `<480` / `480–767` / `768–1023` / `1024–1439` / `1440+` |
 | `country` | text | `US` | Cloudflare |
 | `browser_lang` | text | `en` | primary subtag only |
 | `is_likely_bot` | bool | `false` | simple server-side heuristic |
@@ -97,7 +98,7 @@ Each event also stores `gni_year` (§9), so buckets stay comparable when GNI cha
 Fired exactly once per page load when the user focuses on any calculator input field or clicks a checkbox. Used as the top of the calculator funnel.
 No params.
 
-### `calculator_submitted` — Q1, Q3
+### `calculator_submitted` — Q1, Q2, Q9
 | Param | Type | Values / example |
 |---|---|---|
 | `attempt_no` | int | `1`, `2`, … within one page load |
@@ -109,83 +110,80 @@ No params.
 
 `under_18`: a valid age below the visa minimum — the calculator shows the "must be 18 or older" notice instead of a map result.
 
-Analysis rule: `attempt_no = 1` for outcome statistics (Q1); `max(attempt_no)` per page load for Q9.
+Analysis rule: `attempt_no = 1` for outcome statistics (Q2); `max(attempt_no)` per page load for Q9.
 
-### `calculator_input_error` — Q1, Q19
-Fired when the calculator asks the user to complete the form instead of showing a result. (Letters cannot be typed; a negative income is ignored; a negative age is converted to its absolute value — none of these produce an error.)
+### `calculator_input_error` — Q1
+Fired when the calculator asks the user to complete the form instead of showing a result. 
+(Letters cannot be typed; a negative income is ignored; a negative age is converted to its absolute value — none of these produce an error.)
 | Param | Type | Values |
 |---|---|---|
 | `field` | text | `income` / `age` / `both` |
 | `reason` | text | `empty` / `zero` |
 
-### `calculator_cleared` — Q3
+### `calculator_cleared` — Q9
 | Param | Type | Values |
 |---|---|---|
 | `attempts_before_clear` | int | number of submissions in this page load before Clear |
 
-### `map_seen_after_calculator` — Q4
-Fired once, when ≥50% of the map enters the viewport after a submission.
+### `map_seen_after_calculator` — Q3, Q12
+Fired once, when ≥50% of the map enters the viewport after the latest submission.
 | Param | Type | Values |
 |---|---|---|
 | `seconds_after_submit_bucket` | text | `<3` / `3–10` / `10–30` / `30+` |
 | `result` | text | as above |
 
-### `map_region_hover` — Q9 (pointer devices only)
-Fired once per region per page load, after ≥300 ms of hover.
+### `home_map_region_hover` — Q17 (pointer devices only)
+Fired once per region per page load, after ≥300 ms of hover. Hovering a region on the national map highlights its region card.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
 
-### `map_region_tap` — Q10 (touch devices only)
+### `home_map_region_tap` — Q19 (touch devices only)
+Fired on screens below 1024px, as it is when we re-order cards from map side to below map carousel.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
 | `tap_no` | int | taps on this region in this page load; repeated taps signal confusion |
 
-Interpretation: a `map_region_tap` followed by `region_link_click` with `source = home_card` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
+Interpretation: a `home_map_region_tap` followed by `region_link_click` with `source = home_card` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
 
 ---
 
 ## 6. Events — navigation
 
-### `page_view` — Q7, Q8, Q17
+### `page_view` — Q23
 | Param | Type | Values |
 |---|---|---|
 | `referrer_domain` | text | `reddit.com` (external referrers only) |
 | `utm_source` / `utm_medium` / `utm_campaign` | text | from the landing URL, if present |
 
-### `nav_click` — Q5, Q6
+### `nav_click` — Q4, Q5, Q11, Q13
 | Param | Type | Values |
 |---|---|---|
 | `nav` | text | `main` / `section` |
 | `item` | text | main: `logo` / `regions` / `visa` / `settling` / `about` · section (region pages): `map` / `cities` / `rent` / `events` / `places` / `dishes` · section (Visa info): `eligibility` / `documents` / `notes` / `questions` / `links` · section (Settling in): `renting` / `places_to_work` / `communities` / `links` |
+| `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
-### `regions_landing_scroll_up` — Q6
-Fired if, within 10 s after arriving at `/#map` via main nav "Regions", the user scrolls up to the hero.
+### `regions_landing_scroll_up` — Q14
+Fired if, within 10 s after arriving at `/#map` via main nav "Regions", the user scrolls up to the hero by ≥150px.
 No params.
 
-### `region_link_click` — Q2, Q7, Q8, Q10
+### `internal_link_click` — Q1, Q3, Q4, Q10, Q15, Q18
 Sent from the **source** page at click time (via `sendBeacon`, which survives navigation). URLs stay unchanged.
 | Param | Type | Values |
 |---|---|---|
-| `target` | text | region slug, or `gyeonggi_decline_areas` |
-| `source` | text | `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `settling_in_link` / `calc_partial_hint` / `home_card_partial` |
-| `calc_result` | text | the calculator result on this page load, or `none_calculated` |
+| `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` / `404` |
+| `target` | text | region slug, or link ID (`renting_intro_to_settling` / `visa_info_badge` etc ) |
+| `source` | text | `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text`|
+| `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't user calculator, `null` for pages other than home |
 
-Region → home map → another region is visible as a `region_link_click` on the home page with `prev_page_type = region`.
-
-Known routes to the population-decline page: `settling_in_link`, `region_badge` (Gyeonggi-do page), `home_card_partial`, `calc_partial_hint`. `breadcrumb` exists only on the population-decline page (back to Gyeonggi-do).
-
-### `internal_link_click` — Q2, Q7, Q16
-| Param | Type | Values (examples) |
-|---|---|---|
-| `link_id` | text | `renting_intro_to_settling` / `visa_info_badge` / `eligibility_calculator_link` / `decline_visa_info` |
+Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do page), `home_card`, `calc_partial_hint`. `breadcrumb` exists only on the population-decline page (back to Gyeonggi-do).
 
 ---
 
 ## 7. Events — content
 
-### `outbound_click` — Q2, Q12, Q16
+### `outbound_click` — Q6
 Category and id come from `data-link-category` / `data-link-id` attributes in templates — never guessed in JS.
 | Param | Type | Values |
 |---|---|---|
@@ -193,85 +191,97 @@ Category and id come from `data-link-category` / `data-link-id` attributes in te
 | `link_id` | text | stable id |
 | `domain` | text | `hikorea.go.kr` |
 | `section` | text | `visa_useful_links` / `region_guides` / `region_cities` / `region_dishes` / `settling_renting` / … |
-| `city` | text | set for links inside a city card, else empty |
+| `city` | text | set for links inside a city card, else `null` |
 
-### `city_card_seen` — Q13
-Fired once per city per page load when ≥50% of the card is visible. Works on desktop and mobile.
+### `gallery_scrolled` — Q21
+Fired once per each type gallery scroll.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
-| `city` | text | `sokcho` |
-| `position` | int | order of the card on the page (1-based) |
+| `gallery_type` | text | `highlights` / `cities` / `attractions` / `dishes` |
 
-### `section_seen` — Q16a
+### `section_seen` — Q5, Q8
 Fired once per section per page load when the section heading enters the viewport. Sections (not scroll percentages) are used because percentages depend on screen size.
 | Param | Type | Values |
 |---|---|---|
 | `section` | text | Region pages: `highlights` / `map` / `cities` / `rent` / `events` / `places` / `dishes` / `prev_next` · Visa info: `eligibility` / `income_table` / `documents` / `notes` / `questions` / `links` · Settling in: `renting` / `short_term` / `colivings` / `places_to_work` / `search_notes` / `communities` / `links` |
 | `seconds_since_load_bucket` | text | `<10` / `10–30` / `30–120` / `120+` |
 
-### `vibe_tag_click` — Q11
+### `vibe_tag_click` — Q20
 Clicks on non-interactive tags (dead-click detector).
 | Param | Type | Values |
 |---|---|---|
 | `tag` | text | `surf` |
 | `location` | text | `home_card` / `region_header` / `city_card` |
 
-### `festival_tab_switch` — Q14
+### `region_map_poi_hover` — Q16 (pointer devices only)
 | Param | Type | Values |
 |---|---|---|
+| `poi_name` | text | `sokcho` / `yangyang_beaches` |
+| `poi_type` | text | `city` / `surf_beach` / `ski_resort` |
+
+Cities and mountains are not hoverable and tapable right now.
+
+### `region_map_poi_interact` — Q16
+Fires on tap for mobile devices and on click for desktop devices
+| Param | Type | Values |
+|---|---|---|
+| `action_type` | text | `tap` / `click` |
+| `poi_name` | text | `yangyang_beaches` |
+| `poi_type` | text | `surf_beach` |
+
+### `festival_interacted` — Q22
+| Param | Type | Values |
+|---|---|---|
+| `action` | text | `tab_switch` / `month_filter` / `page_change` |
 | `tab` | text | `ongoing` / `upcoming` |
 | `region` | text | |
-
-### `festival_page_change` — Q14
-| Param | Type | Values |
-|---|---|---|
+| `month_selected` | text | |
 | `page_no` | int | |
-| `region` | text | |
 
-### `places_filter_used` — Q14
+### `places_filter_used` — Q22
 | Param | Type | Values |
 |---|---|---|
 | `filter_type` | text | `area` / `type` |
 | `value` | text | `sokcho` / `nature` |
 | `region` | text | |
 
-### `highlights_carousel_nav` — Q14
+### `highlights_carousel_nav` — Q22
 | Param | Type | Values |
 |---|---|---|
 | `direction` | text | `next` / `prev` |
 | `region` | text | |
 
-### `accordion_opened` — Q14, Q15
+### `accordion_opened` — Q7, Q22
 | Param | Type | Values |
 |---|---|---|
-| `accordion_id` | text | `price_snapshot_gangwon` / `faq_freelancer` / … |
-| `page_type` | text | |
-
-FAQ items use the `faq_` prefix in `accordion_id`.
+| `accordion_id` | text | `settling_in_price_snapshot` / `visa_info_faq` |
+| `item_id` | text | Settling in: `gangwon-do` · Visa info:`freelancer` / `arc` / … |
 
 ---
 
 ## 8. Events — quality & infrastructure
 
-### `js_error` — Q19
+### `js_error` — Q25
 | Param | Type | Values |
 |---|---|---|
 | `source_file` | text | `calculator.js` |
 | `line` | int | |
-| `message_short` | text | first 80 characters, no user data |
+| `message_short` | text | first 80 characters, no user input data |
 
-### `not_found` — Q19
+### `not_found` — Q25
 | Param | Type | Values |
 |---|---|---|
 | `requested_path` | text | no query string |
 
-### `api_call` — Q18 *(server-side, in Pages Functions)*
+### `api_call` — Q24 *(server-side, in Pages Functions)*
 The number of calls per page view is defined by the code; this event records what actually happened (failures, retries, quota, fallbacks, latency).
 | Param | Type | Values |
 |---|---|---|
 | `endpoint` | text | `kto_attractions` / `kto_festivals` / `kakao_study_cafe` |
-| `region` / `city` | text | |
+| `region` | text |  |
+| `city` | text | (Kakao only)|
+| `kto_codes_requested` | int | number of region codes fetched in this request (KTO only) |
 | `status` | text | `ok` / `empty` / `quota` / `error` / `skipped_no_key` |
 | `retried` | bool | |
 | `fallback_served` | bool | |
@@ -348,11 +358,11 @@ CREATE TABLE gni_reference (
 | Env | Destination | How events get there |
 |---|---|---|
 | `local` | local D1 / PostHog test project | `localhost:8788` |
-| `preview` | separate preview DB / test project | preview deployments (separate binding in Pages → Settings → Bindings → Preview) |
-| `production` | production DB / project | live site only |
+| `preview` | separate preview DB / test project | Cloudflare Pages preview `<x>.worknstay-korea.pages.dev` |
+| `production` | production DB / project | `worknstay-korea.com` |
 
-Test checklist before merging:
-1. Locally, trigger every event once and check that each arrives with correct params.
+Test checklist:
+1. Locally, trigger every new or changed event once and check that each arrives with correct params.
 2. A payload with an unknown event name or extra field is rejected.
 3. The UI never blocks or errors if tracking fails.
 4. Repeat step 1 on a preview deployment.
@@ -364,7 +374,7 @@ Test checklist before merging:
 
 - **Single release** for all events. Implementation order: calculator → navigation → content → quality → map UX.
 - First review of naming and params after ~2 weeks of data. Changes after that bump `schema_version` and are logged in §13.
-- **Data retention (proposed):** how long records are kept, not a user-retention metric. Raw event rows are deleted after 24 months; only monthly summary tables remain (e.g. "Oct 2026: 120 calculator submissions, 40% `all_regions`"). Returning-user retention cannot be measured by design, since there is no user ID.
+- **Data retention:** raw event rows are deleted after 24 months; only monthly summary tables remain (e.g. "Oct 2026: 120 calculator submissions, 40% `all_regions`").
 - **Sharing:** only aggregated tables, never raw rows.
 
 ---
@@ -373,7 +383,7 @@ Test checklist before merging:
 
 | Date | Version | Change |
 |---|---|---|
-| 2026-10-17 | 0.1 | First draft |
 | 2026-10-17 | 0.4 | `<0.02` income bucket for implausible inputs; `section_seen` on Visa info, Settling in and region pages |
 | 2026-10-17 | 0.3 | Calculator validation matched to actual behaviour (`under_18` result, `empty` / `zero` errors); region → map → region path; data retention wording clarified |
 | 2026-10-17 | 0.2 | Questions rewritten around actual calculator logic (ternary result); nav questions split; added map hover/tap, city cards, guides, About/GitHub/Feedback, price snapshot; region entry sources corrected; source tracked at click time instead of `?from=`; `with_family`; param types; bucket boundaries defined; Q8 via referrer instead of session ID; single release; implementation options A/B |
+| 2026-10-17 | 0.1 | First draft |
