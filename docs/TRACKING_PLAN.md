@@ -67,7 +67,7 @@ This document is the single source of truth for analytics on the site. It is too
 | `prev_page_type` | text | `region` / `home` / … / `external` / `none` | from same-origin `document.referrer` |
 | `page_load_id` | text (UUID) | — | in memory only |
 | `device_category` | text | `mobile` / `tablet` / `desktop` | server-side |
-| `viewport_bucket` | text | `<480` / `480–767` / `768–1023` / `1024–1439` / `1440+` |
+| `viewport_bucket` | text | `<480` / `480–767` / `768–1023` / `1024–1439` / `1440+` | |
 | `country` | text | `US` | Cloudflare |
 | `browser_lang` | text | `en` | primary subtag only |
 | `is_likely_bot` | bool | `false` | simple server-side heuristic |
