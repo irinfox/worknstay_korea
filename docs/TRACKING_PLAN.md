@@ -44,7 +44,7 @@ This document is the single source of truth for analytics on the site. It is too
 - **No IP addresses, no raw User-Agent, no exact income or age.**
 - Calculator inputs are stored only as **buckets** (§4).
 - `page_load_id`: random UUID created on page load, kept **in memory only**. It links events within one page view and disappears on reload or navigation.
-- Region-to-region journeys (Q8) are measured **without IDs**, from the same-origin `document.referrer` → `prev_page_type` (§3).
+- Region-to-region journeys are measured **without IDs**, from the same-origin `document.referrer` → `prev_page_type` (§3).
 - Country is derived by Cloudflare at the edge (`request.cf.country`). The IP address is used by Cloudflare to determine the country but never reaches our data.
 - Device category and bot flag are derived server-side from the User-Agent; only the derived value is stored.
 - The calculator copy should inform the user that inputs are used anonymously for site analytics.
@@ -138,14 +138,14 @@ Fired once per region per page load, after ≥300 ms of hover. Hovering a region
 |---|---|---|
 | `region` | text | `gangwon-do` |
 
-### `home_map_region_tap` — Q19 (touch devices only)
+### `home_map_region_click` — Q19 (touch devices only)
 Fired on screens below 1024px, as it is when we re-order cards from map side to below map carousel.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
 | `tap_no` | int | taps on this region in this page load; repeated taps signal confusion |
 
-Interpretation: a `home_map_region_tap` followed by `region_link_click` with `source = home_card` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
+Interpretation: a `home_map_region_click` followed by `internal_link_click` with `source = home_card` and `target_page_type = region` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
 
 ---
 
@@ -222,7 +222,7 @@ Clicks on non-interactive tags (dead-click detector).
 | `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
 ### `region_map_poi_click` — Q16, Q20
-Fires on tap for mobile devices and on click for desktop devices for both active and non-active pois.
+Fires on tap for mobile devices and on click for desktop devices for both active and non-active POIs.
 | Param | Type | Values |
 |---|---|---|
 | `poi_name` | text | `yangyang_beaches` |
@@ -234,22 +234,22 @@ Fires on tap for mobile devices and on click for desktop devices for both active
 |---|---|---|
 | `action` | text | `tab_switch` / `month_filter` / `page_change` |
 | `tab` | text | `ongoing` / `upcoming` |
-| `region` | text | |
-| `month_selected` | text | |
-| `page_no` | int | |
+| `region` | text | `gangwon-do` |
+| `month_selected` | text | `October` |
+| `page_no` | int | `1` |
 
 ### `places_filter_used` — Q22
 | Param | Type | Values |
 |---|---|---|
 | `filter_type` | text | `area` / `type` |
 | `value` | text | `sokcho` / `nature` |
-| `region` | text | |
+| `region` | text | `gangwon-do` |
 
 ### `highlights_carousel_nav` — Q22
 | Param | Type | Values |
 |---|---|---|
 | `direction` | text | `next` / `prev` |
-| `region` | text | |
+| `region` | text | `gangwon-do` |
 
 ### `accordion_opened` — Q7, Q22
 | Param | Type | Values |
@@ -265,7 +265,7 @@ Fires on tap for mobile devices and on click for desktop devices for both active
 | Param | Type | Values |
 |---|---|---|
 | `source_file` | text | `calculator.js` |
-| `line` | int | |
+| `line` | int | `42` |
 | `message_short` | text | first 80 characters, no user input data |
 
 ### `not_found` — Q25
@@ -278,9 +278,9 @@ The number of calls per page view is defined by the code; this event records wha
 | Param | Type | Values |
 |---|---|---|
 | `endpoint` | text | `kto_attractions` / `kto_festivals` / `kakao_study_cafe` |
-| `region` | text |  |
-| `city` | text | (Kakao only)|
-| `kto_codes_requested` | int | number of region codes fetched in this request (KTO only) |
+| `region` | text | `gangwon-do` |
+| `city` | text | city name (i.e. `sokcho`) for Kakao calls / `null` for KTO calls |
+| `kto_codes_requested` | int | number of codes fetched in this request: `9` for KTO / `null` for Kakao |
 | `status` | text | `ok` / `empty` / `quota` / `error` / `skipped_no_key` |
 | `retried` | bool | |
 | `fallback_served` | bool | |
