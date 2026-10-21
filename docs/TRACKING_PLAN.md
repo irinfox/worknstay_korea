@@ -219,16 +219,15 @@ Clicks on non-interactive tags (dead-click detector).
 |---|---|---|
 | `poi_name` | text | `sokcho` / `yangyang_beaches` |
 | `poi_type` | text | `city` / `surf_beach` / `ski_resort` |
+| `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
-Cities and mountains are not hoverable and tapable right now.
-
-### `region_map_poi_interact` — Q16, Q20
-Fires on tap for mobile devices and on click for desktop devices
+### `region_map_poi_click` — Q16, Q20
+Fires on tap for mobile devices and on click for desktop devices for both active and non-active pois.
 | Param | Type | Values |
 |---|---|---|
-| `action_type` | text | `tap` / `click` |
 | `poi_name` | text | `yangyang_beaches` |
 | `poi_type` | text | `surf_beach` |
+| `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
 ### `festival_interacted` — Q22
 | Param | Type | Values |
@@ -256,7 +255,7 @@ Fires on tap for mobile devices and on click for desktop devices
 | Param | Type | Values |
 |---|---|---|
 | `accordion_id` | text | `settling_in_price_snapshot` / `visa_info_faq` |
-| `item_id` | text | Settling in: `gangwon-do` · Visa info:`freelancer` / `arc` / … |
+| `item_id` | text | Settling in: `gangwon-do` · Visa info: `freelancer` / `arc` / … |
 
 ---
 
@@ -306,50 +305,15 @@ Join `events.gni_year = gni_reference.gni_year` to convert income buckets back t
 
 ---
 
-## 10. Implementation — decision pending
+## 10. Implementation strategy
 
-| | A. Own storage (Cloudflare D1) | B. PostHog (cookieless) |
-|---|---|---|
-| Setup | Custom endpoint, schema, validation | Script + config (`persistence: 'memory'`), events via `posthog.capture` |
-| Funnels / dashboards | Written in SQL | Built in UI; SQL also available |
-| Heatmaps, session replay | No | Yes (input masking must be verified, especially calculator fields) |
-| Data location | Own Cloudflare account | Third-party processor (EU or US cloud) |
-| Server-side `api_call` | Native | Via PostHog capture API from Functions, or keep this event in D1 |
-| Portfolio angle | Event design + pipeline + SQL analysis | Event design + industry-standard tool |
+Two tools are used for analytics: Cloudflare D1 and cookieless PostHog.
 
-Either way, the privacy note must name what is collected; option B must also name PostHog.
+**Cloudflare D1:** own tracking system with full control of pipeline and event design. Data engineering + analytics SQl angle.
+Storage schema: [`0001_create_tracking.sql`](../migrations/0001_create_tracking.sql)
 
-Storage schema for option A:
-
-```sql
-CREATE TABLE events (
-  event_id        TEXT PRIMARY KEY,
-  ts_utc          TEXT NOT NULL,
-  event_name      TEXT NOT NULL,
-  schema_version  INTEGER NOT NULL,
-  env             TEXT NOT NULL,
-  page_path       TEXT,
-  page_type       TEXT,
-  prev_page_type  TEXT,
-  page_load_id    TEXT,
-  device_category TEXT,
-  viewport_bucket TEXT,
-  country         TEXT,
-  browser_lang    TEXT,
-  is_likely_bot   INTEGER DEFAULT 0,
-  params          TEXT          -- JSON
-);
-CREATE INDEX idx_events_name_ts ON events(event_name, ts_utc);
-CREATE INDEX idx_events_page_load ON events(page_load_id);
-
-CREATE TABLE gni_reference (
-  application_year INTEGER PRIMARY KEY,
-  gni_year         INTEGER NOT NULL,
-  gni_krw          INTEGER NOT NULL,
-  source_url       TEXT,
-  valid_from       TEXT
-);
-```
+**PostHog:** industry-standard tool with AB experiments, user heatmaps and session replays. Product data analyst angle.
+Requires user input data masking and data collection notice.
 
 ---
 
