@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.4** · Owner: Irina
+Status: **draft v0.5** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
@@ -168,14 +168,14 @@ Interpretation: a `home_map_region_tap` followed by `region_link_click` with `so
 Fired if, within 10 s after arriving at `/#map` via main nav "Regions", the user scrolls up to the hero by ≥150px.
 No params.
 
-### `internal_link_click` — Q1, Q3, Q4, Q10, Q15, Q18
+### `internal_link_click` — Q1, Q3, Q4, Q5, Q10, Q15, Q18
 Sent from the **source** page at click time (via `sendBeacon`, which survives navigation). URLs stay unchanged.
 | Param | Type | Values |
 |---|---|---|
 | `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` / `404` |
 | `target` | text | region slug, or link ID (`renting_intro_to_settling` / `visa_info_badge` etc ) |
 | `source` | text | `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text`|
-| `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't user calculator, `null` for pages other than home |
+| `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
 Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do page), `home_card`, `calc_partial_hint`. `breadcrumb` exists only on the population-decline page (back to Gyeonggi-do).
 
@@ -183,7 +183,7 @@ Known routes to the population-decline page: `visa_info_faq_link`, `region_badge
 
 ## 7. Events — content
 
-### `outbound_click` — Q6
+### `outbound_click` — Q5, Q6
 Category and id come from `data-link-category` / `data-link-id` attributes in templates — never guessed in JS.
 | Param | Type | Values |
 |---|---|---|
@@ -193,7 +193,7 @@ Category and id come from `data-link-category` / `data-link-id` attributes in te
 | `section` | text | `visa_useful_links` / `region_guides` / `region_cities` / `region_dishes` / `settling_renting` / … |
 | `city` | text | set for links inside a city card, else `null` |
 
-### `gallery_scrolled` — Q21
+### `gallery_scrolled` — Q5, Q21
 Fired once per each type gallery scroll.
 | Param | Type | Values |
 |---|---|---|
@@ -214,7 +214,7 @@ Clicks on non-interactive tags (dead-click detector).
 | `tag` | text | `surf` |
 | `location` | text | `home_card` / `region_header` / `city_card` |
 
-### `region_map_poi_hover` — Q16 (pointer devices only)
+### `region_map_poi_hover` — Q16, Q20 (pointer devices only)
 | Param | Type | Values |
 |---|---|---|
 | `poi_name` | text | `sokcho` / `yangyang_beaches` |
@@ -222,7 +222,7 @@ Clicks on non-interactive tags (dead-click detector).
 
 Cities and mountains are not hoverable and tapable right now.
 
-### `region_map_poi_interact` — Q16
+### `region_map_poi_interact` — Q16, Q20
 Fires on tap for mobile devices and on click for desktop devices
 | Param | Type | Values |
 |---|---|---|
