@@ -55,7 +55,8 @@ Region map and info panel, carousel, eligibility gating: decisions and reasons l
 
 Eleventy (11ty) v3 + Nunjucks, hand-written CSS, vanilla ES module JS, inline SVG map,
 Cloudflare Pages + Pages Functions. Zero client-side libraries. One runtime dependency
-(`@11ty/eleventy`); dev tooling (wrangler) lives in `devDependencies`. No database.
+(`@11ty/eleventy`); dev tooling (wrangler) lives in `devDependencies`. Cloudflare D1 is used
+strictly for storing anonymous analytics events.
 Third-party embeds (fonts, analytics) are listed in ARCHITECTURE.md §2, which also gives the
 reasoning for each choice — the reasoning is the guardrail, not just the list.
 

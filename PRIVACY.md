@@ -13,7 +13,7 @@ This site uses privacy-first, cookieless analytics to understand how it is used 
 **What IS NOT collected:**
 * No cookies or local storage tracking entries are placed on user's device.
 * No IP addresses, raw User-Agents, or personal identifiers (PII) are saved.
-* No cross-site tracking or persistent individual profiles. Events are only linked together during a single page view using a temporary, in-memory ID that disappears as soon as user navigates away or reload the page.
+* No cross-site tracking or persistent individual profiles. Events are only linked together during a single page view using a temporary, in-memory ID that disappears as soon as user navigates away or reloads the page.
 
 **Data storage and retention:**
 * Project uses **PostHog** and **Cloudflare D1** to process and store this anonymous data.
@@ -22,7 +22,8 @@ This site uses privacy-first, cookieless analytics to understand how it is used 
 * Raw event logs are automatically deleted after 24 months. Only aggregated monthly summaries (e.g., "120 calculator submissions") are kept permanently.
 
 **Third-Party Services:**
-* **Google Fonts:** The site uses Google Fonts. When a user's browser downloads these fonts, user IP address may be exposed to Google's servers.
+* **[Google Fonts:](https://fonts.google.com/faq#privacy)** The site uses Google Fonts. When a user's browser downloads these fonts, the user IP address may be exposed to Google's servers.
+* **[Cloudflare Web Analytics:](https://developers.cloudflare.com/web-analytics/about/)** The site uses Cloudflare's built-in, cookieless analytics to monitor overall traffic and site performance. It does not track individual visitors or place tracking cookies on user's device.
 
 **Contact:**
 In case of any privacy concerns, you can reach out via the [Feedback form](https://tally.so/r/0Q2zrP).
