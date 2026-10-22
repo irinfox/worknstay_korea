@@ -9,6 +9,7 @@ CREATE TABLE events (
   page_type       TEXT,
   prev_page_type  TEXT,
   page_load_id    TEXT,
+  event_seq       INTEGER,
   device_category TEXT,
   viewport_bucket TEXT,
   country         TEXT,

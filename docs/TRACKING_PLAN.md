@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.7** · Owner: Irina
+Status: **draft v0.8** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
@@ -64,8 +64,9 @@ This document is the single source of truth for analytics on the site. It is too
 | `env` | text | `production` / `preview` / `local` | |
 | `page_path` | text | `/regions/gangwon-do/` | no query string |
 | `page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` / `404` | |
-| `prev_page_type` | text | `region` / `home` / … / `external` / `none` | from same-origin `document.referrer` |
+| `prev_page_type` | text | `region` / `home` / … / `external`; `null` when there is no referrer | from same-origin `document.referrer` |
 | `page_load_id` | text (UUID) | — | in memory only |
+| `event_seq` | int | `1`, `2`, … | order of client events within one `page_load_id`, set in the browser; a gap means a lost event. `null` on server-side `api_call` rows |
 | `device_category` | text | `mobile` / `tablet` / `desktop` | server-side |
 | `viewport_bucket` | text | `<360` / `360–399` / `400–479` / `480–599` / `600–767` / `768–899` / `900–1023` / `1024–1149` / `1150–1439` / `1440+` | |
 | `country` | text | `US` | Cloudflare |
@@ -95,7 +96,7 @@ Each event also stores `gni_year` (§9), so buckets stay comparable when GNI cha
 ## 5. Events — calculator & home map
 
 ### calculator_interaction_started — Q1
-Fired exactly once per page load when the user focuses on any calculator input field or clicks a checkbox. Used as the top of the calculator funnel.
+Fired exactly once per page load when the user focuses on any calculator input field, clicks a checkbox or submits the form (even an empty one). Used as the top of the calculator funnel; always precedes the first `calculator_input_error` / `calculator_submitted`.
 No params.
 
 ### `calculator_submitted` — Q1, Q2, Q9
@@ -202,7 +203,7 @@ Fired once per gallery type per page load, on the first scroll the visitor drive
 | `gallery_type` | text | `highlights` / `cities` / `attractions` / `dishes` |
 
 ### `section_seen` — Q5, Q8
-Fired once per section per page load when the section heading enters the viewport. Sections (not scroll percentages) are used because percentages depend on screen size.
+Fired once per section per page load when the section heading has stayed in the viewport for 1 s (jumps via section nav and fast scrolling past a section don't count). Sections (not scroll percentages) are used because percentages depend on screen size.
 | Param | Type | Values |
 |---|---|---|
 | `section` | text | Region pages: `highlights` / `map` / `cities` / `rent` / `events` / `places` / `dishes` / `prev_next` · Visa info: `eligibility` / `income_table` / `documents` / `notes` / `questions` / `links` · Settling in: `renting` / `short_term` / `colivings` / `places_to_work` / `search_notes` / `communities` / `links` |
@@ -250,6 +251,10 @@ Re-selecting the active tab or month is not an event.
 | `filter_type` | text | `area` / `type` |
 | `value` | text | `sokcho` / `nature` |
 | `region` | text | `gangwon-do` |
+| `area_selected` | text | area pill active in the current page state, either just clicked or from previous state |
+| `type_selected` | text | type pill active in the current page state, either just clicked or from previous state |
+
+`filter_type` + `value` say what was clicked; the `*_selected` pair is the full filter state. Re-selecting the active pill is not an event.
 
 ### `highlights_carousel_nav` — Q22
 | Param | Type | Values |
@@ -353,6 +358,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-10-22 | 0.8 | ``event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs 1 s in view; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
 | 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |
 | 2026-10-22 | 0.6 | Back to top tracked as `nav_click` item `top`; hero scroll cue and 404 page links tracked as `internal_link_click` (`content_text`; new targets `visa_info`, `settling_in`) |
 | 2026-10-21 | 0.5 | Re-arranged Questions section (added several new); clarified privacy rules (GDPR/PIPA); added `calculator_interaction_started` event; merged region and internal link clicks into a unified `internal_link_click` (added calc_result); replaced `city_card_seen` with generic `gallery_scrolled`; added `region_map_poi_hover` and `_click` events; consolidated festival events into `festival_interacted` (added action param); added `kto_codes_requested` to `api_call`; linked SQL schema file instead of its citation |

@@ -349,8 +349,8 @@ export function init(onResult = () => {}) {
   // with no working submit handler is worse than the <noscript> fallback.
   form.hidden = false;
 
-  // Top of the calculator funnel: first focus in any field, or a click on the checkbox (Safari
-  // doesn't focus a checkbox on click), once per page load.
+  // Top of the calculator funnel: first focus in any field, a click on the checkbox (Safari
+  // doesn't focus a checkbox on click), or a submit, once per page load.
   let interacted = false;
   const markInteraction = () => {
     if (interacted) return;
@@ -365,6 +365,7 @@ export function init(onResult = () => {}) {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    markInteraction(); // submitting without touching a field (empty submit) still starts the funnel
     const userInput = readUserInput(form);
     computeAndRender(userInput, { markInvalid: true, trackSubmit: true });
     if (cardEl) scrollResultIntoView(cardEl, resultEl);

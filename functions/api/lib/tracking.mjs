@@ -128,7 +128,13 @@ export const EVENTS = {
     month_selected: { type: "enum", values: MONTHS, optional: true },
     page_no: { ...int(1, 100), optional: true },
   },
-  places_filter_used: { filter_type: enumOf("area", "type"), value: slug, region },
+  places_filter_used: {
+    filter_type: enumOf("area", "type"),
+    value: slug,
+    region,
+    area_selected: slug,
+    type_selected: slug,
+  },
   highlights_carousel_nav: { direction: enumOf("next", "prev"), region },
   accordion_opened: {
     accordion_id: enumOf("settling_in_price_snapshot", "visa_info_faq"),
@@ -199,7 +205,7 @@ function validParams(schema, params) {
 
 const TOP_LEVEL_FIELDS = new Set([
   "event_name", "schema_version", "page_path", "page_type", "prev_page_type",
-  "page_load_id", "viewport_bucket", "browser_lang", "params",
+  "page_load_id", "event_seq", "viewport_bucket", "browser_lang", "params",
 ]);
 
 /** Returns the cleaned client payload, or null if anything is off-allowlist. */
@@ -210,8 +216,9 @@ export function validateClientEvent(body) {
   if (!schema || body.schema_version !== SCHEMA_VERSION) return null;
   if (typeof body.page_path !== "string" || !PATH_RE.test(body.page_path)) return null;
   if (!PAGE_TYPES.includes(body.page_type)) return null;
-  if (![...PAGE_TYPES, "external", "none"].includes(body.prev_page_type)) return null;
+  if (body.prev_page_type != null && ![...PAGE_TYPES, "external"].includes(body.prev_page_type)) return null;
   if (typeof body.page_load_id !== "string" || !UUID.test(body.page_load_id)) return null;
+  if (!Number.isInteger(body.event_seq) || body.event_seq < 1 || body.event_seq > 100000) return null;
   if (!VIEWPORT_BUCKETS.includes(body.viewport_bucket)) return null;
   if (typeof body.browser_lang !== "string" || !/^[a-z]{2,3}$/i.test(body.browser_lang)) return null;
   const params = validParams(schema, body.params ?? {});
@@ -220,8 +227,9 @@ export function validateClientEvent(body) {
     event_name: body.event_name,
     page_path: body.page_path,
     page_type: body.page_type,
-    prev_page_type: body.prev_page_type,
+    prev_page_type: body.prev_page_type ?? null,
     page_load_id: body.page_load_id.toLowerCase(),
+    event_seq: body.event_seq,
     viewport_bucket: body.viewport_bucket,
     browser_lang: body.browser_lang.toLowerCase(),
     params,
@@ -262,8 +270,8 @@ async function insert(db, row) {
   await db
     .prepare(
       `INSERT INTO events (event_id, ts_utc, event_name, schema_version, env, page_path, page_type,
-        prev_page_type, page_load_id, device_category, viewport_bucket, country, browser_lang,
-        is_likely_bot, params) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        prev_page_type, page_load_id, event_seq, device_category, viewport_bucket, country,
+        browser_lang, is_likely_bot, params) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
     .bind(
       crypto.randomUUID(),
@@ -275,6 +283,7 @@ async function insert(db, row) {
       row.page_type ?? null,
       row.prev_page_type ?? null,
       row.page_load_id ?? null,
+      row.event_seq ?? null,
       row.device_category,
       row.viewport_bucket ?? null,
       row.country ?? null,

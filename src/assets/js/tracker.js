@@ -37,12 +37,12 @@ function pageTypeOf(pathname) {
 
 function prevPageType() {
   try {
-    if (!document.referrer) return "none";
+    if (!document.referrer) return null;
     const ref = new URL(document.referrer);
     if (ref.origin !== location.origin) return "external";
     return pageTypeOf(ref.pathname) || "external";
   } catch {
-    return "none";
+    return null;
   }
 }
 
@@ -71,6 +71,9 @@ function calcResultParam() {
   return pageTypeOf(location.pathname) === "home" ? { calc_result: state.calcResult } : {};
 }
 
+// Counts every track() call in this page load, so a gap in the sequence means a lost event.
+let eventSeq = 0;
+
 export function track(eventName, params = {}) {
   try {
     const payload = JSON.stringify({
@@ -80,6 +83,7 @@ export function track(eventName, params = {}) {
       page_type: pageTypeOf(location.pathname),
       prev_page_type: prevPageType(),
       page_load_id: pageLoadId,
+      event_seq: ++eventSeq,
       viewport_bucket: viewportBucket(window.innerWidth),
       browser_lang: (navigator.language || "en").split("-")[0],
       params,
@@ -177,17 +181,6 @@ function onClick(event) {
     return;
   }
 
-  const pill = el.closest(".filter-pill[data-filter-group]");
-  if (pill) {
-    const list = document.querySelector("[data-region-attractions]");
-    track("places_filter_used", {
-      filter_type: pill.dataset.filterGroup,
-      value: pill.dataset.filterValue,
-      region: list?.dataset.regionSlug,
-    });
-    return;
-  }
-
   const pager = el.closest(".event-pager__btn");
   if (pager) {
     const wrap = pager.closest(".event-list-wrap");
@@ -272,6 +265,26 @@ function onMonthTabClick(event) {
   });
 }
 
+// Places filter pill. Captured before the pill's own handler flips is-selected, so re-clicking the
+// already-selected pill is not counted; the clicked group's state is the pill itself.
+function onFilterPillClick(event) {
+  const pill = event.target instanceof Element ? event.target.closest(".filter-pill[data-filter-group]") : null;
+  if (!pill || pill.classList.contains("is-selected")) return;
+  const group = pill.dataset.filterGroup;
+  const selected = (g) =>
+    g === group
+      ? pill.dataset.filterValue
+      : pill.closest("[data-attraction-filters]")
+          ?.querySelector(`[data-filter-group="${g}"].is-selected`)?.dataset.filterValue ?? "all";
+  track("places_filter_used", {
+    filter_type: group,
+    value: pill.dataset.filterValue,
+    region: document.querySelector("[data-region-attractions]")?.dataset.regionSlug,
+    area_selected: selected("area"),
+    type_selected: selected("type"),
+  });
+}
+
 function eventsRegion() {
   return document.querySelector("[data-region-events]")?.dataset.regionSlug;
 }
@@ -318,18 +331,30 @@ const initMapHover = safe(() => {
   });
 });
 
-// Once per section per page load, when the section's top enters the viewport.
+// Once per section per page load, after the section's top has stayed in view for SECTION_DWELL_MS
+// (a jump or fast scroll past a section doesn't count).
+const SECTION_DWELL_MS = 1000;
 const initSectionSeen = safe(() => {
   const sections = [...document.querySelectorAll("[data-section-seen]")];
   if (!sections.length || !("IntersectionObserver" in window)) return;
+  const timers = new Map();
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      observer.unobserve(entry.target);
-      track("section_seen", {
-        section: entry.target.dataset.sectionSeen,
-        seconds_since_load_bucket: loadSecondsBucket(performance.now() / 1000),
-      });
+      const el = entry.target;
+      if (!entry.isIntersecting) {
+        clearTimeout(timers.get(el));
+        timers.delete(el);
+        continue;
+      }
+      if (timers.has(el)) continue;
+      timers.set(el, setTimeout(() => {
+        observer.unobserve(el);
+        timers.delete(el);
+        track("section_seen", {
+          section: el.dataset.sectionSeen,
+          seconds_since_load_bucket: loadSecondsBucket(performance.now() / 1000),
+        });
+      }, SECTION_DWELL_MS));
     }
   });
   sections.forEach((s) => observer.observe(s));
@@ -436,7 +461,7 @@ const trackPageView = safe(() => {
   track("page_view", params);
   if (document.body?.dataset.pageType === "404") track("not_found", { requested_path: location.pathname });
   // Cross-page arrival at /#map (from main nav "Regions", or any other link to it).
-  if (location.pathname === "/" && location.hash === "#map" && prevPageType() !== "external" && prevPageType() !== "none") {
+  if (location.pathname === "/" && location.hash === "#map" && prevPageType() && prevPageType() !== "external") {
     watchLandingScrollUp();
   }
 });
@@ -444,6 +469,7 @@ const trackPageView = safe(() => {
 export function init() {
   try {
     document.addEventListener("click", safe(onMonthTabClick), true);
+    document.addEventListener("click", safe(onFilterPillClick), true);
     document.addEventListener("click", safe(onClick));
     initErrors();
     initMapHover();
