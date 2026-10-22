@@ -112,6 +112,8 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
 - [ ] Post-launch privacy pivot: after hitting ~1k visitors, finalize the UX review via PostHog
       replays, then either drop the replay feature to keep the zero-consent architecture or add a
       consent banner.
+- [ ] Analytics retention: monthly summary table and a job (Worker with cron) that summarises, then
+      deletes raw D1 events older than 24 months.
 
 
 ## Possible site extensions

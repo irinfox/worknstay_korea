@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.8** · Owner: Irina
+Status: **draft v0.9** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
@@ -311,7 +311,7 @@ Table `gni_reference`:
 | `gni_year` | `2025` | year of the GNI figure used |
 | `gni_krw` | `52410000` | |
 | `source_url` | | Bank of Korea / immigration notice |
-| `valid_from` | `2026-01-01` | when the site started using this value |
+| `valid_from` | `2026-06-30` | when the site started using this value |
 
 Join `events.gni_year = gni_reference.gni_year` to convert income buckets back to won ranges.
 
