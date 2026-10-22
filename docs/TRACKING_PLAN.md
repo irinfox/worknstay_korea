@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.9** · Owner: Irina
+Status: **v1.0** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events
 and parameters are defined here first, then implemented in whichever tool is chosen. Any new or
@@ -362,6 +362,8 @@ data analyst angle.
 
 PostHog setup (EU cloud, one project for all environments):
 - Memory-only persistence: Client IPs are not stored and internal IDs live for a single page view.
+- No GeoIP enrichment: events carry `$geoip_disable`, so PostHog stores no city, postal code or
+  coordinates. Country comes from D1 only.
 - Strict data masking: Replays mask all user inputs and block the calculator card entirely
   (`ph-no-capture`). Page text is
   public content and is not masked.
@@ -409,6 +411,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-10-22 | 1.0 | Released to production. PostHog no longer derives location from IP (`$geoip_disable`), so it stores no country, city or coordinates; country stays in D1. Events and params unchanged from 0.9 |
 | 2026-10-22 | 0.9 | PostHog added: memory-only, replay with inputs masked and calculator card blocked, heatmaps, autocapture (clicks); D1 events not mirrored |
 | 2026-10-22 | 0.8 | `event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs enough of the section in view for 1 s; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
 | 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |

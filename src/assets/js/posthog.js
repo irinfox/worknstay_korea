@@ -46,7 +46,7 @@ function start(cfg) {
     capture_pageleave: true,
     disable_surveys: true,
     before_send: (event) => {
-      if (event) event.properties = { ...event.properties, env: envName() };
+      if (event) event.properties = { ...event.properties, env: envName(), $geoip_disable: true };
       return event;
     },
     session_recording: {
