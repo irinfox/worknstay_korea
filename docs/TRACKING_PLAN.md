@@ -44,6 +44,7 @@ This document is the single source of truth for analytics on the site. It is too
 - **No IP addresses, no raw User-Agent, no exact income or age.**
 - Calculator inputs are stored only as **buckets** (§4).
 - `page_load_id`: random UUID created on page load, kept **in memory only**. It links events within one page view and disappears on reload or navigation.
+- PostHog's distinct, person and session ids follow the same rule: random, memory-only, new on every page view.
 - Region-to-region journeys are measured **without IDs**, from the same-origin `document.referrer` → `prev_page_type` (§3).
 - Country is derived by Cloudflare at the edge (`request.cf.country`). The IP address is used by Cloudflare to determine the country but never reaches our data.
 - Device category and bot flag are derived server-side from the User-Agent; only the derived value is stored.
@@ -324,7 +325,15 @@ Two tools are used for analytics: Cloudflare D1 and cookieless PostHog.
 Storage schema: [`0001_create_tracking.sql`](../migrations/0001_create_tracking.sql)
 
 **PostHog:** industry-standard tool with AB experiments, user heatmaps and session replays. Product data analyst angle.
-Requires user input data masking and data collection notice.
+
+PostHog setup (EU cloud, one project for all environments):
+- Memory-only persistence: Client IPs are not stored and internal IDs live for a single page view.
+- Strict data masking: Replays mask all user inputs and block the calculator card entirely (`ph-no-capture`). Page text is
+  public content and is not masked.
+- Privacy compliance: The SDK is not loaded when the browser sends Do Not Track (DNT) or Global Privacy Control (GPC) signals.
+- Environment setup: The project key is public and set in `src/_data/posthog.json`. Every event carries an `env` parameter (`production` / `preview` / `local`) matching the D1 setup; reports exclude non-production through the project's test-account filter.
+- D1 events are not mirrored.
+
 
 ---
 
@@ -332,16 +341,17 @@ Requires user input data masking and data collection notice.
 
 | Env | Destination | How events get there |
 |---|---|---|
-| `local` | local D1 / PostHog test project | `localhost:8788` |
-| `preview` | separate preview DB / test project | Cloudflare Pages preview `<x>.worknstay-korea.pages.dev` |
-| `production` | production DB / project | `worknstay-korea.com` |
+| `local` | local D1 / PostHog (same project, `env` = `local`) | `localhost:8788` |
+| `preview` | separate preview DB / same PostHog project (`env` = `preview`) | Cloudflare Pages preview `<x>.worknstay-korea.pages.dev` |
+| `production` | production DB / same PostHog project (`env` = `production`) | `worknstay-korea.com` |
 
 Test checklist:
 1. Locally, trigger every new or changed event once and check that each arrives with correct params.
 2. A payload with an unknown event name or extra field is rejected.
 3. The UI never blocks or errors if tracking fails.
 4. Repeat step 1 on a preview deployment.
-5. DevTools → Application: no cookies, no storage entries.
+5. DevTools → Application: no cookies, no storage entries (PostHog loaded).
+6. A replay of a calculator run shows the card blocked and any other input masked.
 
 ---
 
@@ -358,6 +368,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-10-22 | 0.9 | PostHog added: memory-only, replay with inputs masked and calculator card blocked, heatmaps, autocapture (clicks); D1 events not mirrored |
 | 2026-10-22 | 0.8 | `event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs enough of the section in view for 1 s; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
 | 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |
 | 2026-10-22 | 0.6 | Back to top tracked as `nav_click` item `top`; hero scroll cue and 404 page links tracked as `internal_link_click` (`content_text`; new targets `visa_info`, `settling_in`) |

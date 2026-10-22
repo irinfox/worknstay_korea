@@ -56,7 +56,8 @@
        Markup order here is free to change (calculator.js keys off data-* / element names, not
        DOM order); the comparison logic and its messages are frozen. #}
       <div class="hero__calculator">
-        <div id="calculator" class="calculator-mount" data-calculator-mount>
+        {# ph-no-capture: PostHog never records this card (age, income, result) in replay or autocapture. #}
+        <div id="calculator" class="calculator-mount ph-no-capture" data-calculator-mount>
       <noscript>
         <p class="calculator-mount__noscript">
           The eligibility calculator needs JavaScript. See the

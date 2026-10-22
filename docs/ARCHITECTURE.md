@@ -34,12 +34,13 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
 | **Static/editorial data** | Build-time data in `src/_data/`, hand-authored | Visa rules, rent, food, settling-in guide aren't API-sourced — no live-call need. |
 | Hosting | **Cloudflare Pages** (+ Functions) | One vendor for hosting + proxy. |
 | Event tracking | **First-party**: `POST /api/events` Pages Function → **Cloudflare D1** | Own endpoint and schema keep full control of event design; nothing is stored on the device, so no consent banner. |
+| Replay, heatmaps | **PostHog** (EU cloud) via CDN embed | Qualitative UX analytics (session replays and heatmaps). Configured as memory-only (cookieless) with strict input masking, requiring no consent banner. |
 | Traffic stats | **Cloudflare Web Analytics** | Free, cookieless, no consent banner; enabled in the Pages dashboard (beacon injected at the edge, nothing in the repo). |
 | Fonts | **Instrument Sans + Noto Sans KR** via one Google Fonts `<link>` | Per DESIGN.md; Noto Sans KR covers Hangul place names. |
 
 **Rejected:** Astro (heavier tree, faster breaking-change cadence).
 
-**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon; no
+**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon and the PostHog script; no
 user input shown to other visitors. Framing and permissions are set in `src/_headers`, HSTS in the
 Cloudflare dashboard. Revisit if third-party scripts, accounts or URL state are added.
 
@@ -293,3 +294,5 @@ functions/api/**                `api_call` rows (failures, retries, quota, laten
   accepted and discarded; storage errors are swallowed.
 - **Tracking is declarative.** Outbound links, internal links, accordions and map pins declare
   their ids in `data-*` attributes; the tracker reads them.
+- **Standalone PostHog integration.** `posthog.js` loads the pinned SDK from PostHog's CDN; the project
+  key is in `src/_data/posthog.json` (empty key disables it).

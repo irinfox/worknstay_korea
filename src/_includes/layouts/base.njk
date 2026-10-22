@@ -22,6 +22,7 @@
   {%- for sheet in ["hero", "calculator", "korea-map", "region-card", "region-page", "region-detail-map", "city-card", "event-timeline", "section-nav", "about", "settling-in", "visa-info", "not-found"] %}
   {% if sheet in (styles or []) %}<link rel="stylesheet" href="/assets/css/components/{{ sheet }}.css">{% endif %}
   {% endfor %}
+  <script type="application/json" id="posthog-config">{{ posthog | dump | safe }}</script>
   <script type="module" src="/assets/js/main.js"></script>
 </head>
 <body{% if page.url == "/" %} class="has-hero"{% endif %}{% if page.url == "/404.html" %} data-page-type="404"{% endif %}>
