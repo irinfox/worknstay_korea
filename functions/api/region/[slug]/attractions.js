@@ -40,7 +40,7 @@ export async function onRequestGet(context) {
   if (!env?.KTO_API_KEY) {
     sortByRegionPriority(regionTopPicks, slug);
     logApiCall(context, {
-      endpoint: "kto_attractions", region: slug, status: "skipped_no_key", retried: false,
+      endpoint: "kto_attractions", region: slug, status: "skipped_no_key", kto_codes_requested: 0, retried: false,
       fallback_served: true, latency_ms_bucket: latencyBucket(0),
     });
     return Response.json({ items: regionTopPicks, quotaExceeded: false, fallback: true }, NO_STORE);
@@ -50,9 +50,10 @@ export async function onRequestGet(context) {
   let items = regionTopPicks;
   let quotaExceeded = false;
   let liveFailed = false;
+  let ktoCalls = 0;
   if (codes.length) {
     let failed;
-    ({ items, quotaExceeded, failed } = await fetchRegionAttractions(slug, codes, env, citySlugFor, undefined, trace));
+    ({ items, quotaExceeded, failed, calls: ktoCalls } = await fetchRegionAttractions(slug, codes, env, citySlugFor, undefined, trace));
     liveFailed = failed && !quotaExceeded;
 
     // Any live call failed (quota included): serve top picks rather than a partial gallery. The
@@ -77,6 +78,7 @@ export async function onRequestGet(context) {
   logApiCall(context, {
     endpoint: "kto_attractions",
     region: slug,
+    kto_codes_requested: ktoCalls,
     status: quotaExceeded ? "quota" : liveFailed ? "error" : items.length ? "ok" : "empty",
     retried: trace.retried,
     fallback_served: quotaExceeded || liveFailed,

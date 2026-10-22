@@ -2,7 +2,9 @@
 // storage, and the page_load_id lives in memory only. Every path fails silently — tracking must
 // never block or break the UI. Event names/params are validated again server-side
 // (functions/api/events.js), so anything off the allowlist is dropped there.
-import { loadSecondsBucket, secondsBucket, viewportBucket } from "./tracking-buckets.js";
+import {
+  loadSecondsBucket, scrubMessage, secondsBucket, slugOf, targetPageTypeOf, viewportBucket,
+} from "./tracking-buckets.js";
 
 const ENDPOINT = "/api/events";
 const SCHEMA_VERSION = 1;
@@ -17,6 +19,10 @@ const pageLoadId = (() => {
 
 const DECLINE_PATH = "/regions/gyeonggi-do/population-decline-areas/";
 const DECLINE_TARGET = "gyeonggi_decline_areas";
+const MONTH_NAMES = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december",
+];
 
 function pageTypeOf(pathname) {
   if (document.body?.dataset.pageType) return document.body.dataset.pageType;
@@ -58,6 +64,11 @@ export function attemptCount() {
 /** Headers for first-party API fetches, so the server can tie api_call events to this page view. */
 export function pageLoadHeaders() {
   return { "X-Page-Load-Id": pageLoadId };
+}
+
+// The calculator only exists on the home page; elsewhere the field is omitted (stored as null).
+function calcResultParam() {
+  return pageTypeOf(location.pathname) === "home" ? { calc_result: state.calcResult } : {};
 }
 
 export function track(eventName, params = {}) {
@@ -118,17 +129,20 @@ export const watchMapAfterSubmit = safe((result) => {
 
 const tapCounts = new Map();
 
-function regionTargetFromHref(href) {
-  const path = new URL(href, location.origin).pathname;
-  if (path === DECLINE_PATH) return DECLINE_TARGET;
-  const m = /^\/regions\/([a-z0-9-]+)\/$/.exec(path);
-  return m ? m[1] : null;
-}
-
-function trackRegionLink(link, source) {
+// Region links on the home page can be gated (no href) or re-pointed at the decline page, so the
+// destination is read from the href at click time.
+function trackInternalLink(link, source) {
   const href = link.getAttribute("href"); // gated (ineligible) regions have no href: not a click
-  const target = href && regionTargetFromHref(href);
-  if (target) track("region_link_click", { target, source, calc_result: state.calcResult });
+  if (!href) return;
+  const path = new URL(href, location.origin).pathname;
+  const targetPageType = targetPageTypeOf(path);
+  if (!targetPageType) return;
+  const target =
+    targetPageType === "region" ? path.split("/")[2]
+    : targetPageType === "decline_areas" ? DECLINE_TARGET
+    : link.dataset.internalTarget;
+  if (!target) return;
+  track("internal_link_click", { target_page_type: targetPageType, target, source, ...calcResultParam() });
 }
 
 function onClick(event) {
@@ -141,7 +155,14 @@ function onClick(event) {
     const region = mapRegion.dataset.slug;
     const n = (tapCounts.get(region) || 0) + 1;
     tapCounts.set(region, n);
-    track("map_region_tap", { region, tap_no: n });
+    track("home_map_region_click", { region, tap_no: n });
+    return;
+  }
+
+  const pin = el.closest(".region-detail-map__svg .map-pin");
+  if (pin) {
+    const poi = poiParams(pin);
+    if (poi) track("region_map_poi_click", poi);
     return;
   }
 
@@ -169,7 +190,16 @@ function onClick(event) {
   if (pager) {
     const wrap = pager.closest(".event-list-wrap");
     const pageNo = Number(/^(\d+)/.exec(wrap?.querySelector(".event-pager__status")?.textContent || "")?.[1]);
-    if (pageNo) track("festival_page_change", { page_no: pageNo, region: eventsRegion() });
+    if (pageNo) {
+      const month = pager.closest(".event-monthpanel[data-month]")?.dataset.month;
+      track("festival_interacted", {
+        action: "page_change",
+        tab: pager.closest(".event-panel[data-panel]")?.dataset.panel,
+        region: eventsRegion(),
+        page_no: pageNo,
+        ...(month && { month_selected: monthName(month) }),
+      });
+    }
     return;
   }
 
@@ -185,7 +215,7 @@ function onClick(event) {
   const summary = el.closest("summary");
   const details = summary?.parentElement;
   if (details?.dataset.accordionId && !details.open) {
-    track("accordion_opened", { accordion_id: details.dataset.accordionId, page_type: pageTypeOf(location.pathname) });
+    track("accordion_opened", { accordion_id: details.dataset.accordionId, item_id: details.dataset.accordionItem });
     return;
   }
 
@@ -193,7 +223,7 @@ function onClick(event) {
   if (!link) return;
 
   if (link.dataset.nav) {
-    track("nav_click", { nav: link.dataset.nav, item: link.dataset.navItem });
+    track("nav_click", { nav: link.dataset.nav, item: link.dataset.navItem, ...calcResultParam() });
     if (link.dataset.nav === "main" && link.dataset.navItem === "regions") watchLandingScrollUp();
     return;
   }
@@ -213,21 +243,31 @@ function onClick(event) {
     });
     return;
   }
-  if (link.dataset.internalLink) {
-    track("internal_link_click", { link_id: link.dataset.internalLink });
-    return;
-  }
-  if (link.dataset.regionSource) {
-    trackRegionLink(link, link.dataset.regionSource);
+  if (link.dataset.internalSource) {
+    trackInternalLink(link, link.dataset.internalSource);
     return;
   }
   // Home page entry points: link state (pointing at the decline page, or gated) is read at click time.
   if (link.closest(".korea-map")) {
-    trackRegionLink(link, "home_map");
+    trackInternalLink(link, "home_map");
   } else if (link.matches(".region-card__link")) {
-    const partial = link.getAttribute("href") === DECLINE_PATH && link.dataset.originalHref;
-    trackRegionLink(link, partial ? "home_card_partial" : "home_card");
+    trackInternalLink(link, "home_card");
   }
+}
+
+const monthName = (key) => MONTH_NAMES[Number(key.split("-")[1]) - 1];
+
+// Month sub-tab (Upcoming). Captured before the tab's own handler flips aria-selected, so
+// re-clicking the already-selected month is not counted.
+function onMonthTabClick(event) {
+  const tab = event.target instanceof Element ? event.target.closest(".event-months__tab") : null;
+  if (!tab || tab.getAttribute("aria-selected") === "true" || !tab.dataset.month) return;
+  track("festival_interacted", {
+    action: "month_filter",
+    tab: "upcoming",
+    region: eventsRegion(),
+    month_selected: monthName(tab.dataset.month),
+  });
 }
 
 function eventsRegion() {
@@ -269,7 +309,7 @@ const initMapHover = safe(() => {
       if (e.pointerType !== "mouse" || seen.has(el.dataset.slug)) return;
       timer = setTimeout(() => {
         seen.add(el.dataset.slug);
-        track("map_region_hover", { region: el.dataset.slug });
+        track("home_map_region_hover", { region: el.dataset.slug });
       }, 300);
     });
     el.addEventListener("pointerleave", () => clearTimeout(timer));
@@ -293,21 +333,57 @@ const initSectionSeen = safe(() => {
   sections.forEach((s) => observer.observe(s));
 });
 
-const initCitySeen = safe(() => {
-  const cards = [...document.querySelectorAll("[data-city-card]")];
-  if (!cards.length || !("IntersectionObserver" in window)) return;
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting || entry.intersectionRatio < 0.5) continue;
-      observer.unobserve(entry.target);
-      track("city_card_seen", {
-        region: entry.target.dataset.region,
-        city: entry.target.dataset.city,
-        position: cards.indexOf(entry.target) + 1,
-      });
-    }
-  }, { threshold: [0.5] });
-  cards.forEach((c) => observer.observe(c));
+const GALLERIES = [
+  [".region-hero-gallery__track", "highlights"],
+  [".city-card-list", "cities"],
+  [".attraction-list", "attractions"],
+  [".dish-list", "dishes"],
+];
+
+// Once per gallery type per page load, on the first scroll the visitor drives. Scripted scrolls
+// (highlights autoplay, prev/next buttons, snap corrections) don't count: a scroll only counts
+// if a wheel / touch / pointer / key input reached the strip first.
+const initGalleryScroll = safe(() => {
+  if (pageTypeOf(location.pathname) !== "region") return;
+  const region = location.pathname.split("/")[2];
+  const driven = new WeakSet();
+  const fired = new Set();
+  const galleryOf = (el) => (el instanceof Element ? GALLERIES.find(([sel]) => el.closest(sel)) : null);
+  const markDriven = (e) => {
+    const g = galleryOf(e.target);
+    if (g) driven.add(e.target.closest(g[0]));
+  };
+  for (const type of ["wheel", "touchstart", "pointerdown", "keydown"]) {
+    document.addEventListener(type, markDriven, { capture: true, passive: true });
+  }
+  document.addEventListener("scroll", (e) => {
+    const g = galleryOf(e.target);
+    if (!g || fired.has(g[1]) || !driven.has(e.target)) return;
+    fired.add(g[1]);
+    track("gallery_scrolled", { region, gallery_type: g[1] });
+  }, { capture: true, passive: true });
+});
+
+function poiParams(pin) {
+  const name = slugOf(pin.querySelector(".map-pin__label")?.textContent);
+  if (!name || !pin.dataset.poiType) return null;
+  return { poi_name: name, poi_type: pin.dataset.poiType, is_interactive: pin.hasAttribute("tabindex") };
+}
+
+const initPoiHover = safe(() => {
+  const seen = new Set();
+  document.querySelectorAll(".region-detail-map__svg .map-pin").forEach((pin) => {
+    let timer = null;
+    pin.addEventListener("pointerenter", (e) => {
+      const poi = poiParams(pin);
+      if (e.pointerType !== "mouse" || !poi || seen.has(poi.poi_name)) return;
+      timer = setTimeout(() => {
+        seen.add(poi.poi_name);
+        track("region_map_poi_hover", poi);
+      }, 300);
+    });
+    pin.addEventListener("pointerleave", () => clearTimeout(timer));
+  });
 });
 
 // Festival tabs are rendered after the live fetch; their active tab is mirrored in data-active
@@ -319,7 +395,7 @@ const initFestivalTabs = safe(() => {
     for (const r of records) {
       const tab = r.target.dataset.active;
       if (r.oldValue !== tab && (tab === "ongoing" || tab === "upcoming")) {
-        track("festival_tab_switch", { tab, region: eventsRegion() });
+        track("festival_interacted", { action: "tab_switch", tab, region: eventsRegion() });
       }
     }
   }).observe(mount, { subtree: true, attributes: true, attributeFilter: ["data-active"], attributeOldValue: true });
@@ -336,7 +412,7 @@ const initErrors = safe(() => {
       track("js_error", {
         source_file: url.pathname.split("/").pop() || "inline",
         line: e.lineno || 0,
-        message_short: String(e.message || "").slice(0, 80),
+        message_short: scrubMessage(e.message),
       });
     } catch {
       // ignore
@@ -365,10 +441,12 @@ const trackPageView = safe(() => {
 
 export function init() {
   try {
+    document.addEventListener("click", safe(onMonthTabClick), true);
     document.addEventListener("click", safe(onClick));
     initErrors();
     initMapHover();
-    initCitySeen();
+    initPoiHover();
+    initGalleryScroll();
     initSectionSeen();
     initFestivalTabs();
     trackPageView();

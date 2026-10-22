@@ -28,7 +28,7 @@ eleventyComputed:
 <div class="content-page region-page" id="top">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
-  <a href="/#map" data-internal-link="breadcrumb_regions">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
+  <a href="/#map" data-internal-source="breadcrumb" data-internal-target="regions_map">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
 </nav>
 
 <header class="region-header region-header--split">
@@ -75,13 +75,13 @@ eleventyComputed:
     {% endif %}
     {% if region.isCapitalArea %}
     <div class="note-plate note-plate--stricter">
-      <span class="note-plate__text">Capital-area region — the higher income threshold applies, except in its <a href="/regions/gyeonggi-do/population-decline-areas/" data-region-source="region_badge">population-decline areas</a>.</span>
-      <a class="note-plate__link" href="/visa-info/" data-internal-link="visa_info_badge">Visa info &rarr;</a>
+      <span class="note-plate__text">Capital-area region — the higher income threshold applies, except in its <a href="/regions/gyeonggi-do/population-decline-areas/" data-internal-source="region_badge">population-decline areas</a>.</span>
+      <a class="note-plate__link" href="/visa-info/" data-internal-source="region_badge" data-internal-target="region_note_link">Visa info &rarr;</a>
     </div>
     {% else %}
     <div class="note-plate note-plate--easier">
       <span class="note-plate__text">Outside the capital area — the lower income threshold applies.</span>
-      <a class="note-plate__link" href="/visa-info/" data-internal-link="visa_info_badge">Visa info &rarr;</a>
+      <a class="note-plate__link" href="/visa-info/" data-internal-source="region_badge" data-internal-target="region_note_link">Visa info &rarr;</a>
     </div>
     {% endif %}
   </aside>
@@ -288,7 +288,7 @@ eleventyComputed:
       {% for para in rentSummary.costNote %}
       <p class="cost-note">{{ para | safe }}</p>
       {% endfor %}
-      <p class="cost-link"><a href="/settling-in/" data-internal-link="renting_intro_to_settling">A short intro into Korean renting →</a></p>
+      <p class="cost-link"><a href="/settling-in/" data-internal-source="content_text" data-internal-target="renting_intro_link">A short intro into Korean renting →</a></p>
       {% else %}
       {% set message = "No rental price figures for this region yet." %}
       {% set tag = "p" %}

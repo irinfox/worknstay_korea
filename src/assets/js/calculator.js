@@ -1,5 +1,5 @@
 import { calculateEligibility } from "./eligibility.js";
-import { ageBucket, incomeGniBucket, resultName } from "./tracking-buckets.js";
+import { ageBucket, incomeGniBucket, inputErrorOf, resultName } from "./tracking-buckets.js";
 import {
   attemptCount, nextAttemptNo, setCalcResult, track, watchMapAfterSubmit,
 } from "./tracker.js";
@@ -41,7 +41,8 @@ const CAPTIONS = {
   all: () => "Eligible everywhere.",
 };
 
-const FULL_RULES_LINK = ' <a href="/visa-info/">Visa info →</a>';
+const FULL_RULES_LINK =
+  ' <a href="/visa-info/" data-internal-source="calc_hint" data-internal-target="calc_result_link">Visa info →</a>';
 
 // Plate tint follows the site palette (see calculator.css) — never red. The calculator gives
 // answers ("not eligible" / under the minimum age → amber) and, when the form isn't complete
@@ -315,13 +316,7 @@ export function init(onResult = () => {}) {
       return;
     }
     setCalcResult("none_calculated");
-    const salaryMissing = rawInput.salaryRaw.trim() === "" || userInput.salaryKrw === 0 || !Number.isFinite(userInput.salaryKrw);
-    const ageMissing = rawInput.ageRaw.trim() === "";
-    const zero = userInput.salaryKrw === 0 || (salaryMissing && rawInput.salaryRaw.trim() !== "");
-    track("calculator_input_error", {
-      field: salaryMissing && ageMissing ? "both" : salaryMissing ? "income" : "age",
-      reason: salaryMissing && zero ? "zero" : "empty",
-    });
+    track("calculator_input_error", inputErrorOf(rawInput.salaryRaw, rawInput.ageRaw, userInput.salaryKrw));
   }
 
   // markInvalid: true only for a real submit, so no field is painted red before the visitor acts.
@@ -353,6 +348,17 @@ export function init(onResult = () => {}) {
   // Only reveal the form once JS has actually loaded and referenceData parsed — a broken form
   // with no working submit handler is worse than the <noscript> fallback.
   form.hidden = false;
+
+  // Top of the calculator funnel: first focus in any field, or a click on the checkbox (Safari
+  // doesn't focus a checkbox on click), once per page load.
+  let interacted = false;
+  const markInteraction = () => {
+    if (interacted) return;
+    interacted = true;
+    track("calculator_interaction_started");
+  };
+  form.addEventListener("focusin", (e) => e.target.matches("input") && markInteraction());
+  form.addEventListener("click", (e) => e.target.matches("input[type=checkbox]") && markInteraction());
 
   bindSalaryFormatting(form.elements.salaryKrw);
   bindAgeSanitizing(form.elements.age);

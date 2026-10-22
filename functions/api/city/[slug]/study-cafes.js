@@ -6,7 +6,7 @@ import { countStudyCafes } from "../../lib/kakao-client.mjs";
 import { latencyBucket, logApiCall } from "../../lib/tracking.mjs";
 
 export async function onRequestGet(context) {
-  const { params, env } = context;
+  const { params, env, request } = context;
   const city = cities.find((c) => c.slug === params.slug);
   if (!city) {
     return Response.json({ error: "Unknown city" }, { status: 404 });
@@ -23,7 +23,7 @@ export async function onRequestGet(context) {
     region: city.regionSlug,
     city: city.slug,
     status,
-    retried: false, // the browser owns the single retry (study-cafes.js); each attempt logs itself
+    retried: request.headers.get("x-retry") === "1", // the page's own JS retries (study-cafes.js); each attempt logs itself
     fallback_served: Boolean(result.degraded),
     latency_ms_bucket: latencyBucket(Date.now() - startedAt),
   });

@@ -48,10 +48,48 @@ export function loadSecondsBucket(seconds) {
   return "120+";
 }
 
+// Fine at the small end (360 Galaxy / 412 Pixel class phones), plus the CSS layout breakpoints.
 export function viewportBucket(width) {
-  if (width < 480) return "<480";
-  if (width < 768) return "480–767";
-  if (width < 1024) return "768–1023";
-  if (width < 1440) return "1024–1439";
+  if (width < 360) return "<360";
+  if (width < 400) return "360–399";
+  if (width < 480) return "400–479";
+  if (width < 600) return "480–599";
+  if (width < 768) return "600–767";
+  if (width < 900) return "768–899";
+  if (width < 1024) return "900–1023";
+  if (width < 1150) return "1024–1149";
+  if (width < 1440) return "1150–1439";
   return "1440+";
+}
+
+// Which calculator field(s) the form asked to complete. Returns only enum values, never the input.
+export function inputErrorOf(salaryRaw, ageRaw, salaryKrw) {
+  const salaryZero = salaryKrw === 0;
+  const salaryMissing = salaryRaw.trim() === "" || salaryZero;
+  const ageMissing = ageRaw.trim() === "";
+  return {
+    field: salaryMissing && ageMissing ? "both" : salaryMissing ? "income" : "age",
+    reason: salaryZero ? "zero" : "empty",
+  };
+}
+
+// Error text is the only free text we send; digits are masked so a typed age or income can never
+// ride along in it.
+export function scrubMessage(message) {
+  return String(message ?? "").replace(/\d+/g, "#").slice(0, 80);
+}
+
+export function slugOf(text, max = 60) {
+  return String(text ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, max);
+}
+
+// Where an internal href leads; null for anything that is not a tracked site page.
+export function targetPageTypeOf(pathname) {
+  if (pathname === "/") return "home";
+  if (pathname === "/regions/gyeonggi-do/population-decline-areas/") return "decline_areas";
+  if (/^\/regions\/[a-z0-9-]+\/$/.test(pathname)) return "region";
+  if (pathname.startsWith("/visa-info")) return "visa";
+  if (pathname.startsWith("/settling-in")) return "settling";
+  if (pathname.startsWith("/about")) return "about";
+  return null;
 }

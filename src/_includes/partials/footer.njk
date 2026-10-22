@@ -3,12 +3,12 @@
   <div class="site-footer__inner">
     {% if regionNav.prev or regionNav.next %}
     <nav class="site-footer__regions" aria-label="Nearby regions" data-section-seen="prev_next">
-      {% if regionNav.prev %}<a class="site-footer__link site-footer__prev" data-region-source="prev_next" href="/regions/{{ regionNav.prev.slug }}/">&larr; {{ regionNav.prev.nameEn }}</a>{% endif %}
-      {% if regionNav.next %}<a class="site-footer__link site-footer__next" data-region-source="prev_next" href="/regions/{{ regionNav.next.slug }}/">{{ regionNav.next.nameEn }} &rarr;</a>{% endif %}
+      {% if regionNav.prev %}<a class="site-footer__link site-footer__prev" data-internal-source="prev_next" href="/regions/{{ regionNav.prev.slug }}/">&larr; {{ regionNav.prev.nameEn }}</a>{% endif %}
+      {% if regionNav.next %}<a class="site-footer__link site-footer__next" data-internal-source="prev_next" href="/regions/{{ regionNav.next.slug }}/">{{ regionNav.next.nameEn }} &rarr;</a>{% endif %}
     </nav>
     {% endif %}
     <div class="site-footer__row">
-      <p class="site-footer__disclaimer">{{ site.footer.disclaimer }}</p>
+      <p class="site-footer__disclaimer">{{ site.footer.disclaimer }} {{ site.footer.privacy.lead }} <a class="site-footer__link site-footer__link--out" href="{{ site.footer.privacy.url }}" data-link-category="github" data-link-id="privacy_note" data-link-section="footer" target="_blank" rel="noopener">{{ site.footer.privacy.label }} ↗</a>.</p>
       <nav class="site-footer__links" aria-label="Project links">
         <a class="site-footer__link site-footer__link--out" href="{{ site.footer.repoUrl }}" data-link-category="github" data-link-id="repo" data-link-section="footer" target="_blank" rel="noopener">GitHub ↗</a>
         <a class="site-footer__link site-footer__link--out" href="{{ site.footer.feedbackUrl }}" data-link-category="feedback" data-link-id="feedback_form" data-link-section="footer" target="_blank" rel="noopener">Feedback ↗</a>

@@ -31,7 +31,7 @@ export async function onRequestGet(context) {
 
   if (!env?.KTO_API_KEY) {
     logApiCall(context, {
-      endpoint: "kto_festivals", region: slug, status: "skipped_no_key", retried: false,
+      endpoint: "kto_festivals", region: slug, status: "skipped_no_key", kto_codes_requested: 0, retried: false,
       fallback_served: true, latency_ms_bucket: latencyBucket(0),
     });
     return Response.json({
@@ -91,6 +91,7 @@ export async function onRequestGet(context) {
   logApiCall(context, {
     endpoint: "kto_festivals",
     region: slug,
+    kto_codes_requested: codes.length,
     status: quotaExceeded ? "quota" : liveFailed ? "error" : items.length ? "ok" : "empty",
     retried: trace.retried,
     fallback_served: false, // failures serve an empty list + notice, never the snapshot

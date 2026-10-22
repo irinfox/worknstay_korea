@@ -2,6 +2,8 @@
 // an unknown event name, field or param value is rejected, never stored. Writes go to the D1
 // binding `DB`; when it is absent (preview without a database, plain Node) every write is a no-op.
 
+import { REGION_SLUGS } from "./region-map.mjs";
+
 export const SCHEMA_VERSION = 1;
 
 const SLUG = /^[a-z0-9][a-z0-9_-]{0,63}$/;
@@ -15,14 +17,30 @@ const int = (min, max) => ({ type: "int", min, max });
 const bool = { type: "bool" };
 
 const RESULT = enumOf("all_regions", "non_capital_plus_decline", "none", "under_18");
+const CALC_RESULT = { ...enumOf(...RESULT.values, "none_calculated"), optional: true }; // absent = null (not the home page)
+const region = enumOf(...REGION_SLUGS);
+const POI_TYPE = enumOf("city", "mountain", "surf_beach", "ski_resort", "beach", "history", "greenery");
+const MONTHS = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december",
+];
 const REGION_PAGE_SECTIONS = ["map", "cities", "rent", "events", "places", "dishes"];
 
+// Link IDs for internal links whose target is not a region page (data-internal-target in templates).
+export const INTERNAL_LINK_TARGETS = [
+  "regions_map", "gyeonggi_decline_areas", "region_note_link", "calc_result_link",
+  "eligibility_calculator", "renting_intro_link",
+];
+
 export const PAGE_TYPES = ["home", "region", "decline_areas", "visa", "settling", "about", "404"];
-export const VIEWPORT_BUCKETS = ["<480", "480–767", "768–1023", "1024–1439", "1440+"];
+export const VIEWPORT_BUCKETS = [
+  "<360", "360–399", "400–479", "480–599", "600–767", "768–899", "900–1023", "1024–1149", "1150–1439", "1440+",
+];
 
 // Every param is required unless marked optional; strings are never free text except
 // message_short (hard-capped).
 export const EVENTS = {
+  calculator_interaction_started: {},
   calculator_submitted: {
     attempt_no: int(1, 1000),
     age_bucket: enumOf("<18", "18–24", "25–29", "30–34", "35–39", "40–49", "50+", "invalid"),
@@ -40,8 +58,8 @@ export const EVENTS = {
     seconds_after_submit_bucket: enumOf("<3", "3–10", "10–30", "30+"),
     result: RESULT,
   },
-  map_region_hover: { region: slug },
-  map_region_tap: { region: slug, tap_no: int(1, 1000) },
+  home_map_region_hover: { region },
+  home_map_region_click: { region, tap_no: int(1, 1000) },
   page_view: {
     referrer_domain: { ...{ type: "pattern", re: DOMAIN }, optional: true },
     utm_source: { type: "pattern", re: UTM, optional: true },
@@ -56,17 +74,18 @@ export const EVENTS = {
       "eligibility", "documents", "notes", "questions", "links",
       "renting", "places_to_work", "communities"
     ),
+    calc_result: CALC_RESULT,
   },
   regions_landing_scroll_up: {},
-  region_link_click: {
-    target: slug,
+  internal_link_click: {
+    target_page_type: enumOf(...PAGE_TYPES.filter((t) => t !== "404")),
+    target: enumOf(...REGION_SLUGS, ...INTERNAL_LINK_TARGETS),
     source: enumOf(
       "home_map", "home_card", "prev_next", "breadcrumb", "region_badge",
-      "settling_in_link", "calc_partial_hint", "home_card_partial"
+      "visa_info_faq_link", "calc_partial_hint", "calc_hint", "content_text"
     ),
-    calc_result: enumOf("all_regions", "non_capital_plus_decline", "none", "under_18", "none_calculated"),
+    calc_result: CALC_RESULT,
   },
-  internal_link_click: { link_id: slug },
   outbound_click: {
     category: enumOf(
       "official", "guide", "coworking", "study_cafe_search", "coliving", "rental_platform",
@@ -85,16 +104,34 @@ export const EVENTS = {
     ),
     seconds_since_load_bucket: enumOf("<10", "10–30", "30–120", "120+"),
   },
-  city_card_seen: { region: slug, city: slug, position: int(1, 100) },
+  gallery_scrolled: { region, gallery_type: enumOf("highlights", "cities", "attractions", "dishes") },
   vibe_tag_click: {
     tag: { type: "pattern", re: /^[a-z0-9][a-z0-9 _&'-]{0,39}$/i },
     location: enumOf("home_card", "region_header", "city_card"),
   },
-  festival_tab_switch: { tab: enumOf("ongoing", "upcoming"), region: slug },
-  festival_page_change: { page_no: int(1, 100), region: slug },
-  places_filter_used: { filter_type: enumOf("area", "type"), value: slug, region: slug },
-  highlights_carousel_nav: { direction: enumOf("next", "prev"), region: slug },
-  accordion_opened: { accordion_id: slug, page_type: enumOf(...PAGE_TYPES) },
+  region_map_poi_hover: {
+    poi_name: slug,
+    poi_type: POI_TYPE,
+    is_interactive: bool,
+  },
+  region_map_poi_click: {
+    poi_name: slug,
+    poi_type: POI_TYPE,
+    is_interactive: bool,
+  },
+  festival_interacted: {
+    action: enumOf("tab_switch", "month_filter", "page_change"),
+    tab: enumOf("ongoing", "upcoming"),
+    region,
+    month_selected: { type: "enum", values: MONTHS, optional: true },
+    page_no: { ...int(1, 100), optional: true },
+  },
+  places_filter_used: { filter_type: enumOf("area", "type"), value: slug, region },
+  highlights_carousel_nav: { direction: enumOf("next", "prev"), region },
+  accordion_opened: {
+    accordion_id: enumOf("settling_in_price_snapshot", "visa_info_faq"),
+    item_id: slug,
+  },
   js_error: {
     source_file: { type: "pattern", re: /^[A-Za-z0-9._-]{1,60}$/ },
     line: int(0, 1000000),
@@ -109,10 +146,20 @@ const SERVER_EVENTS = {
     endpoint: enumOf("kto_attractions", "kto_festivals", "kakao_study_cafe"),
     region: { type: "pattern", re: SLUG, optional: true },
     city: { type: "pattern", re: SLUG, optional: true },
+    kto_codes_requested: { ...int(0, 100), optional: true },
     status: enumOf("ok", "empty", "quota", "error", "skipped_no_key"),
     retried: bool,
     fallback_served: bool,
     latency_ms_bucket: enumOf("<300", "300–1000", "1000–3000", "3000+"),
+  },
+};
+
+// Cross-field rules a flat schema can't express: which optional params an action requires.
+const REFINE = {
+  festival_interacted: (p) => {
+    if (p.action === "tab_switch") return p.month_selected === undefined && p.page_no === undefined;
+    if (p.action === "month_filter") return p.tab === "upcoming" && p.month_selected !== undefined && p.page_no === undefined;
+    return p.page_no !== undefined && (p.tab === "upcoming" || p.month_selected === undefined);
   },
 };
 
@@ -138,7 +185,7 @@ function validParams(schema, params) {
   }
   for (const [key, rule] of Object.entries(schema)) {
     const v = params[key];
-    if (v === undefined || v === "") {
+    if (v === undefined || v === "" || (v === null && rule.optional)) {
       if (rule.optional) continue;
       return null;
     }
@@ -166,7 +213,7 @@ export function validateClientEvent(body) {
   if (!VIEWPORT_BUCKETS.includes(body.viewport_bucket)) return null;
   if (typeof body.browser_lang !== "string" || !/^[a-z]{2,3}$/i.test(body.browser_lang)) return null;
   const params = validParams(schema, body.params ?? {});
-  if (!params) return null;
+  if (!params || (REFINE[body.event_name] && !REFINE[body.event_name](params))) return null;
   return {
     event_name: body.event_name,
     page_path: body.page_path,

@@ -14,7 +14,7 @@ async function fetchLive(slug) {
   for (let attempt = 0; ; attempt++) {
     let retryable = true;
     try {
-      const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`, { headers: pageLoadHeaders() });
+      const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`, { headers: { ...pageLoadHeaders(), ...(attempt > 0 && { "X-Retry": "1" }) } });
       if (res.ok) {
         const data = await res.json();
         if (!data.degraded) return data;

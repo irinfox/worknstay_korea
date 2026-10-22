@@ -177,5 +177,7 @@ export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRa
     }
   });
 
-  return { items: [...byContentId.values()], quotaExceeded, failed };
+  // Billable calls made: one per code and bucket, plus the repeat of the probe if arrange was broken.
+  const calls = groups.length + (arrangeBroken ? 1 : 0);
+  return { items: [...byContentId.values()], quotaExceeded, failed, calls };
 }
