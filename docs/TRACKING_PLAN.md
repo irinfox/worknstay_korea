@@ -24,7 +24,7 @@ This document is the single source of truth for analytics on the site. It is too
 | Q12 | Do people notice that the map reacted to the result and scroll to it? | UX |
 | Q13 | Is the sticky section nav used, and which sections? | UX |
 | Q14 | Main nav "Regions" leads to `/#map`, not the top of the home page — do people scroll up right after landing (expecting the top)? | UX |
-| Q15 | How do people reach the population-decline page? (Gyeonggi-do breadcrumb, calc notice, region notice, partial map results) | UX |
+| Q15 | How do people reach the population-decline page? (Gyeonggi-do region badge, calc notice, region notice, partial map results) | UX |
 | Q16 | Desktop: do people hover over the regional map (some pins appear only on hover)? | UX |
 | Q17 | Desktop: do people hover over the national map (hovering it highlights region area and region card)? | UX |
 | Q18 | Desktop: how do people reach region page (click on map region, click on region card)? | UX |
@@ -67,7 +67,7 @@ This document is the single source of truth for analytics on the site. It is too
 | `prev_page_type` | text | `region` / `home` / … / `external` / `none` | from same-origin `document.referrer` |
 | `page_load_id` | text (UUID) | — | in memory only |
 | `device_category` | text | `mobile` / `tablet` / `desktop` | server-side |
-| `viewport_bucket` | text | `<480` / `480–767` / `768–1023` / `1024–1439` / `1440+` | |
+| `viewport_bucket` | text | `<360` / `360–399` / `400–479` / `480–599` / `600–767` / `768–899` / `900–1023` / `1024–1149` / `1150–1439` / `1440+` | |
 | `country` | text | `US` | Cloudflare |
 | `browser_lang` | text | `en` | primary subtag only |
 | `is_likely_bot` | bool | `false` | simple server-side heuristic |
@@ -172,12 +172,13 @@ No params.
 Sent from the **source** page at click time (via `sendBeacon`, which survives navigation). URLs stay unchanged.
 | Param | Type | Values |
 |---|---|---|
-| `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` / `404` |
-| `target` | text | region slug, or link ID (`renting_intro_to_settling` / `visa_info_badge` etc ) |
-| `source` | text | `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text`|
+| `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` |
+| `target` | text | region slug, or a link ID: `regions_map` / `gyeonggi_decline_areas` / `region_note_link` / `calc_result_link` / `eligibility_calculator` / `renting_intro_link` |
+| `source` | text | where the link sits: `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text` |
 | `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
-Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do page), `home_card`, `calc_partial_hint`. `breadcrumb` exists only on the population-decline page (back to Gyeonggi-do).
+Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do page), `home_card`, `home_map`, `calc_partial_hint`.
+`breadcrumb` exists on every region page and population-decline page, leads to `/#map` on Regions click and back to Gyeonggi-do on the population-decline page.
 
 ---
 
@@ -194,7 +195,7 @@ Category and id come from `data-link-category` / `data-link-id` attributes in te
 | `city` | text | set for links inside a city card, else `null` |
 
 ### `gallery_scrolled` — Q5, Q21
-Fired once per each type gallery scroll.
+Fired once per gallery type per page load, on the first scroll the visitor drives (wheel, touch, drag, keys). Autoplay and prev/next buttons do not count.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
@@ -215,10 +216,11 @@ Clicks on non-interactive tags (dead-click detector).
 | `location` | text | `home_card` / `region_header` / `city_card` |
 
 ### `region_map_poi_hover` — Q16, Q20 (pointer devices only)
+Fired once per POI per page load, after ≥300 ms of hover.
 | Param | Type | Values |
 |---|---|---|
 | `poi_name` | text | `sokcho` / `yangyang_beaches` |
-| `poi_type` | text | `city` / `surf_beach` / `ski_resort` |
+| `poi_type` | text | `city` / `mountain` / `surf_beach` / `ski_resort` / `beach` / `history` / `greenery` |
 | `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
 ### `region_map_poi_click` — Q16, Q20
@@ -226,17 +228,19 @@ Fires on tap for mobile devices and on click for desktop devices for both active
 | Param | Type | Values |
 |---|---|---|
 | `poi_name` | text | `yangyang_beaches` |
-| `poi_type` | text | `surf_beach` |
+| `poi_type` | text | `city` / `mountain` / `surf_beach` / `ski_resort` / `beach` / `history` / `greenery` |
 | `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
 ### `festival_interacted` — Q22
 | Param | Type | Values |
 |---|---|---|
 | `action` | text | `tab_switch` / `month_filter` / `page_change` |
-| `tab` | text | `ongoing` / `upcoming` |
+| `tab` | text | `ongoing` / `upcoming` — on `tab_switch` or `page_change`, `upcoming` on `month_filter` |
 | `region` | text | `gangwon-do` |
-| `month_selected` | text | `October` |
-| `page_no` | int | `1` |
+| `month_selected` | text | `october`; only on `month_filter`, and on `page_change` inside an Upcoming tab, if it has more than 1 month with events |
+| `page_no` | int | `2`; only on `page_change` |
+
+Re-selecting the active tab or month is not an event.
 
 ### `places_filter_used` — Q22
 | Param | Type | Values |
@@ -255,7 +259,7 @@ Fires on tap for mobile devices and on click for desktop devices for both active
 | Param | Type | Values |
 |---|---|---|
 | `accordion_id` | text | `settling_in_price_snapshot` / `visa_info_faq` |
-| `item_id` | text | Settling in: `gangwon-do` · Visa info: `freelancer` / `arc` / … |
+| `item_id` | text | Settling in: `gangwon-do` · Visa info: `calculate_and_convert` / `reside_in_capital` / `freelancer` / `work_for_korean_company` / `family` / `insurance` / `criminal_record` / `change_visa_type` / `nationalities` / `visit_without_visa` / `arc` / `permanent_residence` |
 
 ---
 
@@ -266,7 +270,7 @@ Fires on tap for mobile devices and on click for desktop devices for both active
 |---|---|---|
 | `source_file` | text | `calculator.js` |
 | `line` | int | `42` |
-| `message_short` | text | first 80 characters, no user input data |
+| `message_short` | text | first 80 characters, all digits masked as `#` so no typed age or income can appear |
 
 ### `not_found` — Q25
 | Param | Type | Values |
@@ -282,7 +286,7 @@ The number of calls per page view is defined by the code; this event records wha
 | `city` | text | city name (i.e. `sokcho`) for Kakao calls / `null` for KTO calls |
 | `kto_codes_requested` | int | number of codes fetched in this request: `9` for KTO / `null` for Kakao |
 | `status` | text | `ok` / `empty` / `quota` / `error` / `skipped_no_key` |
-| `retried` | bool | |
+| `retried` | bool | a retry after a failure (KTO: made by the server within the call; Kakao: made by the page and flagged with a request header) |
 | `fallback_served` | bool | |
 | `latency_ms_bucket` | text | `<300` / `300–1000` / `1000–3000` / `3000+` |
 | `page_load_id` | text | forwarded from the client in a request header |
