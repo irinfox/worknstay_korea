@@ -9,8 +9,10 @@ user experience.
 * **Calculator inputs:** Strictly generalized. Income is stored as a ratio of the GNI, age is
   grouped into ranges (e.g., "30–34"), and accompanying family is saved as a simple yes/no. Exact
   numbers are never saved.
-* **Technical environment:** Generalized device category (mobile/tablet/desktop), screen-width
-  bucket, browser language, and a bot-probability flag.
+* **Technical environment (Cloudflare D1):** Generalized device category (mobile/tablet/desktop),
+  screen-width bucket, browser language, and a bot-probability flag.
+* **Technical environment (PostHog):** Browser version, OS, screen and viewport size, browser
+  language, and timezone.
 * **Acquisition:** The referring site's domain and campaign parameters (UTMs), if present.
 * **Site health:** Short JavaScript error messages (with all numbers masked to protect inputs) and
   server-side API performance logs.
