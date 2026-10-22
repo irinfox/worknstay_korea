@@ -2,7 +2,9 @@
 
 Status: **draft v0.9** · Owner: Irina
 
-This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
+This document is the single source of truth for analytics on the site. It is tool-agnostic: events
+and parameters are defined here first, then implemented in whichever tool is chosen. Any new or
+renamed event is added here before it is added to code.
 
 ---
 
@@ -43,14 +45,22 @@ This document is the single source of truth for analytics on the site. It is too
 - **No cookies, no localStorage / sessionStorage, no user or session IDs.**
 - **No IP addresses, no raw User-Agent, no exact income or age.**
 - Calculator inputs are stored only as **buckets** (§4).
-- `page_load_id`: random UUID created on page load, kept **in memory only**. It links events within one page view and disappears on reload or navigation.
-- PostHog's distinct, person and session ids follow the same rule: random, memory-only, new on every page view.
-- Region-to-region journeys are measured **without IDs**, from the same-origin `document.referrer` → `prev_page_type` (§3).
-- Country is derived by Cloudflare at the edge (`request.cf.country`). The IP address is used by Cloudflare to determine the country but never reaches our data.
-- Device category and bot flag are derived server-side from the User-Agent; only the derived value is stored.
+- `page_load_id`: random UUID created on page load, kept **in memory only**. It links events within
+  one page view and disappears on reload or navigation.
+- PostHog's distinct, person and session ids follow the same rule: random, memory-only, new on every
+  page view.
+- Region-to-region journeys are measured **without IDs**, from the same-origin `document.referrer` →
+  `prev_page_type` (§3).
+- Country is derived by Cloudflare at the edge (`request.cf.country`). The IP address is used by
+  Cloudflare to determine the country but never reaches our data.
+- Device category and bot flag are derived server-side from the User-Agent; only the derived value
+  is stored.
 - The calculator copy should inform the user that inputs are used anonymously for site analytics.
 
-**Why no session / user ID:** anonymous events with no identifier and nothing written to the device are not linkable to a person and need no consent banner. A session ID stored on the device (even in sessionStorage) is device storage for a non-essential purpose and makes events linkable, which in the EU (GDPR) and RK (PIPA) generally requires prior user consent.
+**Why no session / user ID:** anonymous events with no identifier and nothing written to the device
+are not linkable to a person and need no consent banner. A session ID stored on the device (even in
+sessionStorage) is device storage for a non-essential purpose and makes events linkable, which in
+the EU (GDPR) and RK (PIPA) generally requires prior user consent.
 
 ---
 
@@ -75,7 +85,8 @@ This document is the single source of truth for analytics on the site. It is too
 | `is_likely_bot` | bool | `false` | simple server-side heuristic |
 | `params` | JSON | `{...}` | event-specific, validated against the allowlist |
 
-All "click" events also fire on tap: browsers emit `click` for taps. `device_category` tells them apart. Hover events exist only on devices with a pointer.
+All "click" events also fire on tap: browsers emit `click` for taps. `device_category` tells them
+apart. Hover events exist only on devices with a pointer.
 
 ---
 
@@ -85,10 +96,12 @@ All "click" events also fire on tap: browsers emit `click` for taps. `device_cat
 `<18` · `18–24` · `25–29` · `30–34` · `35–39` · `40–49` · `50+` · `invalid`
 
 **Income** — stored as a **share of the GNI reference value**, never as an exact amount.
-`share = income_krw / gni_krw`, computed with the same GNI value the calculator uses, with **no rounding before bucketing**.
+`share = income_krw / gni_krw`, computed with the same GNI value the calculator uses, with **no
+rounding before bucketing**.
 Buckets are lower-inclusive, upper-exclusive `[a, b)`:
 `<0.02` · `0.02–0.5` · `0.5–1` · `1–1.25` · `1.25–1.5` · `1.5–2` · `2–2.5` · `2.5+` · `invalid`
-`<0.02` (under ~1M KRW a year) is implausible and flags likely input mistakes, e.g. an amount typed in USD or in thousands. A high share here is a UX signal (input mask, currency hint).
+`<0.02` (under ~1M KRW a year) is implausible and flags likely input mistakes, e.g. an amount typed
+in USD or in thousands. A high share here is a UX signal (input mask, currency hint).
 Example: income exactly equal to 1 × GNI → `1–1.25`.
 Each event also stores `gni_year` (§9), so buckets stay comparable when GNI changes.
 
@@ -97,7 +110,9 @@ Each event also stores `gni_year` (§9), so buckets stay comparable when GNI cha
 ## 5. Events — calculator & home map
 
 ### calculator_interaction_started — Q1
-Fired exactly once per page load when the user focuses on any calculator input field, clicks a checkbox or submits the form (even an empty one). Used as the top of the calculator funnel; always precedes the first `calculator_input_error` / `calculator_submitted`.
+Fired exactly once per page load when the user focuses on any calculator input field, clicks a
+checkbox or submits the form (even an empty one). Used as the top of the calculator funnel; always
+precedes the first `calculator_input_error` / `calculator_submitted`.
 No params.
 
 ### `calculator_submitted` — Q1, Q2, Q9
@@ -110,13 +125,15 @@ No params.
 | `gni_year` | int | `2025` |
 | `result` | text | `all_regions` / `non_capital_plus_decline` / `none` / `under_18` |
 
-`under_18`: a valid age below the visa minimum — the calculator shows the "must be 18 or older" notice instead of a map result.
+`under_18`: a valid age below the visa minimum — the calculator shows the "must be 18 or older"
+notice instead of a map result.
 
 Analysis rule: `attempt_no = 1` for outcome statistics (Q2); `max(attempt_no)` per page load for Q9.
 
 ### `calculator_input_error` — Q1
 Fired when the calculator asks the user to complete the form instead of showing a result. 
-(Letters cannot be typed; a negative income is ignored; a negative age is converted to its absolute value — none of these produce an error.)
+(Letters cannot be typed; a negative income is ignored; a negative age is converted to its absolute
+value — none of these produce an error.)
 | Param | Type | Values |
 |---|---|---|
 | `field` | text | `income` / `age` / `both` |
@@ -135,7 +152,8 @@ Fired once, when ≥50% of the map enters the viewport after the latest submissi
 | `result` | text | as above |
 
 ### `home_map_region_hover` — Q17 (pointer devices only)
-Fired once per region per page load, after ≥300 ms of hover. Hovering a region on the national map highlights its region card.
+Fired once per region per page load, after ≥300 ms of hover. Hovering a region on the national map
+highlights its region card.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
@@ -147,7 +165,9 @@ Fired on screens below 1024px, as it is when we re-order cards from map side to 
 | `region` | text | `gangwon-do` |
 | `tap_no` | int | taps on this region in this page load; repeated taps signal confusion |
 
-Interpretation: a `home_map_region_click` followed by `internal_link_click` with `source = home_card` and `target_page_type = region` for the same region means the behaviour was understood and the main site usefulness was fulfilled.
+Interpretation: a `home_map_region_click` followed by `internal_link_click` with
+`source = home_card` and `target_page_type = region` for the same region means the behaviour was
+understood and the main site usefulness was fulfilled.
 
 ---
 
@@ -167,11 +187,13 @@ Interpretation: a `home_map_region_click` followed by `internal_link_click` with
 | `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
 ### `regions_landing_scroll_up` — Q14
-Fired if, within 10 s after arriving at `/#map` via main nav "Regions", the user scrolls up to the hero by ≥150px.
+Fired if, within 10 s after arriving at `/#map` via main nav "Regions", the user scrolls up to the
+hero by ≥150px.
 No params.
 
 ### `internal_link_click` — Q1, Q3, Q4, Q5, Q10, Q15, Q18
-Sent from the **source** page at click time (via `sendBeacon`, which survives navigation). URLs stay unchanged.
+Sent from the **source** page at click time (via `sendBeacon`, which survives navigation). URLs stay
+unchanged.
 | Param | Type | Values |
 |---|---|---|
 | `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` |
@@ -179,15 +201,18 @@ Sent from the **source** page at click time (via `sendBeacon`, which survives na
 | `source` | text | where the link sits: `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text` |
 | `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
-Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do page), `home_card`, `home_map`, `calc_partial_hint`.
-`breadcrumb` exists on every region page and population-decline page, leads to `/#map` on Regions click and back to Gyeonggi-do on the population-decline page.
+Known routes to the population-decline page: `visa_info_faq_link`, `region_badge` (Gyeonggi-do
+page), `home_card`, `home_map`, `calc_partial_hint`.
+`breadcrumb` exists on every region page and population-decline page, leads to `/#map` on Regions
+click and back to Gyeonggi-do on the population-decline page.
 
 ---
 
 ## 7. Events — content
 
 ### `outbound_click` — Q5, Q6
-Category and id come from `data-link-category` / `data-link-id` attributes in templates — never guessed in JS.
+Category and id come from `data-link-category` / `data-link-id` attributes in templates — never
+guessed in JS.
 | Param | Type | Values |
 |---|---|---|
 | `category` | text | `official` / `guide` / `coworking` / `study_cafe_search` / `coliving` / `rental_platform` / `community` / `map_app` / `food` / `source_credit` / `github` / `feedback` / `other` |
@@ -197,14 +222,18 @@ Category and id come from `data-link-category` / `data-link-id` attributes in te
 | `city` | text | set for links inside a city card, else `null` |
 
 ### `gallery_scrolled` — Q5, Q21
-Fired once per gallery type per page load, on the first scroll the visitor drives (wheel, touch, drag, keys). Autoplay and prev/next buttons do not count.
+Fired once per gallery type per page load, on the first scroll the visitor drives (wheel, touch,
+drag, keys). Autoplay and prev/next buttons do not count.
 | Param | Type | Values |
 |---|---|---|
 | `region` | text | `gangwon-do` |
 | `gallery_type` | text | `highlights` / `cities` / `attractions` / `dishes` |
 
 ### `section_seen` — Q5, Q8
-Fired once per section per page load when enough of the section has stayed in the viewport for 1 s: at least half of the section, or 30% of the viewport height for tall sections. Jumps via section nav and fast scrolling past a section don't count. Sections (not scroll percentages) are used because percentages depend on screen size.
+Fired once per section per page load when enough of the section has stayed in the viewport for 1 s:
+at least half of the section, or 30% of the viewport height for tall sections. Jumps via section nav
+and fast scrolling past a section don't count. Sections (not scroll percentages) are used because
+percentages depend on screen size.
 | Param | Type | Values |
 |---|---|---|
 | `section` | text | Region pages: `highlights` / `map` / `cities` / `rent` / `events` / `places` / `dishes` / `prev_next` · Visa info: `eligibility` / `income_table` / `documents` / `notes` / `questions` / `links` · Settling in: `renting` / `short_term` / `colivings` / `places_to_work` / `search_notes` / `communities` / `links` |
@@ -228,7 +257,8 @@ Fired once per POI per page load, after ≥300 ms of hover.
 | `is_interactive` | bool | `false` for non-interactive elements, otherwise `true` |
 
 ### `region_map_poi_click` — Q16, Q20
-Fires on tap for mobile devices and on click for desktop devices for both active and non-active POIs.
+Fires on tap for mobile devices and on click for desktop devices for both active and non-active
+POIs.
 | Param | Type | Values |
 |---|---|---|
 | `poi_name` | text | `yangyang_beaches` |
@@ -255,7 +285,8 @@ Re-selecting the active tab or month is not an event.
 | `area_selected` | text | area pill active in the current page state, either just clicked or from previous state |
 | `type_selected` | text | type pill active in the current page state, either just clicked or from previous state |
 
-`filter_type` + `value` say what was clicked; the `*_selected` pair is the full filter state. Re-selecting the active pill is not an event.
+`filter_type` + `value` say what was clicked; the `*_selected` pair is the full filter state.
+Re-selecting the active pill is not an event.
 
 ### `highlights_carousel_nav` — Q22
 | Param | Type | Values |
@@ -286,7 +317,8 @@ Re-selecting the active tab or month is not an event.
 | `requested_path` | text | no query string |
 
 ### `api_call` — Q24 *(server-side, in Pages Functions)*
-The number of calls per page view is defined by the code; this event records what actually happened (failures, retries, quota, fallbacks, latency).
+The number of calls per page view is defined by the code; this event records what actually happened
+(failures, retries, quota, fallbacks, latency).
 | Param | Type | Values |
 |---|---|---|
 | `endpoint` | text | `kto_attractions` / `kto_festivals` / `kakao_study_cafe` |
@@ -321,17 +353,23 @@ Join `events.gni_year = gni_reference.gni_year` to convert income buckets back t
 
 Two tools are used for analytics: Cloudflare D1 and cookieless PostHog.
 
-**Cloudflare D1:** own tracking system with full control of pipeline and event design. Data engineering + analytics SQl angle.
+**Cloudflare D1:** own tracking system with full control of pipeline and event design. Data
+engineering + analytics SQl angle.
 Storage schema: [`0001_create_tracking.sql`](../migrations/0001_create_tracking.sql)
 
-**PostHog:** industry-standard tool with AB experiments, user heatmaps and session replays. Product data analyst angle.
+**PostHog:** industry-standard tool with AB experiments, user heatmaps and session replays. Product
+data analyst angle.
 
 PostHog setup (EU cloud, one project for all environments):
 - Memory-only persistence: Client IPs are not stored and internal IDs live for a single page view.
-- Strict data masking: Replays mask all user inputs and block the calculator card entirely (`ph-no-capture`). Page text is
+- Strict data masking: Replays mask all user inputs and block the calculator card entirely
+  (`ph-no-capture`). Page text is
   public content and is not masked.
-- Privacy compliance: The SDK is not loaded when the browser sends Do Not Track (DNT) or Global Privacy Control (GPC) signals.
-- Environment setup: The project key is public and set in `src/_data/posthog.json`. Every event carries an `env` parameter (`production` / `preview` / `local`) matching the D1 setup; reports exclude non-production through the project's test-account filter.
+- Privacy compliance: The SDK is not loaded when the browser sends Do Not Track (DNT) or Global
+  Privacy Control (GPC) signals.
+- Environment setup: The project key is public and set in `src/_data/posthog.json`. Every event
+  carries an `env` parameter (`production` / `preview` / `local`) matching the D1 setup; reports
+  exclude non-production through the project's test-account filter.
 - D1 events are not mirrored.
 
 
@@ -357,9 +395,12 @@ Test checklist:
 
 ## 12. Rollout & data policy
 
-- **Single release** for all events. Implementation order: calculator → navigation → content → quality → map UX.
-- First review of naming and params after ~2 weeks of data. Changes after that bump `schema_version` and are logged in §13.
-- **Data retention:** raw event rows are deleted after 24 months; only monthly summary tables remain (e.g. "Oct 2026: 120 calculator submissions, 40% `all_regions`").
+- **Single release** for all events. Implementation order: calculator → navigation → content →
+  quality → map UX.
+- First review of naming and params after ~2 weeks of data. Changes after that bump `schema_version`
+  and are logged in §13.
+- **Data retention:** raw event rows are deleted after 24 months; only monthly summary tables remain
+  (e.g. "Oct 2026: 120 calculator submissions, 40% `all_regions`").
 - **Sharing:** only aggregated tables, never raw rows.
 
 ---

@@ -40,9 +40,10 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
 
 **Rejected:** Astro (heavier tree, faster breaking-change cadence).
 
-**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon and the PostHog script; no
-user input shown to other visitors. Framing and permissions are set in `src/_headers`, HSTS in the
-Cloudflare dashboard. Revisit if third-party scripts, accounts or URL state are added.
+**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon and
+the PostHog script; no user input shown to other visitors. Framing and permissions are set in
+`src/_headers`, HSTS in the Cloudflare dashboard. Revisit if third-party scripts, accounts or URL
+state are added.
 
 ## 3. UX decisions locked in
 
@@ -294,5 +295,5 @@ functions/api/**                `api_call` rows (failures, retries, quota, laten
   accepted and discarded; storage errors are swallowed.
 - **Tracking is declarative.** Outbound links, internal links, accordions and map pins declare
   their ids in `data-*` attributes; the tracker reads them.
-- **Standalone PostHog integration.** `posthog.js` loads the pinned SDK from PostHog's CDN; the project
-  key is in `src/_data/posthog.json` (empty key disables it).
+- **Standalone PostHog integration.** `posthog.js` loads the pinned SDK from PostHog's CDN; the
+  project key is in `src/_data/posthog.json` (empty key disables it).

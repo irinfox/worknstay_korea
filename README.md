@@ -40,8 +40,8 @@ The stack is kept deliberately simple and stable — designed to last and be eas
   external map services
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting with
   serverless functions for the live KTO and Kakao® Local API calls
-- **[Cloudflare D1](https://developers.cloudflare.com/d1/)** — database to store the site's anonymous,
-  cookieless analytics events
+- **[Cloudflare D1](https://developers.cloudflare.com/d1/)** — database to store the site's
+  anonymous, cookieless analytics events
 - **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — local development and
   deployment CLI, the only dev dependency
 
