@@ -171,6 +171,8 @@ function onClick(event) {
     track("vibe_tag_click", {
       tag: tag.textContent.trim().toLowerCase().slice(0, 40),
       location: tag.dataset.vibeTag,
+      region: tag.dataset.vibeRegion,
+      city: tag.dataset.vibeCity,
     });
     return;
   }

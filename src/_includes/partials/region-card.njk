@@ -15,7 +15,7 @@
   <p class="region-card__intro">{{ region.shortIntro }}</p>
   <ul class="region-card__tags">
     {% for tag in region.vibeTags %}
-    <li data-vibe-tag="home_card">{{ tag }}</li>
+    <li data-vibe-tag="home_card" data-vibe-region="{{ region.slug }}">{{ tag }}</li>
     {% endfor %}
   </ul>
   {# The real <a href> both entry points to a region page share (CLAUDE.md); korea-map.js

@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.6** · Owner: Irina
+Status: **draft v0.7** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
@@ -214,6 +214,8 @@ Clicks on non-interactive tags (dead-click detector).
 |---|---|---|
 | `tag` | text | `surf` |
 | `location` | text | `home_card` / `region_header` / `city_card` |
+| `region` | text | `gangwon-do` |
+| `city` | text | city slug from `src/_data/cities.json`; `null` unless `location` is `city_card` |
 
 ### `region_map_poi_hover` — Q16, Q20 (pointer devices only)
 Fired once per POI per page load, after ≥300 ms of hover.
@@ -351,6 +353,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |
 | 2026-10-22 | 0.6 | Back to top tracked as `nav_click` item `top`; hero scroll cue and 404 page links tracked as `internal_link_click` (`content_text`; new targets `visa_info`, `settling_in`) |
 | 2026-10-21 | 0.5 | Re-arranged Questions section (added several new); clarified privacy rules (GDPR/PIPA); added `calculator_interaction_started` event; merged region and internal link clicks into a unified `internal_link_click` (added calc_result); replaced `city_card_seen` with generic `gallery_scrolled`; added `region_map_poi_hover` and `_click` events; consolidated festival events into `festival_interacted` (added action param); added `kto_codes_requested` to `api_call`; linked SQL schema file instead of its citation |
 | 2026-10-17 | 0.4 | `<0.02` income bucket for implausible inputs; `section_seen` on Visa info, Settling in and region pages |

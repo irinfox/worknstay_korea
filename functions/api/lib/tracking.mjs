@@ -108,6 +108,8 @@ export const EVENTS = {
   vibe_tag_click: {
     tag: { type: "pattern", re: /^[a-z0-9][a-z0-9 _&'-]{0,39}$/i },
     location: enumOf("home_card", "region_header", "city_card"),
+    region,
+    city: { type: "pattern", re: SLUG, optional: true },
   },
   region_map_poi_hover: {
     poi_name: slug,

@@ -38,7 +38,7 @@ eleventyComputed:
     {% if region.vibeTags.length %}
     <ul class="region-header__tags region-header__tags--vibe">
       {% for tag in region.vibeTags %}
-      <li data-vibe-tag="region_header">{{ tag }}</li>
+      <li data-vibe-tag="region_header" data-vibe-region="{{ region.slug }}">{{ tag }}</li>
       {% endfor %}
     </ul>
     {% endif %}

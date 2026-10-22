@@ -13,7 +13,7 @@
     </div>
     {% if city.vibeTags.length %}
     <ul class="city-card__tags">
-      {% for tag in city.vibeTags %}<li data-vibe-tag="city_card">{{ tag }}</li>{% endfor %}
+      {% for tag in city.vibeTags %}<li data-vibe-tag="city_card" data-vibe-region="{{ city.regionSlug }}" data-vibe-city="{{ city.slug }}">{{ tag }}</li>{% endfor %}
     </ul>
     {% endif %}
   </div>
