@@ -331,9 +331,13 @@ const initMapHover = safe(() => {
   });
 });
 
-// Once per section per page load, after the section's top has stayed in view for SECTION_DWELL_MS
-// (a jump or fast scroll past a section doesn't count).
+// Once per section per page load, after enough of it has stayed in view for SECTION_DWELL_MS.
+// "Enough" is relative to the section's own size, so short and tall sections both qualify while
+// the leftover strip of a section scrolled past (or jumped over) doesn't.
 const SECTION_DWELL_MS = 1000;
+const SECTION_MIN_OWN_SHARE = 0.5;
+const SECTION_MIN_VIEWPORT_SHARE = 0.3;
+const SECTION_THRESHOLDS = Array.from({ length: 21 }, (_, i) => i / 20);
 const initSectionSeen = safe(() => {
   const sections = [...document.querySelectorAll("[data-section-seen]")];
   if (!sections.length || !("IntersectionObserver" in window)) return;
@@ -341,7 +345,12 @@ const initSectionSeen = safe(() => {
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       const el = entry.target;
-      if (!entry.isIntersecting) {
+      const visible = entry.intersectionRect.height;
+      const viewport = entry.rootBounds?.height ?? window.innerHeight;
+      const enough =
+        entry.isIntersecting && visible > 0 &&
+        visible >= Math.min(entry.boundingClientRect.height * SECTION_MIN_OWN_SHARE, viewport * SECTION_MIN_VIEWPORT_SHARE);
+      if (!enough) {
         clearTimeout(timers.get(el));
         timers.delete(el);
         continue;
@@ -356,7 +365,7 @@ const initSectionSeen = safe(() => {
         });
       }, SECTION_DWELL_MS));
     }
-  });
+  }, { threshold: SECTION_THRESHOLDS });
   sections.forEach((s) => observer.observe(s));
 });
 

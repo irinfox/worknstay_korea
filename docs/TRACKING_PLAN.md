@@ -119,7 +119,7 @@ Fired when the calculator asks the user to complete the form instead of showing 
 | Param | Type | Values |
 |---|---|---|
 | `field` | text | `income` / `age` / `both` |
-| `reason` | text | `empty` / `zero` |
+| `reason` | text | `empty` / `zero`; `zero` applies to income only, so `both` + `zero` means zero income and empty age |
 
 ### `calculator_cleared` — Q9
 | Param | Type | Values |
@@ -203,7 +203,7 @@ Fired once per gallery type per page load, on the first scroll the visitor drive
 | `gallery_type` | text | `highlights` / `cities` / `attractions` / `dishes` |
 
 ### `section_seen` — Q5, Q8
-Fired once per section per page load when the section heading has stayed in the viewport for 1 s (jumps via section nav and fast scrolling past a section don't count). Sections (not scroll percentages) are used because percentages depend on screen size.
+Fired once per section per page load when enough of the section has stayed in the viewport for 1 s: at least half of the section, or 30% of the viewport height for tall sections. Jumps via section nav and fast scrolling past a section don't count. Sections (not scroll percentages) are used because percentages depend on screen size.
 | Param | Type | Values |
 |---|---|---|
 | `section` | text | Region pages: `highlights` / `map` / `cities` / `rent` / `events` / `places` / `dishes` / `prev_next` · Visa info: `eligibility` / `income_table` / `documents` / `notes` / `questions` / `links` · Settling in: `renting` / `short_term` / `colivings` / `places_to_work` / `search_notes` / `communities` / `links` |
@@ -358,7 +358,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
-| 2026-10-22 | 0.8 | ``event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs 1 s in view; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
+| 2026-10-22 | 0.8 | `event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs enough of the section in view for 1 s; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
 | 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |
 | 2026-10-22 | 0.6 | Back to top tracked as `nav_click` item `top`; hero scroll cue and 404 page links tracked as `internal_link_click` (`content_text`; new targets `visa_info`, `settling_in`) |
 | 2026-10-21 | 0.5 | Re-arranged Questions section (added several new); clarified privacy rules (GDPR/PIPA); added `calculator_interaction_started` event; merged region and internal link clicks into a unified `internal_link_click` (added calc_result); replaced `city_card_seen` with generic `gallery_scrolled`; added `region_map_poi_hover` and `_click` events; consolidated festival events into `festival_interacted` (added action param); added `kto_codes_requested` to `api_call`; linked SQL schema file instead of its citation |
