@@ -409,7 +409,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
-| 2026-10-22 | 1.0 | Released to production. PostHog no longer derives location from IP (GeoIP transformation removed in the PostHog dashboard); country stays in D1. Events and params unchanged from 0.9 |
+| 2026-10-22 | 1.0 | Released to production. PostHog no longer derives location from IP (GeoIP transformation removed in the PostHog dashboard); country stays in D1. PostHog drops the raw User-Agent (`$raw_user_agent`) client-side. Events and params unchanged from 0.9 |
 | 2026-10-22 | 0.9 | PostHog added: memory-only, replay with inputs masked and calculator card blocked, heatmaps, autocapture (clicks); D1 events not mirrored |
 | 2026-10-22 | 0.8 | `event_seq` common field (client events, per page load); `prev_page_type` is `null` instead of `none`; `section_seen` needs enough of the section in view for 1 s; `calculator_interaction_started` also fires on submit; `places_filter_used` carries full filter state (`area_selected`, `type_selected`) and skips re-selecting the active pill |
 | 2026-10-22 | 0.7 | `vibe_tag_click` gets `region` and `city` params |
