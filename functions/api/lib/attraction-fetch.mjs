@@ -102,7 +102,7 @@ export function classify(raw, lclsSystm1) {
   return rule.category;
 }
 
-function fetchBroadBucket(lDongRegnCd, lclsSystm1, arrange, env) {
+function fetchBroadBucket(lDongRegnCd, lclsSystm1, arrange, env, trace) {
   return fetchKtoAllPages(
     "areaBasedList2",
     { lDongRegnCd, lclsSystm1, arrange },
@@ -110,6 +110,7 @@ function fetchBroadBucket(lDongRegnCd, lclsSystm1, arrange, env) {
     {
       numOfRows: ROWS_PER_GROUP,
       maxPages: 1,
+      trace,
     }
   );
 }
@@ -121,9 +122,10 @@ function fetchBroadBucket(lDongRegnCd, lclsSystm1, arrange, env) {
  * for every raw KTO item before any filter runs (content-type, classify, image) — a diagnostic
  * hook for investigation scripts that need to explain *why* a specific contentId didn't make the
  * final list (never returned by KTO at all vs. filtered out) without paying for a second live
- * fetch. The live endpoint never passes it; a no-op default keeps its behavior unchanged.
+ * fetch. The live endpoint never passes it; a no-op default keeps its behavior unchanged. `trace`
+ * is the optional `{ retried }` out-param of kto-client's fetchKto.
  */
-export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRawItem = () => {}) {
+export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRawItem = () => {}, trace) {
   const groups = codes.flatMap((lDongRegnCd) =>
     BROAD_LCLS_SYSTM1.map((lclsSystm1) => ({ lDongRegnCd, lclsSystm1 }))
   );
@@ -133,16 +135,16 @@ export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRa
   const probeGroup = groups[probeIndex];
   const otherGroups = groups.filter((_, i) => i !== probeIndex);
 
-  const probeResult = await fetchBroadBucket(probeGroup.lDongRegnCd, probeGroup.lclsSystm1, ARRANGE, env);
+  const probeResult = await fetchBroadBucket(probeGroup.lDongRegnCd, probeGroup.lclsSystm1, ARRANGE, env, trace);
   const arrangeBroken = !probeResult.degraded && !probeResult.quotaExceeded && probeResult.items.length === 0;
   const arrange = arrangeBroken ? FALLBACK_ARRANGE : ARRANGE;
 
   const orderedGroups = [probeGroup, ...otherGroups];
   const settled = await Promise.allSettled([
     arrangeBroken
-      ? fetchBroadBucket(probeGroup.lDongRegnCd, probeGroup.lclsSystm1, arrange, env)
+      ? fetchBroadBucket(probeGroup.lDongRegnCd, probeGroup.lclsSystm1, arrange, env, trace)
       : Promise.resolve(probeResult),
-    ...otherGroups.map((g) => fetchBroadBucket(g.lDongRegnCd, g.lclsSystm1, arrange, env)),
+    ...otherGroups.map((g) => fetchBroadBucket(g.lDongRegnCd, g.lclsSystm1, arrange, env, trace)),
   ]);
 
   const byContentId = new Map();
@@ -175,5 +177,7 @@ export async function fetchRegionAttractions(slug, codes, env, citySlugFor, onRa
     }
   });
 
-  return { items: [...byContentId.values()], quotaExceeded, failed };
+  // Billable calls made: one per code and bucket, plus the repeat of the probe if arrange was broken.
+  const calls = groups.length + (arrangeBroken ? 1 : 0);
+  return { items: [...byContentId.values()], quotaExceeded, failed, calls };
 }

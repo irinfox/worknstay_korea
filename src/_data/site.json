@@ -4,15 +4,20 @@
   "dataDates": { "studyCafes": "2026-10" },
   "url": "https://worknstay-korea.com",
   "nav": [
-    { "label": "Regions", "href": "/#map" },
-    { "label": "Visa info", "href": "/visa-info/" },
-    { "label": "Settling in", "href": "/settling-in/" },
-    { "label": "About", "href": "/about/" }
+    { "id": "regions", "label": "Regions", "href": "/#map" },
+    { "id": "visa", "label": "Visa info", "href": "/visa-info/" },
+    { "id": "settling", "label": "Settling in", "href": "/settling-in/" },
+    { "id": "about", "label": "About", "href": "/about/" }
   ],
   "footer": {
     "repoUrl": "https://github.com/irinfox/worknstay_korea",
     "feedbackUrl": "https://tally.so/r/0Q2zrP",
-    "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — please confirm requirements with official Korean embassies before applying."
+    "disclaimer": "© 2026 worknstay korea. An independent, unofficial guide. Visa info is for general guidance — confirm with official Korean embassies.",
+    "privacy": {
+      "lead": "Site uses",
+      "label": "anonymous analytics",
+      "url": "https://github.com/irinfox/worknstay_korea/blob/main/PRIVACY.md"
+    }
   },
   "about": {
     "heading": "Hi, I'm Irina",

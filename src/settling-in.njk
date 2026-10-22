@@ -16,15 +16,15 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
 
 <div class="section-nav">
   <div class="section-nav__links">
-    <a href="#renting"><span class="section-nav__full">Renting</span><span class="section-nav__short">Renting</span></a>
-    <a href="#work"><span class="section-nav__full">Places to work</span><span class="section-nav__short">Work</span></a>
-    <a href="#communities"><span class="section-nav__full">Communities</span><span class="section-nav__short">Community</span></a>
-    <a href="#links"><span class="section-nav__full">Useful links</span><span class="section-nav__short">Links</span></a>
+    <a href="#renting" data-nav="section" data-nav-item="renting"><span class="section-nav__full">Renting</span><span class="section-nav__short">Renting</span></a>
+    <a href="#work" data-nav="section" data-nav-item="places_to_work"><span class="section-nav__full">Places to work</span><span class="section-nav__short">Work</span></a>
+    <a href="#communities" data-nav="section" data-nav-item="communities"><span class="section-nav__full">Communities</span><span class="section-nav__short">Community</span></a>
+    <a href="#links" data-nav="section" data-nav-item="links"><span class="section-nav__full">Useful links</span><span class="section-nav__short">Links</span></a>
   </div>
-  <a href="#top" class="section-nav__top" aria-label="Back to top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
+  <a href="#top" class="section-nav__top" aria-label="Back to top" data-nav="section" data-nav-item="top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
 </div>
 
-<section id="renting" class="settling-section">
+<section id="renting" class="settling-section" data-section-seen="renting" data-link-section="settling_renting">
   <div class="settling-section__head">
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Renting</h2>
@@ -34,12 +34,12 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <div class="settling-callout settling-callout--tip">
     <div class="settling-callout__text">Typical rental logic is — the higher the deposit, the lower the rent.</div>
     <div class="settling-callout__link">
-      <a target="_blank" rel="noopener" href="{{ settlingIn.housingRentalGuideUrl }}">Types of long-term renting explained ↗</a>
+      <a target="_blank" rel="noopener" data-link-category="guide" data-link-id="housing_rental_guide" href="{{ settlingIn.housingRentalGuideUrl }}">Types of long-term renting explained ↗</a>
       <span class="settling-source">koreansnextdoor.com · July 2026</span>
     </div>
   </div>
 
-  <div class="settling-subsection">
+  <div class="settling-subsection" data-section-seen="short_term">
     <div class="settling-subhead">
       <span class="settling-subhead__tick" aria-hidden="true"></span>
       <span>Short-term rental options for foreigners</span>
@@ -65,7 +65,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
           {% endfor %}
         </div>
         <div class="settling-platform-card__linkrow">
-          <a target="_blank" rel="noopener" href="{{ platform.url }}">{{ platform.urlLabel }} ↗</a>
+          <a target="_blank" rel="noopener" data-link-category="rental_platform" data-link-id="{{ platform.name | linkId }}" href="{{ platform.url }}">{{ platform.urlLabel }} ↗</a>
         </div>
       </div>
       {% endfor %}
@@ -78,15 +78,15 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <span>Reviews:</span>
     </div>
     {% for r in settlingIn.rentalReviews.subreddits %}
-    <a target="_blank" rel="noopener" class="settling-reviews__plain" href="{{ r.url }}">{{ r.label }} ↗</a>
+    <a target="_blank" rel="noopener" class="settling-reviews__plain" data-link-category="community" data-link-id="{{ r.label | linkId }}" href="{{ r.url }}">{{ r.label }} ↗</a>
     {% endfor %}
     <div class="settling-reviews__source-block">
-      <a target="_blank" rel="noopener" href="{{ settlingIn.rentalReviews.article.url }}">{{ settlingIn.rentalReviews.article.label }} ↗</a>
+      <a target="_blank" rel="noopener" data-link-category="guide" data-link-id="{{ settlingIn.rentalReviews.article.label | linkId }}" href="{{ settlingIn.rentalReviews.article.url }}">{{ settlingIn.rentalReviews.article.label }} ↗</a>
       <span class="settling-source">{{ settlingIn.rentalReviews.article.source }}</span>
     </div>
   </div>
 
-  <div class="settling-subsection">
+  <div class="settling-subsection" data-section-seen="colivings">
     <div class="settling-subhead">
       <span class="settling-subhead__tick" aria-hidden="true"></span>
       <span>Nomad-specific stays — colivings</span>
@@ -94,7 +94,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     <div class="settling-coliving-list">
       {% for c in settlingIn.colivings %}
       <div class="settling-coliving-row">
-        <a target="_blank" rel="noopener" class="settling-coliving-row__name" href="{{ c.url }}">{{ c.name }} ↗</a>
+        <a target="_blank" rel="noopener" class="settling-coliving-row__name" data-link-category="coliving" data-link-id="{{ c.name | linkId }}" href="{{ c.url }}">{{ c.name }} ↗</a>
         <div class="settling-coliving-row__loc">
           {# Same pin glyph as the festival/attraction/coworking pins (html.js pinIcon /
              city-card.njk .work-venue__pin) — fill: currentColor inherits this row's muted colour. #}
@@ -111,7 +111,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     <p class="settling-body settling-body--sm">If you want to test your Korean, use <span class="settling-ko settling-ko--medium">단기</span> to filter for short-term. Most contracts assume you already have an ARC, Korean phone number and bank account.</p>
     <div class="settling-callout__linkrow">
       {% for p in settlingIn.localKoreanPlatforms %}
-      <a target="_blank" rel="noopener" href="{{ p.url }}">{{ p.label }} ↗</a>
+      <a target="_blank" rel="noopener" data-link-category="rental_platform" data-link-id="{{ p.label | linkId }}" href="{{ p.url }}">{{ p.label }} ↗</a>
       {% endfor %}
     </div>
   </div>
@@ -121,7 +121,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
     <p class="settling-body settling-body--muted">There are also very cheap stays — around {{ settlingIn.typicalRental.goshiwonMonthly }}/mo — such as goshiwon and goshitel. They usually provide the visa documents you need, but rooms are generally very small — roughly a bed and a desk. If you consider this option, check room-tour videos on YouTube first.</p>
   </div>
 
-  <details class="settling-price-table">
+  <details class="settling-price-table" data-accordion-id="settling_in_price_snapshot" data-accordion-item="gangwon-do">
     <summary class="settling-price-table__summary">
       <span class="settling-price-table__label">
         <span class="settling-price-table__title">Price snapshot in Gangwon-do, by city and platform</span>
@@ -211,7 +211,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
 
 </section>
 
-<section id="work" class="settling-section">
+<section id="work" class="settling-section" data-section-seen="places_to_work" data-link-section="settling_work">
   <div class="settling-section__head">
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Places to work</h2>
@@ -238,17 +238,17 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <span>Guides:</span>
     </div>
     <div class="settling-reviews__source-block">
-      <a target="_blank" rel="noopener" href="{{ settlingIn.workGuide.url }}">{{ settlingIn.workGuide.label }} ↗</a>
+      <a target="_blank" rel="noopener" data-link-category="guide" data-link-id="{{ settlingIn.workGuide.label | linkId }}" href="{{ settlingIn.workGuide.url }}">{{ settlingIn.workGuide.label }} ↗</a>
       <span class="settling-source">{{ settlingIn.workGuide.source }}</span>
     </div>
   </div>
 
-  <div class="settling-subsection">
+  <div class="settling-subsection" data-section-seen="search_notes">
     <div class="settling-subhead">
       <span class="settling-subhead__tick" aria-hidden="true"></span>
       <span>Search notes</span>
     </div>
-    <p class="settling-body">Korea widely uses its own map apps — <a target="_blank" rel="noopener" href="{{ settlingIn.naverMapUrl }}">Naver Map ↗</a> and <a target="_blank" rel="noopener" href="{{ settlingIn.kakaoMapUrl }}">Kakao Map ↗</a>. They offer better precision and navigation than Google Maps, but even when set to English, it can be useful to search in Korean.</p>
+    <p class="settling-body">Korea widely uses its own map apps — <a target="_blank" rel="noopener" data-link-category="map_app" data-link-id="naver_map" href="{{ settlingIn.naverMapUrl }}">Naver Map ↗</a> and <a target="_blank" rel="noopener" data-link-category="map_app" data-link-id="kakao_map" href="{{ settlingIn.kakaoMapUrl }}">Kakao Map ↗</a>. They offer better precision and navigation than Google Maps, but even when set to English, it can be useful to search in Korean.</p>
 
     <div class="settling-label">Keywords to search with</div>
     <div class="settling-keyword-grid">
@@ -269,7 +269,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
         <div class="settling-otherresult__body">
           <div class="settling-ko">장소대여</div>
           <p class="settling-otherresult__desc">Can be useful. Hourly rental of spaces such as meeting rooms, usually requiring advance booking through the map app or SpaceCloud.</p>
-          <a target="_blank" rel="noopener" class="settling-otherresult__link" href="{{ settlingIn.spaceCloudUrl }}">spacecloud.kr (KR) ↗</a>
+          <a target="_blank" rel="noopener" class="settling-otherresult__link" data-link-category="coworking" data-link-id="spacecloud" href="{{ settlingIn.spaceCloudUrl }}">spacecloud.kr (KR) ↗</a>
         </div>
       </div>
       <div class="settling-otherresult">
@@ -295,7 +295,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   </div>
 </section>
 
-<section id="communities" class="settling-section">
+<section id="communities" class="settling-section" data-section-seen="communities" data-link-section="settling_communities">
   <div class="settling-section__head">
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Communities</h2>
@@ -311,7 +311,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <div class="settling-community-list">
         {% for item in settlingIn.communities.nomadSpecific %}
         <div class="settling-community-item">
-          <a target="_blank" rel="noopener" href="{{ item.url }}">{{ item.name }} ↗</a>
+          <a target="_blank" rel="noopener" data-link-category="community" data-link-id="{{ item.name | linkId }}" href="{{ item.url }}">{{ item.name }} ↗</a>
           <div class="settling-community-item__desc">{{ item.description }}</div>
         </div>
         {% endfor %}
@@ -326,7 +326,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <div class="settling-community-list">
         {% for item in settlingIn.communities.englishSpeaking %}
         <div class="settling-community-item">
-          <a target="_blank" rel="noopener" href="{{ item.url }}">{{ item.name }} ↗</a>
+          <a target="_blank" rel="noopener" data-link-category="community" data-link-id="{{ item.name | linkId }}" href="{{ item.url }}">{{ item.name }} ↗</a>
           <div class="settling-community-item__desc">{{ item.description }}</div>
         </div>
         {% endfor %}
@@ -341,17 +341,17 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
       <div class="settling-community-list">
         {% for item in settlingIn.communities.hobbyApps %}
         <div class="settling-community-item">
-          <a target="_blank" rel="noopener" href="{{ item.url }}">{{ item.name }} ↗</a>
+          <a target="_blank" rel="noopener" data-link-category="community" data-link-id="{{ item.name | linkId }}" href="{{ item.url }}">{{ item.name }} ↗</a>
           <div class="settling-community-item__desc">{{ item.description }}</div>
         </div>
         {% endfor %}
-        <p class="settling-community-item__note">Koreans also use thematic <a target="_blank" rel="noopener" href="{{ settlingIn.communities.kakaoTalkUrl }}">KakaoTalk ↗</a> open chat groups.</p>
+        <p class="settling-community-item__note">Koreans also use thematic <a target="_blank" rel="noopener" data-link-category="community" data-link-id="kakaotalk" href="{{ settlingIn.communities.kakaoTalkUrl }}">KakaoTalk ↗</a> open chat groups.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section id="links" class="settling-section">
+<section id="links" class="settling-section" data-section-seen="links" data-link-section="settling_links">
   <div class="settling-section__head">
     <span class="settling-section__tick" aria-hidden="true"></span>
     <h2>Useful links</h2>
@@ -359,7 +359,7 @@ description: "A brief intro to stays, places to work, and communities in Korea, 
   <div class="settling-panel settling-links-panel">
     {% for link in settlingIn.usefulLinks %}
     <div class="settling-link-block">
-      <a target="_blank" rel="noopener" href="{{ link.url }}">{{ link.label }} ↗</a>
+      <a target="_blank" rel="noopener" data-link-category="guide" data-link-id="{{ link.label | linkId }}" href="{{ link.url }}">{{ link.label }} ↗</a>
       <span class="settling-source">{{ link.source }}</span>
     </div>
     {% endfor %}

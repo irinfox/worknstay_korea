@@ -52,6 +52,10 @@
   line-height: 1.6;
 }
 
+.site-footer__disclaimer .site-footer__link {
+  font-size: inherit;
+}
+
 .site-footer__link {
   font-size: 14px;
   font-weight: 500;

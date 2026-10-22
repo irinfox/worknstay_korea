@@ -3,12 +3,29 @@
 // Missing key or any Kakao failure returns { degraded: true } so the card keeps its fallback.
 import cities from "../../../../src/_data/cities.json";
 import { countStudyCafes } from "../../lib/kakao-client.mjs";
+import { latencyBucket, logApiCall } from "../../lib/tracking.mjs";
 
-export async function onRequestGet({ params, env }) {
+export async function onRequestGet(context) {
+  const { params, env, request } = context;
   const city = cities.find((c) => c.slug === params.slug);
   if (!city) {
     return Response.json({ error: "Unknown city" }, { status: 404 });
   }
+  const startedAt = Date.now();
   const result = await countStudyCafes(city, env);
+  const status = !env?.KAKAO_REST_API_KEY
+    ? "skipped_no_key"
+    : !result.degraded
+      ? (result.count === 0 ? "empty" : "ok")
+      : /HTTP 429/.test(result.reason || "") ? "quota" : "error";
+  logApiCall(context, {
+    endpoint: "kakao_study_cafe",
+    region: city.regionSlug,
+    city: city.slug,
+    status,
+    retried: request.headers.get("x-retry") === "1", // the page's own JS retries (study-cafes.js); each attempt logs itself
+    fallback_served: Boolean(result.degraded),
+    latency_ms_bucket: latencyBucket(Date.now() - startedAt),
+  });
   return Response.json(result, { headers: { "Cache-Control": "no-store" } });
 }

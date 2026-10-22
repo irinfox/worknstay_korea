@@ -2,11 +2,12 @@
 // <noscript> fallbacks (region.njk) cover no-JS; init() replaces them when JS runs.
 import { renderAttractions } from "./attractions.js";
 import { renderEventsTimeline } from "./events.js";
+import { pageLoadHeaders } from "./tracker.js";
 
 // Always resolves to an object; any failure is { items: [], failed: true }.
 async function fetchJson(url) {
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { headers: pageLoadHeaders() });
     if (!res.ok) return { items: [], failed: true };
     return await res.json();
   } catch {

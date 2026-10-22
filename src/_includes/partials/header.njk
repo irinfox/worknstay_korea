@@ -2,7 +2,7 @@
   <div class="site-header__inner">
     {# The wordmark is the way back to the full homepage (hero + calculator); the "Regions" nav
        item jumps straight to the map. #}
-    <a class="site-header__logo" href="/" aria-label="{{ site.name }} — home">
+    <a class="site-header__logo" href="/" data-nav="main" data-nav-item="logo" aria-label="{{ site.name }} — home">
       <img class="site-header__mark" src="/assets/img/brand/mark-white.svg" alt="" width="19" height="19">
       <span class="site-header__name">{{ site.name }}</span>
     </a>
@@ -16,7 +16,7 @@
         {% for item in site.nav %}
         {% set itemPath = item.href | replace("/#map", "/") %}
         <li class="site-nav__item">
-          <a href="{{ item.href }}"{% if page.url == itemPath %} aria-current="page"{% endif %}>{{ item.label }}</a>
+          <a href="{{ item.href }}" data-nav="main" data-nav-item="{{ item.id }}"{% if page.url == itemPath %} aria-current="page"{% endif %}>{{ item.label }}</a>
         </li>
         {% endfor %}
       </ul>

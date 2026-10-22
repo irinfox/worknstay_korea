@@ -33,14 +33,17 @@ strategies to attract a sustainable flow of long-term visitors to depopulating r
 | **External-API data** | **Cloudflare Pages Functions** (`functions/api/*`): KTO (attractions, festivals) and Kakao® Local (study-café counts) | Satisfies "checkable API use"; keys stay server-side. |
 | **Static/editorial data** | Build-time data in `src/_data/`, hand-authored | Visa rules, rent, food, settling-in guide aren't API-sourced — no live-call need. |
 | Hosting | **Cloudflare Pages** (+ Functions) | One vendor for hosting + proxy. |
-| Analytics | **Cloudflare Web Analytics** | Free, cookieless, no consent banner; enabled in the Pages dashboard (beacon injected at the edge, nothing in the repo). |
+| Event tracking | **First-party**: `POST /api/events` Pages Function → **Cloudflare D1** | Own endpoint and schema keep full control of event design; nothing is stored on the device, so no consent banner. |
+| Replay, heatmaps | **PostHog** (EU cloud) via CDN embed | Qualitative UX analytics (session replays and heatmaps). Configured as memory-only (cookieless) with strict input masking, requiring no consent banner. |
+| Traffic stats | **Cloudflare Web Analytics** | Free, cookieless, no consent banner; enabled in the Pages dashboard (beacon injected at the edge, nothing in the repo). |
 | Fonts | **Instrument Sans + Noto Sans KR** via one Google Fonts `<link>` | Per DESIGN.md; Noto Sans KR covers Hangul place names. |
 
 **Rejected:** Astro (heavier tree, faster breaking-change cadence).
 
-**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon; no
-user input shown to other visitors. Framing and permissions are set in `src/_headers`, HSTS in the
-Cloudflare dashboard. Revisit if third-party scripts, accounts or URL state are added.
+**No CSP (deliberate).** No third-party scripts except Cloudflare's injected analytics beacon and
+the PostHog script; no user input shown to other visitors. Framing and permissions are set in
+`src/_headers`, HSTS in the Cloudflare dashboard. Revisit if third-party scripts, accounts or URL
+state are added.
 
 ## 3. UX decisions locked in
 
@@ -95,10 +98,13 @@ map are revealed on hover/tap (`region-detail-map.js`).
 ```
 functions/api/      region/[slug]/{attractions,events}.js   KTO proxies
                     city/[slug]/study-cafes.js              Kakao® proxy
+                    events.js                               POST /api/events: analytics intake
                     _middleware.js                          X-Robots-Tag: noindex on /api/*
                     lib/                                    KTO/Kakao clients, normalizers,
                                                             region/city maps, attraction fan-out
-                                                            + top-picks boost
+                                                            + top-picks boost, tracking
+                                                            allowlist and D1 storage
+migrations/         D1 schema for the analytics events table
 src/_data/          editorial data and API fallbacks (§6)
 src/_includes/      layouts/ + partials/ (region-card, city-card, korea-map, hero, …)
 src/assets/         css/ (tokens, base, components/), js/ (one module per behaviour),
@@ -113,7 +119,8 @@ usually named after its partial; one JS module per interactive behaviour. SVGs i
 `inlineSvg` shortcode so CSS can target their elements. `functions/**` imports JSON bare —
 Cloudflare's Functions bundler rejects `with { type: "json" }`; Eleventy-side `_data/*.js` may
 still use it. Dev secrets (`KTO_API_KEY`, `KAKAO_REST_API_KEY`) live in one gitignored `.env`,
-read by `wrangler pages dev` and by `scripts/*` (`node --env-file=.env`).
+read by `wrangler pages dev` and by `scripts/*` (`node --env-file=.env`). `pages:dev` binds a local
+D1 as `DB`; `npm run db:migrate:local` creates its tables.
 
 ## 5. External-API data flow (the compliance-critical part)
 
@@ -268,3 +275,25 @@ No library, no store. Three tiers:
    event bus.
 3. **Persistence** — none. Inputs and result live in the page only (`autocomplete="off"`, nothing
    in the URL or storage), so reload starts empty. Region pages don't read a calculator run.
+
+## 9. Analytics pipeline
+
+Event names, params and privacy rules are defined in `TRACKING_PLAN.md` and implemented from it;
+the public privacy statement is `PRIVACY.md`.
+
+```
+src/assets/js/tracker.js        one `track()` call per event, sent with sendBeacon (survives
+                                navigation); every path fails silently
+functions/api/events.js         validates against the allowlist in lib/tracking.mjs, rejects
+                                anything unknown, adds env / country / device / bot flag
+D1 `events` table               one row per event, event-specific fields as JSON in `params`
+functions/api/**                `api_call` rows (failures, retries, quota, latency) written
+                                server-side after the response, never from the browser
+```
+
+- **Tracking never blocks the UI.** No D1 binding (a preview without a database) means events are
+  accepted and discarded; storage errors are swallowed.
+- **Tracking is declarative.** Outbound links, internal links, accordions and map pins declare
+  their ids in `data-*` attributes; the tracker reads them.
+- **Standalone PostHog integration.** `posthog.js` loads the pinned SDK from PostHog's CDN; the
+  project key is in `src/_data/posthog.json` (empty key disables it).

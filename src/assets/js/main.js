@@ -1,3 +1,5 @@
+import { init as initTracker } from "./tracker.js";
+import { init as initPostHog } from "./posthog.js";
 import { init as initNav } from "./nav.js";
 import { init as initCalculator } from "./calculator.js";
 import { init as initKoreaMap, applyResult } from "./korea-map.js";
@@ -9,6 +11,8 @@ import { init as initAttractionFilters } from "./attraction-filters.js";
 import { init as initStudyCafes } from "./study-cafes.js";
 import { init as initSectionNav } from "./section-nav.js";
 
+initTracker();
+initPostHog();
 initNav();
 initKoreaMap();
 // Glue: the calculator renders its own caption; this is the only place the map hears the result

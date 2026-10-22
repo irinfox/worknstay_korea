@@ -1,3 +1,5 @@
+import { pageLoadHeaders } from "./tracker.js";
+
 // Live Kakao study-café count per city card (functions/api/city/[slug]/study-cafes.js). Nothing
 // is stored client-side. Retryable failures (network, 5xx) are retried once; quota (429)
 // and other 4xx are not. All-or-nothing per page: live data is applied only if every city
@@ -12,7 +14,7 @@ async function fetchLive(slug) {
   for (let attempt = 0; ; attempt++) {
     let retryable = true;
     try {
-      const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`);
+      const res = await fetch(`/api/city/${encodeURIComponent(slug)}/study-cafes`, { headers: { ...pageLoadHeaders(), ...(attempt > 0 && { "X-Retry": "1" }) } });
       if (res.ok) {
         const data = await res.json();
         if (!data.degraded) return data;

@@ -11,7 +11,9 @@
     "build": "eleventy",
     "serve": "eleventy --serve",
     "debug": "DEBUG=Eleventy* eleventy",
-    "pages:dev": "npm run build && wrangler pages dev _site",
+    "pages:dev": "npm run build && wrangler pages dev _site --d1=DB",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local --config wrangler.local.jsonc",
+    "db:query:local": "wrangler d1 execute DB --local --config wrangler.local.jsonc --command",
     "pages:deploy": "npm run build && wrangler pages deploy _site"
   },
   "dependencies": {

@@ -2,6 +2,6 @@
    renders as-is; with several, each is followed by the photo titles it covers. Callers supply the surrounding <p> and prefix. #}
 {% macro creditText(groups) -%}
 {%- for g in groups -%}
-{{ g.text }}{% if g.license %} / <a href="{{ g.licenseUrl }}" target="_blank" rel="noopener">{{ g.license }} ↗</a>{% endif %}{% if groups.length > 1 %} ({{ g.labels | join(", ") }}){% endif %}{% if not loop.last %}; {% endif %}
+{{ g.text }}{% if g.license %} / <a href="{{ g.licenseUrl }}" data-link-category="source_credit" data-link-id="{{ g.license | linkId }}" target="_blank" rel="noopener">{{ g.license }} ↗</a>{% endif %}{% if groups.length > 1 %} ({{ g.labels | join(", ") }}){% endif %}{% if not loop.last %}; {% endif %}
 {%- endfor -%}
 {%- endmacro %}

@@ -109,6 +109,11 @@ scaffold was finished. Contest dev period: 2026-07-27 to 2026-09-21 16:00 KST (s
       present in commit 7c2f96a. Restore if KTO approves caching after contest reviews.
 - [ ] Hero image licensing: KTO `Type3` images — `cover` vs `contain`. Moot while every hero
       photo is Type1; revisit if a Type3 photo is ever swapped in.
+- [ ] Post-launch privacy pivot: after hitting ~1k visitors, finalize the UX review via PostHog
+      replays, then either drop the replay feature to keep the zero-consent architecture or add a
+      consent banner.
+- [ ] Analytics retention: monthly summary table and a job (Worker with cron) that summarises, then
+      deletes raw D1 events older than 24 months.
 
 
 ## Possible site extensions
@@ -126,4 +131,5 @@ Site enhancement ideas, not scheduled.
   and workspace reviews with star ratings, general feedback).
 - **Interactive event calendar.** Month-to-month navigation and hover detail on event days, on
   top of the current timeline list.
-- **UX testing & validation.** Perform a UX test with several respondents.
+- **UX testing & validation.** Perform a UX test with several respondents or use PostHog Session
+  Replays to spot friction points.

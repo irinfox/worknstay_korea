@@ -1,5 +1,28 @@
 {
+  // Cloudflare Pages: once this file exists the dashboard no longer edits bindings or plain vars.
+  // Secrets (KTO_API_KEY, KAKAO_REST_API_KEY) stay in the dashboard. Top level = Production;
+  // `env.preview` = Preview and is NOT inherited, so each environment lists its own bindings.
   "name": "worknstay-korea",
   "compatibility_date": "2026-08-24",
-  "pages_build_output_dir": "_site"
+  "pages_build_output_dir": "_site",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "worknstay-analytics-prod",
+      "database_id": "3fd5eeff-f433-4a8d-b728-462b747c8f7d",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "env": {
+    "preview": {
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "worknstay-analytics-preview",
+          "database_id": "44f9eb99-9e44-48eb-9141-1d0c8a41b4a5",
+          "migrations_dir": "migrations"
+        }
+      ]
+    }
+  }
 }

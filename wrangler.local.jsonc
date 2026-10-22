@@ -1,0 +1,10 @@
+{
+  // Local-only config for D1 migrations (`npm run db:migrate:local`). Not named wrangler.jsonc, so
+  // Cloudflare Pages ignores it; wrangler.jsonc is the source of truth for deployed bindings.
+  // database_id "DB" matches the binding `wrangler pages dev --d1=DB` creates.
+  "name": "worknstay-korea",
+  "compatibility_date": "2026-08-24",
+  "d1_databases": [
+    { "binding": "DB", "database_name": "worknstay-tracking", "database_id": "DB", "migrations_dir": "migrations" }
+  ]
+}

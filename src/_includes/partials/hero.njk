@@ -56,7 +56,8 @@
        Markup order here is free to change (calculator.js keys off data-* / element names, not
        DOM order); the comparison logic and its messages are frozen. #}
       <div class="hero__calculator">
-        <div id="calculator" class="calculator-mount" data-calculator-mount>
+        {# ph-no-capture: PostHog never records this card (age, income, result) in replay or autocapture. #}
+        <div id="calculator" class="calculator-mount ph-no-capture" data-calculator-mount>
       <noscript>
         <p class="calculator-mount__noscript">
           The eligibility calculator needs JavaScript. See the
@@ -68,7 +69,7 @@
            strings. #}
         <p class="calculator-form__title">Check your eligibility</p>
         <p class="calculator-form__note">Eligible regions depend on your age, income, and whether
-          you bring your family. Nothing is stored.</p>
+          you bring your family. No personal data saved.</p>
         <div class="calculator-form__row">
           <div class="calculator-form__field">
             <label for="calc-salary">Annual income, gross (KRW)</label>
@@ -135,7 +136,7 @@
     {# Desktop only — the cover photo is full-viewport there, so a foot-of-photo nudge toward the
        map earns its place. A real anchor (CLAUDE.md), hidden on phone where the photo is
        a short crop and the map is already the next thing down. #}
-    <a class="hero__scroll-cue" href="#map">Scroll down to explore Korean regions ↓</a>
+    <a class="hero__scroll-cue" href="#map" data-internal-source="content_text" data-internal-target="regions_map">Scroll down to explore Korean regions ↓</a>
   </div>
 
   {# Reference data for calculator.js — assembled at build time (see

@@ -40,6 +40,8 @@ The stack is kept deliberately simple and stable — designed to last and be eas
   external map services
 - **[Cloudflare Pages + Pages Functions](https://pages.cloudflare.com/)** — static hosting with
   serverless functions for the live KTO and Kakao® Local API calls
+- **[Cloudflare D1](https://developers.cloudflare.com/d1/)** — database to store the site's
+  anonymous, cookieless analytics events
 - **[Wrangler](https://developers.cloudflare.com/workers/wrangler/)** — local development and
   deployment CLI, the only dev dependency
 
@@ -111,6 +113,9 @@ re-hitting KTO. Unset `KAKAO_REST_API_KEY` to see fallback data.
 
 Both KTO flags are dev-only — never set them in production.
 
+**Analytics events** Run `npm run db:migrate:local` once to create local D1 database tables;
+without it events are silently dropped without affecting site functionality.
+
 **Scripts:** `scripts/verify-*.mjs` are plain Node checks (no test framework), run with
 `node --env-file=.env scripts/<name>.mjs`; the ones that call KTO need the key and spend quota.
 
@@ -118,15 +123,19 @@ Both KTO flags are dev-only — never set them in production.
 
 Hosted on Cloudflare Pages: build command `npm run build`, output directory `_site`. Set
 `KTO_API_KEY` and `KAKAO_REST_API_KEY` as Pages environment variables — they are per environment,
-so Production and Preview each need their own. Per this project's Pages settings, every push to
-main deploys automatically; other branches get preview deployments.
+so Production and Preview each need their own. To store analytics events bound a D1 database as
+`DB` per environment in `wrangler.jsonc`, with `migrations/` applied; without the binding events
+are discarded.
+Per this project's Pages settings, every push to main deploys automatically; other branches get
+preview deployments.
 
 ## Project layout
 
 ```
 docs/                   Project docs (architecture, design, roadmap), screenshots, contest spec
 eleventy/               Eleventy template filters
-functions/api/          Cloudflare Pages Functions — live KTO and Kakao® proxies (server-side)
+functions/api/          Cloudflare Pages Functions — live KTO and Kakao® proxies, analytics intake
+migrations/             D1 schema for analytics events
 notes/                  Research notes and raw reference data (not part of the build)
 scripts/                Standalone verification and investigation scripts (no test framework)
 src/_data/              Editorial content: visa rules, region/city metadata, rental data, fallbacks
@@ -139,6 +148,9 @@ src/regions/            Per-region pages (paginated from _data/regions.json)
 
 - [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind notable decisions
+- [`TRACKING_PLAN.md`](./docs/TRACKING_PLAN.md) — analytics events, params, privacy rules and
+  pipeline
+- [`PRIVACY.md`](./PRIVACY.md) — privacy notice for users
 - [`DESIGN.md`](./docs/DESIGN.md) — visual/design conventions (palette, type, spacing, components)
 - [`ROADMAP_TODO.md`](./docs/ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest

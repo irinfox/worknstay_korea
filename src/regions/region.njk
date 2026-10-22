@@ -28,7 +28,7 @@ eleventyComputed:
 <div class="content-page region-page" id="top">
 
 <nav class="region-breadcrumb" aria-label="Breadcrumb">
-  <a href="/#map">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
+  <a href="/#map" data-internal-source="breadcrumb" data-internal-target="regions_map">Regions</a> <span aria-hidden="true">/</span> <span class="region-breadcrumb__here">{{ region.nameEn }}</span>
 </nav>
 
 <header class="region-header region-header--split">
@@ -38,7 +38,7 @@ eleventyComputed:
     {% if region.vibeTags.length %}
     <ul class="region-header__tags region-header__tags--vibe">
       {% for tag in region.vibeTags %}
-      <li>{{ tag }}</li>
+      <li data-vibe-tag="region_header" data-vibe-region="{{ region.slug }}">{{ tag }}</li>
       {% endfor %}
     </ul>
     {% endif %}
@@ -75,13 +75,13 @@ eleventyComputed:
     {% endif %}
     {% if region.isCapitalArea %}
     <div class="note-plate note-plate--stricter">
-      <span class="note-plate__text">Capital-area region — the higher income threshold applies, except in its <a href="/regions/gyeonggi-do/population-decline-areas/">population-decline areas</a>.</span>
-      <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
+      <span class="note-plate__text">Capital-area region — the higher income threshold applies, except in its <a href="/regions/gyeonggi-do/population-decline-areas/" data-internal-source="region_badge">population-decline areas</a>.</span>
+      <a class="note-plate__link" href="/visa-info/" data-internal-source="region_badge" data-internal-target="region_note_link">Visa info &rarr;</a>
     </div>
     {% else %}
     <div class="note-plate note-plate--easier">
       <span class="note-plate__text">Outside the capital area — the lower income threshold applies.</span>
-      <a class="note-plate__link" href="/visa-info/">Visa info &rarr;</a>
+      <a class="note-plate__link" href="/visa-info/" data-internal-source="region_badge" data-internal-target="region_note_link">Visa info &rarr;</a>
     </div>
     {% endif %}
   </aside>
@@ -97,16 +97,16 @@ eleventyComputed:
    the same geometry check naturally activates just one at a time. #}
 <div class="section-nav">
   <div class="section-nav__links">
-    <a href="#region-map"><span class="section-nav__full">Map</span><span class="section-nav__short">Map</span></a>
-    <a href="#cities"><span class="section-nav__full">Cities</span><span class="section-nav__short">Cities</span></a>
-    <a href="#rent"><span class="section-nav__full">Rent</span><span class="section-nav__short">Rent</span></a>
-    <a href="#events"><span class="section-nav__full">Events</span><span class="section-nav__short">Events</span></a>
-    <a href="#places"><span class="section-nav__full">Places</span><span class="section-nav__short">Places</span></a>
+    <a href="#region-map" data-nav="section" data-nav-item="map"><span class="section-nav__full">Map</span><span class="section-nav__short">Map</span></a>
+    <a href="#cities" data-nav="section" data-nav-item="cities"><span class="section-nav__full">Cities</span><span class="section-nav__short">Cities</span></a>
+    <a href="#rent" data-nav="section" data-nav-item="rent"><span class="section-nav__full">Rent</span><span class="section-nav__short">Rent</span></a>
+    <a href="#events" data-nav="section" data-nav-item="events"><span class="section-nav__full">Events</span><span class="section-nav__short">Events</span></a>
+    <a href="#places" data-nav="section" data-nav-item="places"><span class="section-nav__full">Places</span><span class="section-nav__short">Places</span></a>
     {% if regionFood.length %}
-    <a href="#dishes"><span class="section-nav__full">Dishes</span><span class="section-nav__short">Dishes</span></a>
+    <a href="#dishes" data-nav="section" data-nav-item="dishes"><span class="section-nav__full">Dishes</span><span class="section-nav__short">Dishes</span></a>
     {% endif %}
   </div>
-  <a href="#top" class="section-nav__top" aria-label="Back to top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
+  <a href="#top" class="section-nav__top" aria-label="Back to top" data-nav="section" data-nav-item="top"><span class="section-nav__top-icon" aria-hidden="true"></span><span class="section-nav__top-label">Top</span></a>
 </div>
 
 {# "Around the region" cover gallery: heroPhotos (regionHeroPhotos.json) is the ordered list of
@@ -115,7 +115,7 @@ eleventyComputed:
    counter + prev/next arrows + autoplay (region-hero-gallery.js) are pure enhancement layered
    on top, so nothing here gates content behind JS. #}
 {% if slideCount > 0 %}
-<section class="region-gallery" aria-labelledby="region-gallery-heading"{% if slideCount > 1 %} data-region-hero-gallery{% endif %}>
+<section class="region-gallery" data-section-seen="highlights" aria-labelledby="region-gallery-heading"{% if slideCount > 1 %} data-region-hero-gallery{% endif %}>
   <div class="region-gallery__head">
     <div class="region-gallery__intro">
       <div class="region-section__head">
@@ -160,7 +160,7 @@ eleventyComputed:
    fit instead, since they all crop from the same korea-regions.svg coordinate frame (see
    gyeonggi-detail-map.svg's comment for the fit itself). None of this is a real map projection,
    so treat spacing as illustrative, not survey-accurate. #}
-<section class="region-section region-section--map" id="region-map">
+<section class="region-section region-section--map" id="region-map" data-section-seen="map">
   <div class="region-section__head">
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Region map</h2>
@@ -204,7 +204,7 @@ eleventyComputed:
 </section>
 
 {% if region.usefulLinks.length %}
-<section class="region-section region-section--guides">
+<section class="region-section region-section--guides" data-link-section="region_guides">
   <div class="region-guides">
     <span class="region-guides__head">
       <span class="region-guides__tick" aria-hidden="true"></span>
@@ -213,7 +213,7 @@ eleventyComputed:
     <span class="region-guides__items">
       {% for link in region.usefulLinks %}
       <span class="region-guides__item">
-        <a class="region-guides__link" href="{{ link.url }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
+        <a class="region-guides__link" href="{{ link.url }}" data-link-category="guide" data-link-id="{{ link.label | linkId }}" target="_blank" rel="noopener">{{ link.label }} ↗</a>
         <span class="region-guides__meta">{{ link.sourceLabel }}{% if link.sourceDate %} · {{ link.sourceDate }}{% endif %}</span>
       </span>
       {% endfor %}
@@ -222,7 +222,7 @@ eleventyComputed:
 </section>
 {% endif %}
 
-<section class="region-section region-section--cities" id="cities">
+<section class="region-section region-section--cities" id="cities" data-section-seen="cities" data-link-section="region_cities">
   <div class="region-section__head">
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Cities</h2>
@@ -238,9 +238,9 @@ eleventyComputed:
   {% include "partials/empty-state.njk" %}
   {% endif %}
   {% if cityList.length %}
-  <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
+  <p class="data-provenance">Population data for {{ populationSource.period }}. Source: <a href="{{ populationSource.url }}" data-link-category="source_credit" data-link-id="kosis_population" data-link-section="region_cities" target="_blank" rel="noopener" title="{{ populationSource.linkTitle }}">KOSIS({{ populationSource.source }}, {{ populationSource.surveyName }}) ↗</a>, {{ populationSource.retrievedAt }}. {{ populationSource.roundingNote }}</p>
   <p class="data-provenance" data-study-cafes-fallback-note hidden>Study-café data is a manual editorial estimate, last updated in {{ site.dataDates.studyCafes | formatDate }}. Live data currently unavailable.</p>
-  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="{{ sources.kakaoLocal.url }}" target="_blank" rel="noopener">{{ sources.kakaoLocal.name }} ↗</a> results.</p>
+  <p class="data-provenance" data-study-cafes-live-note hidden>Study-café data is a live qualitative estimate based on <a href="{{ sources.kakaoLocal.url }}" data-link-category="source_credit" data-link-id="kakao_local" data-link-section="region_cities" target="_blank" rel="noopener">{{ sources.kakaoLocal.name }} ↗</a> results.</p>
   {% endif %}
 </section>
 
@@ -248,7 +248,7 @@ eleventyComputed:
    § region page order). Costs left, festivals right on desktop; stacked on phone. #}
 <div class="region-band">
   <div class="region-band__inner">
-    <div class="region-band__col region-band__col--costs" id="rent">
+    <div class="region-band__col region-band__col--costs" id="rent" data-section-seen="rent">
       <div class="region-section__head">
         <span class="region-section__tick" aria-hidden="true"></span>
         <h2>Rental prices</h2>
@@ -288,7 +288,7 @@ eleventyComputed:
       {% for para in rentSummary.costNote %}
       <p class="cost-note">{{ para | safe }}</p>
       {% endfor %}
-      <p class="cost-link"><a href="/settling-in/">A short intro into Korean renting →</a></p>
+      <p class="cost-link"><a href="/settling-in/" data-internal-source="content_text" data-internal-target="renting_intro_link">A short intro into Korean renting →</a></p>
       {% else %}
       {% set message = "No rental price figures for this region yet." %}
       {% set tag = "p" %}
@@ -296,7 +296,7 @@ eleventyComputed:
       {% endif %}
     </div>
 
-    <div class="region-band__col region-band__col--events" id="events">
+    <div class="region-band__col region-band__col--events" id="events" data-section-seen="events">
       <div class="region-section__head">
         <span class="region-section__tick" aria-hidden="true"></span>
         <h2>Festivals &amp; events</h2>
@@ -325,7 +325,7 @@ eleventyComputed:
   </div>
 </div>
 
-<section class="region-section region-section--attractions" id="places">
+<section class="region-section region-section--attractions" id="places" data-section-seen="places">
   <div class="region-section__head">
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Places to visit</h2>
@@ -379,7 +379,7 @@ eleventyComputed:
 </section>
 
 {% if regionFood.length %}
-<section class="region-section region-section--food" id="dishes">
+<section class="region-section region-section--food" id="dishes" data-section-seen="dishes" data-link-section="region_dishes">
   <div class="region-section__head">
     <span class="region-section__tick" aria-hidden="true"></span>
     <h2>Regional dishes</h2>
@@ -407,7 +407,7 @@ eleventyComputed:
       <h3 class="dish-card__name">{{ dish.nameEn }} <span class="dish-card__ko">{{ dish.nameKo }}</span></h3>
       <p class="dish-card__note">{{ dish.caption }}</p>
       {% if dish.restaurantUrl %}
-      <a class="dish-card__restaurant" href="{{ dish.restaurantUrl }}" target="_blank" rel="noopener">Where to eat it ↗</a>
+      <a class="dish-card__restaurant" href="{{ dish.restaurantUrl }}" data-link-category="food" data-link-id="{{ dish.nameEn | linkId }}" target="_blank" rel="noopener">Where to eat it ↗</a>
       {% endif %}
     </li>
     {% endfor %}
@@ -415,7 +415,7 @@ eleventyComputed:
   {% if (regionFood | dump).indexOf('"kind":"spicy-ingredient"') !== -1 %}
   <p class="dish-legend"><span class="dish-plate dish-plate--spicy-ingredient">spicy ingredient</span> can usually be left out or served separately.</p>
   {% endif %}
-  <p class="data-provenance">Source: {{ sources.kto.attribution }}.{% for dish in regionFood %}{% if dish.photo.credit.source != "kto" %} {{ dish.nameEn }}: {{ dish.photo.credit.text }}{% if dish.photo.credit.license %} / <a href="{{ dish.photo.credit.licenseUrl }}" target="_blank" rel="noopener">{{ dish.photo.credit.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
+  <p class="data-provenance">Source: {{ sources.kto.attribution }}.{% for dish in regionFood %}{% if dish.photo.credit.source != "kto" %} {{ dish.nameEn }}: {{ dish.photo.credit.text }}{% if dish.photo.credit.license %} / <a href="{{ dish.photo.credit.licenseUrl }}" data-link-category="source_credit" data-link-id="{{ dish.photo.credit.license | linkId }}" target="_blank" rel="noopener">{{ dish.photo.credit.license }} ↗</a>{% endif %}.{% endif %}{% endfor %}</p>
 </section>
 {% endif %}
 </div>

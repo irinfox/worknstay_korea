@@ -59,6 +59,13 @@ export default function registerFilters(eleventyConfig) {
 
   // Data files store dates as "YYYY-MM" or "YYYY-MM-DD"; format at render time:
   // "2026-09" -> "September 2026", "2026-06-30" -> "30 June 2026".
+  // Stable snake_case id for analytics (data-link-id): lowercase ASCII, capped so it fits the
+  // tracking allowlist. Needs at least one ASCII letter/digit, so Korean-only names fall back to "link".
+  eleventyConfig.addFilter("linkId", function (value, max = 60) {
+    const id = String(value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "").slice(0, max).replace(/_+$/, "");
+    return id || "link";
+  });
+
   eleventyConfig.addFilter("formatDate", function (value) {
     const [y, m, d] = String(value).split("-").map(Number);
     const date = new Date(Date.UTC(y, m - 1, d || 1));

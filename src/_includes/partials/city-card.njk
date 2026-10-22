@@ -5,7 +5,7 @@
    link, no address/domain row since one link can't honestly point at a single site), then the
    study-café battery — then a "Getting around" line. No accordion — always open. Param: city
    (City, required). #}
-<article class="city-card">
+<article class="city-card" data-region="{{ city.regionSlug }}" data-city="{{ city.slug }}" data-link-city="{{ city.slug }}">
   <div class="city-card__head">
     <div class="city-card__title">
       <h3 class="city-card__name">{{ city.nameEn }} <span class="city-card__ko">{{ city.nameKo }}</span></h3>
@@ -13,7 +13,7 @@
     </div>
     {% if city.vibeTags.length %}
     <ul class="city-card__tags">
-      {% for tag in city.vibeTags %}<li>{{ tag }}</li>{% endfor %}
+      {% for tag in city.vibeTags %}<li data-vibe-tag="city_card" data-vibe-region="{{ city.regionSlug }}" data-vibe-city="{{ city.slug }}">{{ tag }}</li>{% endfor %}
     </ul>
     {% endif %}
   </div>
@@ -35,12 +35,12 @@
       <p class="work-venue__addr"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg>{{ wc.address | keepHyphenated | safe }}</p>
       {% endif %}
       {% for b in wc.branches %}
-      <p class="work-venue__addr work-venue__branch"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg><span class="work-venue__branch-addr">{{ b.address | keepHyphenated | safe }}</span>{% if b.mapUrl %}<a class="work-venue__branch-map" href="{{ b.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}</p>
+      <p class="work-venue__addr work-venue__branch"><svg class="work-venue__pin" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M8 1a5 5 0 0 1 5 5c0 3.5-5 9-5 9S3 9.5 3 6a5 5 0 0 1 5-5Zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4Z"/></svg><span class="work-venue__branch-addr">{{ b.address | keepHyphenated | safe }}</span>{% if b.mapUrl %}<a class="work-venue__branch-map" href="{{ b.mapUrl }}" data-link-category="map_app" data-link-id="{{ wc.name | linkId(40) }}_branch_map" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}</p>
       {% endfor %}
       <p class="work-venue__links">
-        {% if wc.url %}<a href="{{ wc.url }}" target="_blank" rel="noopener">Website{% if wc.korOnly %} (KR){% endif %} ↗</a>{% endif %}
-        {% if wc.instagram %}<a href="https://instagram.com/{{ wc.instagram }}" target="_blank" rel="noopener">Instagram{% if wc.korOnly %} (KR){% endif %} ↗</a>{% endif %}
-        {% if wc.mapUrl %}<a href="{{ wc.mapUrl }}" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}
+        {% if wc.url %}<a href="{{ wc.url }}" data-link-category="coworking" data-link-id="{{ wc.name | linkId(40) }}" target="_blank" rel="noopener">Website{% if wc.korOnly %} (KR){% endif %} ↗</a>{% endif %}
+        {% if wc.instagram %}<a href="https://instagram.com/{{ wc.instagram }}" data-link-category="coworking" data-link-id="{{ wc.name | linkId(40) }}_instagram" target="_blank" rel="noopener">Instagram{% if wc.korOnly %} (KR){% endif %} ↗</a>{% endif %}
+        {% if wc.mapUrl %}<a href="{{ wc.mapUrl }}" data-link-category="map_app" data-link-id="{{ wc.name | linkId(40) }}_naver_map" target="_blank" rel="noopener">Naver Map ↗</a>{% endif %}
       </p>
     </div>
     {% endfor %}
@@ -50,7 +50,7 @@
     <div class="work-venue-chains">
       {% for wc in chainVenues %}
       <span class="work-venue__chain-name">{{ wc.name }}</span>
-      <a class="work-venue__chain-site" href="{{ wc.url }}" target="_blank" rel="noopener">Website{% if wc.korOnly %} (KR){% endif %} ↗</a>
+      <a class="work-venue__chain-site" href="{{ wc.url }}" data-link-category="coworking" data-link-id="{{ wc.name | linkId(40) }}" target="_blank" rel="noopener">Website{% if wc.korOnly %} (KR){% endif %} ↗</a>
       <span class="work-venue__kind">{{ wc.kind or "coworking" }}</span>
       {% endfor %}
     </div>
@@ -67,7 +67,7 @@
       <span class="study-cafes__count{% if space.fallbackLevel === undefined %} study-cafes__count--unrated{% endif %}" data-study-cafes-count>
         {%- if space.fallbackLevel === undefined -%}not rated yet{%- else -%}{{ studyCafeLevels[space.fallbackLevel].label }}{%- endif -%}
       </span>
-      <a class="study-cafes__search" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map<span class="study-cafes__search-word"> search</span> ↗</a>
+      <a class="study-cafes__search" data-link-category="study_cafe_search" data-link-id="naver_{{ city.slug | linkId(40) }}" href="https://map.naver.com/p/search/{{ city.nameKo }}%20스터디카페" target="_blank" rel="noopener">Naver Map<span class="study-cafes__search-word"> search</span> ↗</a>
     </div>
     {% endfor %}
   </div>
