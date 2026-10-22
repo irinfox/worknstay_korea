@@ -1,6 +1,6 @@
 # Tracking Plan — worknstay korea
 
-Status: **draft v0.5** · Owner: Irina
+Status: **draft v0.6** · Owner: Irina
 
 This document is the single source of truth for analytics on the site. It is tool-agnostic: events and parameters are defined here first, then implemented in whichever tool is chosen. Any new or renamed event is added here before it is added to code.
 
@@ -161,7 +161,7 @@ Interpretation: a `home_map_region_click` followed by `internal_link_click` with
 | Param | Type | Values |
 |---|---|---|
 | `nav` | text | `main` / `section` |
-| `item` | text | main: `logo` / `regions` / `visa` / `settling` / `about` · section (region pages): `map` / `cities` / `rent` / `events` / `places` / `dishes` · section (Visa info): `eligibility` / `documents` / `notes` / `questions` / `links` · section (Settling in): `renting` / `places_to_work` / `communities` / `links` |
+| `item` | text | main: `logo` / `regions` / `visa` / `settling` / `about` · section (region pages): `map` / `cities` / `rent` / `events` / `places` / `dishes` · section (Visa info): `eligibility` / `documents` / `notes` / `questions` / `links` · section (Settling in): `renting` / `places_to_work` / `communities` / `links` · section (any page with a section nav): `top` |
 | `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
 ### `regions_landing_scroll_up` — Q14
@@ -173,7 +173,7 @@ Sent from the **source** page at click time (via `sendBeacon`, which survives na
 | Param | Type | Values |
 |---|---|---|
 | `target_page_type` | text | `home` / `region` / `decline_areas` / `visa` / `settling` / `about` |
-| `target` | text | region slug, or a link ID: `regions_map` / `gyeonggi_decline_areas` / `region_note_link` / `calc_result_link` / `eligibility_calculator` / `renting_intro_link` |
+| `target` | text | region slug, or a link ID: `regions_map` / `gyeonggi_decline_areas` / `region_note_link` / `calc_result_link` / `eligibility_calculator` / `renting_intro_link` / `visa_info` / `settling_in` |
 | `source` | text | where the link sits: `home_map` / `home_card` / `prev_next` / `breadcrumb` / `region_badge` / `visa_info_faq_link` / `calc_partial_hint` / `calc_hint` / `content_text` |
 | `calc_result` | text | the calculator result on this page load, `none_calculated` if on the home page but user didn't use calculator, `null` for pages other than home |
 
@@ -351,6 +351,7 @@ Test checklist:
 
 | Date | Version | Change |
 |---|---|---|
+| 2026-10-22 | 0.6 | Back to top tracked as `nav_click` item `top`; hero scroll cue and 404 page links tracked as `internal_link_click` (`content_text`; new targets `visa_info`, `settling_in`) |
 | 2026-10-21 | 0.5 | Re-arranged Questions section (added several new); clarified privacy rules (GDPR/PIPA); added `calculator_interaction_started` event; merged region and internal link clicks into a unified `internal_link_click` (added calc_result); replaced `city_card_seen` with generic `gallery_scrolled`; added `region_map_poi_hover` and `_click` events; consolidated festival events into `festival_interacted` (added action param); added `kto_codes_requested` to `api_call`; linked SQL schema file instead of its citation |
 | 2026-10-17 | 0.4 | `<0.02` income bucket for implausible inputs; `section_seen` on Visa info, Settling in and region pages |
 | 2026-10-17 | 0.3 | Calculator validation matched to actual behaviour (`under_18` result, `empty` / `zero` errors); region → map → region path; data retention wording clarified |

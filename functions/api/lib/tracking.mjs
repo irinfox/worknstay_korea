@@ -29,7 +29,7 @@ const REGION_PAGE_SECTIONS = ["map", "cities", "rent", "events", "places", "dish
 // Link IDs for internal links whose target is not a region page (data-internal-target in templates).
 export const INTERNAL_LINK_TARGETS = [
   "regions_map", "gyeonggi_decline_areas", "region_note_link", "calc_result_link",
-  "eligibility_calculator", "renting_intro_link",
+  "eligibility_calculator", "renting_intro_link", "visa_info", "settling_in",
 ];
 
 export const PAGE_TYPES = ["home", "region", "decline_areas", "visa", "settling", "about", "404"];
@@ -72,7 +72,7 @@ export const EVENTS = {
       "logo", "regions", "visa", "settling", "about",
       ...REGION_PAGE_SECTIONS,
       "eligibility", "documents", "notes", "questions", "links",
-      "renting", "places_to_work", "communities"
+      "renting", "places_to_work", "communities", "top"
     ),
     calc_result: CALC_RESULT,
   },
