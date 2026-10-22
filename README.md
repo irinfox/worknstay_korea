@@ -124,7 +124,8 @@ without it events are silently dropped without affecting site functionality.
 Hosted on Cloudflare Pages: build command `npm run build`, output directory `_site`. Set
 `KTO_API_KEY` and `KAKAO_REST_API_KEY` as Pages environment variables — they are per environment,
 so Production and Preview each need their own. To store analytics events bound a D1 database as
-`DB` per environment, with `migrations/` applied; without the binding events are discarded.
+`DB` per environment in `wrangler.jsonc`, with `migrations/` applied; without the binding events
+are discarded.
 Per this project's Pages settings, every push to main deploys automatically; other branches get
 preview deployments.
 
