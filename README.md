@@ -148,21 +148,21 @@ src/regions/            Per-region pages (paginated from _data/regions.json)
 
 - [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) — stack, folder structure, data models, and KTO
   integration conventions, with the reasoning behind notable decisions
+- [`DESIGN.md`](./docs/DESIGN.md) — visual/design conventions (palette, type, spacing, components)
+- [`ROADMAP_TODO.md`](./docs/ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`TRACKING_PLAN.md`](./docs/TRACKING_PLAN.md) — analytics events, params, privacy rules and
   pipeline
 - [`PRIVACY.md`](./PRIVACY.md) — privacy notice for users
-- [`DESIGN.md`](./docs/DESIGN.md) — visual/design conventions (palette, type, spacing, components)
-- [`ROADMAP_TODO.md`](./docs/ROADMAP_TODO.md) — phase-by-phase feature checklist
 - [`CLAUDE.md`](./CLAUDE.md) — the operating rulebook for Claude Code in this repo (contest
   constraints, workflow rules, tech-stack conventions)
-- [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of
-  the optimal KTO calls per region
-- [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and
-  usage
-- [`docs/contest-functional-spec.pdf`](./docs/contest-functional-spec.pdf) — the functional
-  specification submitted to the contest, in Korean
 - [`.claude/agents/website-architect.md`](./.claude/agents/website-architect.md) — the Claude Code
   subagent used for planning the site's architecture
+- [`src/assets/img/brand/README.md`](./src/assets/img/brand/README.md) — brand icon files and
+  usage
+- [`notes/attraction-gallery-report.md`](./notes/attraction-gallery-report.md) — investigation of
+  the optimal KTO calls per region
+- [`docs/contest-functional-spec.pdf`](./docs/contest-functional-spec.pdf) — the functional
+  specification submitted to the contest, in Korean
 
 ## License / credits
 
